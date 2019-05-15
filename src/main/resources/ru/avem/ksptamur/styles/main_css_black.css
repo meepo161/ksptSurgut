@@ -1,0 +1,10 @@
+.root {
+    -fx-base: #343434;
+    -fx-focus-color: #FF6F61;
+    -fx-selection-bar: #FF6F61;
+    -fx-accent: rgb(255, 111, 97);
+}
+
+.table-column {
+	-fx-alignment: CENTER;
+}
