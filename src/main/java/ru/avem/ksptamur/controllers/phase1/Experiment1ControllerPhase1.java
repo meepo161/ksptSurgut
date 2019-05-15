@@ -23,7 +23,6 @@ import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.model.phase1.Experiment1ModelPhase1;
 import ru.avem.ksptamur.utils.View;
 
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Observable;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -317,7 +316,7 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
     private void startBH() {
         if (isExperimentStart && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания ВН...");
-            communicationModel.onKM1M2IkasBH(); //подаем 1 на выход пр для подключения ИКАС к ВН обмотки
+            communicationModel.onKM1M2(); //подаем 1 на выход пр для подключения ИКАС к ВН обмотки
         }
 
         while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) { //проверка готовности ИКАС
@@ -345,7 +344,7 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
 
         appendOneMessageToLog("Конец испытания BH\n_______________________________________________________");
 
-        communicationModel.offKM1M2IkasBH(); //подаем 0 на выход ПР для подключения ИКАС к ВН обмотки
+        communicationModel.offKM1M2(); //подаем 0 на выход ПР для подключения ИКАС к ВН обмотки
 
         try {
             double R = Double.parseDouble(experiment1ModelBHPhase1.getR());
@@ -365,8 +364,8 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
     private void startHH() {
         if (isExperimentStart && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания НН...");
-            communicationModel.offKM1M2IkasBH(); //отключаем ВН выход у ИКАС
-            communicationModel.onKM7M1IkasHH(); //подаем 1 на выход пр для подключения ИКАС к НН обмотки
+            communicationModel.offKM1M2(); //отключаем ВН выход у ИКАС
+            communicationModel.onKM7M1(); //подаем 1 на выход пр для подключения ИКАС к НН обмотки
         }
 
         while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
@@ -394,7 +393,7 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
 
         appendOneMessageToLog("Конец испытания HH\n_______________________________________________________");
 
-        communicationModel.offKM7M1IkasHH(); //подаем 0 на выход пр для подключения ИКАС к НН обмотки
+        communicationModel.offKM7M1(); //подаем 0 на выход пр для подключения ИКАС к НН обмотки
 
         try {
             double R = Double.parseDouble(experiment1ModelHHPhase1.getR());
@@ -467,44 +466,44 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.DI6_STOP_BTN:
+                    case OwenPRModel.PRDI6:
                         isStopButtonOn = (boolean) value;
                         break;
-                    case OwenPRModel.DI6_STOP_BTN_FIXED:
+                    case OwenPRModel.PRDI6_FIXED:
                         if ((boolean) value) {
                             cause = "Нажата кнопка (СТОП)";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI1_CURRENT_1:
+                    case OwenPRModel.PRDI1:
                         isCurrent1On = (boolean) value;
                         if (!isCurrent1On) {
                             cause = "сработала токовая защита 1";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI2_CURRENT_DELTA:
+                    case OwenPRModel.PRDI2:
                         isCurrent2On = (boolean) value;
                         if (!isCurrent2On) {
                             cause = "сработала токовая защита 2";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI3_DOOR_BLOCK:
+                    case OwenPRModel.PRDI3:
                         isDoorLockOn = (boolean) value;
                         if (!isDoorLockOn) {
                             cause = "открыта дверь";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI4_INSULATION:
+                    case OwenPRModel.PRDI4:
                         isInsulationOn = (boolean) value;
                         if (!isInsulationOn) {
                             cause = "пробита изоляция";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI7_DOOR_ZONE:
+                    case OwenPRModel.PRDI7:
                         isDoorZoneOn = (boolean) value;
                         if (!isDoorZoneOn) {
                             cause = "открыта дверь зоны";

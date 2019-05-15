@@ -5,21 +5,39 @@ import java.util.Observer;
 
 public class OwenPRModel extends Observable {
     public static final int RESPONDING_PARAM = 0;
-    public static final int DI1_CURRENT_1 = 1;
-    public static final int DI2_CURRENT_DELTA = 2;
-    public static final int DI3_DOOR_BLOCK = 3;
-    public static final int DI4_INSULATION = 4;
-    public static final int DI5_START_BTN = 5;
-    public static final int DI6_STOP_BTN = 6;
-    public static final int DI7_DOOR_ZONE = 7;
+    public static final int PRDI1 = 1;
+    public static final int PRDI2 = 2;
+    public static final int PRDI3 = 3;
+    public static final int PRDI4 = 4;
+    public static final int PRDI5 = 5;
+    public static final int PRDI6 = 6;
+    public static final int PRDI7 = 7;
+    public static final int PRDI8 = 8;
 
-    public static final int DI1_CURRENT_1_FIXED = 8;
-    public static final int DI2_CURRENT_DELTA_FIXED = 9;
-    public static final int DI3_DOOR_BLOCK_FIXED = 10;
-    public static final int DI4_INSULATION_FIXED = 11;
-    public static final int DI5_START_BTN_FIXED = 12;
-    public static final int DI6_STOP_BTN_FIXED = 13;
-    public static final int DI7_DOOR_ZONE_FIXED = 14;
+    public static final int PRMDI1 = 9;
+    public static final int PRMDI2 = 10;
+    public static final int PRMDI3 = 11;
+    public static final int PRMDI4 = 12;
+    public static final int PRMDI5 = 13;
+    public static final int PRMDI6 = 14;
+    public static final int PRMDI7 = 15;
+    public static final int PRMDI8 = 16;
+
+    public static final int PRDI1_FIXED = 17;
+    public static final int PRDI2_FIXED = 18;
+    public static final int PRDI3_FIXED = 19;
+    public static final int PRDI4_FIXED = 20;
+    public static final int PRDI5_FIXED = 21;
+    public static final int PRDI6_FIXED = 22;
+    public static final int PRDI7_FIXED = 23;
+
+    public static final int PRMDI1_FIXED = 24;
+    public static final int PRMDI2_FIXED = 25;
+    public static final int PRMDI3_FIXED = 26;
+    public static final int PRMDI4_FIXED = 27;
+    public static final int PRMDI5_FIXED = 28;
+    public static final int PRMDI6_FIXED = 29;
+    public static final int PRMDI7_FIXED = 30;
 
     private int deviceID;
     private boolean readResponding;
@@ -45,23 +63,23 @@ public class OwenPRModel extends Observable {
     }
 
     void setInstantInputStatus(short instantInputStatusInputStatus) {
-        notice(DI1_CURRENT_1, (instantInputStatusInputStatus & 0b1) > 0);
-        notice(DI2_CURRENT_DELTA, (instantInputStatusInputStatus & 0b10) > 0);
-        notice(DI3_DOOR_BLOCK, (instantInputStatusInputStatus & 0b100) > 0);
-        notice(DI4_INSULATION, (instantInputStatusInputStatus & 0b1000) > 0);
-        notice(DI5_START_BTN, (instantInputStatusInputStatus & 0b10000) > 0);
-        notice(DI6_STOP_BTN, (instantInputStatusInputStatus & 0b100000) > 0);
-        notice(DI7_DOOR_ZONE, (instantInputStatusInputStatus & 0b1000000) > 0);
+        notice(PRDI1, (instantInputStatusInputStatus & 0b1) > 0);
+        notice(PRDI2, (instantInputStatusInputStatus & 0b10) > 0);
+        notice(PRDI3, (instantInputStatusInputStatus & 0b100) > 0);
+        notice(PRDI4, (instantInputStatusInputStatus & 0b1000) > 0);
+        notice(PRDI5, (instantInputStatusInputStatus & 0b10000) > 0);
+        notice(PRDI6, (instantInputStatusInputStatus & 0b100000) > 0);
+        notice(PRDI7, (instantInputStatusInputStatus & 0b1000000) > 0);
     }
 
     void setFixedInputStatus(short fixedInputStatus) {
-        notice(DI1_CURRENT_1_FIXED, (fixedInputStatus & 0b1) > 0);
-        notice(DI2_CURRENT_DELTA_FIXED, (fixedInputStatus & 0b10) > 0);
-        notice(DI3_DOOR_BLOCK_FIXED, (fixedInputStatus & 0b100) > 0);
-        notice(DI4_INSULATION_FIXED, (fixedInputStatus & 0b1000) > 0);
-        notice(DI5_START_BTN_FIXED, (fixedInputStatus & 0b10000) > 0);
-        notice(DI6_STOP_BTN_FIXED, (fixedInputStatus & 0b100000) > 0);
-        notice(DI7_DOOR_ZONE_FIXED, (fixedInputStatus & 0b1000000) > 0);
+        notice(PRDI1_FIXED, (fixedInputStatus & 0b1) > 0);
+        notice(PRDI2_FIXED, (fixedInputStatus & 0b10) > 0);
+        notice(PRDI3_FIXED, (fixedInputStatus & 0b100) > 0);
+        notice(PRDI4_FIXED, (fixedInputStatus & 0b1000) > 0);
+        notice(PRDI5_FIXED, (fixedInputStatus & 0b10000) > 0);
+        notice(PRDI6_FIXED, (fixedInputStatus & 0b100000) > 0);
+        notice(PRDI7_FIXED, (fixedInputStatus & 0b1000000) > 0);
     }
 
     private void notice(int param, Object value) {

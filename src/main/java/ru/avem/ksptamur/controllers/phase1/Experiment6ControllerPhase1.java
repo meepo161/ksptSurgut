@@ -21,7 +21,6 @@ import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.model.phase1.Experiment6ModelPhase1;
 
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Observable;
 
@@ -240,7 +239,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onKM1PermissionButtonPost();
+                communicationModel.onKM1();
                 isStartButtonOn = true;
                 is75to5State = true;
                 sleep(1000);
@@ -266,16 +265,16 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onKM2TP1();
-                communicationModel.onKM7CurrentProtection75A();
+                communicationModel.onKM2();
+                communicationModel.onKM7();
                 is75to5State = true;
                 if (UBHTestItem <= WIDDING418) {
-                    communicationModel.onKM2M1TP418();
+                    communicationModel.onKM2M1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (UBHTestItem > WIDDING418) {
-                    communicationModel.onKM3M1TP1320();
-                    communicationModel.onKM4M2Parma418();
-                    communicationModel.onKM5M2ChangeWinding();
+                    communicationModel.onKM3M1();
+                    communicationModel.onKM4M2();
+                    communicationModel.onKM5M2();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
@@ -388,67 +387,67 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
     private void pickUpState() {
         if (is75to5State) {
             if (iA < 12.0 && iA > 1.2) {
-                communicationModel.onKM8CurrentProtection10A();
+                communicationModel.onKM8();
                 sleep(200);
                 is75to5State = false;
                 is10to5State = true;
                 is1to5State = false;
-                communicationModel.offKM7CurrentProtection75A();
-                communicationModel.offKM1M1CurrentProtection1A();
+                communicationModel.offKM7();
+                communicationModel.offKM1M1();
                 appendOneMessageToLog("Выставляем токовую ступень 10/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onKM1M1CurrentProtection1A();
+                communicationModel.onKM1M1();
                 sleep(200);
                 is75to5State = false;
                 is10to5State = false;
                 is1to5State = true;
-                communicationModel.offKM7CurrentProtection75A();
-                communicationModel.offKM8CurrentProtection10A();
+                communicationModel.offKM7();
+                communicationModel.offKM8();
                 appendOneMessageToLog("Выставляем токовую ступень 1/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
         } else if (is10to5State) {
             if (iA > 12) {
-                communicationModel.onKM7CurrentProtection75A();
+                communicationModel.onKM7();
                 sleep(200);
                 is75to5State = true;
                 is10to5State = false;
                 is1to5State = false;
-                communicationModel.offKM1M1CurrentProtection1A();
-                communicationModel.offKM8CurrentProtection10A();
+                communicationModel.offKM1M1();
+                communicationModel.offKM8();
                 appendOneMessageToLog("Выставляем токовую ступень 75/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onKM1M1CurrentProtection1A();
+                communicationModel.onKM1M1();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = false;
                 is1to5State = true;
-                communicationModel.offKM7CurrentProtection75A();
-                communicationModel.offKM8CurrentProtection10A();
+                communicationModel.offKM7();
+                communicationModel.offKM8();
                 appendOneMessageToLog("Выставляем токовую ступень 1/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
         } else if (is1to5State) {
             if (iA > 1.2) {
-                communicationModel.onKM8CurrentProtection10A();
+                communicationModel.onKM8();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = true;
                 is1to5State = false;
-                communicationModel.offKM8CurrentProtection10A();
-                communicationModel.offKM1M1CurrentProtection1A();
+                communicationModel.offKM8();
+                communicationModel.offKM1M1();
                 appendOneMessageToLog("Выставляем токовую ступень 10/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onKM1M1CurrentProtection1A();
+                communicationModel.onKM1M1();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = false;
                 is1to5State = true;
-                communicationModel.offKM7CurrentProtection75A();
-                communicationModel.offKM8CurrentProtection10A();
+                communicationModel.offKM7();
+                communicationModel.offKM8();
                 appendOneMessageToLog("Выставляем токовую ступень 1/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
@@ -512,47 +511,47 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.DI5_START_BTN:
+                    case OwenPRModel.PRDI5:
                         isStartButtonOn = (boolean) value;
                         break;
-                    case OwenPRModel.DI6_STOP_BTN:
+                    case OwenPRModel.PRDI6:
                         isStopButtonOn = (boolean) value;
                         break;
-                    case OwenPRModel.DI6_STOP_BTN_FIXED:
+                    case OwenPRModel.PRDI6_FIXED:
                         if ((boolean) value) {
                             cause = "Нажата кнопка (СТОП)";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI1_CURRENT_1:
+                    case OwenPRModel.PRDI1:
                         isCurrent1On = (boolean) value;
                         if (!isCurrent1On) {
                             cause = "сработала токовая защита 1";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI2_CURRENT_DELTA:
+                    case OwenPRModel.PRDI2:
                         isCurrent2On = (boolean) value;
                         if (!isCurrent2On) {
                             cause = "сработала токовая защита 2";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI3_DOOR_BLOCK:
+                    case OwenPRModel.PRDI3:
                         isDoorLockOn = (boolean) value;
                         if (!isDoorLockOn) {
                             cause = "открыта дверь";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI4_INSULATION:
+                    case OwenPRModel.PRDI4:
                         isInsulationOn = (boolean) value;
                         if (!isInsulationOn) {
                             cause = "пробита изоляция";
                             isExperimentStart = false;
                         }
                         break;
-                    case OwenPRModel.DI7_DOOR_ZONE:
+                    case OwenPRModel.PRDI7:
                         isDoorZoneOn = (boolean) value;
                         if (!isDoorZoneOn) {
                             cause = "открыта дверь зоны";

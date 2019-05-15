@@ -348,214 +348,213 @@ public class CommunicationModel extends Observable implements Observer {
     public void initExperiment8Devices() {
     }
 
-    public void onKM1PermissionButtonPost() {
-        sleep(2600);
+    public void onKM1() {
         onRegisterInTheKms(1, 1);
         sleep(500);
     }
 
-    public void onKM2TP1() {
+    public void onKM2() {
         onRegisterInTheKms(2, 1);
         sleep(500);
     }
 
-    public void onKM3TP2() {
+    public void onKM3() {
         onRegisterInTheKms(3, 1);
         sleep(500);
     }
 
-    public void onKM4TPBB() {
+    public void onKM4() {
         onRegisterInTheKms(4, 1);
         sleep(500);
     }
 
-    public void onKM5WindingHH() {
+    public void onKM5() {
         onRegisterInTheKms(5, 1);
         sleep(500);
     }
 
-    public void onKM6KZ() {
+    public void onKM6() {
         onRegisterInTheKms(6, 1);
         sleep(500);
     }
 
-    public void onKM7CurrentProtection75A() {
+    public void onKM7() {
         onRegisterInTheKms(7, 1);
         sleep(500);
     }
 
-    public void onKM8CurrentProtection10A() {
+    public void onKM8() {
         onRegisterInTheKms(8, 1);
         sleep(500);
     }
 
-    public void onKM1M1CurrentProtection1A() {
+    public void onKM1M1() {
         onRegisterInTheKms(1, 2);
         sleep(500);
     }
 
-    public void onKM2M1TP418() {
+    public void onKM2M1() {
         onRegisterInTheKms(2, 2);
         sleep(500);
     }
 
-    public void onKM3M1TP1320() {
+    public void onKM3M1() {
         onRegisterInTheKms(3, 2);
         sleep(500);
     }
 
-    public void onKM4M1TP12() {
+    public void onKM4M1() {
         onRegisterInTheKms(4, 2);
         sleep(500);
     }
 
-    public void onKM5M1TP4() {
+    public void onKM5M1() {
         onRegisterInTheKms(5, 2);
         sleep(500);
     }
 
-    public void onKM6M1PhaseMeter() {
+    public void onKM6M1() {
         onRegisterInTheKms(6, 2);
         sleep(500);
     }
 
-    public void onKM7M1IkasHH() {
+    public void onKM7M1() {
         onRegisterInTheKms(7, 2);
         sleep(500);
     }
 
-    public void onKM8M1Discharge() {
+    public void onKM8M1() {
         onRegisterInTheKms(8, 2);
         sleep(500);
     }
 
-    public void onKM1M2IkasBH() {
+    public void onKM1M2() {
         onRegisterInTheKms(1, 3);
         sleep(500);
     }
 
-    public void onKM2M2SoundKm() {
+    public void onKM2M2() {
         onRegisterInTheKms(2, 3);
         sleep(500);
     }
 
-    public void onKM3M2LightKm() {
+    public void onKM3M2() {
         onRegisterInTheKms(3, 3);
         sleep(500);
     }
 
-    public void onKM4M2Parma418() {
+    public void onKM4M2() {
         onRegisterInTheKms(4, 3);
         sleep(500);
     }
 
-    public void onKM5M2ChangeWinding() {
+    public void onKM5M2() {
         onRegisterInTheKms(5, 3);
         sleep(500);
     }
 
-    public void offKM1PermissionButtonPost() {
+    public void offKM1() {
         offRegisterInTheKms(1, 1);
         sleep(500);
     }
 
-    public void offKM2TP1() {
+    public void offKM2() {
         offRegisterInTheKms(2, 1);
         sleep(500);
     }
 
-    public void offKM3TP2() {
+    public void offKM3() {
         offRegisterInTheKms(3, 1);
         sleep(500);
     }
 
-    public void offKM4TPBB() {
+    public void offKM4() {
         offRegisterInTheKms(4, 1);
         sleep(500);
     }
 
-    public void offKM5WindingHH() {
+    public void offKM5() {
         offRegisterInTheKms(5, 1);
         sleep(500);
     }
 
-    public void offKM6KZ() {
+    public void offKM6() {
         offRegisterInTheKms(6, 1);
         sleep(500);
     }
 
-    public void offKM7CurrentProtection75A() {
+    public void offKM7() {
         offRegisterInTheKms(7, 1);
         sleep(500);
     }
 
-    public void offKM8CurrentProtection10A() {
+    public void offKM8() {
         offRegisterInTheKms(8, 1);
         sleep(500);
     }
 
-    public void offKM1M1CurrentProtection1A() {
+    public void offKM1M1() {
         offRegisterInTheKms(1, 2);
         sleep(500);
     }
 
-    public void offKM2M1TP418() {
+    public void offKM2M1() {
         offRegisterInTheKms(2, 2);
         sleep(500);
     }
 
-    public void offKM3M1TP1320() {
+    public void offKM3M1() {
         offRegisterInTheKms(3, 2);
         sleep(500);
     }
 
-    public void offKM4M1TP12() {
+    public void offKM4M1() {
         offRegisterInTheKms(4, 2);
         sleep(500);
     }
 
-    public void offKM5M1TP4() {
+    public void offKM5M1() {
         offRegisterInTheKms(5, 2);
         sleep(500);
     }
 
-    public void offKM6M1PhaseMeter() {
+    public void offKM6M1() {
         offRegisterInTheKms(6, 2);
         sleep(500);
     }
 
-    public void offKM7M1IkasHH() {
+    public void offKM7M1() {
         offRegisterInTheKms(7, 2);
         sleep(500);
     }
 
-    public void offKM8M1Discharge() {
+    public void offKM8M1() {
         offRegisterInTheKms(8, 2);
         sleep(500);
     }
 
-    public void offKM1M2IkasBH() {
+    public void offKM1M2() {
         offRegisterInTheKms(1, 3);
         sleep(500);
     }
 
-    public void offKM2M2SoundKm() {
+    public void offKM2M2() {
         offRegisterInTheKms(2, 3);
         sleep(500);
     }
 
-    public void offKM3M2LightKm() {
+    public void offKM3M2() {
         offRegisterInTheKms(3, 3);
         sleep(500);
     }
 
-    public void offKM4M2Parma418() {
-        onRegisterInTheKms(4, 3);
+    public void offKM4M2() {
+        offRegisterInTheKms(4, 3);
         sleep(500);
     }
 
-    public void offKM5M2ChangeWinding() {
-        onRegisterInTheKms(5, 3);
+    public void offKM5M2() {
+        offRegisterInTheKms(5, 3);
         sleep(500);
     }
 
