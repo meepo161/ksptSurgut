@@ -29,7 +29,7 @@ import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment6ControllerPhase1 extends DeviceState implements ExperimentController {
-    private static final int WIDDING418 = 418;
+    private static final int WIDDING400 = 400;
     private static final int WIDDING1320 = 1320;
     private static final float STATE_1_TO_5_MULTIPLIER = 1f / 5f;
     private static final float STATE_10_TO_5_MULTIPLIER = 10f / 5f;
@@ -268,10 +268,10 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
                 communicationModel.onKM2();
                 communicationModel.onKM7();
                 is75to5State = true;
-                if (UBHTestItem <= WIDDING418) {
+                if (UBHTestItem <= WIDDING400) {
                     communicationModel.onKM2M1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
-                } else if (UBHTestItem > WIDDING418) {
+                } else if (UBHTestItem > WIDDING400) {
                     communicationModel.onKM3M1();
                     communicationModel.onKM4M2();
                     communicationModel.onKM5M2();
@@ -295,10 +295,10 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                if (UBHTestItem <= WIDDING418) {
+                if (UBHTestItem <= WIDDING400) {
                     appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
                     regulation(5 * 10, 15, 2, UBHTestItem, 0.10, 2, 100, 200);
-                } else if (UBHTestItem > WIDDING418) {
+                } else if (UBHTestItem > WIDDING400) {
                     appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
                     regulation(5 * 10, 10, 2, UHHTestItem, 0.1, 2, 100, 200);
                 } else {

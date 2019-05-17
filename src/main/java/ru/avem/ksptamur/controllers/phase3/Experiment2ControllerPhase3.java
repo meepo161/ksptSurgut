@@ -575,5 +575,4 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
         isDeltaReady50 = value == 5000;
         isDeltaReady0 = value == 0;
     }
-
 }

@@ -22,16 +22,19 @@ import ru.avem.ksptamur.controllers.ExperimentController;
 import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.model.phase3.Experiment3ModelPhase3;
+import ru.avem.ksptamur.utils.View;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Observable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.avem.ksptamur.Main.setTheme;
 import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment3ControllerPhase3 extends DeviceState implements ExperimentController {
-    private static final int WIDDING418 = 418;
+    private static final int WIDDING400 = 400;
     private static final int WIDDING1320 = 1320;
     private static final float STATE_1_TO_5_MULTIPLIER = 1f / 5f;
     private static final float STATE_10_TO_5_MULTIPLIER = 10f / 5f;
@@ -142,11 +145,6 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
         return isCanceled;
     }
 
-    @FXML
-    private void handleExperimentCancel() {
-        dialogStage.close();
-        isCanceled = true;
-    }
 
     private void fillProtocolExperimentFields() {
         Protocol currentProtocol = mainModel.getCurrentProtocol();
@@ -169,6 +167,12 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
         } else {
             stopExperiment();
         }
+    }
+
+    @FXML
+    private void handleExperimentCancel() {
+        dialogStage.close();
+        isCanceled = true;
     }
 
     private void stopExperiment() {
@@ -197,10 +201,25 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
         cause = "";
 
         new Thread(() -> {
+
+            if (isExperimentStart) {
+                AtomicBoolean isPressed = new AtomicBoolean(false);
+                Platform.runLater(() -> {
+                    View.showConfirmDialog("Подключите ОИ для определения Ктр: провода с маркировкой А-В-С (ШСО) к стороне ВН и А-В-С (стойка приборов) к НН",
+                            () -> {
+                                isPressed.set(true);
+                            },
+                            () -> {
+                                cause = "Отменено";
+                                isExperimentStart = false;
+                                isPressed.set(true);
+                            });
+                });
+            }
+
             if (isExperimentStart) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment3Devices();
                 sleep(3000);
             }
 
@@ -211,22 +230,21 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isThereAreAccidents()) {
-            appendOneMessageToLog(getAccidentsString("Аварии"));
-            isExperimentStart = false;
-        }
+                appendOneMessageToLog(getAccidentsString("Аварии"));
+                isExperimentStart = false;
+            }
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onKM1();
-                sleep(1000);
             }
 
             while (isExperimentStart && !isStartButtonOn) {
-                sleep(100);
                 appendOneMessageToLog("Включите кнопочный пост");
+                sleep(1);
             }
 
             if (isExperimentStart) {
+                appendOneMessageToLog("Идет загрузка ЧП");
                 sleep(8000);
                 communicationModel.initExperiment3Devices();
             }
@@ -240,27 +258,22 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onKM2();
-                communicationModel.onKM7();
                 is75to5State = true;
-                if (UBHTestItem < WIDDING418) {
-                    communicationModel.onKM2M1();
+                if (isExperimentStart && UBHTestItem < WIDDING400) {
+                    communicationModel.onKM1();
                     coef = 1;
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
-                } else if (UBHTestItem > WIDDING418) {
-                    communicationModel.onKM3M1();
-                    communicationModel.onKM4M2();
+                } else if (isExperimentStart && UBHTestItem > WIDDING400) {
+                    communicationModel.onKM2();
+                    communicationModel.onKM2M2();
                     coef = 3.158;
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный ВН в объекте испытания.");
                 }
-            }
-
-            if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.onKM5();
-                appendOneMessageToLog("Подключена обмотка НН");
+                communicationModel.onKM4();
+                communicationModel.onKM1M1();
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
@@ -275,12 +288,11 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь выйдет к заданным характеристикам");
             }
 
-
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                if (UBHTestItem < WIDDING418) {
+                if (UBHTestItem < WIDDING400) {
                     appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
                     regulation(5 * 10, 30, 5, UBHTestItem, 0.1, 2, 100, 200);
-                } else if (UBHTestItem > WIDDING418) {
+                } else if (UBHTestItem > WIDDING400) {
                     coef = 3.158;
                     communicationModel.onKM4M2();
                     appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
@@ -291,21 +303,21 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 sleep(4000);
                 isNeedToRefresh = false;
+                sleep(1000);
             }
 
             isNeedToRefresh = false;
             isDeviceOn = false;
             isExperimentStart = false;
             isExperimentEnd = true;
+            sleep(500);
             communicationModel.stopObject();
             while (isExperimentStart && !isDeltaReady0 && isDeltaResponding) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
             }
-            sleep(500);
 
             communicationModel.offAllKms(); //разбираем все возможные схемы
-
             communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
 
             if (!cause.equals("")) {
@@ -411,52 +423,22 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRDI5:
-                        isStartButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRDI6:
-                        isStopButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRDI6_FIXED:
-                        if ((boolean) value) {
-                            cause = "Нажата кнопка (СТОП)";
-                            isExperimentStart = false;
-                        }
-                        break;
                     case OwenPRModel.PRDI1:
-                        isCurrent1On = (boolean) value;
-                        if (!isCurrent1On) {
-                            cause = "сработала токовая защита 1";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI2:
-                        isCurrent2On = (boolean) value;
-                        if (!isCurrent2On) {
-                            cause = "сработала токовая защита 2";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI3:
-                        isDoorLockOn = (boolean) value;
-                        if (!isDoorLockOn) {
-                            cause = "открыта дверь";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI4:
-                        isInsulationOn = (boolean) value;
-                        if (!isInsulationOn) {
-                            cause = "пробита изоляция";
-                            isExperimentStart = false;
-                        }
+                        break;
+                    case OwenPRModel.PRDI5:
+                        break;
+                    case OwenPRModel.PRDI6:
+                        isStartButtonOn = (boolean) value;
+                        break;
+                    case OwenPRModel.PRDI6_FIXED:
                         break;
                     case OwenPRModel.PRDI7:
-                        isDoorZoneOn = (boolean) value;
-                        if (!isDoorZoneOn) {
-                            cause = "открыта дверь зоны";
-                            isExperimentStart = false;
-                        }
                         break;
                 }
                 break;

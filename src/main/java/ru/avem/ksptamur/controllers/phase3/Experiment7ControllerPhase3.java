@@ -30,7 +30,7 @@ import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment7ControllerPhase3 extends DeviceState implements ExperimentController {
-    private static final int WIDDING418 = 418;
+    private static final int WIDDING400 = 400;
     private static final int WIDDING1320 = 1320;
     private static final float STATE_1_TO_5_MULTIPLIER = 1f / 5f;
     private static final int STATE_10_TO_5_MULTIPLIER = 10 / 5;
@@ -277,7 +277,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
 
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                if (UBHTestItem < WIDDING418) {
+                if (UBHTestItem < WIDDING400) {
                     appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItemX2);
                     regulation(5 * 10, 25, 5, (int) (UHHTestItemX2 / coef), 0.4, 2, 100, 200);
                 } else if (UBHTestItem < WIDDING1320) {

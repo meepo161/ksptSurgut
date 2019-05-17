@@ -29,7 +29,7 @@ import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment5ControllerPhase1 extends DeviceState implements ExperimentController {
-    private static final int WIDDING418 = 418;
+    private static final int WIDDING400 = 400;
     private static final double STATE_1_TO_5_MULTIPLIER = 1.0 / 5.0;
     private static final double STATE_10_TO_5_MULTIPLIER = 10.0 / 5.0;
     private static final double STATE_75_TO_5_MULTIPLIER = 75.0 / 5.0;
