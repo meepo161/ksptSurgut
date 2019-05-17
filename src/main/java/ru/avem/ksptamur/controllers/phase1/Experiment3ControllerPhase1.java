@@ -65,7 +65,7 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
     private double UBHTestItem = currentProtocol.getUbh();
     private double UBHTestItem418 = (int) (UBHTestItem / 1.1);
     private double UBHTestItem1312 = (int) (UBHTestItem / 3.158);
-    private double coef;
+
     private CommunicationModel communicationModel = CommunicationModel.getInstance();
     private Experiment3ModelPhase1 experiment3ModelPhase1;
     private ObservableList<Experiment3ModelPhase1> experiment3Data = FXCollections.observableArrayList();
@@ -208,9 +208,9 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isThereAreAccidents()) {
-            appendOneMessageToLog(getAccidentsString("Аварии"));
-            isExperimentStart = false;
-        }
+                appendOneMessageToLog(getAccidentsString("Аварии"));
+                isExperimentStart = false;
+            }
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
@@ -242,12 +242,12 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
                 is75to5State = true;
                 if (UBHTestItem < WIDDING400) {
                     communicationModel.onKM2M1();
-                    coef = 1;
+
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (UBHTestItem > WIDDING400) {
                     communicationModel.onKM3M1();
                     communicationModel.onKM4M2();
-                    coef = 3.158;
+
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
@@ -278,7 +278,7 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
                     appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
                     regulation(5 * 10, 30, 5, UBHTestItem, 0.1, 2, 100, 200);
                 } else if (UBHTestItem > WIDDING400) {
-                    coef = 3.158;
+
                     communicationModel.onKM4M2();
                     appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
                     regulation(5 * 10, 30, 5, UBHTestItem, 0.1, 2, 100, 200);
@@ -471,49 +471,49 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
                                 sleep(50);
                             }
                         }
-                            break;
+                        break;
+                }
+                break;
+            case PARMA400_ID:
+                switch (param) {
+                    case ParmaT400Model.RESPONDING_PARAM:
+                        isParmaResponding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        break;
+                    case ParmaT400Model.F_PARAM:
+                        if (isNeedToRefresh) {
+                            String fParma = String.format("%.2f", (double) value);
+                            experiment3ModelPhase1.setF(fParma);
                         }
                         break;
-                    case PARMA400_ID:
-                        switch (param) {
-                            case ParmaT400Model.RESPONDING_PARAM:
-                                isParmaResponding = (boolean) value;
-                                Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
-                                break;
-                            case ParmaT400Model.F_PARAM:
-                                if (isNeedToRefresh) {
-                                    String fParma = String.format("%.2f", (double) value);
-                                    experiment3ModelPhase1.setF(fParma);
-                                }
-                                break;
-                            case ParmaT400Model.UAB_PARAM:
-                                if (isNeedToRefresh) {
-                                    measuringUInAB = (double) value;
-                                    String UInAvr = String.format("%.2f", measuringUInAB);
-                                    if (measuringUInAB > 0.001) {
-                                        experiment3ModelPhase1.setUBH(UInAvr);
-                                        sleep(100);
-                                    }
-                                }
-                                break;
-                        }
-                        break;
-                    case DELTACP2000_ID:
-                        switch (param) {
-                            case DeltaCP2000Model.RESPONDING_PARAM:
-                                isDeltaResponding = (boolean) value;
-                                Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
-                                break;
-                            case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
-                                setCurrentFrequencyObject((short) value);
-                                break;
+                    case ParmaT400Model.UAB_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUInAB = (double) value;
+                            String UInAvr = String.format("%.2f", measuringUInAB);
+                            if (measuringUInAB > 0.001) {
+                                experiment3ModelPhase1.setUBH(UInAvr);
+                                sleep(100);
+                            }
                         }
                         break;
                 }
-        }
-
-        private void setCurrentFrequencyObject ( short value){
-            isDeltaReady50 = value == 5000;
-            isDeltaReady0 = value == 0;
+                break;
+            case DELTACP2000_ID:
+                switch (param) {
+                    case DeltaCP2000Model.RESPONDING_PARAM:
+                        isDeltaResponding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        break;
+                    case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
+                        setCurrentFrequencyObject((short) value);
+                        break;
+                }
+                break;
         }
     }
+
+    private void setCurrentFrequencyObject(short value) {
+        isDeltaReady50 = value == 5000;
+        isDeltaReady0 = value == 0;
+    }
+}

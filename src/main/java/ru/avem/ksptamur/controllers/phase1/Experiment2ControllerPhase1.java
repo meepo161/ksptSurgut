@@ -65,7 +65,6 @@ public class Experiment2ControllerPhase1 extends DeviceState implements Experime
     private double UBHTestItem = currentProtocol.getUbh();
     private double UBHTestItem418 = (int) (UBHTestItem / 1.1);
     private double UBHTestItem1312 = (int) (UBHTestItem / 3.158);
-    private double coef;
     private CommunicationModel communicationModel = CommunicationModel.getInstance();
     private Experiment2ModelPhase1 experiment2ModelPhase1;
     private Experiment4ModelPhase1 experiment4ModelPhase1;
@@ -213,9 +212,9 @@ public class Experiment2ControllerPhase1 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isThereAreAccidents()) {
-            appendOneMessageToLog(getAccidentsString("Аварии"));
-            isExperimentStart = false;
-        }
+                appendOneMessageToLog(getAccidentsString("Аварии"));
+                isExperimentStart = false;
+            }
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
@@ -248,12 +247,10 @@ public class Experiment2ControllerPhase1 extends DeviceState implements Experime
                 is75to5State = true;
                 if (UBHTestItem < WIDDING400) {
                     communicationModel.onKM2M1();
-                    coef = 1;
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (UBHTestItem > WIDDING400) {
                     communicationModel.onKM3M1();
                     communicationModel.onKM4M2();
-                    coef = 3.158;
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
@@ -284,7 +281,6 @@ public class Experiment2ControllerPhase1 extends DeviceState implements Experime
                     appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
                     regulation(5 * 10, 30, 5, UBHTestItem, 0.1, 2, 100, 200);
                 } else if (UBHTestItem > WIDDING400) {
-                    coef = 3.158;
                     communicationModel.onKM4M2();
                     appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
                     regulation(5 * 10, 30, 5, UBHTestItem, 0.1, 2, 100, 200);
@@ -493,7 +489,7 @@ public class Experiment2ControllerPhase1 extends DeviceState implements Experime
                         break;
                     case ParmaT400Model.UAB_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUIn = (double) value * coef;
+                            measuringUIn = (double) value;
                             String UInAB = String.format("%.2f", measuringUIn);
                             if (measuringUIn > 0.001) {
                                 experiment2ModelPhase1.setUInput(UInAB);

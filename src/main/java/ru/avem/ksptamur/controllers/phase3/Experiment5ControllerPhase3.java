@@ -13,16 +13,18 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
 import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
-import ru.avem.ksptamur.communication.devices.parmaT400.ParmaT400Model;
+import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.controllers.DeviceState;
 import ru.avem.ksptamur.controllers.ExperimentController;
 import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.model.phase3.Experiment5ModelPhase3;
+import ru.avem.ksptamur.utils.View;
 
 import java.text.SimpleDateFormat;
 import java.util.Observable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.avem.ksptamur.Main.setTheme;
 import static ru.avem.ksptamur.communication.devices.DeviceController.*;
@@ -68,6 +70,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
     private MainModel mainModel = MainModel.getInstance();
     private Protocol currentProtocol = mainModel.getCurrentProtocol();
     private double UBHTestItem = currentProtocol.getUbh();
+    private double UHHTestItem = currentProtocol.getUhh();
     private double UKZTestItem = currentProtocol.getUkz();
     private double UBHTestItem418 = (int) (UBHTestItem / 1.1);
     private double UBHTestItem1312 = (int) (UBHTestItem / 3.158);
@@ -116,7 +119,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
     private volatile double iC;
     private volatile double iAvr;
     private volatile double iAkz;
-    private volatile double fParma;
+    private volatile double measuringP;
     private volatile int phaseMeterState;
     private volatile int windingGroup0;
     private volatile int windingGroup1;
@@ -133,7 +136,6 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
     private double measuringUkzPercent;
     private double ukzPercent;
     private double ukzDif;
-    private double coef;
     private String PParma;
 
     @FXML
@@ -229,6 +231,22 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
         cause = "";
 
         new Thread(() -> {
+
+            if (isExperimentStart) {
+                AtomicBoolean isPressed = new AtomicBoolean(false);
+                Platform.runLater(() -> {
+                    View.showConfirmDialog("Подключите ШСО к НН",
+                            () -> {
+                                isPressed.set(true);
+                            },
+                            () -> {
+                                cause = "Отменено";
+                                isExperimentStart = false;
+                                isPressed.set(true);
+                            });
+                });
+            }
+
             if (isExperimentStart) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
@@ -248,16 +266,15 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onKM1();
-                sleep(1000);
             }
 
             while (isExperimentStart && !isStartButtonOn) {
-                sleep(100);
                 appendOneMessageToLog("Включите кнопочный пост");
+                sleep(1);
             }
 
             if (isExperimentStart) {
+                appendOneMessageToLog("Идет загрузка ЧП");
                 sleep(8000);
                 communicationModel.initExperiment5Devices();
             }
@@ -271,36 +288,37 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 communicationModel.onKM3();
+                communicationModel.onKM2M1();
                 if (Ikz < 1) {
                     appendOneMessageToLog("1к5 токовая ступень");
-                    communicationModel.onKM1M1();
+                    communicationModel.onKM6();
                     is1to5State = true;
                     is10to5State = false;
                     is75to5State = false;
-                } else if (Ikz > 1 && Ikz < 11) {
+                } else if (Ikz > 1 && Ikz < 15) {
                     appendOneMessageToLog("10к5 токовая ступень");
-                    communicationModel.onKM8();
+                    communicationModel.onKM5();
                     is1to5State = false;
                     is10to5State = true;
                     is75to5State = false;
                 } else {
                     appendOneMessageToLog("75к5 токовая ступень");
-                    communicationModel.onKM7();
+                    communicationModel.onKM4();
                     is1to5State = false;
                     is10to5State = false;
                     is75to5State = true;
                 }
-                communicationModel.onKM6();
+                communicationModel.onKM7();
+                communicationModel.onKM1M1();
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                if (Ukz < 3.0) {
-                    communicationModel.onKM5M1();
-                    appendOneMessageToLog("KM5M1TP4");
-                } else if (Ukz > 3.0) {
-                    communicationModel.onKM4M1();
-                    appendOneMessageToLog("KM4M1TP12");
-                } else if (Ukz > 12.0) {
+                if (UHHTestItem < WIDDING400) {
+                    communicationModel.onKM1();
+                } else if (UHHTestItem > WIDDING400) {
+                    communicationModel.onKM2();
+                    communicationModel.onKM2M1();
+                } else if (Ukz > 12.0) { //TODO
                     appendOneMessageToLog("Напряжение короткого больше допустимого");
                     appendOneMessageToLog("Проверьте корректность введенных данных в БД");
                     communicationModel.offAllKms();
@@ -321,9 +339,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
 
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                coef = 1.1;
-                appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
-                regulation(5 * 10, 30, 5, UBHTestItem / coef, 0.4, 2, 100, 200);
+                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
+                regulation(5 * 10, 30, 5, UHHTestItem, 0.4, 2, 100, 200);
             }
 
 
@@ -489,14 +506,14 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                         break;
                 }
                 break;
-            case PARMA400_ID:
+            case PM130_ID:
                 switch (param) {
-                    case ParmaT400Model.RESPONDING_PARAM:
+                    case PM130Model.RESPONDING_PARAM:
                         isParmaResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
 
                         break;
-                    case ParmaT400Model.IA_PARAM:
+                    case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
                             iA = (double) value;
                             if (is75to5State) {
@@ -515,7 +532,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                             isExperimentStart = false;
                         }
                         break;
-                    case ParmaT400Model.IB_PARAM:
+                    case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
                             iB = (double) value;
                             if (is75to5State) {
@@ -534,7 +551,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                             isExperimentStart = false;
                         }
                         break;
-                    case ParmaT400Model.IC_PARAM:
+                    case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
                             iC = (double) value;
                             if (is75to5State) {
@@ -553,42 +570,42 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                             isExperimentStart = false;
                         }
                         break;
-                    case ParmaT400Model.UAB_PARAM:
+                    case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (double) value * coef;
+                            measuringUInAB = (double) value;
                             String UInAB = String.format("%.2f", measuringUInAB);
                             experiment5ModelPhase3.setUBH(UInAB);
                             Unom = measuringUInAB * 4.0;
-                            measuringUkzPercent = (Unom * 100.0) / UBHTestItem;
+                            measuringUkzPercent = (Unom * 100.0) / UHHTestItem;
                             ukzPercent = ((int) ((double) measuringUkzPercent * POWER) / POWER);
                             experiment5ModelPhase3.setUKZPercent(String.valueOf(ukzPercent));
                             String ukzDif = String.format("%.2f", ukzPercent - UKZTestItem);
                             experiment5ModelPhase3.setUKZDiff(String.valueOf(ukzDif));
-                            if (measuringUInAB > UBHTestItem) {
+                            if (measuringUInAB > UHHTestItem) {
                                 appendOneMessageToLog("Напряжение достигло номинального, испытание прервано");
                                 isExperimentStart = false;
                                 cause = "Неуспешно";
                             }
                         }
                         break;
-                    case ParmaT400Model.P_PARAM:
+                    case PM130Model.P_PARAM:
                         if (isNeedToRefresh) {
-                            fParma = (double) value;
+                            measuringP = (double) value;
                             if (is75to5State) {
-                                fParma *= STATE_75_TO_5_MULTIPLIER;
+                                measuringP *= STATE_75_TO_5_MULTIPLIER;
                             } else if (is10to5State) {
-                                fParma *= STATE_10_TO_5_MULTIPLIER;
+                                measuringP *= STATE_10_TO_5_MULTIPLIER;
                             } else if (is1to5State) {
-                                fParma *= STATE_1_TO_5_MULTIPLIER;
+                                measuringP *= STATE_1_TO_5_MULTIPLIER;
                             }
-                            String fParmaString = String.format("%.2f", fParma * 16);
-                            experiment5ModelPhase3.setPP(fParmaString);
+                            String PP = String.format("%.2f", measuringP * 16);
+                            experiment5ModelPhase3.setPP(PP);
                         }
                         break;
-                    case ParmaT400Model.F_PARAM:
+                    case PM130Model.F_PARAM:
                         if (isNeedToRefresh) {
-                            String fParma = String.format("%.2f", (double) value);
-                            experiment5ModelPhase3.setF(fParma);
+                            String freq = String.format("%.2f", (double) value);
+                            experiment5ModelPhase3.setF(freq);
                         }
                         break;
                 }

@@ -65,7 +65,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     private Protocol currentProtocol = mainModel.getCurrentProtocol();
     private double UBHTestItem = currentProtocol.getUbh();
     private double UHHTestItem = currentProtocol.getUhh();
-    private double UHHTestItemX2 = UHHTestItem * 2;
     private CommunicationModel communicationModel = CommunicationModel.getInstance();
     private Experiment7ModelPhase3 experiment7ModelPhase3;
     private ObservableList<Experiment7ModelPhase3> experiment7Data = FXCollections.observableArrayList();
@@ -111,7 +110,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     private float measuringUOutAB;
     private double measuringUInAB;
     private float measuringF;
-    private double coef;
+
     private volatile double F;
     private volatile double measuringIAvr;
     private volatile double measuringIA;
@@ -219,9 +218,9 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isThereAreAccidents()) {
-            appendOneMessageToLog(getAccidentsString("Аварии"));
-            isExperimentStart = false;
-        }
+                appendOneMessageToLog(getAccidentsString("Аварии"));
+                isExperimentStart = false;
+            }
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
@@ -254,12 +253,10 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                 communicationModel.onKM7();
                 communicationModel.onKM5M2();
                 is75to5State = true;
-                if (UHHTestItemX2 <= 380) {
-                    coef = 1;
+                if (UHHTestItem <= 380) {
                     communicationModel.onKM2M1();
                     appendOneMessageToLog("Собрана схема для испытания 418В трансформатора");
-                } else if (UHHTestItemX2 > 380) {
-                    coef = 3.158;
+                } else if (UHHTestItem > 380) {
                     communicationModel.onKM3M1();
                     appendOneMessageToLog("Собрана схема для испытания 1320В трансформатора");
                     communicationModel.onKM4M2();
@@ -278,11 +275,8 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 if (UBHTestItem < WIDDING400) {
-                    appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItemX2);
-                    regulation(5 * 10, 25, 5, (int) (UHHTestItemX2 / coef), 0.4, 2, 100, 200);
-                } else if (UBHTestItem < WIDDING1320) {
-                    appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItemX2);
-                    regulation(5 * 10, 25, 5, (int) (UHHTestItemX2 / coef), 0.4, 2, 100, 200);
+                    appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
+                    regulation(5 * 10, 25, 5, (int) (UHHTestItem), 0.4, 2, 100, 200);
                 }
             }
 
@@ -542,8 +536,8 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case ParmaT400Model.UAB_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (double) value * coef;
-                            measuringUInABWithCoef = measuringUInAB * coef;
+                            measuringUInAB = (double) value;
+                            measuringUInABWithCoef = measuringUInAB;
                             String UInAB = String.format("%.2f", measuringUInABWithCoef);
                             if (measuringUInAB > 0.001) {
                                 experiment7ModelPhase3.setUIN(UInAB);

@@ -126,7 +126,6 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
     private double measuringUkzPercent;
     private double ukzPercent;
     private double ukzDif;
-    private double coef;
     private double pParma;
 
     @FXML
@@ -311,9 +310,8 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
 
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                coef = 1.1;
                 appendOneMessageToLog("Поднимаем напряжение до " + UBHTestItem);
-                regulation(5 * 10, 30, 5, UBHTestItem / coef, 0.15, 2, 100, 200);
+                regulation(5 * 10, 30, 5, UBHTestItem, 0.15, 2, 100, 200);
             }
 
 
@@ -507,7 +505,7 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
                         break;
                     case ParmaT400Model.UAB_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (double) value * coef;
+                            measuringUInAB = (double) value;
                             String UInAB = String.format("%.2f", measuringUInAB);
                             experiment5ModelPhase1.setUBH(UInAB);
                             Unom = measuringUInAB * 4.0;
@@ -525,7 +523,7 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
                         break;
                     case ParmaT400Model.P_PARAM:
                         if (isNeedToRefresh) {
-                            pParma  =  (double) value;
+                            pParma = (double) value;
                             if (is75to5State) {
                                 fParma *= STATE_75_TO_5_MULTIPLIER;
                             } else if (is10to5State) {
