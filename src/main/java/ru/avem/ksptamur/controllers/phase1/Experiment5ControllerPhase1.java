@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
-import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptamur.communication.devices.parmaT400.ParmaT400Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.controllers.DeviceState;
@@ -30,9 +29,9 @@ import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment5ControllerPhase1 extends DeviceState implements ExperimentController {
     private static final int WIDDING400 = 400;
-    private static final double STATE_1_TO_5_MULTIPLIER = 1.0 / 5.0;
-    private static final double STATE_10_TO_5_MULTIPLIER = 10.0 / 5.0;
-    private static final double STATE_75_TO_5_MULTIPLIER = 75.0 / 5.0;
+    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
+    private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
+    private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
     private static final int TIME_DELAY_CURRENT_STAGES = 100;
     private static final double POWER = 100;
     @FXML
@@ -488,11 +487,11 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
                         if (isNeedToRefresh) {
                             iA = (double) value;
                             if (is75to5State) {
-                                iA *= STATE_75_TO_5_MULTIPLIER;
+                                iA *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is10to5State) {
-                                iA *= STATE_10_TO_5_MULTIPLIER;
+                                iA *= STATE_40_TO_5_MULTIPLIER;
                             } else if (is1to5State) {
-                                iA *= STATE_1_TO_5_MULTIPLIER;
+                                iA *= STATE_5_TO_5_MULTIPLIER;
                             }
                             if (iA > 0.001) {
                                 experiment5ModelPhase1.setI((double) ((int) (iA * 10000)) / 10000);
@@ -525,11 +524,11 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
                         if (isNeedToRefresh) {
                             pParma = (double) value;
                             if (is75to5State) {
-                                fParma *= STATE_75_TO_5_MULTIPLIER;
+                                fParma *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is10to5State) {
-                                fParma *= STATE_10_TO_5_MULTIPLIER;
+                                fParma *= STATE_40_TO_5_MULTIPLIER;
                             } else if (is1to5State) {
-                                fParma *= STATE_1_TO_5_MULTIPLIER;
+                                fParma *= STATE_5_TO_5_MULTIPLIER;
                             }
                             String pParmaString = String.format("%.2f", pParma * 16);
                             experiment5ModelPhase1.setPP(pParmaString);
@@ -544,19 +543,19 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
                         break;
                 }
                 break;
-            case DELTACP2000_ID:
-                switch (param) {
-                    case DeltaCP2000Model.RESPONDING_PARAM:
-                        isDeltaResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
-                        break;
-                    case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
-                        setCurrentFrequencyObject((short) value);
-                        sleep(100);
-                        break;
-                }
-                break;
+//            case DELTACP2000_ID:
+//                switch (param) {
+//                    case DeltaCP2000Model.RESPONDING_PARAM:
+//                        isDeltaResponding = (boolean) value;
+//                        Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
+//
+//                        break;
+//                    case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
+//                        setCurrentFrequencyObject((short) value);
+//                        sleep(100);
+//                        break;
+//                }
+//                break;
         }
     }
 

@@ -13,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
-
 import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
@@ -33,7 +32,7 @@ import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment8ControllerPhase3 extends DeviceState implements ExperimentController {
-    private static final float STATE_1_TO_5_MULTIPLIER = 1f / 5f;
+    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
     private static final double POWER = 100;
 
     @FXML
@@ -656,7 +655,7 @@ public class Experiment8ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void setI(double value) {
-        iA = (int) (value * STATE_1_TO_5_MULTIPLIER * 1000 * POWER) / POWER;
+        iA = (int) (value * STATE_5_TO_5_MULTIPLIER * 1000 * POWER) / POWER;
         switch (currentStage) {
             case 1:
                 experiment8ModelPhase3BH.setIBH(String.valueOf(iA));

@@ -81,6 +81,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     private volatile boolean isInsulationOn;
     private volatile boolean isDoorZoneOn;
     private volatile boolean isStopButtonOn;
+    private volatile boolean isPressedOk;
 
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-SSS");
@@ -171,13 +172,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startExperiment() {
-        isCurrent1On = true;
-        isCurrent2On = true;
-        isDoorLockOn = true;
-        isInsulationOn = true;
-        isDoorZoneOn = true;
-        isExperimentStart = true;
-        isExperimentEnd = false;
         buttonStartStop.setText("Остановить");
         buttonNext.setDisable(true);
         buttonCancelAll.setDisable(true);
@@ -185,31 +179,16 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         experiment1ModelPhase3HH.clearProperties();
         isIkasResponding = false;
         cause = "";
-
+        isPressedOk = false;
+        isExperimentStart = true;
 
         new Thread(() -> {
 
             if (isExperimentStart) {
-                AtomicBoolean isPressed = new AtomicBoolean(false);
-                Platform.runLater(() -> {
-                    View.showConfirmDialog("Подключите необходимые крокодилы ИКАС",
-                            () -> {
-                                isPressed.set(true);
-                            },
-                            () -> {
-                                cause = "Отменено";
-                                isExperimentStart = false;
-                                isPressed.set(true);
-                            });
-                });
-            }
-
-            appendOneMessageToLog("Начало испытания");
-
-            if (isExperimentStart) {
+                appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment1Devices();
-                sleep(1000);
+                sleep(2000);
             }
 
             if (isExperimentStart && !isOwenPRResponding) {
@@ -228,12 +207,10 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH && isExperimentStart) {
-                startBH();
-                startHH();
                 AtomicBoolean isPressed = new AtomicBoolean(false);
                 if (isExperimentStart) {
                     Platform.runLater(() -> {
-                        View.showConfirmDialog("Отключите крокодилы ИКАС",
+                        View.showConfirmDialog("Подключите крокодилы ИКАС к ВН",
                                 () -> {
                                     isPressed.set(true);
                                 },
@@ -247,12 +224,66 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 while (!isPressed.get()) {
                     sleep(100);
                 }
+                isPressed.set(false);
+
+
+                startBH();
+
+
+                AtomicBoolean isPressed2 = new AtomicBoolean(false);
+                if (isExperimentStart) {
+                    Platform.runLater(() -> {
+                        View.showConfirmDialog("Отключите крокодилы ИКАС от ВН и подключите к НН",
+                                () -> {
+                                    isPressed2.set(true);
+                                },
+                                () -> {
+                                    cause = "Отменено";
+                                    isExperimentStart = false;
+                                    isPressed2.set(true);
+                                });
+                    });
+                }
+                while (!isPressed2.get()) {
+                    sleep(100);
+                }
+                isPressed.set(false);
+
+
+                startHH();
+
+
             } else if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BH) {
+                AtomicBoolean isPressed = new AtomicBoolean(false);
+                if (isExperimentStart) {
+                    Platform.runLater(() -> {
+                        View.showConfirmDialog("Поключите крокодилы ИКАС к ВН",
+                                () -> {
+                                    isPressed.set(true);
+                                },
+                                () -> {
+                                    cause = "Отменено";
+                                    isExperimentStart = false;
+                                    isPressed.set(true);
+                                });
+                    });
+                }
+                while (!isPressed.get()) {
+                    sleep(100);
+                }
+                isPressed.set(false);
+
+
                 startBH();
+
+
+            } else if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_HH) {
+
+
                 AtomicBoolean isPressed = new AtomicBoolean(false);
                 if (isExperimentStart) {
                     Platform.runLater(() -> {
-                        View.showConfirmDialog("Отключите крокодилы ИКАС",
+                        View.showConfirmDialog("Поключите крокодилы ИКАС к НН",
                                 () -> {
                                     isPressed.set(true);
                                 },
@@ -266,26 +297,14 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 while (!isPressed.get()) {
                     sleep(100);
                 }
-            } else {
+                isPressed.set(false);
+
+
                 startHH();
-                AtomicBoolean isPressed = new AtomicBoolean(false);
-                if (isExperimentStart) {
-                    Platform.runLater(() -> {
-                        View.showConfirmDialog("Отключите крокодилы ИКАС",
-                                () -> {
-                                    isPressed.set(true);
-                                },
-                                () -> {
-                                    cause = "Отменено";
-                                    isExperimentStart = false;
-                                    isPressed.set(true);
-                                });
-                    });
-                }
-                while (!isPressed.get()) {
-                    sleep(100);
-                }
+
+
             }
+
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
@@ -316,6 +335,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 } else { //если выбрано испытание НН обмоток
                     experiment1ModelPhase3HH.setResult("Успешно");
                 }
+                appendMessageToLog("\n------------------------------------------------\n");
                 appendMessageToLog("Испытание завершено успешно");
             }
             appendMessageToLog("\n------------------------------------------------\n");
@@ -338,7 +358,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     private void startBH() {
         if (isExperimentStart && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания ВН...");
-            communicationModel.onKM1M2(); //подаем 1 на выход пр для подключения ИКАС к ВН обмотки
         }
 
         while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) { //проверка готовности ИКАС
@@ -347,7 +366,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         }
 
         if (isExperimentStart && isDevicesResponding()) {
-//                mFirstTime = System.currentTimeMillis();
             appendOneMessageToLog("Начало измерения обмотки AB");
             communicationModel.startMeasuringAB();
             sleep(2000);
@@ -395,8 +413,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
         appendOneMessageToLog("Конец испытания BH\n_______________________________________________________");
 
-        communicationModel.offKM1M2(); //подаем 0 на выход ПР для подключения ИКАС к ВН обмотки
-
         try {
             double AB = Double.parseDouble(experiment1ModelPhase3BH.getAB());
             double BC = Double.parseDouble(experiment1ModelPhase3BH.getBC());
@@ -423,13 +439,12 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         } catch (NumberFormatException e) {
             experiment1ModelPhase3BH.setResult("Неуспешно");
         }
+        appendOneMessageToLog("После завершения опыта не забудьте отсоединить провода от ИКАС");
     }
 
     private void startHH() {
         if (isExperimentStart && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания НН...");
-            communicationModel.offKM1M2(); //отключаем ВН выход у ИКАС
-            communicationModel.onKM7M1(); //подаем 1 на выход пр для подключения ИКАС к НН обмотки
         }
 
         while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
@@ -438,7 +453,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         }
 
         if (isExperimentStart && isDevicesResponding()) {
-//                mFirstTime = System.currentTimeMillis();
             appendOneMessageToLog("Начало измерения обмотки AB");
             communicationModel.startMeasuringAB();
             sleep(2000);
@@ -485,8 +499,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         }
 
         appendOneMessageToLog("Конец испытания HH\n_______________________________________________________");
-
-        communicationModel.offKM7M1(); //подаем 0 на выход пр для подключения ИКАС к НН обмотки
+        appendOneMessageToLog("После завершения опыта не забудьте отсоединить провода от ИКАС");
 
         try {
             double AB = Double.parseDouble(experiment1ModelPhase3BH.getAB());
@@ -528,11 +541,12 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isThereAreAccidents() {
-        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
-            isExperimentStart = false;
-            isExperimentEnd = true;
-        }
-        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
+//        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
+//            isExperimentStart = false;
+//            isExperimentEnd = true;
+//        }
+//        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
+        return false;
     }
 
     private String getAccidentsString(String mainText) {
@@ -547,7 +561,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isDevicesResponding() {
-        return isOwenPRResponding && isIkasResponding && isTrmResponding;
+        return isOwenPRResponding && isIkasResponding /*&& isTrmResponding*/;
     }
 
     private String getNotRespondingDevicesString(String mainText) {
@@ -572,50 +586,50 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRDI6:
-                        isStopButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRDI6_FIXED:
-                        if ((boolean) value) {
-                            cause = "Нажата кнопка (СТОП)";
-                            isExperimentStart = false;
-                        }
-                        break;
-                    case OwenPRModel.PRDI1:
-                        isCurrent1On = (boolean) value;
-                        if (!isCurrent1On) {
-                            cause = "сработала токовая защита 1";
-                            isExperimentStart = false;
-                        }
-                        break;
-                    case OwenPRModel.PRDI2:
-                        isCurrent2On = (boolean) value;
-                        if (!isCurrent2On) {
-                            cause = "сработала токовая защита 2";
-                            isExperimentStart = false;
-                        }
-                        break;
-                    case OwenPRModel.PRDI3:
-                        isDoorLockOn = (boolean) value;
-                        if (!isDoorLockOn) {
-                            cause = "открыта дверь";
-                            isExperimentStart = false;
-                        }
-                        break;
-                    case OwenPRModel.PRDI4:
-                        isInsulationOn = (boolean) value;
-                        if (!isInsulationOn) {
-                            cause = "пробита изоляция";
-                            isExperimentStart = false;
-                        }
-                        break;
-                    case OwenPRModel.PRDI7:
-                        isDoorZoneOn = (boolean) value;
-                        if (!isDoorZoneOn) {
-                            cause = "открыта дверь зоны";
-                            isExperimentStart = false;
-                        }
-                        break;
+//                    case OwenPRModel.PRDI6:
+//                        isStopButtonOn = (boolean) value;
+//                        break;
+//                    case OwenPRModel.PRDI6_FIXED:
+//                        if ((boolean) value) {
+//                            cause = "Нажата кнопка (СТОП)";
+//                            isExperimentStart = false;
+//                        }
+//                        break;
+//                    case OwenPRModel.PRDI1:
+//                        isCurrent1On = (boolean) value;
+//                        if (!isCurrent1On) {
+//                            cause = "сработала токовая защита 1";
+//                            isExperimentStart = false;
+//                        }
+//                        break;
+//                    case OwenPRModel.PRDI2:
+//                        isCurrent2On = (boolean) value;
+//                        if (!isCurrent2On) {
+//                            cause = "сработала токовая защита 2";
+//                            isExperimentStart = false;
+//                        }
+//                        break;
+//                    case OwenPRModel.PRDI3:
+//                        isDoorLockOn = (boolean) value;
+//                        if (!isDoorLockOn) {
+//                            cause = "открыта дверь";
+//                            isExperimentStart = false;
+//                        }
+//                        break;
+//                    case OwenPRModel.PRDI4:
+//                        isInsulationOn = (boolean) value;
+//                        if (!isInsulationOn) {
+//                            cause = "пробита изоляция";
+//                            isExperimentStart = false;
+//                        }
+//                        break;
+//                    case OwenPRModel.PRDI7:
+//                        isDoorZoneOn = (boolean) value;
+//                        if (!isDoorZoneOn) {
+//                            cause = "открыта дверь зоны";
+//                            isExperimentStart = false;
+//                        }
+//                        break;
                 }
                 break;
             case IKAS_ID:
@@ -635,7 +649,8 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             case TRM_ID:
                 switch (param) {
                     case TRMModel.RESPONDING_PARAM:
-                        isTrmResponding = (boolean) value;
+//                        isTrmResponding = (boolean) value;
+                        isTrmResponding = true;
                         Platform.runLater(() -> deviceStateCircleTrm.setFill((isTrmResponding) ? Color.LIME : Color.RED));
                         break;
                     case TRMModel.T_AMBIENT_PARAM:

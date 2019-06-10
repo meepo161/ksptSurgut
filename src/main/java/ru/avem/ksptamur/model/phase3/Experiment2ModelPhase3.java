@@ -22,9 +22,6 @@ public class Experiment2ModelPhase3 {
     private final StringProperty result;
     private List<StringProperty> properties = new ArrayList<>();
 
-    private final StringProperty groupHH;
-    private final StringProperty groupBH;
-
 
     public Experiment2ModelPhase3() {
         UOutputAB = new SimpleStringProperty();
@@ -39,9 +36,6 @@ public class Experiment2ModelPhase3 {
         F = new SimpleStringProperty();
         result = new SimpleStringProperty();
         properties.addAll(Arrays.asList(UOutputAB, UOutputBC, UOutputCA, UOutputAvr, UInputAB, UInputBC, UInputCA,UInputAvr, UDiff, F, result));
-
-        groupBH = new SimpleStringProperty();
-        groupHH = new SimpleStringProperty();
     }
 
     public String getUOutputAB() {
@@ -178,31 +172,6 @@ public class Experiment2ModelPhase3 {
 
     public void clearProperties() {
         properties.forEach(stringProperty -> stringProperty.set(""));
-    }
-
-
-    public String getGroupHH() {
-        return groupHH.get();
-    }
-
-    public StringProperty groupHHProperty() {
-        return groupHH;
-    }
-
-    public void setGroupHH(String groupHH) {
-        this.groupHH.set(groupHH);
-    }
-
-    public String getGroupBH() {
-        return groupBH.get();
-    }
-
-    public StringProperty groupBHProperty() {
-        return groupBH;
-    }
-
-    public void setGroupBH(String groupBH) {
-        this.groupBH.set(groupBH);
     }
 
 }

@@ -22,7 +22,6 @@
 package ru.avem.ksptamur.communication.serial.driver;
 
 import ru.avem.ksptamur.utils.Log;
-import ru.avem.ksptamur.utils.Utils;
 
 import javax.usb.*;
 import java.io.IOException;

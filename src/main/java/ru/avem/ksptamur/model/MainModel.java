@@ -7,6 +7,14 @@ import ru.avem.ksptamur.model.phase1.*;
 import ru.avem.ksptamur.model.phase3.*;
 
 public class MainModel {
+    public static final int EXPERIMENT0_BH = 1;
+    public static final int EXPERIMENT0_HH = 2;
+    public static final int EXPERIMENT0_BHHH = 3;
+    public static final int EXPERIMENT0_BH_HH = 4;
+    public static final int EXPERIMENT0_BHHH_BH = 5;
+    public static final int EXPERIMENT0_BHHH_HH = 6;
+    public static final int EXPERIMENT0_ALL = 7;
+
     public static final int EXPERIMENT1_BOTH = 0;
     public static final int EXPERIMENT1_BH = 1;
     public static final int EXPERIMENT1_HH = 2;
@@ -33,10 +41,10 @@ public class MainModel {
 
     private Protocol intermediateProtocol;
 
+    private int experiment0Choise;
     private int experiment1Choise;
     private int experiment2Choise;
     private int experiment8Choise;
-
 
     private Experiment1ModelPhase1 experiment1ModelPhase1BH = new Experiment1ModelPhase1("BH");
     private Experiment1ModelPhase1 experiment1ModelPhase1HH = new Experiment1ModelPhase1("HH");
@@ -49,6 +57,10 @@ public class MainModel {
     private Experiment8ModelPhase1 experiment8ModelPhase1BH = new Experiment8ModelPhase1("BH");
     private Experiment8ModelPhase1 experiment8ModelPhase1HH = new Experiment8ModelPhase1("HH");
 
+
+    private Experiment0ModelPhase3 experiment0ModelPhase3BH = new Experiment0ModelPhase3("BH и К.");
+    private Experiment0ModelPhase3 experiment0ModelPhase3HH = new Experiment0ModelPhase3("HH и К.");
+    private Experiment0ModelPhase3 experiment0ModelPhase3BHHH = new Experiment0ModelPhase3("ВН и HH");
     private Experiment1ModelPhase3 experiment1ModelPhase3BH = new Experiment1ModelPhase3("BH");
     private Experiment1ModelPhase3 experiment1ModelPhase3HH = new Experiment1ModelPhase3("HH");
     private Experiment2ModelPhase3 experiment2ModelPhase3 = new Experiment2ModelPhase3();
@@ -59,7 +71,6 @@ public class MainModel {
     private Experiment7ModelPhase3 experiment7ModelPhase3 = new Experiment7ModelPhase3();
     private Experiment8ModelPhase3 experiment8ModelPhase3BH = new Experiment8ModelPhase3("BH");
     private Experiment8ModelPhase3 experiment8ModelPhase3HH = new Experiment8ModelPhase3("HH");
-
 
 
     private MainModel() {
@@ -101,6 +112,26 @@ public class MainModel {
     public void applyIntermediateProtocol() {
         currentProtocol = intermediateProtocol;
         intermediateProtocol = null;
+    }
+
+    public Experiment0ModelPhase3 getExperiment0ModelPhase3BH() {
+        return experiment0ModelPhase3BH;
+    }
+
+    public Experiment0ModelPhase3 getExperiment0ModelPhase3HH() {
+        return experiment0ModelPhase3HH;
+    }
+
+    public Experiment0ModelPhase3 getExperiment0ModelPhase3BHHH() {
+        return experiment0ModelPhase3BHHH;
+    }
+
+    public int getExperiment0Choise() {
+        return experiment1Choise;
+    }
+
+    public void setExperiment0Choise(int experiment0Choise) {
+        this.experiment0Choise = experiment0Choise;
     }
 
     public Experiment1ModelPhase3 getExperiment1ModelPhase3BH() {

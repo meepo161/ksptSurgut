@@ -39,6 +39,7 @@ public class ParmaT400Controller implements DeviceController {
         resetWriteAttemptsOfAttempts();
     }
 
+
     public void resetWriteAttempts() {
         writeAttempt = NUMBER_OF_WRITE_ATTEMPTS;
     }

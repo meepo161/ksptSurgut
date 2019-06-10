@@ -14,13 +14,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
 import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
-import ru.avem.ksptamur.communication.devices.parmaT400.ParmaT400Model;
+import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.controllers.DeviceState;
 import ru.avem.ksptamur.controllers.ExperimentController;
 import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.model.phase3.Experiment7ModelPhase3;
+import ru.avem.ksptamur.utils.View;
 
 import java.text.SimpleDateFormat;
 import java.util.Observable;
@@ -32,9 +33,9 @@ import static ru.avem.ksptamur.utils.Utils.sleep;
 public class Experiment7ControllerPhase3 extends DeviceState implements ExperimentController {
     private static final int WIDDING400 = 400;
     private static final int WIDDING1320 = 1320;
-    private static final float STATE_1_TO_5_MULTIPLIER = 1f / 5f;
-    private static final int STATE_10_TO_5_MULTIPLIER = 10 / 5;
-    private static final int STATE_75_TO_5_MULTIPLIER = 75 / 5;
+    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
+    private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
+    private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
     private static final int TIME_DELAY_CURRENT_STAGES = 100;
     private static final double POWER = 100;
 
@@ -74,6 +75,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
 
     private volatile boolean isNeedToRefresh;
     private volatile boolean isStartButtonOn;
+    private volatile boolean isNeedToWaitDelta;
     private volatile boolean isStopButtonOn;
     private volatile boolean isExperimentStart;
     private volatile boolean isExperimentEnd = true;
@@ -82,17 +84,17 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     private volatile boolean isDeltaResponding;
     private volatile boolean isDeltaReady200;
     private volatile boolean isDeltaReady0;
-    private volatile boolean isParmaResponding;
+    private volatile boolean isPM130Responding;
+    private volatile boolean isPressedOk;
 
-    private volatile boolean isCurrent1On;
-    private volatile boolean isCurrent2On;
-    private volatile boolean isDoorLockOn;
-    private volatile boolean isInsulationOn;
-    private volatile boolean isDoorZoneOn;
+    private volatile boolean isDoorSHSO;
+    private volatile boolean isDoorZone;
+    private volatile boolean isCurrent;
+    private volatile boolean isCurrentVIU;
 
-    private boolean is75to5State;
-    private boolean is10to5State;
-    private boolean is1to5State;
+    private boolean is200to5State;
+    private boolean is40to5State;
+    private boolean is5to5State;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-SSS");
     private String logBuffer;
@@ -147,11 +149,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         return isCanceled;
     }
 
-    @FXML
-    private void handleExperimentCancel() {
-        dialogStage.close();
-        isCanceled = true;
-    }
 
     private void fillProtocolExperimentFields() {
         Protocol currentProtocol = mainModel.getCurrentProtocol();
@@ -176,39 +173,69 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         }
     }
 
+    @FXML
+    private void handleExperimentCancel() {
+        dialogStage.close();
+        isCanceled = true;
+    }
+
     private void stopExperiment() {
+        isNeedToRefresh = false;
         buttonStartStop.setDisable(true);
         cause = "Отменено оператором";
         isExperimentStart = false;
     }
 
     private void startExperiment() {
-        isCurrent1On = true;
-        isCurrent2On = true;
-        isDoorLockOn = true;
-        isInsulationOn = true;
-        isDoorZoneOn = true;
-        isNeedToRefresh = true;
-        isExperimentStart = true;
-        isExperimentEnd = false;
         buttonStartStop.setText("Остановить");
         buttonNext.setDisable(true);
         buttonCancelAll.setDisable(true);
+
+        communicationModel.offAllKms();
+        communicationModel.finalizeAllDevices();
         experiment7ModelPhase3.clearProperties();
+
+        isNeedToRefresh = true;
+        isExperimentStart = true;
+        isExperimentEnd = false;
+
         isDeltaResponding = false;
-        isParmaResponding = false;
+        isPM130Responding = false;
+
+        isCurrentVIU = true;
+
+        isPressedOk = false;
         cause = "";
         iAOld = -1;
         iBOld = -1;
         iCOld = -1;
 
+        isPressedOk = false;
+
         new Thread(() -> {
+
+            if (isExperimentStart) {
+                Platform.runLater(() -> {
+                    View.showConfirmDialog("Подключите ОИ для определения Ктр: провода с маркировкой А-В-С (ШСО) к стороне ВН и А-В-С (стойка приборов) к НН",
+                            () -> {
+                                isPressedOk = true;
+                                isNeedToRefresh = true;
+                            },
+                            () -> {
+                                cause = "Отменено";
+                                isExperimentStart = false;
+                                isPressedOk = false;
+                            });
+                });
+            }
+
+            while (!isPressedOk) {
+                sleep(1);
+            }
+
             if (isExperimentStart) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment7Devices();
-                sleep(3000);
-                experiment7ModelPhase3.setF("200,00");
             }
 
             if (isExperimentStart && !isOwenPRResponding) {
@@ -224,54 +251,61 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onKM1();
-                isStartButtonOn = true;
-                is75to5State = true;
-                sleep(1000);
             }
 
             while (isExperimentStart && !isStartButtonOn) {
-                sleep(100);
                 appendOneMessageToLog("Включите кнопочный пост");
+                sleep(1);
+                isNeedToWaitDelta = true;
             }
 
-            if (isExperimentStart && isStartButtonOn) {
+            if (isExperimentStart) {
                 appendOneMessageToLog("Идет загрузка ЧП");
+            }
+
+            if (isExperimentStart && isNeedToWaitDelta) {
                 sleep(8000);
+            }
+
+            if (isExperimentStart) {
                 communicationModel.initExperiment7Devices();
             }
 
-
-            while (isExperimentStart && !isDevicesResponding() && isStartButtonOn) {
+            while (isExperimentStart && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
             }
 
+
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onKM2();
-                communicationModel.onKM7();
-                communicationModel.onKM5M2();
-                is75to5State = true;
-                if (UHHTestItem <= 380) {
+                is200to5State = true;
+                if (isExperimentStart && UHHTestItem < WIDDING400) {
+                    communicationModel.onKM1();
+                    appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
+                } else if (isExperimentStart && UHHTestItem > WIDDING400) {
+                    communicationModel.onKM2();
                     communicationModel.onKM2M1();
-                    appendOneMessageToLog("Собрана схема для испытания 418В трансформатора");
-                } else if (UHHTestItem > 380) {
-                    communicationModel.onKM3M1();
-                    appendOneMessageToLog("Собрана схема для испытания 1320В трансформатора");
-                    communicationModel.onKM4M2();
+                    appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
-                    appendOneMessageToLog("Схема разобрана. Введите корректный HH в объекте испытания.");
+                    appendOneMessageToLog("Схема разобрана. Введите корректный ВН в объекте испытания.");
                 }
+                communicationModel.onKM4();
+                communicationModel.onKM1M1();
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 communicationModel.setObjectParams(200 * 100, 50 * 10, 200 * 100);
                 appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
                 communicationModel.startObject();
+                appendOneMessageToLog("Запускаем ЧП");
             }
 
+            while (isExperimentStart && !isDeltaReady200 && isStopButtonOn) {
+                sleep(100);
+                appendOneMessageToLog("Ожидаем, пока частотный преобразователь выйдет к заданным характеристикам");
+            }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 if (UBHTestItem < WIDDING400) {
@@ -290,13 +324,12 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
             isNeedToRefresh = false;
             isExperimentStart = false;
             isExperimentEnd = true;
-            sleep(1000);
             communicationModel.stopObject();
-            while (isExperimentStart && !isDeltaReady0 && isDeltaResponding && isStartButtonOn) {
+            
+            while (isExperimentStart && !isDeltaReady0 && isDeltaResponding) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
             }
-
             sleep(500);
 
             communicationModel.offAllKms(); //разбираем все возможные схемы
@@ -336,26 +369,22 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isThereAreAccidents() {
-        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
+        if (!isCurrentVIU) {
             isExperimentStart = false;
             isExperimentEnd = true;
         }
-        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
+        return !isCurrentVIU || isCanceled;
     }
 
     private String getAccidentsString(String mainText) {
-        return String.format("%s: %s%s%s%s%s%s",
+        return String.format("%s: %s%s",
                 mainText,
-                isCurrent1On ? "" : "сработала токовая защита 1, ",
-                isCurrent2On ? "" : "сработала токовая защита 2, ",
-                isDoorLockOn ? "" : "открылась дверь, ",
-                isInsulationOn ? "" : "обрыв изоляции, ",
-                isCanceled ? "" : "нажата кнопка отмены, ",
-                isDoorZoneOn ? "" : "открылась дверь зоны");
+                isCurrentVIU ? "" : "сработала токовая защита 1, ",
+                isCanceled ? "" : "нажата кнопка отмены, ");
     }
 
     private boolean isDevicesResponding() {
-        return isOwenPRResponding && isParmaResponding && isDeltaResponding;
+        return isOwenPRResponding && isPM130Responding && isDeltaResponding;
     }
 
     private String getNotRespondingDevicesString(String mainText) {
@@ -363,7 +392,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
                 isDeltaResponding ? "" : "Дельта ",
-                isParmaResponding ? "" : "Парма ");
+                isPM130Responding ? "" : "Парма ");
     }
 
     private int regulation(int start, int coarseStep, int fineStep, int end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
@@ -403,73 +432,62 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                     case OwenPRModel.RESPONDING_PARAM:
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
-                        break;
-                    case OwenPRModel.PRDI5:
-                        isStartButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRDI6:
-                        isStopButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRDI6_FIXED:
-                        if ((boolean) value) {
-                            cause = "Нажата кнопка (СТОП)";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI1:
-                        isCurrent1On = (boolean) value;
-                        if (!isCurrent1On) {
-                            cause = "сработала токовая защита 1";
-                            isExperimentStart = false;
-                        }
+//                        isDoorZone = (boolean) value;
+//                        if (isDoorZone) {
+//                            cause = "открыта дверь зоны";
+//                            isExperimentStart = false;
+//                        }
                         break;
                     case OwenPRModel.PRDI2:
-                        isCurrent2On = (boolean) value;
-                        if (!isCurrent2On) {
-                            cause = "сработала токовая защита 2";
-                            isExperimentStart = false;
-                        }
+//                        isCurrentVIU = (boolean) value;
+//                        if (isCurrentVIU) {
+//                            cause = "открыта дверь шкафа";
+//                            isExperimentStart = false;
+//                        }
                         break;
                     case OwenPRModel.PRDI3:
-                        isDoorLockOn = (boolean) value;
-                        if (!isDoorLockOn) {
-                            cause = "открыта дверь";
-                            isExperimentStart = false;
-                        }
+//                        isCurrent = (boolean) value;
+//                        if (isCurrent) {
+//                            cause = "сработала токовая защита";
+//                            isExperimentStart = false;
+//                        }
                         break;
                     case OwenPRModel.PRDI4:
-                        isInsulationOn = (boolean) value;
-                        if (!isInsulationOn) {
-                            cause = "пробита изоляция";
-                            isExperimentStart = false;
-                        }
+                        break;
+                    case OwenPRModel.PRDI5:
+                        break;
+                    case OwenPRModel.PRDI6:
+                        isStartButtonOn = (boolean) value;
+                        break;
+                    case OwenPRModel.PRDI6_FIXED:
                         break;
                     case OwenPRModel.PRDI7:
-                        isDoorZoneOn = (boolean) value;
-                        if (!isDoorZoneOn) {
-                            cause = "открыта дверь зоны";
-                            isExperimentStart = false;
-                        }
+//                        isCurrentVIU = (boolean) value;
+//                        if (isCurrentVIU) {
+//                            cause = "сработала токовая защита ВИУ";
+//                            isExperimentStart = false;
+//                        }
                         break;
                 }
                 break;
-            case PARMA400_ID:
+            case PM130_ID:
                 switch (param) {
-                    case ParmaT400Model.RESPONDING_PARAM:
-                        isParmaResponding = (boolean) value;
+                    case PM130Model.RESPONDING_PARAM:
+                        isPM130Responding = (boolean) value;
                         Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
 
                         break;
-                    case ParmaT400Model.IA_PARAM:
+                    case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
                             iA = (double) value;
-                            if (is75to5State) {
-                                iA *= STATE_75_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
-                                iA *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
-                                iA *= STATE_1_TO_5_MULTIPLIER;
+                            if (is200to5State) {
+                                iA *= STATE_200_TO_5_MULTIPLIER;
+                            } else if (is40to5State) {
+                                iA *= STATE_40_TO_5_MULTIPLIER;
+                            } else if (is5to5State) {
+                                iA *= STATE_5_TO_5_MULTIPLIER;
                             }
                             if (iAOld != -1) {
                                 if (iA > iAOld * 4 && iA > 2) {
@@ -484,15 +502,15 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             measuringIA = (double) ((int) (iA * 10000)) / 10000;
                         }
                         break;
-                    case ParmaT400Model.IB_PARAM:
+                    case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
                             iB = (double) value;
-                            if (is75to5State) {
-                                iB *= STATE_75_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
-                                iB *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
-                                iB *= STATE_1_TO_5_MULTIPLIER;
+                            if (is200to5State) {
+                                iB *= STATE_200_TO_5_MULTIPLIER;
+                            } else if (is40to5State) {
+                                iB *= STATE_40_TO_5_MULTIPLIER;
+                            } else if (is5to5State) {
+                                iB *= STATE_5_TO_5_MULTIPLIER;
                             }
                             iB = (int) ((double) value * POWER) / POWER;
                             if (iBOld != -1) {
@@ -508,15 +526,15 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             measuringIB = (double) ((int) (iB * 10000)) / 10000;
                         }
                         break;
-                    case ParmaT400Model.IC_PARAM:
+                    case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
                             iC = (double) value;
-                            if (is75to5State) {
-                                iC *= STATE_75_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
-                                iC *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
-                                iC *= STATE_1_TO_5_MULTIPLIER;
+                            if (is200to5State) {
+                                iC *= STATE_200_TO_5_MULTIPLIER;
+                            } else if (is40to5State) {
+                                iC *= STATE_40_TO_5_MULTIPLIER;
+                            } else if (is5to5State) {
+                                iC *= STATE_5_TO_5_MULTIPLIER;
                             }
                             iC = ((int) ((double) value * POWER) / POWER);
                             if (iCOld != -1) {
@@ -534,7 +552,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             experiment7ModelPhase3.setIBH((double) ((int) (measuringIAvr * 10000)) / 10000);
                         }
                         break;
-                    case ParmaT400Model.UAB_PARAM:
+                    case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
                             measuringUInAB = (double) value;
                             measuringUInABWithCoef = measuringUInAB;

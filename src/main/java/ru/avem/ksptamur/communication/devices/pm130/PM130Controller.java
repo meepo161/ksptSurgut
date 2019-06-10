@@ -48,6 +48,7 @@ public class PM130Controller implements DeviceController {
         resetWriteAttemptsOfAttempts();
     }
 
+
     public void resetReadAttempts() {
         readAttempt = NUMBER_OF_READ_ATTEMPTS;
     }

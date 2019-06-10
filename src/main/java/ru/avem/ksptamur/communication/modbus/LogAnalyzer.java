@@ -3,7 +3,7 @@ package ru.avem.ksptamur.communication.modbus;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class LogAnalyzer {
+class LogAnalyzer {
     private static int sWrite;
     private static int sSuccess;
 

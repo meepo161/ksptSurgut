@@ -46,6 +46,7 @@ public class DeltaCP2000Controller implements DeviceController {
         resetWriteAttemptsOfAttempts();
     }
 
+
     public void resetReadAttempts() {
         readAttempt = NUMBER_OF_READ_ATTEMPTS;
     }

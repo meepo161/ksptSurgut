@@ -22,7 +22,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768" prefWidth="1366" stylesheets="@../styles/main_css.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptamur.controllers.MainViewController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -116,7 +115,7 @@
                     <content>
                         <AnchorPane>
                             <children>
-                        <VBox alignment="CENTER" prefHeight="714.0" prefWidth="1366.0" spacing="16.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="CENTER" prefHeight="714.0" prefWidth="1366.0" spacing="8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <HBox spacing="16.0">
                                  <children>
@@ -124,6 +123,36 @@
                                  </children>
                                  <padding>
                                     <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox spacing="16.0">
+                                 <children>
+                                    <CheckBox fx:id="checkBoxExperiment0" mnemonicParsing="false" onAction="#handleCheckBox0" text="0. Измерение сопротивления изоляции" wrapText="true" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox spacing="16.0">
+                                 <children>
+                                    <RadioButton fx:id="radioMegerBH" mnemonicParsing="false" onAction="#handleRadioExperiment0BH" text="0.1 ВН и корпус">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="toggleExp11" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="radioMegerHH" mnemonicParsing="false" onAction="#handleRadioExperiment0HH" text="0.1 НН и корпус">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="toggleExp12" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="radioMegerBHHH" mnemonicParsing="false" onAction="#handleRadioExperiment0BHHH" text="0.1 ВН и НН">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="toggleExp13" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
                                  </padding>
                               </HBox>
                               <HBox spacing="16.0">
@@ -142,13 +171,6 @@
                                                       <ToggleGroup fx:id="toggleExp1" />
                                                   </toggleGroup>
                                               </RadioButton>
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox spacing="16.0">
-                                 <children>
                                               <RadioButton fx:id="radioIKASHH" mnemonicParsing="false" onAction="#handleRadioExperiment1HH" text="1.2 НН" toggleGroup="$toggleExp1" />
                                  </children>
                                  <padding>

@@ -17,6 +17,10 @@ public class CS02021Controller implements DeviceController {
 
     private CS020201Model model;
     private boolean needToReed;
+    public byte readAttempt = NUMBER_OF_READ_ATTEMPTS;
+    public byte readAttemptOfAttempt = NUMBER_OF_READ_ATTEMPTS_OF_ATTEMPTS;
+    public byte writeAttempt = NUMBER_OF_WRITE_ATTEMPTS;
+    public byte writeAttemptOfAttempt = NUMBER_OF_WRITE_ATTEMPTS_OF_ATTEMPTS;
 
     public CS02021Controller(int address, Observer observer, Connection connection, int megacsId) {
         this.address = (byte) address;
@@ -149,6 +153,16 @@ public class CS02021Controller implements DeviceController {
     }
 
     @Override
+    public boolean thereAreReadAttempts() {
+        return readAttempt > 0;
+    }
+
+    @Override
+    public boolean thereAreWriteAttempts() {
+        return writeAttempt > 0;
+    }
+
+    @Override
     public boolean needToRead() {
         return needToReed;
     }
@@ -159,24 +173,32 @@ public class CS02021Controller implements DeviceController {
     }
 
 
-    // TODO: 14.05.2019
-    @Override
-    public boolean thereAreReadAttempts() {
-        return false;
-    }
-
-    @Override
-    public boolean thereAreWriteAttempts() {
-        return false;
-    }
-
     @Override
     public void resetAllAttempts() {
-
+        resetReadAttempts();
+        resetReadAttemptsOfAttempts();
+        resetWriteAttempts();
+        resetWriteAttemptsOfAttempts();
     }
 
     @Override
     public void resetAllDeviceStateOnAttempts() {
 
+    }
+
+    public void resetReadAttempts() {
+        readAttempt = NUMBER_OF_READ_ATTEMPTS;
+    }
+
+    private void resetReadAttemptsOfAttempts() {
+        readAttemptOfAttempt = NUMBER_OF_READ_ATTEMPTS_OF_ATTEMPTS;
+    }
+
+    public void resetWriteAttempts() {
+        writeAttempt = NUMBER_OF_WRITE_ATTEMPTS;
+    }
+
+    private void resetWriteAttemptsOfAttempts() {
+        writeAttemptOfAttempt = NUMBER_OF_WRITE_ATTEMPTS_OF_ATTEMPTS;
     }
 }

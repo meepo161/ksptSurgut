@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import ru.avem.ksptamur.communication.devices.cs02021.CS020201Model;
+//import ru.avem.ksptamur.communication.devices.fr_a800.FRA800Model;
 import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptamur.communication.devices.ikas.IKASModel;
 import ru.avem.ksptamur.communication.devices.parmaT400.ParmaT400Model;

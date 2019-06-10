@@ -34,9 +34,9 @@ import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment4ControllerPhase3 extends DeviceState implements ExperimentController {
     private static final int WIDDING400 = 400;
-    private static final float STATE_1_TO_5_MULTIPLIER = 1f / 5f;
-    private static final float STATE_10_TO_5_MULTIPLIER = 10f / 5f;
-    private static final float STATE_75_TO_5_MULTIPLIER = 75f / 5f;
+    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
+    private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
+    private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
     private static final int TIME_DELAY_CURRENT_STAGES = 100;
     private static final double POWER = 100;
 
@@ -72,8 +72,9 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
     private Stage dialogStage;
     private boolean isCanceled;
 
-    private volatile boolean isNeedToRefresh;
+    private volatile boolean isNeedToRefresh = true;
     private volatile boolean isStartButtonOn;
+    private volatile boolean isNeedToWaitDelta;
     private volatile boolean isStopButtonOn;
     private volatile boolean isExperimentStart;
     private volatile boolean isExperimentEnd = true;
@@ -85,17 +86,17 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
     private volatile boolean isParmaResponding;
     private volatile boolean isPM130Responding;
     private volatile boolean isPhaseMeterResponding;
+    private volatile boolean isPressedOk;
     private volatile boolean isDeviceOn = false;
 
-    private volatile boolean isCurrent1On;
-    private volatile boolean isCurrent2On;
-    private volatile boolean isDoorLockOn;
-    private volatile boolean isInsulationOn;
-    private volatile boolean isDoorZoneOn;
+    private volatile boolean isDoorSHSO;
+    private volatile boolean isDoorZone;
+    private volatile boolean isCurrent;
+    private volatile boolean isCurrentVIU;
 
-    private boolean is75to5State;
-    private boolean is10to5State;
-    private boolean is1to5State;
+    private boolean is200to5State;
+    private boolean is40to5State;
+    private boolean is5to5State;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-SSS");
     private String logBuffer;
@@ -148,11 +149,6 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
         return isCanceled;
     }
 
-    @FXML
-    private void handleExperimentCancel() {
-        dialogStage.close();
-        isCanceled = true;
-    }
 
     private void fillProtocolExperimentFields() {
         Protocol currentProtocol = mainModel.getCurrentProtocol();
@@ -168,6 +164,7 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
         fillProtocolExperimentFields();
         dialogStage.close();
     }
+
     @FXML
     private void handleStartExperiment() {
         if (isExperimentEnd) {
@@ -175,6 +172,12 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
         } else {
             stopExperiment();
         }
+    }
+
+    @FXML
+    private void handleExperimentCancel() {
+        dialogStage.close();
+        isCanceled = true;
     }
 
     private void stopExperiment() {
@@ -186,45 +189,53 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
 
 
     private void startExperiment() {
-        isCurrent1On = true;
-        isCurrent2On = true;
-        isDoorLockOn = true;
-        isInsulationOn = true;
-        isDoorZoneOn = true;
-        isNeedToRefresh = true;
-        isExperimentStart = true;
-        isExperimentEnd = false;
         buttonStartStop.setText("Остановить");
         buttonNext.setDisable(true);
         buttonCancelAll.setDisable(true);
+
+        communicationModel.offAllKms();
+        communicationModel.finalizeAllDevices();
         experiment4ModelPhase3.clearProperties();
+
+        isNeedToRefresh = true;
+        isNeedToWaitDelta = false;
+        isExperimentStart = true;
+        isExperimentEnd = false;
+
         isDeltaResponding = false;
         isParmaResponding = false;
         isPM130Responding = false;
+
+        isCurrentVIU = true;
+
+        isPressedOk = false;
         isPhaseMeterResponding = false;
         cause = "";
 
         new Thread(() -> {
 
             if (isExperimentStart) {
-                AtomicBoolean isPressed = new AtomicBoolean(false);
                 Platform.runLater(() -> {
                     View.showConfirmDialog("Подключите ОИ для определения группы соединений: провода с маркировкой А-В-С (ШСО) к стороне ВН и А-В-С (стойка приборов) к НН",
                             () -> {
-                                isPressed.set(true);
+                                isPressedOk = true;
+                                isNeedToRefresh = true;
                             },
                             () -> {
                                 cause = "Отменено";
                                 isExperimentStart = false;
-                                isPressed.set(true);
+                                isPressedOk = false;
                             });
                 });
+            }
+
+            while (!isPressedOk) {
+                sleep(1);
             }
 
             if (isExperimentStart) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
-                sleep(3000);
             }
 
             if (isExperimentStart && !isOwenPRResponding) {
@@ -245,11 +256,18 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
             while (isExperimentStart && !isStartButtonOn) {
                 appendOneMessageToLog("Включите кнопочный пост");
                 sleep(1);
+                isNeedToWaitDelta = true;
             }
 
             if (isExperimentStart) {
                 appendOneMessageToLog("Идет загрузка ЧП");
+            }
+
+            if (isExperimentStart && isNeedToWaitDelta) {
                 sleep(8000);
+            }
+
+            if (isExperimentStart) {
                 communicationModel.initExperiment4Devices();
             }
 
@@ -261,13 +279,13 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                is75to5State = true;
-                if (isExperimentStart && UBHTestItem < WIDDING400) {
+                is200to5State = true;
+                if (isExperimentStart && UHHTestItem < WIDDING400) {
                     communicationModel.onKM1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
-                } else if (isExperimentStart && UBHTestItem > WIDDING400) {
+                } else if (isExperimentStart && UHHTestItem > WIDDING400) {
                     communicationModel.onKM2();
-                    communicationModel.onKM2M2();
+                    communicationModel.onKM2M1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
@@ -278,6 +296,7 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
+                sleep(3000);
                 communicationModel.setObjectParams(50 * 100, 5 * 10, 50 * 100);
                 appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
                 communicationModel.startObject();
@@ -295,6 +314,7 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
+                sleep(5000);
                 communicationModel.startPhaseMeter();
                 appendOneMessageToLog("Началось измерение");
                 sleep(2000);
@@ -311,6 +331,7 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
             isExperimentEnd = true;
             sleep(500);
             communicationModel.stopObject();
+
             while (isExperimentStart && !isDeltaReady0 && isDeltaResponding) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
@@ -352,22 +373,18 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isThereAreAccidents() {
-        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
+        if (!isCurrentVIU) {
             isExperimentStart = false;
             isExperimentEnd = true;
         }
-        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
+        return !isCurrentVIU || isCanceled;
     }
 
     private String getAccidentsString(String mainText) {
-        return String.format("%s: %s%s%s%s%s%s",
+        return String.format("%s: %s%s",
                 mainText,
-                isCurrent1On ? "" : "сработала токовая защита 1, ",
-                isCurrent2On ? "" : "сработала токовая защита 2, ",
-                isDoorLockOn ? "" : "открылась дверь, ",
-                isInsulationOn ? "" : "обрыв изоляции, ",
-                isCanceled ? "" : "нажата кнопка отмены, ",
-                isDoorZoneOn ? "" : "открылась дверь зоны");
+                isCurrentVIU ? "" : "сработала токовая защита 1, ",
+                isCanceled ? "" : "нажата кнопка отмены, ");
     }
 
     private boolean isDevicesResponding() {
@@ -512,30 +529,18 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                         break;
                 }
                 break;
-            case DELTACP2000_ID:
-                switch (param) {
-                    case DeltaCP2000Model.RESPONDING_PARAM:
-                        isDeltaResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
+          case DELTACP2000_ID:
+              switch (param) {
+                  case DeltaCP2000Model.RESPONDING_PARAM:
+                      isDeltaResponding = (boolean) value;
+                      Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
 
-                        break;
-                    case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
-                        setCurrentFrequencyObject((short) value);
-                        break;
-//                    case DeltaCP2000Model.ERROR1_PARAM:
-//                        if ((short) value > 0) {
-//                            appendMessageToLog(String.valueOf(value));
-//                        }
-//
-//                        break;
-//                    case DeltaCP2000Model.ERROR2_PARAM:
-//                        if ((short) value > 0) {
-//                            appendMessageToLog(String.valueOf(value));
-//                        }
-//                        break;
-                }
-                break;
-
+                      break;
+                  case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
+                      setCurrentFrequencyObject((short) value);
+                      break;
+              }
+              break;
         }
     }
 

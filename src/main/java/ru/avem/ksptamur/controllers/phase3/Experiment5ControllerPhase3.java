@@ -32,9 +32,9 @@ import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment5ControllerPhase3 extends DeviceState implements ExperimentController {
     private static final int WIDDING400 = 400;
-    private static final double STATE_1_TO_5_MULTIPLIER = 0.2;
-    private static final double STATE_10_TO_5_MULTIPLIER = 2.0;
-    private static final double STATE_75_TO_5_MULTIPLIER = 15.0;
+    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
+    private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
+    private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
     private static final int TIME_DELAY_CURRENT_STAGES = 100;
     private static final double POWER = 100;
 
@@ -90,6 +90,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
 
     private volatile boolean isNeedToRefresh;
     private volatile boolean isStartButtonOn;
+    private volatile boolean isNeedToWaitDelta;
     private volatile boolean isStopButtonOn;
     private volatile boolean isExperimentStart;
     private volatile boolean isExperimentEnd = true;
@@ -99,16 +100,17 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
     private volatile boolean isDeltaReady50;
     private volatile boolean isDeltaReady0;
     private volatile boolean isParmaResponding;
+    private volatile boolean isPM130Responding;
+    private volatile boolean isPressedOk;
 
-    private volatile boolean isCurrent1On;
-    private volatile boolean isCurrent2On;
-    private volatile boolean isDoorLockOn;
-    private volatile boolean isInsulationOn;
-    private volatile boolean isDoorZoneOn;
+    private volatile boolean isDoorSHSO;
+    private volatile boolean isDoorZone;
+    private volatile boolean isCurrent;
+    private volatile boolean isCurrentVIU;
 
-    private boolean is75to5State;
-    private boolean is10to5State;
-    private boolean is1to5State;
+    private boolean is200to5State;
+    private boolean is40to5State;
+    private boolean is5to5State;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-SSS");
     private String logBuffer;
@@ -171,11 +173,6 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
         return isCanceled;
     }
 
-    @FXML
-    private void handleExperimentCancel() {
-        dialogStage.close();
-        isCanceled = true;
-    }
 
     private void fillProtocolExperimentFields() {
         Protocol currentProtocol = mainModel.getCurrentProtocol();
@@ -205,6 +202,12 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
         }
     }
 
+    @FXML
+    private void handleExperimentCancel() {
+        dialogStage.close();
+        isCanceled = true;
+    }
+
     private void stopExperiment() {
         isNeedToRefresh = false;
         buttonStartStop.setDisable(true);
@@ -214,43 +217,53 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
 
 
     private void startExperiment() {
-        isCurrent1On = true;
-        isCurrent2On = true;
-        isDoorLockOn = true;
-        isInsulationOn = true;
-        isDoorZoneOn = true;
-        isNeedToRefresh = true;
-        isExperimentStart = true;
-        isExperimentEnd = false;
         buttonStartStop.setText("Остановить");
         buttonNext.setDisable(true);
         buttonCancelAll.setDisable(true);
+
+        communicationModel.offAllKms();
+        communicationModel.finalizeAllDevices();
         experiment5ModelPhase3.clearProperties();
+
+        isNeedToRefresh = true;
+        isExperimentStart = true;
+        isExperimentEnd = false;
+        isNeedToWaitDelta = false;
+
         isDeltaResponding = false;
         isParmaResponding = false;
+        isPM130Responding = false;
+
+        isCurrentVIU = true;
+
+        isPressedOk = false;
         cause = "";
+        isPressedOk = false;
 
         new Thread(() -> {
 
             if (isExperimentStart) {
-                AtomicBoolean isPressed = new AtomicBoolean(false);
                 Platform.runLater(() -> {
                     View.showConfirmDialog("Подключите ШСО к НН",
                             () -> {
-                                isPressed.set(true);
+                                isPressedOk = true;
+                                isNeedToRefresh = true;
                             },
                             () -> {
                                 cause = "Отменено";
                                 isExperimentStart = false;
-                                isPressed.set(true);
+                                isPressedOk = false;
                             });
                 });
+            }
+
+            while (!isPressedOk) {
+                sleep(1);
             }
 
             if (isExperimentStart) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
-                sleep(3000);
             }
 
             if (isExperimentStart && !isOwenPRResponding) {
@@ -271,12 +284,19 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
             while (isExperimentStart && !isStartButtonOn) {
                 appendOneMessageToLog("Включите кнопочный пост");
                 sleep(1);
+                isNeedToWaitDelta = true;
             }
 
             if (isExperimentStart) {
                 appendOneMessageToLog("Идет загрузка ЧП");
+            }
+
+            if (isExperimentStart && isNeedToWaitDelta) {
                 sleep(8000);
-                communicationModel.initExperiment5Devices();
+            }
+
+            if (isExperimentStart) {
+                communicationModel.initExperiment3Devices();
             }
 
             while (isExperimentStart && !isDevicesResponding()) {
@@ -284,29 +304,26 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 sleep(100);
             }
 
-
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onKM3();
-                communicationModel.onKM2M1();
                 if (Ikz < 1) {
                     appendOneMessageToLog("1к5 токовая ступень");
                     communicationModel.onKM6();
-                    is1to5State = true;
-                    is10to5State = false;
-                    is75to5State = false;
+                    is5to5State = true;
+                    is40to5State = false;
+                    is200to5State = false;
                 } else if (Ikz > 1 && Ikz < 15) {
                     appendOneMessageToLog("10к5 токовая ступень");
                     communicationModel.onKM5();
-                    is1to5State = false;
-                    is10to5State = true;
-                    is75to5State = false;
+                    is5to5State = false;
+                    is40to5State = true;
+                    is200to5State = false;
                 } else {
                     appendOneMessageToLog("75к5 токовая ступень");
                     communicationModel.onKM4();
-                    is1to5State = false;
-                    is10to5State = false;
-                    is75to5State = true;
+                    is5to5State = false;
+                    is40to5State = false;
+                    is200to5State = true;
                 }
                 communicationModel.onKM7();
                 communicationModel.onKM1M1();
@@ -322,6 +339,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                     appendOneMessageToLog("Напряжение короткого больше допустимого");
                     appendOneMessageToLog("Проверьте корректность введенных данных в БД");
                     communicationModel.offAllKms();
+                    appendOneMessageToLog("Схема разобрана. Введите корректный ВН в объекте испытания.");
                 }
             }
 
@@ -339,10 +357,9 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
 
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                regulation(5 * 10, 30, 5, UHHTestItem, 0.4, 2, 100, 200);
+                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem / 4);
+                regulation(5 * 10, 10, 2, UHHTestItem / 4, 0.4, 2, 100, 200);
             }
-
 
             isNeedToRefresh = false;
             isExperimentStart = false;
@@ -388,22 +405,18 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isThereAreAccidents() {
-        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
+        if (!isCurrentVIU) {
             isExperimentStart = false;
             isExperimentEnd = true;
         }
-        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
+        return !isCurrentVIU || isCanceled;
     }
 
     private String getAccidentsString(String mainText) {
-        return String.format("%s: %s%s%s%s%s%s",
+        return String.format("%s: %s%s",
                 mainText,
-                isCurrent1On ? "" : "сработала токовая защита 1, ",
-                isCurrent2On ? "" : "сработала токовая защита 2, ",
-                isDoorLockOn ? "" : "открылась дверь, ",
-                isInsulationOn ? "" : "обрыв изоляции, ",
-                isCanceled ? "" : "нажата кнопка отмены, ",
-                isDoorZoneOn ? "" : "открылась дверь зоны");
+                isCurrentVIU ? "" : "сработала токовая защита 1, ",
+                isCanceled ? "" : "нажата кнопка отмены, ");
     }
 
     private boolean isDevicesResponding() {
@@ -443,6 +456,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
         return start;
     }
 
+
     @Override
     public void update(Observable o, Object values) {
         int modelId = (int) (((Object[]) values)[0]);
@@ -455,54 +469,23 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                     case OwenPRModel.RESPONDING_PARAM:
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
-                        break;
-                    case OwenPRModel.PRDI5:
-                        isStartButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRDI6:
-                        isStopButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRDI6_FIXED:
-                        if ((boolean) value) {
-                            cause = "Нажата кнопка (СТОП)";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI1:
-                        isCurrent1On = (boolean) value;
-                        if (!isCurrent1On) {
-                            cause = "сработала токовая защита 1";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI2:
-                        isCurrent2On = (boolean) value;
-                        if (!isCurrent2On) {
-                            cause = "сработала токовая защита 2";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI3:
-                        isDoorLockOn = (boolean) value;
-                        if (!isDoorLockOn) {
-                            cause = "открыта дверь";
-                            isExperimentStart = false;
-                        }
                         break;
                     case OwenPRModel.PRDI4:
-                        isInsulationOn = (boolean) value;
-                        if (!isInsulationOn) {
-                            cause = "пробита изоляция";
-                            isExperimentStart = false;
-                        }
+                        break;
+                    case OwenPRModel.PRDI5:
+                        break;
+                    case OwenPRModel.PRDI6:
+                        isStartButtonOn = (boolean) value;
+                        break;
+                    case OwenPRModel.PRDI6_FIXED:
                         break;
                     case OwenPRModel.PRDI7:
-                        isDoorZoneOn = (boolean) value;
-                        if (!isDoorZoneOn) {
-                            cause = "открыта дверь зоны";
-                            isExperimentStart = false;
-                        }
                         break;
                 }
                 break;
@@ -515,16 +498,16 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
-                            iA = (double) value;
-                            if (is75to5State) {
-                                iA *= STATE_75_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
-                                iA *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
-                                iA *= STATE_1_TO_5_MULTIPLIER;
+                            iA = (float) value;
+                            if (is200to5State) {
+                                iA *= STATE_200_TO_5_MULTIPLIER;
+                            } else if (is40to5State) {
+                                iA *= STATE_40_TO_5_MULTIPLIER;
+                            } else if (is5to5State) {
+                                iA *= STATE_5_TO_5_MULTIPLIER;
                             }
                             if (iA > 0.001) {
-                                experiment5ModelPhase3.setIA((double) ((int) (iA * 10000)) / 10000);
+                                experiment5ModelPhase3.setIA((float) ((int) (iA * 10000)) / 10000);
                             }
                         }
                         if (iA > Ikz) {
@@ -534,16 +517,16 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
-                            iB = (double) value;
-                            if (is75to5State) {
-                                iB *= STATE_75_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
-                                iB *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
-                                iB *= STATE_1_TO_5_MULTIPLIER;
+                            iB = (float) value;
+                            if (is200to5State) {
+                                iB *= STATE_200_TO_5_MULTIPLIER;
+                            } else if (is40to5State) {
+                                iB *= STATE_40_TO_5_MULTIPLIER;
+                            } else if (is5to5State) {
+                                iB *= STATE_5_TO_5_MULTIPLIER;
                             }
                             if (iB > 0.001) {
-                                experiment5ModelPhase3.setIB((double) ((int) (iB * 10000)) / 10000);
+                                experiment5ModelPhase3.setIB((float) ((int) (iB * 10000)) / 10000);
                             }
                         }
                         if (iB > Ikz) {
@@ -553,16 +536,16 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
-                            iC = (double) value;
-                            if (is75to5State) {
-                                iC *= STATE_75_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
-                                iC *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
-                                iC *= STATE_1_TO_5_MULTIPLIER;
+                            iC = (float) value;
+                            if (is200to5State) {
+                                iC *= STATE_200_TO_5_MULTIPLIER;
+                            } else if (is40to5State) {
+                                iC *= STATE_40_TO_5_MULTIPLIER;
+                            } else if (is5to5State) {
+                                iC *= STATE_5_TO_5_MULTIPLIER;
                             }
                             if (iC > 0.001) {
-                                experiment5ModelPhase3.setIC((double) ((int) (iC * 10000)) / 10000);
+                                experiment5ModelPhase3.setIC((float) ((int) (iC * 10000)) / 10000);
                             }
                         }
                         if (iC > Ikz) {
@@ -572,12 +555,12 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (double) value;
+                            measuringUInAB = (float) value;
                             String UInAB = String.format("%.2f", measuringUInAB);
                             experiment5ModelPhase3.setUBH(UInAB);
                             Unom = measuringUInAB * 4.0;
                             measuringUkzPercent = (Unom * 100.0) / UHHTestItem;
-                            ukzPercent = ((int) ((double) measuringUkzPercent * POWER) / POWER);
+                            ukzPercent = ((int) ((float) measuringUkzPercent * POWER) / POWER);
                             experiment5ModelPhase3.setUKZPercent(String.valueOf(ukzPercent));
                             String ukzDif = String.format("%.2f", ukzPercent - UKZTestItem);
                             experiment5ModelPhase3.setUKZDiff(String.valueOf(ukzDif));
@@ -590,13 +573,13 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.P_PARAM:
                         if (isNeedToRefresh) {
-                            measuringP = (double) value;
-                            if (is75to5State) {
-                                measuringP *= STATE_75_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
-                                measuringP *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
-                                measuringP *= STATE_1_TO_5_MULTIPLIER;
+                            measuringP = (float) value;
+                            if (is200to5State) {
+                                measuringP *= STATE_200_TO_5_MULTIPLIER;
+                            } else if (is40to5State) {
+                                measuringP *= STATE_40_TO_5_MULTIPLIER;
+                            } else if (is5to5State) {
+                                measuringP *= STATE_5_TO_5_MULTIPLIER;
                             }
                             String PP = String.format("%.2f", measuringP * 16);
                             experiment5ModelPhase3.setPP(PP);
@@ -604,7 +587,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.F_PARAM:
                         if (isNeedToRefresh) {
-                            String freq = String.format("%.2f", (double) value);
+                            String freq = String.format("%.2f", (float) value);
                             experiment5ModelPhase3.setF(freq);
                         }
                         break;

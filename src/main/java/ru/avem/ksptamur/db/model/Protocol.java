@@ -13,6 +13,44 @@ public class Protocol {
     @DatabaseField(generatedId = true)
     private long id;
 
+    @DatabaseField
+    private String e0WindingBH = "";
+    @DatabaseField
+    private String e0R15BH = "";
+    @DatabaseField
+    private String e0R60BH = "";
+    @DatabaseField
+    private String e0CoefBH = "";
+    @DatabaseField
+    private String e0TBH = "";
+    @DatabaseField
+    private String e0ResultBH = "";
+
+    @DatabaseField
+    private String e0WindingHH = "";
+    @DatabaseField
+    private String e0R15HH = "";
+    @DatabaseField
+    private String e0R60HH = "";
+    @DatabaseField
+    private String e0CoefHH = "";
+    @DatabaseField
+    private String e0THH = "";
+    @DatabaseField
+    private String e0ResultHH = "";
+
+    @DatabaseField
+    private String e0WindingBHHH = "";
+    @DatabaseField
+    private String e0R15BHHH = "";
+    @DatabaseField
+    private String e0R60BHHH = "";
+    @DatabaseField
+    private String e0CoefBHHH = "";
+    @DatabaseField
+    private String e0TBHHH = "";
+    @DatabaseField
+    private String e0ResultBHHH = "";
 
     @DatabaseField
     private String e1WindingBH = "";
@@ -268,6 +306,150 @@ public class Protocol {
     public void setMillis(long millis) {
         this.millis = millis;
         this.date = new SimpleDateFormat("dd.MM.yy").format(millis);
+    }
+
+    public String getE0WindingBH() {
+        return e0WindingBH;
+    }
+
+    public void setE0WindingBH(String e0WindingBH) {
+        this.e0WindingBH = e0WindingBH;
+    }
+
+    public String getE0R15BH() {
+        return e0R15BH;
+    }
+
+    public void setE0R15BH(String e0R15BH) {
+        this.e0R15BH = e0R15BH;
+    }
+
+    public String getE0R60BH() {
+        return e0R60BH;
+    }
+
+    public void setE0R60BH(String e0R60BH) {
+        this.e0R60BH = e0R60BH;
+    }
+
+    public String getE0CoefBH() {
+        return e0CoefBH;
+    }
+
+    public void setE0CoefBH(String e0CoefBH) {
+        this.e0CoefBH = e0CoefBH;
+    }
+
+    public String getE0TBH() {
+        return e0TBH;
+    }
+
+    public void setE0TBH(String e0TBH) {
+        this.e0TBH = e0TBH;
+    }
+
+    public String getE0ResultBH() {
+        return e0ResultBH;
+    }
+
+    public void setE0ResultBH(String e0ResultBH) {
+        this.e0ResultBH = e0ResultBH;
+    }
+
+    public String getE0WindingHH() {
+        return e0WindingHH;
+    }
+
+    public void setE0WindingHH(String e0WindingHH) {
+        this.e0WindingHH = e0WindingHH;
+    }
+
+    public String getE0R15HH() {
+        return e0R15HH;
+    }
+
+    public void setE0R15HH(String e0R15HH) {
+        this.e0R15HH = e0R15HH;
+    }
+
+    public String getE0R60HH() {
+        return e0R60HH;
+    }
+
+    public void setE0R60HH(String e0R60HH) {
+        this.e0R60HH = e0R60HH;
+    }
+
+    public String getE0CoefHH() {
+        return e0CoefHH;
+    }
+
+    public void setE0CoefHH(String e0CoefHH) {
+        this.e0CoefHH = e0CoefHH;
+    }
+
+    public String getE0THH() {
+        return e0THH;
+    }
+
+    public void setE0THH(String e0THH) {
+        this.e0THH = e0THH;
+    }
+
+    public String getE0ResultHH() {
+        return e0ResultHH;
+    }
+
+    public void setE0ResultHH(String e0ResultHH) {
+        this.e0ResultHH = e0ResultHH;
+    }
+
+    public String getE0WindingBHHH() {
+        return e0WindingBHHH;
+    }
+
+    public void setE0WindingBHHH(String e0WindingBHHH) {
+        this.e0WindingBHHH = e0WindingBHHH;
+    }
+
+    public String getE0R15BHHH() {
+        return e0R15BHHH;
+    }
+
+    public void setE0R15BHHH(String e0R15BHHH) {
+        this.e0R15BHHH = e0R15BHHH;
+    }
+
+    public String getE0R60BHHH() {
+        return e0R60BHHH;
+    }
+
+    public void setE0R60BHHH(String e0R60BHHH) {
+        this.e0R60BHHH = e0R60BHHH;
+    }
+
+    public String getE0CoefBHHH() {
+        return e0CoefBHHH;
+    }
+
+    public void setE0CoefBHHH(String e0CoefBHHH) {
+        this.e0CoefBHHH = e0CoefBHHH;
+    }
+
+    public String getE0TBHHH() {
+        return e0TBHHH;
+    }
+
+    public void setE0TBHHH(String e0TBHHH) {
+        this.e0TBHHH = e0TBHHH;
+    }
+
+    public String getE0ResultBHHH() {
+        return e0ResultBHHH;
+    }
+
+    public void setE0ResultBHHH(String e0ResultBHHH) {
+        this.e0ResultBHHH = e0ResultBHHH;
     }
 
     public String getE1WindingBH() {
@@ -996,6 +1178,24 @@ public class Protocol {
                 Double.compare(protocol.uinsulation, uinsulation) == 0 &&
                 Double.compare(protocol.withMeger, withMeger) == 0 &&
                 millis == protocol.millis &&
+                Objects.equals(e0WindingBH, protocol.e0WindingBH) &&
+                Objects.equals(e0R15BH, protocol.e0R15BH) &&
+                Objects.equals(e0R60BH, protocol.e0R60BH) &&
+                Objects.equals(e0CoefBH, protocol.e0CoefBH) &&
+                Objects.equals(e0TBH, protocol.e0TBH) &&
+                Objects.equals(e0ResultBH, protocol.e0ResultBH) &&
+                Objects.equals(e0WindingHH, protocol.e0WindingHH) &&
+                Objects.equals(e0R15HH, protocol.e0R15HH) &&
+                Objects.equals(e0R60HH, protocol.e0R60HH) &&
+                Objects.equals(e0CoefHH, protocol.e0CoefHH) &&
+                Objects.equals(e0THH, protocol.e0THH) &&
+                Objects.equals(e0ResultHH, protocol.e0ResultHH) &&
+                Objects.equals(e0WindingBHHH, protocol.e0WindingBHHH) &&
+                Objects.equals(e0R15BHHH, protocol.e0R15BHHH) &&
+                Objects.equals(e0R60BHHH, protocol.e0R60BHHH) &&
+                Objects.equals(e0CoefBHHH, protocol.e0CoefBHHH) &&
+                Objects.equals(e0TBHHH, protocol.e0TBHHH) &&
+                Objects.equals(e0ResultBHHH, protocol.e0ResultBHHH) &&
                 Objects.equals(e1WindingBH, protocol.e1WindingBH) &&
                 Objects.equals(e1ABBH, protocol.e1ABBH) &&
                 Objects.equals(e1BCBH, protocol.e1BCBH) &&
@@ -1080,6 +1280,6 @@ public class Protocol {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, e1WindingBH, e1ABBH, e1BCBH, e1CABH, e1TBH, e1ResultBH, e1WindingHH, e1ABHH, e1BCHH, e1CAHH, e1THH, e1ResultHH, e2UInputAB, e2UInputBC, e2UInputCA, e2UInputAvr, e2UOutputAB, e2UOutputBC, e2UOutputCA, e2UOutputAvr, e2DiffU, e2F, e2Result, e3UBH, e3UHH, e3F, e3Result, e4WindingBH, e4WindingHH, e4UBH, e4UHH, e4Result, e5UKZV, e5UKZPercent, e5UKZDiff, e5IA, e5IB, e5IC, e5Pp, e5F, e5Result, e6UBH, e6IA, e6IB, e6IC, e6IAPercent, e6IBPercent, e6ICPercent, e6IADiff, e6IBDiff, e6ICDiff, e6Pp, e6Cos, e6F, e6Result, e7UInput, e7IBH, e7F, e7Time, e7Result, e8TypeBHandCorps, e8IBHandCorps, e8UBHandCorps, e8TimeBHandCorps, e8ResultBHandCorps, e8TypeHHandCorps, e8IHHandCorps, e8UHHandCorps, e8TimeHHandCorps, e8ResultHHandCorps, serialNumber, type, ubh, uhh, p, phase, ixx, ukz, xxtime, uinsulation, withMeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
+        return Objects.hash(id, e0WindingBH, e0R15BH, e0R60BH, e0CoefBH, e0TBH, e0ResultBH, e0WindingHH, e0R15HH, e0R60HH, e0CoefHH, e0THH, e0ResultHH, e0WindingBHHH, e0R15BHHH, e0R60BHHH, e0CoefBHHH, e0TBHHH, e0ResultBHHH, e1WindingBH, e1ABBH, e1BCBH, e1CABH, e1TBH, e1ResultBH, e1WindingHH, e1ABHH, e1BCHH, e1CAHH, e1THH, e1ResultHH, e2UInputAB, e2UInputBC, e2UInputCA, e2UInputAvr, e2UOutputAB, e2UOutputBC, e2UOutputCA, e2UOutputAvr, e2DiffU, e2F, e2Result, e3UBH, e3UHH, e3F, e3Result, e4WindingBH, e4WindingHH, e4UBH, e4UHH, e4Result, e5UKZV, e5UKZPercent, e5UKZDiff, e5IA, e5IB, e5IC, e5Pp, e5F, e5Result, e6UBH, e6IA, e6IB, e6IC, e6IAPercent, e6IBPercent, e6ICPercent, e6IADiff, e6IBDiff, e6ICDiff, e6Pp, e6Cos, e6F, e6Result, e7UInput, e7IBH, e7F, e7Time, e7Result, e8TypeBHandCorps, e8IBHandCorps, e8UBHandCorps, e8TimeBHandCorps, e8ResultBHandCorps, e8TypeHHandCorps, e8IHHandCorps, e8UHHandCorps, e8TimeHHandCorps, e8ResultHHandCorps, serialNumber, type, ubh, uhh, p, phase, ixx, ukz, xxtime, uinsulation, withMeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
     }
 }

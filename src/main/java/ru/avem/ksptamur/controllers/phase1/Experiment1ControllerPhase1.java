@@ -316,7 +316,6 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
     private void startBH() {
         if (isExperimentStart && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания ВН...");
-            communicationModel.onKM1M2(); //подаем 1 на выход пр для подключения ИКАС к ВН обмотки
         }
 
         while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) { //проверка готовности ИКАС

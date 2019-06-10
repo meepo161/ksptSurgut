@@ -42,6 +42,7 @@ public class CommunicationModel extends Observable implements Observer {
     public ParmaT400Controller parmaT400Controller;
     public PhaseMeterController phaseMeterController;
     public DeltaCP2000Controller deltaCP2000Controller;
+    //    public FRA800Controller fra800ObjectController;
     public TRMController trmController;
     public CS02021Controller megacsController;
 
@@ -87,12 +88,10 @@ public class CommunicationModel extends Observable implements Observer {
         devicesControllers.add(trmController);
 
         megacsController = new CS02021Controller(8, this, RS485Connection, MEGACS_ID);
-//        devicesControllers.add(megacsController);
+        devicesControllers.add(megacsController);
 
         deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
         devicesControllers.add(deltaCP2000Controller);
-
-
 
         new Thread(() -> {
             while (!isFinished) {
@@ -144,20 +143,20 @@ public class CommunicationModel extends Observable implements Observer {
         notice(modelId, param, value);
     }
 
-    public void setNeedToReadAllDevices() {
-        owenPRController.setNeedToRead(true);
-        megacsController.setNeedToRead(true);
-        deltaCP2000Controller.setNeedToRead(true);
-        ikasController.setNeedToRead(true);
-        parmaT400Controller.setNeedToRead(true);
-        phaseMeterController.setNeedToRead(true);
-        pm130Controller.setNeedToRead(true);
-        trmController.setNeedToRead(true);
+    public void setNeedToReadAllDevices(boolean isNeed) {
+        owenPRController.setNeedToRead(isNeed);
+//        megacsController.setNeedToRead(isNeed);
+        deltaCP2000Controller.setNeedToRead(isNeed);
+        ikasController.setNeedToRead(isNeed);
+        parmaT400Controller.setNeedToRead(isNeed);
+        phaseMeterController.setNeedToRead(isNeed);
+        pm130Controller.setNeedToRead(isNeed);
+        trmController.setNeedToRead(isNeed);
     }
 
     public void resetAllDevices() {
         owenPRController.resetAllAttempts();
-        megacsController.resetAllAttempts();
+//        megacsController.resetAllAttempts();
         deltaCP2000Controller.resetAllAttempts();
         ikasController.resetAllAttempts();
         parmaT400Controller.resetAllAttempts();
@@ -324,13 +323,49 @@ public class CommunicationModel extends Observable implements Observer {
         deltaCP2000Controller.write(POINT_1_VOLTAGE_REGISTER, 1, voltageMax);
     }
 
+
+    public void setUMgr(int u) {
+        megacsController.setVoltage(u);
+    }
+
+    public float[] readDataMgr() {
+        return megacsController.readData();
+    }
+
+    public void initExperiment0Devices() {
+        megacsController.setNeedToRead(true);
+        megacsController.resetReadAttempts();
+        megacsController.resetWriteAttempts();
+    }
+
     public void initExperiment1Devices() {
+        ikasController.setNeedToRead(true);
+        ikasController.resetReadAttempts();
+        ikasController.resetWriteAttempts();
     }
 
     public void initExperiment2Devices() {
+        pm130Controller.setNeedToRead(true);
+        pm130Controller.resetReadAttempts();
+        pm130Controller.resetWriteAttempts();
+        parmaT400Controller.setNeedToRead(true);
+        parmaT400Controller.resetReadAttempts();
+        parmaT400Controller.resetWriteAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetReadAttempts();
+        deltaCP2000Controller.resetWriteAttempts();
     }
 
     public void initExperiment3Devices() {
+        pm130Controller.setNeedToRead(true);
+        pm130Controller.resetReadAttempts();
+        pm130Controller.resetWriteAttempts();
+        parmaT400Controller.setNeedToRead(true);
+        parmaT400Controller.resetReadAttempts();
+        parmaT400Controller.resetWriteAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetReadAttempts();
+        deltaCP2000Controller.resetWriteAttempts();
     }
 
     public void initExperiment4Devices() {
@@ -340,6 +375,12 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment6Devices() {
+        pm130Controller.setNeedToRead(true);
+        pm130Controller.resetReadAttempts();
+        pm130Controller.resetWriteAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetReadAttempts();
+        deltaCP2000Controller.resetWriteAttempts();
     }
 
     public void initExperiment7Devices() {
@@ -349,109 +390,86 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void onKM1() {
-        onRegisterInTheKms(1, 1);
         sleep(500);
+        onRegisterInTheKms(1, 1);
     }
 
     public void onKM2() {
-        onRegisterInTheKms(2, 1);
         sleep(500);
+        onRegisterInTheKms(2, 1);
     }
 
     public void onKM3() {
-        onRegisterInTheKms(3, 1);
         sleep(500);
+        onRegisterInTheKms(3, 1);
     }
 
     public void onKM4() {
-        onRegisterInTheKms(4, 1);
         sleep(500);
+        onRegisterInTheKms(4, 1);
     }
 
     public void onKM5() {
+
         onRegisterInTheKms(5, 1);
-        sleep(500);
     }
 
     public void onKM6() {
-        onRegisterInTheKms(6, 1);
         sleep(500);
+        onRegisterInTheKms(6, 1);
     }
 
     public void onKM7() {
-        onRegisterInTheKms(7, 1);
         sleep(500);
+        onRegisterInTheKms(7, 1);
     }
 
     public void onKM8() {
-        onRegisterInTheKms(8, 1);
         sleep(500);
+        onRegisterInTheKms(8, 1);
     }
 
     public void onKM1M1() {
+        sleep(500);
         onRegisterInTheKms(1, 2);
         sleep(500);
     }
 
     public void onKM2M1() {
-        onRegisterInTheKms(2, 2);
         sleep(500);
+        onRegisterInTheKms(2, 2);
     }
 
     public void onKM3M1() {
-        onRegisterInTheKms(3, 2);
         sleep(500);
+        onRegisterInTheKms(3, 2);
     }
 
     public void onKM4M1() {
-        onRegisterInTheKms(4, 2);
         sleep(500);
+        onRegisterInTheKms(4, 2);
     }
 
     public void onKM5M1() {
-        onRegisterInTheKms(5, 2);
         sleep(500);
+        onRegisterInTheKms(5, 2);
     }
 
     public void onKM6M1() {
-        onRegisterInTheKms(6, 2);
         sleep(500);
+        onRegisterInTheKms(6, 2);
     }
 
     public void onKM7M1() {
-        onRegisterInTheKms(7, 2);
         sleep(500);
+        onRegisterInTheKms(7, 2);
     }
 
     public void onKM8M1() {
+        sleep(500);
         onRegisterInTheKms(8, 2);
-        sleep(500);
     }
 
-    public void onKM1M2() {
-        onRegisterInTheKms(1, 3);
-        sleep(500);
-    }
-
-    public void onKM2M2() {
-        onRegisterInTheKms(2, 3);
-        sleep(500);
-    }
-
-    public void onKM3M2() {
-        onRegisterInTheKms(3, 3);
-        sleep(500);
-    }
-
-    public void onKM4M2() {
-        onRegisterInTheKms(4, 3);
-        sleep(500);
-    }
-
-    public void onKM5M2() {
-        onRegisterInTheKms(5, 3);
-        sleep(500);
-    }
 
     public void offKM1() {
         offRegisterInTheKms(1, 1);
