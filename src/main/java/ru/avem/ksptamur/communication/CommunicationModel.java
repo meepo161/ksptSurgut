@@ -58,40 +58,33 @@ public class CommunicationModel extends Observable implements Observer {
     public List<DeviceController> devicesControllers = new ArrayList<>();
 
     private CommunicationModel() {
-        RS485Connection = new SerialConnection(
-                Constants.Communication.RS485_DEVICE_NAME,
-                Constants.Communication.BAUDRATE,
-                Constants.Communication.DATABITS,
-                Constants.Communication.STOPBITS,
-                Constants.Communication.PARITY,
-                Constants.Communication.WRITE_TIMEOUT,
-                Constants.Communication.READ_TIMEOUT);
 
+        connectMainBus();
         ModbusController modbusController = new RTUController(RS485Connection);
 
-//        pm130Controller = new PM130Controller(1, this, modbusController, PM130_ID);
-//        devicesControllers.add(pm130Controller);
-//
-//        parmaT400Controller = new ParmaT400Controller(2, this, modbusController, PARMA400_ID);
-//        devicesControllers.add(parmaT400Controller);
-//
-//        phaseMeterController = new PhaseMeterController(4, this, modbusController, PHASEMETER_ID);
-//        devicesControllers.add(phaseMeterController);
-//
-//        ikasController = new IKASController(5, this, modbusController, IKAS_ID);
-//        devicesControllers.add(ikasController);
-//
-//        owenPRController = new OwenPRController(6, this, modbusController, PR200_ID);
-//        devicesControllers.add(owenPRController);
-//
-//        trmController = new TRMController(7, this, modbusController, TRM_ID);
-//        devicesControllers.add(trmController);
-//
+        pm130Controller = new PM130Controller(1, this, modbusController, PM130_ID);
+        devicesControllers.add(pm130Controller);
+
+        parmaT400Controller = new ParmaT400Controller(2, this, modbusController, PARMA400_ID);
+        devicesControllers.add(parmaT400Controller);
+
+        phaseMeterController = new PhaseMeterController(4, this, modbusController, PHASEMETER_ID);
+        devicesControllers.add(phaseMeterController);
+
+        ikasController = new IKASController(5, this, modbusController, IKAS_ID);
+        devicesControllers.add(ikasController);
+
+        owenPRController = new OwenPRController(6, this, modbusController, PR200_ID);
+        devicesControllers.add(owenPRController);
+
+        trmController = new TRMController(7, this, modbusController, TRM_ID);
+        devicesControllers.add(trmController);
+
         megacsController = new CS02021Controller(8, this, RS485Connection, MEGACS_ID);
         devicesControllers.add(megacsController);
 
-//        deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
-//        devicesControllers.add(deltaCP2000Controller);
+        deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
+        devicesControllers.add(deltaCP2000Controller);
 
         new Thread(() -> {
             while (!isFinished) {
@@ -119,7 +112,6 @@ public class CommunicationModel extends Observable implements Observer {
                 sleep(1);
             }
         }).start();
-        connectMainBus();
     }
 
     public static CommunicationModel getInstance() {
@@ -144,14 +136,14 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void setNeedToReadAllDevices(boolean isNeed) {
-//        owenPRController.setNeedToRead(isNeed);
+        owenPRController.setNeedToRead(isNeed);
         megacsController.setNeedToRead(isNeed);
-//        deltaCP2000Controller.setNeedToRead(isNeed);
-//        ikasController.setNeedToRead(isNeed);
-//        parmaT400Controller.setNeedToRead(isNeed);
-//        phaseMeterController.setNeedToRead(isNeed);
-//        pm130Controller.setNeedToRead(isNeed);
-//        trmController.setNeedToRead(isNeed);
+        deltaCP2000Controller.setNeedToRead(isNeed);
+        ikasController.setNeedToRead(isNeed);
+        parmaT400Controller.setNeedToRead(isNeed);
+        phaseMeterController.setNeedToRead(isNeed);
+        pm130Controller.setNeedToRead(isNeed);
+        trmController.setNeedToRead(isNeed);
     }
 
     public void resetAllDevices() {
@@ -165,7 +157,15 @@ public class CommunicationModel extends Observable implements Observer {
         trmController.resetAllAttempts();
     }
 
-    private void connectMainBus() {
+    public void connectMainBus() {
+        RS485Connection = new SerialConnection(
+                Constants.Communication.RS485_DEVICE_NAME,
+                Constants.Communication.BAUDRATE_MAIN,
+                Constants.Communication.DATABITS,
+                Constants.Communication.STOPBITS,
+                Constants.Communication.PARITY,
+                Constants.Communication.WRITE_TIMEOUT,
+                Constants.Communication.READ_TIMEOUT);
         Logger.withTag("DEBUG_TAG").log("connectMainBus");
         if (!RS485Connection.isInitiatedConnection()) {
             Logger.withTag("DEBUG_TAG").log("!isInitiatedMainBus");
@@ -173,10 +173,13 @@ public class CommunicationModel extends Observable implements Observer {
         }
     }
 
-    public void disconnectMainBus() {
-        RS485Connection.closeConnection();
+    public void setConnectionBaudrate(int baudrate) {
+        RS485Connection.setPortParameters(
+                baudrate,
+                Constants.Communication.DATABITS,
+                Constants.Communication.STOPBITS,
+                Constants.Communication.PARITY);
     }
-
 
     public void initOwenPRforCurrentProtection() {
         offAllKms();
@@ -186,13 +189,14 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void finalizeAllDevices() {
-            owenPRController.write(RES_REGISTER, 1, 0);
+        owenPRController.write(RES_REGISTER, 1, 0);
         offAllKms();
         for (DeviceController deviceController : devicesControllers) {
             deviceController.setNeedToRead(false);
         }
     }
-    public void finalizeMegaCS(){
+
+    public void finalizeMegaCS() {
         megacsController.setNeedToRead(false);
     }
 

@@ -10,4 +10,6 @@ public interface Connection {
     int write(byte[] outputArray);
 
     int read(byte[] inputArray);
+
+    void setPortParameters(int baudRate, int dataBits, int stopBits, int parity);
 }

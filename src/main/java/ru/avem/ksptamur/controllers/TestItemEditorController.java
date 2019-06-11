@@ -62,6 +62,9 @@ public class TestItemEditorController {
     @FXML
     private TextField textTestItemUInsulton;
 
+    @FXML
+    private TextField textTestItemUMeger;
+
 
     @FXML
     private TableColumn<TestItem, String> columnTestItemType;
@@ -89,6 +92,9 @@ public class TestItemEditorController {
 
     @FXML
     private TableColumn<TestItem, Double> columnTestItemUinsulation;
+
+    @FXML
+    private TableColumn<TestItem, Double> columnTestItemUMeger;
 
 
     @FXML
@@ -183,6 +189,16 @@ public class TestItemEditorController {
                 }
         );
 
+        columnTestItemUMeger.setCellValueFactory(new PropertyValueFactory<>("umeger"));
+        columnTestItemUMeger.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        columnTestItemUMeger.setOnEditCommit(t -> {
+                    TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    editingTestItem.setUmeger(t.getNewValue());
+                    TestItemRepository.updateTestItem(editingTestItem);
+                    mainModel.setNeedRefresh(true);
+                }
+        );
+
         // заполняем таблицу данными
         tableTestItems.setItems(testItems);
     }
@@ -204,7 +220,7 @@ public class TestItemEditorController {
                     Double.parseDouble(textTestItemUkz.getText()),
                     Double.parseDouble(textTestItemXXTime.getText()),
                     Double.parseDouble(textTestItemUInsulton.getText()),
-                    1.0);
+                    Double.parseDouble(textTestItemUMeger.getText()));
             TestItemRepository.insertTestItem(testItem);
             testItems.add(testItem);
             mainModel.setNeedRefresh(true);
@@ -262,6 +278,9 @@ public class TestItemEditorController {
         }
         if (textTestItemUInsulton.getText() == null || textTestItemUInsulton.getText().length() == 0) {
             errorMessage += "Неверное значение Uinsulation\n";
+        }
+        if (textTestItemUMeger.getText() == null || textTestItemUMeger.getText().length() == 0) {
+            errorMessage += "Неверное значение UMeger\n";
         }
         if (errorMessage.length() == 0) {
             return true;

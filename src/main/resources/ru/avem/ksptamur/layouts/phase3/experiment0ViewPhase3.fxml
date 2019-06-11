@@ -45,10 +45,10 @@
                            </placeholder>
                            <columns>
                               <TableColumn fx:id="tableColumnWinding" prefWidth="75.0" text="Обмотка" />
+                              <TableColumn fx:id="tableColumnUr" prefWidth="75.0" text="U, В" />
                               <TableColumn fx:id="tableColumnR15" prefWidth="75.0" text="R15" />
                               <TableColumn fx:id="tableColumnR60" prefWidth="75.0" text="R60" />
                               <TableColumn fx:id="tableColumnCoef" prefWidth="75.0" text="R15/R60" />
-                              <TableColumn fx:id="tableColumnTemperature" prefWidth="75.0" text="t, ℃" />
                               <TableColumn fx:id="tableColumnTime" prefWidth="75.0" text="Время, с" />
                               <TableColumn fx:id="tableColumnResultExperiment" prefWidth="75.0" text="Результат" />
                            </columns>

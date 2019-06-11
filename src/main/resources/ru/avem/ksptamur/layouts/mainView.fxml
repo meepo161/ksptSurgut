@@ -136,8 +136,8 @@
                               <HBox spacing="16.0">
                                  <children>
                                     <CheckBox fx:id="radioMegerBH" mnemonicParsing="false" onAction="#handleRadioExperiment0BH" text="0.1 ВН и корпус" />
-                                    <CheckBox fx:id="radioMegerHH" layoutX="610.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0HH" text="0.1 НН и корпус" />
-                                    <CheckBox fx:id="radioMegerBHHH" layoutX="961.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0BHHH" text="0.1 ВН и НН" />
+                                    <CheckBox fx:id="radioMegerHH" layoutX="610.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0HH" text="0.2 НН и корпус" />
+                                    <CheckBox fx:id="radioMegerBHHH" layoutX="961.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0BHHH" text="0.3 ВН и НН" />
                                  </children>
                                  <padding>
                                     <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />

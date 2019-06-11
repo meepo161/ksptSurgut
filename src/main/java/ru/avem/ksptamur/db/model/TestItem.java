@@ -31,12 +31,15 @@ public class TestItem {
 
     @DatabaseField
     private double ukz;
-    @DatabaseField
 
+    @DatabaseField
     private double xxtime;
 
     @DatabaseField
     private double uinsulation;
+
+    @DatabaseField
+    private double umeger;
 
     @DatabaseField
     private double withMeger;  // 1.0 - true, 0.0 - false
@@ -45,7 +48,7 @@ public class TestItem {
         // ORMLite needs a no-arg constructor
     }
 
-    public TestItem(String type, double ubh, double uhh, double p, double phase, double ixx, double ukz, double xxtime, double uinsulation, double withMeger) {
+    public TestItem(String type, double ubh, double uhh, double p, double phase, double ixx, double ukz, double xxtime, double uinsulation, double umeger) {
         this.type = type;
         this.ubh = ubh;
         this.uhh = uhh;
@@ -55,7 +58,7 @@ public class TestItem {
         this.ukz = ukz;
         this.xxtime = xxtime;
         this.uinsulation = uinsulation;
-        this.withMeger = withMeger;
+        this.umeger = umeger;
     }
 
     public long getId() {
@@ -139,12 +142,12 @@ public class TestItem {
         this.uinsulation = uinsulation;
     }
 
-    public double getWithMeger() {
-        return withMeger;
+    public double getUmeger() {
+        return umeger;
     }
 
-    public void setWithMeger(double withMeger) {
-        this.withMeger = withMeger;
+    public void setUmeger(double umeger) {
+        this.umeger = umeger;
     }
 
     @Override

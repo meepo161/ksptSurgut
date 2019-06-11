@@ -4,7 +4,6 @@ import ru.avem.ksptamur.communication.serial.driver.UsbSerialDriver;
 import ru.avem.ksptamur.communication.serial.driver.UsbSerialPort;
 import ru.avem.ksptamur.communication.serial.driver.UsbSerialProber;
 import ru.avem.ksptamur.utils.Log;
-import ru.avem.ksptamur.utils.Utils;
 
 import javax.usb.UsbException;
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class SerialConnection implements Connection {
 
     private UsbSerialPort port; //экземпляр интерфейса
 
-    public SerialConnection(String productName ,int baudRate, int dataBits,  //конструктор класса
+    public SerialConnection(String productName, int baudRate, int dataBits,  //конструктор класса
                             int stopBits, int parity, int writeTimeout, int readTimeout) {
         this.productName = productName;
         this.baudRate = baudRate;
@@ -44,9 +43,9 @@ public class SerialConnection implements Connection {
         if (usbSerialDriver != null) {  //если ничего не присвоилось
             UsbSerialPort port = usbSerialDriver.getPorts().get(0); //берем первый порт и присваевам его в port
             try {
-                port.open(); //открываем порт
-                port.setParameters(baudRate, dataBits, stopBits, parity); //устанавливаем значения порту
-                this.port = port; //локальное значение сохраняем в поле класса
+                port.open();
+                this.port = port;
+                setPortParameters(baudRate, dataBits, stopBits, parity);
                 Log.d("DEBUG_TAG", "mPort = port");
             } catch (UsbException e) {
                 e.printStackTrace();
@@ -59,6 +58,15 @@ public class SerialConnection implements Connection {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void setPortParameters(int baudRate, int dataBits, int stopBits, int parity) {
+        try {
+            port.setParameters(baudRate, dataBits, stopBits, parity);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -80,7 +88,8 @@ public class SerialConnection implements Connection {
                     Log.d("PRODUCT_NAME", "TRUE");
                     return availableDriver;
                 }
-            } catch (UsbException | UnsupportedEncodingException ignored) {}
+            } catch (UsbException | UnsupportedEncodingException ignored) {
+            }
         }
         return null;
     }

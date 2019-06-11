@@ -12,7 +12,8 @@ public final class Constants {
 
         public static final class Communication {
                 public static final String RS485_DEVICE_NAME = "CP2103 USB to RS-485";
-                public static final int BAUDRATE = 9600;
+                public static final int BAUDRATE_MAIN = 38400;
+                public static final int BAUDRATE_MEGACS = 9600;
                 public static final int DATABITS = UsbSerialPort.DATABITS_8;
                 public static final int STOPBITS = UsbSerialPort.STOPBITS_1;
                 public static final int PARITY = UsbSerialPort.PARITY_NONE;

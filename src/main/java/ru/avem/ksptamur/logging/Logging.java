@@ -75,16 +75,7 @@ public class Logging {
 
     private static ByteArrayOutputStream convertProtocolToWorkbookPhase1(Protocol protocol) throws IOException, InvalidFormatException {
         File templateTempFile = new File(System.getProperty("user.dir"), "tmp.xlsx");
-        try {
-            if (protocol.getWithMeger() == 1.0) {
-                copyFileFromStream(Main.class.getResourceAsStream("raw/template_phase3_with_meger.xlsx"), templateTempFile);
-            } else if (protocol.getWithMeger() == 0.0) {
-                copyFileFromStream(Main.class.getResourceAsStream("raw/template_phase3.xlsx"), templateTempFile);
-            }
-        } catch (IOException e) {
-            Toast.makeText("Ошибка").show(Toast.ToastType.ERROR);
-        }
-
+        copyFileFromStream(Main.class.getResourceAsStream("raw/template_phase1.xlsx"), templateTempFile);
         try (Workbook wb = new XSSFWorkbook(templateTempFile)) {
             Sheet sheet = wb.getSheetAt(0);
             for (int i = 0; i < 100; i++) {
@@ -337,16 +328,7 @@ public class Logging {
 
     private static ByteArrayOutputStream convertProtocolToWorkbookPhase3(Protocol protocol) throws IOException, InvalidFormatException {
         File templateTempFile = new File(System.getProperty("user.dir"), "tmp.xlsx");
-        try {
-            if (protocol.getWithMeger() == 1.0) {
-                copyFileFromStream(Main.class.getResourceAsStream("raw/template_phase3_with_meger.xlsx"), templateTempFile);
-            } else if (protocol.getWithMeger() == 0.0) {
-                copyFileFromStream(Main.class.getResourceAsStream("raw/template_phase3.xlsx"), templateTempFile);
-            }
-        } catch (IOException e) {
-            Toast.makeText("Ошибка").show(Toast.ToastType.ERROR);
-        }
-
+        copyFileFromStream(Main.class.getResourceAsStream("raw/template_phase3.xlsx"), templateTempFile);
         try (Workbook wb = new XSSFWorkbook(templateTempFile)) {
             Sheet sheet = wb.getSheetAt(0);
             for (int i = 0; i < 100; i++) {
@@ -379,6 +361,51 @@ public class Logging {
                                     } else {
                                         cell.setCellValue("");
                                     }
+                                    break;
+                                case "$201$":
+                                    cell.setCellValue(protocol.getE0UBH());
+                                    break;
+                                case "$202$":
+                                    cell.setCellValue(protocol.getE0R15BH());
+                                    break;
+                                case "$203$":
+                                    cell.setCellValue(protocol.getE0R60BH());
+                                    break;
+                                case "$204$":
+                                    cell.setCellValue(protocol.getE0CoefBH());
+                                    break;
+                                case "$205$":
+                                    cell.setCellValue(protocol.getE0ResultBH());
+                                    break;
+                                case "$206$":
+                                    cell.setCellValue(protocol.getE0UHH());
+                                    break;
+                                case "$207$":
+                                    cell.setCellValue(protocol.getE0R15HH());
+                                    break;
+                                case "$208$":
+                                    cell.setCellValue(protocol.getE0R60HH());
+                                    break;
+                                case "$209$":
+                                    cell.setCellValue(protocol.getE0CoefHH());
+                                    break;
+                                case "$210$":
+                                    cell.setCellValue(protocol.getE0ResultHH());
+                                    break;
+                                case "$211$":
+                                    cell.setCellValue(protocol.getE0UBHHH());
+                                    break;
+                                case "$212$":
+                                    cell.setCellValue(protocol.getE0R15BHHH());
+                                    break;
+                                case "$213$":
+                                    cell.setCellValue(protocol.getE0R60BHHH());
+                                    break;
+                                case "$214$":
+                                    cell.setCellValue(protocol.getE0CoefBHHH());
+                                    break;
+                                case "$215$":
+                                    cell.setCellValue(protocol.getE0ResultBHHH());
                                     break;
                                 case "$1$":
                                     cell.setCellValue(protocol.getE1WindingBH());

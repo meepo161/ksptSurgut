@@ -12,6 +12,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import ru.avem.ksptamur.Constants;
 import ru.avem.ksptamur.communication.CommunicationModel;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.communication.devices.trm.TRMModel;
@@ -44,7 +45,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     @FXML
     private TableColumn<Experiment0ModelPhase3, String> tableColumnCoef;
     @FXML
-    private TableColumn<Experiment0ModelPhase3, String> tableColumnTemperature;
+    private TableColumn<Experiment0ModelPhase3, String> tableColumnUr;
     @FXML
     private TableColumn<Experiment0ModelPhase3, String> tableColumnTime;
     @FXML
@@ -64,6 +65,9 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     private Experiment0ModelPhase3 experiment0ModelPhase3HH;
     private Experiment0ModelPhase3 experiment0ModelPhase3BHHH;
     private ObservableList<Experiment0ModelPhase3> experiment0Data = FXCollections.observableArrayList();
+
+    private Protocol currentProtocol = mainModel.getCurrentProtocol();
+    private int uMgr = (int) currentProtocol.getUmeger();
 
     private Stage dialogStage;
     private boolean isCanceled;
@@ -95,7 +99,6 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
     @FXML
     private AnchorPane root;
-    private int uMgr;
 
     @FXML
     public void initialize() {
@@ -114,11 +117,9 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         tableColumnR15.setCellValueFactory(cellData -> cellData.getValue().r15Property());
         tableColumnR60.setCellValueFactory(cellData -> cellData.getValue().r60Property());
         tableColumnCoef.setCellValueFactory(cellData -> cellData.getValue().coefProperty());
-        tableColumnTemperature.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
+        tableColumnUr.setCellValueFactory(cellData -> cellData.getValue().urProperty());
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         tableColumnResultExperiment.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
-
-        uMgr = 1000;
     }
 
     @Override
@@ -143,21 +144,21 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         currentProtocol.setE0R15BH(experiment0ModelPhase3BH.getR15());
         currentProtocol.setE0R60BH(experiment0ModelPhase3BH.getR60());
         currentProtocol.setE0CoefBH(experiment0ModelPhase3BH.getCoef());
-        currentProtocol.setE0TBH(experiment0ModelPhase3BH.getTemperature());
+        currentProtocol.setE0UBH(experiment0ModelPhase3BH.getUr());
         currentProtocol.setE0ResultBH(experiment0ModelPhase3BH.getResult());
 
         currentProtocol.setE0WindingHH(experiment0ModelPhase3HH.getWinding());
         currentProtocol.setE0R15HH(experiment0ModelPhase3HH.getR15());
         currentProtocol.setE0R60HH(experiment0ModelPhase3HH.getR60());
         currentProtocol.setE0CoefHH(experiment0ModelPhase3HH.getCoef());
-        currentProtocol.setE0THH(experiment0ModelPhase3HH.getTemperature());
+        currentProtocol.setE0UHH(experiment0ModelPhase3HH.getUr());
         currentProtocol.setE0ResultHH(experiment0ModelPhase3HH.getResult());
 
         currentProtocol.setE0WindingBHHH(experiment0ModelPhase3BHHH.getWinding());
         currentProtocol.setE0R15BHHH(experiment0ModelPhase3BHHH.getR15());
         currentProtocol.setE0R60BHHH(experiment0ModelPhase3BHHH.getR60());
         currentProtocol.setE0CoefBHHH(experiment0ModelPhase3BHHH.getCoef());
-        currentProtocol.setE0TBHHH(experiment0ModelPhase3BHHH.getTemperature());
+        currentProtocol.setE0UBHHH(experiment0ModelPhase3BHHH.getUr());
         currentProtocol.setE0ResultBHHH(experiment0ModelPhase3BHHH.getResult());
     }
 
@@ -188,6 +189,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startExperiment() {
+
         buttonStartStop.setText("Остановить");
         buttonNext.setDisable(true);
         buttonCancelAll.setDisable(true);
@@ -201,6 +203,8 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         isExperimentEnd = false;
 
         new Thread(() -> {
+
+            communicationModel.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
 
             if (isExperimentStart) {
                 appendOneMessageToLog("Начало испытания");
@@ -240,31 +244,31 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
-                    experiment0ModelPhase3BH.setResult("Неуспешно"); //запуск испытния ВН обмотки
-                    experiment0ModelPhase3HH.setResult("Неуспешно"); //запуск испытния НН обмотки
-                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
+                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
                     experiment0ModelPhase3BH.setResult("Неуспешно");
-                } else { //если выбрано испытание НН обмоток
+                    experiment0ModelPhase3HH.setResult("Неуспешно");
+                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
+                    experiment0ModelPhase3BH.setResult("Неуспешно");
+                } else {
                     experiment0ModelPhase3HH.setResult("Неуспешно");
                 }
             } else if (!isDevicesResponding()) {
                 appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
-                    experiment0ModelPhase3BH.setResult("Неуспешно"); //запуск испытния ВН обмотки
-                    experiment0ModelPhase3HH.setResult("Неуспешно"); //запуск испытния НН обмотки
-                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
+                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
                     experiment0ModelPhase3BH.setResult("Неуспешно");
-                } else { //если выбрано испытание НН обмоток
+                    experiment0ModelPhase3HH.setResult("Неуспешно");
+                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
+                    experiment0ModelPhase3BH.setResult("Неуспешно");
+                } else {
                     experiment0ModelPhase3HH.setResult("Неуспешно");
                 }
             } else {
-                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
-                    experiment0ModelPhase3BH.setResult("Успешно"); //запуск испытния ВН обмотки
-                    experiment0ModelPhase3HH.setResult("Успешно"); //запуск испытния НН обмотки
-                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
+                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
                     experiment0ModelPhase3BH.setResult("Успешно");
-                } else { //если выбрано испытание НН обмоток
+                    experiment0ModelPhase3HH.setResult("Успешно");
+                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
+                    experiment0ModelPhase3BH.setResult("Успешно");
+                } else {
                     experiment0ModelPhase3HH.setResult("Успешно");
                 }
                 appendMessageToLog("Испытание завершено успешно");
@@ -274,6 +278,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
             isExperimentStart = false;
             isExperimentEnd = true;
             communicationModel.finalizeMegaCS();
+            communicationModel.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
 
             Platform.runLater(() -> {
                 buttonStartStop.setText("Запустить");
@@ -305,151 +310,154 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startBH() {
-//        if (isExperimentStart && isDevicesResponding()) {
-//            appendOneMessageToLog("Инициализация испытания ВН...");
-//        }
-//
-//        if (isExperimentStart && isDevicesResponding()) {
-//            appendOneMessageToLog("Измерение началось");
-//            appendOneMessageToLog("Ожидайте 90 секунд.");
-//            communicationModel.setUMgr(uMgr);
-//            appendOneMessageToLog("Формирование напряжения");
-//        }
-//
-//        int experimentTime = 90;
-//        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
-//            sleep(1000);
-//            experiment0ModelPhase3BH.setTime(String.valueOf(experimentTime));
-//        }
-//
-//        if (isExperimentStart && isDevicesResponding()) {
-//            float[] data = communicationModel.readDataMgr();
-//            float r15 = formatR(data[3]);
-//            float r60 = formatR(data[0]);
-//            experiment0ModelPhase3BH.setR15(String.format("%.2f", r15) + ", " + units);
-//            experiment0ModelPhase3BH.setR60(String.format("%.2f", r60) + ", " + units);
-//            experiment0ModelPhase3BH.setCoef(String.format("%.2f", data[2]));
-//            appendMessageToLog("Ждём 15 секунд пока разрядится.");
-//        }
-//
-//        communicationModel.setCS02021ExperimentRun(false);
-//
-//        experimentTime = 15;
-//        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
-//            sleep(1000);
-//            experiment0ModelPhase3BH.setTime(String.valueOf(experimentTime));
-//        }
-//
-//        if (!cause.equals("")) {
-//            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-//            experiment0ModelPhase3BH.setResult("Неуспешно");
-//        } else if (!isDevicesResponding()) {
-//            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-//            experiment0ModelPhase3BH.setResult("Неуспешно");
-//        } else {
-//            experiment0ModelPhase3BH.setResult("Успешно");
-//            appendMessageToLog("Испытание завершено успешно");
-//        }
-//        appendMessageToLog("------------------------------------------------\n");
+        if (isExperimentStart && isDevicesResponding()) {
+            appendOneMessageToLog("Инициализация испытания ВН...");
+        }
+
+        if (isExperimentStart && isDevicesResponding()) {
+            appendOneMessageToLog("Измерение началось");
+            appendOneMessageToLog("Ожидайте 90 секунд.");
+            communicationModel.setUMgr(uMgr);
+            appendOneMessageToLog("Формирование напряжения");
+        }
+
+        int experimentTime = 90;
+        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+            sleep(1000);
+            experiment0ModelPhase3BH.setTime(String.valueOf(experimentTime));
+        }
+
+        if (isExperimentStart && isDevicesResponding()) {
+            float[] data = communicationModel.readDataMgr();
+            float r15 = formatR(data[3]);
+            float r60 = formatR(data[0]);
+            experiment0ModelPhase3BH.setUr(String.format("%.2f", data[1]));
+            experiment0ModelPhase3BH.setR15(String.format("%.2f", r15) + ", " + units);
+            experiment0ModelPhase3BH.setR60(String.format("%.2f", r60) + ", " + units);
+            experiment0ModelPhase3BH.setCoef(String.format("%.2f", data[2]));
+            appendMessageToLog("Ждём 15 секунд пока разрядится.");
+        }
+
+        communicationModel.setCS02021ExperimentRun(false);
+
+        experimentTime = 15;
+        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+            sleep(1000);
+            experiment0ModelPhase3BH.setTime(String.valueOf(experimentTime));
+        }
+
+        if (!cause.equals("")) {
+            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
+            experiment0ModelPhase3BH.setResult("Неуспешно");
+        } else if (!isDevicesResponding()) {
+            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+            experiment0ModelPhase3BH.setResult("Неуспешно");
+        } else {
+            experiment0ModelPhase3BH.setResult("Успешно");
+            appendMessageToLog("Испытание завершено успешно");
+        }
+        appendMessageToLog("------------------------------------------------\n");
     }
 
     private void startHH() {
-//        if (isExperimentStart && isDevicesResponding()) {
-//            appendOneMessageToLog("Инициализация испытания HН...");
-//        }
-//
-//        if (isExperimentStart && isDevicesResponding()) {
-//            appendOneMessageToLog("Измерение началось");
-//            appendOneMessageToLog("Ожидайте 90 секунд.");
-//            communicationModel.setUMgr(uMgr);
-//            appendOneMessageToLog("Формирование напряжения");
-//        }
-//
-//        int experimentTime = 90;
-//        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
-//            sleep(1000);
-//            experiment0ModelPhase3HH.setTime(String.valueOf(experimentTime));
-//        }
-//
-//        if (isExperimentStart && isDevicesResponding()) {
-//            float[] data = communicationModel.readDataMgr();
-//            float r15 = formatR(data[3]);
-//            float r60 = formatR(data[0]);
-//            experiment0ModelPhase3HH.setR15(String.format("%.2f", r15) + ", " + units);
-//            experiment0ModelPhase3HH.setR60(String.format("%.2f", r60) + ", " + units);
-//            experiment0ModelPhase3HH.setCoef(String.format("%.2f", data[2]));
-//            appendMessageToLog("Ждём 15 секунд пока разрядится.");
-//        }
-//
-//        communicationModel.setCS02021ExperimentRun(false);
-//
-//
-//        experimentTime = 15;
-//        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
-//            sleep(1000);
-//            experiment0ModelPhase3HH.setTime(String.valueOf(experimentTime));
-//        }
-//
-//        if (!cause.equals("")) {
-//            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-//            experiment0ModelPhase3HH.setResult("Неуспешно");
-//        } else if (!isDevicesResponding()) {
-//            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-//            experiment0ModelPhase3HH.setResult("Неуспешно");
-//        } else {
-//            experiment0ModelPhase3HH.setResult("Успешно");
-//            appendMessageToLog("Испытание завершено успешно");
-//        }
-//        appendMessageToLog("------------------------------------------------\n");
+        if (isExperimentStart && isDevicesResponding()) {
+            appendOneMessageToLog("Инициализация испытания HН...");
+        }
+
+        if (isExperimentStart && isDevicesResponding()) {
+            appendOneMessageToLog("Измерение началось");
+            appendOneMessageToLog("Ожидайте 90 секунд.");
+            communicationModel.setUMgr(uMgr);
+            appendOneMessageToLog("Формирование напряжения");
+        }
+
+        int experimentTime = 90;
+        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+            sleep(1000);
+            experiment0ModelPhase3HH.setTime(String.valueOf(experimentTime));
+        }
+
+        if (isExperimentStart && isDevicesResponding()) {
+            float[] data = communicationModel.readDataMgr();
+            float r15 = formatR(data[3]);
+            float r60 = formatR(data[0]);
+            experiment0ModelPhase3HH.setUr(String.format("%.2f", data[1]));
+            experiment0ModelPhase3HH.setR15(String.format("%.2f", r15) + ", " + units);
+            experiment0ModelPhase3HH.setR60(String.format("%.2f", r60) + ", " + units);
+            experiment0ModelPhase3HH.setCoef(String.format("%.2f", data[2]));
+            appendMessageToLog("Ждём 15 секунд пока разрядится.");
+        }
+
+        communicationModel.setCS02021ExperimentRun(false);
+
+
+        experimentTime = 15;
+        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+            sleep(1000);
+            experiment0ModelPhase3HH.setTime(String.valueOf(experimentTime));
+        }
+
+        if (!cause.equals("")) {
+            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
+            experiment0ModelPhase3HH.setResult("Неуспешно");
+        } else if (!isDevicesResponding()) {
+            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+            experiment0ModelPhase3HH.setResult("Неуспешно");
+        } else {
+            experiment0ModelPhase3HH.setResult("Успешно");
+            appendMessageToLog("Испытание завершено успешно");
+        }
+        appendMessageToLog("------------------------------------------------\n");
     }
 
     private void startBHHH() {
-//        if (isExperimentStart && isDevicesResponding()) {
-//            appendOneMessageToLog("Инициализация испытания ВН и HН...");
-//        }
-//
-//        if (isExperimentStart && isDevicesResponding()) {
-//            appendOneMessageToLog("Измерение началось");
-//            appendOneMessageToLog("Ожидайте 90 секунд.");
-//            communicationModel.setUMgr(uMgr);
-//            appendOneMessageToLog("Формирование напряжения");
-//        }
-//
-//        int experimentTime = 90;
-//        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
-//            sleep(1000);
-//            experiment0ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
-//        }
-//
-//        if (isExperimentStart && isDevicesResponding()) {
-//            float[] data = communicationModel.readDataMgr();
-//            float r15 = formatR(data[3]);
-//            float r60 = formatR(data[0]);
-//            experiment0ModelPhase3BHHH.setR15(String.format("%.2f", r15) + ", " + units);
-//            experiment0ModelPhase3BHHH.setR60(String.format("%.2f", r60) + ", " + units);
-//            experiment0ModelPhase3BHHH.setCoef(String.format("%.2f", data[2]));
-//            appendMessageToLog("Ждём 15 секунд пока разрядится.");
-//        }
-//
-//        experimentTime = 15;
-//        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
-//            sleep(1000);
-//            experiment0ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
-//        }
-//
-//        communicationModel.setCS02021ExperimentRun(false);
-//
-//        if (!cause.equals("")) {
-//            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-//            experiment0ModelPhase3BHHH.setResult("Неуспешно");
-//        } else if (!isDevicesResponding()) {
-//            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-//            experiment0ModelPhase3BHHH.setResult("Неуспешно");
-//        } else {
-//            experiment0ModelPhase3BHHH.setResult("Успешно");
-//            appendMessageToLog("Испытание завершено успешно");
-//        }
-//        appendMessageToLog("------------------------------------------------\n");
+        if (isExperimentStart && isDevicesResponding()) {
+            appendOneMessageToLog("Инициализация испытания ВН и HН...");
+        }
+
+        if (isExperimentStart && isDevicesResponding()) {
+            appendOneMessageToLog("Измерение началось");
+            appendOneMessageToLog("Ожидайте 90 секунд.");
+            communicationModel.setUMgr(uMgr);
+            appendOneMessageToLog("Формирование напряжения");
+        }
+
+        int experimentTime = 90;
+        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+            sleep(1000);
+            experiment0ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
+        }
+
+        if (isExperimentStart && isDevicesResponding()) {
+            float[] data = communicationModel.readDataMgr();
+            float r15 = formatR(data[3]);
+            float r60 = formatR(data[0]);
+            experiment0ModelPhase3BHHH.setUr(String.format("%.2f", data[1]));
+            experiment0ModelPhase3BHHH.setR15(String.format("%.2f", r15) + ", " + units);
+            experiment0ModelPhase3BHHH.setR60(String.format("%.2f", r60) + ", " + units);
+            experiment0ModelPhase3BHHH.setCoef(String.format("%.2f", data[2]));
+            appendMessageToLog("Ждём 15 секунд пока разрядится.");
+        }
+
+        experimentTime = 15;
+        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+            sleep(1000);
+            experiment0ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
+        }
+
+        communicationModel.setCS02021ExperimentRun(false);
+
+        if (!cause.equals("")) {
+            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
+            experiment0ModelPhase3BHHH.setResult("Неуспешно");
+        } else if (!isDevicesResponding()) {
+            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+            experiment0ModelPhase3BHHH.setResult("Неуспешно");
+        } else {
+            experiment0ModelPhase3BHHH.setResult("Успешно");
+            appendMessageToLog("Испытание завершено успешно");
+        }
+        appendMessageToLog("------------------------------------------------\n");
     }
 
     private float formatR(float datum) {
@@ -587,12 +595,12 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
                     case TRMModel.T_AMBIENT_PARAM:
                         temperature = (float) value;
                         if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
-                            experiment0ModelPhase3BH.setTemperature(String.valueOf(temperature));
-                            experiment0ModelPhase3HH.setTemperature(String.valueOf(temperature));
+                            experiment0ModelPhase3BH.setUr(String.valueOf(temperature));
+                            experiment0ModelPhase3HH.setUr(String.valueOf(temperature));
                         } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
-                            experiment0ModelPhase3BH.setTemperature(String.valueOf(temperature));
+                            experiment0ModelPhase3BH.setUr(String.valueOf(temperature));
                         } else {
-                            experiment0ModelPhase3HH.setTemperature(String.valueOf(temperature));
+                            experiment0ModelPhase3HH.setUr(String.valueOf(temperature));
                         }
                         break;
                 }

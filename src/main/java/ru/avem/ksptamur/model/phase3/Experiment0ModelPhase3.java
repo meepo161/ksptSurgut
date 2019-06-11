@@ -13,7 +13,7 @@ public class Experiment0ModelPhase3 {
     private final StringProperty R15;
     private final StringProperty R60;
     private final StringProperty coef;
-    private final StringProperty temperature;
+    private final StringProperty ur;
     private final StringProperty time;
     private final StringProperty result;
     private List<StringProperty> properties = new ArrayList<>();
@@ -23,10 +23,10 @@ public class Experiment0ModelPhase3 {
         R15 = new SimpleStringProperty("");
         R60 = new SimpleStringProperty("");
         coef = new SimpleStringProperty("");
-        temperature = new SimpleStringProperty("");
+        ur = new SimpleStringProperty("");
         time = new SimpleStringProperty("");
         result = new SimpleStringProperty("");
-        properties.addAll(Arrays.asList(R15, R60, coef, temperature, time, result));
+        properties.addAll(Arrays.asList(R15, R60, coef, ur, time, result));
     }
 
     public String getWinding() {
@@ -77,16 +77,16 @@ public class Experiment0ModelPhase3 {
         this.coef.set(coef);
     }
 
-    public String getTemperature() {
-        return temperature.get();
+    public String getUr() {
+        return ur.get();
     }
 
-    public StringProperty temperatureProperty() {
-        return temperature;
+    public StringProperty urProperty() {
+        return ur;
     }
 
-    public void setTemperature(String temperature) {
-        this.temperature.set(temperature);
+    public void setUr(String ur) {
+        this.ur.set(ur);
     }
 
     public String getTime() {
