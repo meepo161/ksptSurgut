@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" prefHeight="618.0" prefWidth="1200.0" stylesheets="@../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.hvtf.grodno.controllers.ProtocolSelectorController">
+<AnchorPane fx:id="root" prefHeight="618.0" prefWidth="1200.0" stylesheets="@../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptamur.controllers.ProtocolSelectorController">
     <children>
       <VBox alignment="CENTER" layoutY="6.0" prefHeight="618.0" prefWidth="1200.0" spacing="16.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
