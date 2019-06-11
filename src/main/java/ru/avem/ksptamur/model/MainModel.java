@@ -127,7 +127,7 @@ public class MainModel {
     }
 
     public int getExperiment0Choise() {
-        return experiment1Choise;
+        return experiment0Choise;
     }
 
     public void setExperiment0Choise(int experiment0Choise) {

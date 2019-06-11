@@ -192,6 +192,9 @@ public class CommunicationModel extends Observable implements Observer {
             deviceController.setNeedToRead(false);
         }
     }
+    public void finalizeMegaCS(){
+        megacsController.setNeedToRead(false);
+    }
 
     private void resetDog() {
         if (lastOne) {

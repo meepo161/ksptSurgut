@@ -801,21 +801,13 @@ public class MainViewController implements Statable {
         } else {
             boolean isCanceled = false;
             if ((checkBoxExperiment0.isSelected() || checkBoxExperiment0.isIndeterminate()) && !isCanceled) {
-                if (radioMegerBH.isSelected() && radioMegerHH.isSelected() && radioMegerBHHH.isSelected()) {
-                    mainModel.setExperiment0Choise(EXPERIMENT0_ALL);
-                } else if (radioMegerBH.isSelected() && radioMegerHH.isSelected() && !radioMegerBHHH.isSelected()) {
-                    mainModel.setExperiment0Choise(EXPERIMENT0_BH_HH);
-                } else if (radioMegerBH.isSelected() && !radioMegerHH.isSelected() && radioMegerBHHH.isSelected()) {
-                    mainModel.setExperiment0Choise(EXPERIMENT0_BHHH_BH);
-                } else if (!radioMegerBH.isSelected() && radioMegerHH.isSelected() && radioMegerBHHH.isSelected()) {
-                    mainModel.setExperiment0Choise(EXPERIMENT0_BHHH_HH);
-                } else if (radioMegerBH.isSelected() && !radioMegerHH.isSelected() && !radioMegerBHHH.isSelected()) {
-                    mainModel.setExperiment0Choise(EXPERIMENT0_BH);
-                } else if (!radioMegerBH.isSelected() && radioMegerHH.isSelected() && !radioMegerBHHH.isSelected()) {
-                    mainModel.setExperiment0Choise(EXPERIMENT0_HH);
-                } else if (!radioMegerBH.isSelected() && !radioMegerHH.isSelected() && radioMegerBHHH.isSelected()) {
-                    mainModel.setExperiment0Choise(EXPERIMENT0_BHHH_HH);
-                }
+
+                int mask = 0;
+                mask |= radioMegerBH.isSelected() ? 0b1 : 0;
+                mask |= radioMegerHH.isSelected() ? 0b10 : 0;
+                mask |= radioMegerBHHH.isSelected() ? 0b100 : 0;
+                mainModel.setExperiment0Choise(mask);
+
                 isCanceled = start0Experiment();
             }
             if ((checkBoxExperiment1.isSelected() || checkBoxExperiment1.isIndeterminate()) && !isCanceled) {
