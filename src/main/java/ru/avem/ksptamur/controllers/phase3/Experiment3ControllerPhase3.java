@@ -336,7 +336,7 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
                 experiment3ModelPhase3.setResult("Успешно");
                 appendMessageToLog("Испытание завершено успешно");
             }
-            appendMessageToLog("\n------------------------------------------------\n");
+            appendMessageToLog("------------------------------------------------\n");
 
 
             Platform.runLater(() -> {

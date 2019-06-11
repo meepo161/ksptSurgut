@@ -17,10 +17,6 @@ public class CS02021Controller implements DeviceController {
 
     private CS020201Model model;
     private boolean needToReed;
-    public byte readAttempt = NUMBER_OF_READ_ATTEMPTS;
-    public byte readAttemptOfAttempt = NUMBER_OF_READ_ATTEMPTS_OF_ATTEMPTS;
-    public byte writeAttempt = NUMBER_OF_WRITE_ATTEMPTS;
-    public byte writeAttemptOfAttempt = NUMBER_OF_WRITE_ATTEMPTS_OF_ATTEMPTS;
 
     public CS02021Controller(int address, Observer observer, Connection connection, int megacsId) {
         this.address = (byte) address;
@@ -31,7 +27,7 @@ public class CS02021Controller implements DeviceController {
     public synchronized void setVoltage(int u) {
         byte byteU = (byte) (u / 10);
         ByteBuffer outputBuffer = ByteBuffer.allocate(5)
-                .put(address)
+                .put((byte) 0x08)
                 .put((byte) 0x01)
                 .put(byteU);
         CRC16.signReversWithSlice(outputBuffer);
@@ -53,7 +49,7 @@ public class CS02021Controller implements DeviceController {
     public synchronized float[] readData() {
         float[] data = new float[4];
         ByteBuffer outputBuffer = ByteBuffer.allocate(5)
-                .put(address)
+                .put((byte) 0x08)
                 .put((byte) 0x07)
                 .put((byte) 0x71)
                 .put((byte) 0x64)
@@ -66,7 +62,7 @@ public class CS02021Controller implements DeviceController {
             Logger.withTag("StatusActivity").log("isExperimentRun=" + isExperimentRun);
             inputBuffer.clear();
             mConnection.write(outputBuffer.array());
-            byte inputArray[] = new byte[40];
+            byte[] inputArray = new byte[40];
             int attempt = 0;
             do {
                 try {
@@ -82,7 +78,6 @@ public class CS02021Controller implements DeviceController {
             }
         }
 
-        Log.i("TAG", "bytes: " + Arrays.toString(inputBuffer.array()));
         if (inputBuffer.position() == 16) {
             inputBuffer.flip().position(2);
             finalBuffer.put(inputBuffer.get());
@@ -112,7 +107,7 @@ public class CS02021Controller implements DeviceController {
 
     public synchronized boolean isResponding() {
         ByteBuffer outputBuffer = ByteBuffer.allocate(5)
-                .put(address)
+                .put((byte) 0x08)
                 .put((byte) 0x07)
                 .put((byte) 0x71)
                 .put((byte) 0x64)
@@ -123,7 +118,7 @@ public class CS02021Controller implements DeviceController {
         inputBuffer.clear();
         int writtenBytes = mConnection.write(outputBuffer.array());
         Logger.withTag("TAG").log("writtenBytes=" + writtenBytes);
-        byte inputArray[] = new byte[40];
+        byte[] inputArray = new byte[40];
         int attempt = 0;
         do {
             try {
@@ -153,16 +148,6 @@ public class CS02021Controller implements DeviceController {
     }
 
     @Override
-    public boolean thereAreReadAttempts() {
-        return readAttempt > 0;
-    }
-
-    @Override
-    public boolean thereAreWriteAttempts() {
-        return writeAttempt > 0;
-    }
-
-    @Override
     public boolean needToRead() {
         return needToReed;
     }
@@ -173,32 +158,24 @@ public class CS02021Controller implements DeviceController {
     }
 
 
+    // TODO: 14.05.2019
+    @Override
+    public boolean thereAreReadAttempts() {
+        return false;
+    }
+
+    @Override
+    public boolean thereAreWriteAttempts() {
+        return false;
+    }
+
     @Override
     public void resetAllAttempts() {
-        resetReadAttempts();
-        resetReadAttemptsOfAttempts();
-        resetWriteAttempts();
-        resetWriteAttemptsOfAttempts();
+
     }
 
     @Override
     public void resetAllDeviceStateOnAttempts() {
 
-    }
-
-    public void resetReadAttempts() {
-        readAttempt = NUMBER_OF_READ_ATTEMPTS;
-    }
-
-    private void resetReadAttemptsOfAttempts() {
-        readAttemptOfAttempt = NUMBER_OF_READ_ATTEMPTS_OF_ATTEMPTS;
-    }
-
-    public void resetWriteAttempts() {
-        writeAttempt = NUMBER_OF_WRITE_ATTEMPTS;
-    }
-
-    private void resetWriteAttemptsOfAttempts() {
-        writeAttemptOfAttempt = NUMBER_OF_WRITE_ATTEMPTS_OF_ATTEMPTS;
     }
 }

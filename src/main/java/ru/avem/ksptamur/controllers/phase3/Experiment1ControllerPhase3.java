@@ -335,10 +335,10 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 } else { //если выбрано испытание НН обмоток
                     experiment1ModelPhase3HH.setResult("Успешно");
                 }
-                appendMessageToLog("\n------------------------------------------------\n");
+                appendMessageToLog("------------------------------------------------\n");
                 appendMessageToLog("Испытание завершено успешно");
             }
-            appendMessageToLog("\n------------------------------------------------\n");
+            appendMessageToLog("------------------------------------------------\n");
 
             isExperimentStart = false;
             isExperimentEnd = true;

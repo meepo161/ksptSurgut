@@ -325,7 +325,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
             experiment8ModelPhase1BH.setResult("Успешно");
             appendMessageToLog("Испытание BH завершено успешно");
         }
-        appendMessageToLog("\n------------------------------------------------\n");
+        appendMessageToLog("------------------------------------------------\n");
 
         communicationModel.stopObject();
         sleep(500);
@@ -449,7 +449,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
             appendMessageToLog("Испытание HH завершено успешно");
             isBHSuccess = false;
         }
-        appendMessageToLog("\n------------------------------------------------\n");
+        appendMessageToLog("------------------------------------------------\n");
 
         communicationModel.stopObject();
         sleep(500);

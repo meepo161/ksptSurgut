@@ -2,6 +2,7 @@ package ru.avem.ksptamur.utils;
 
 import java.awt.*;
 import java.io.*;
+import java.util.Locale;
 
 public class Utils {
 
@@ -57,5 +58,26 @@ public class Utils {
                     + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
         }
         System.out.println();
+    }
+
+    public static String formatRealNumber(double num) {
+        num = Math.abs(num);
+        String format = "%.0f";
+        if (num == 0) {
+            format = "%.0f";
+        } else if (num < 0.1f) {
+            format = "%.5f";
+        } else if (num < 1f) {
+            format = "%.4f";
+        } else if (num < 10f) {
+            format = "%.3f";
+        } else if (num < 100f) {
+            format = "%.2f";
+        } else if (num < 1000f) {
+            format = "%.1f";
+        } else if (num < 10000f) {
+            format = "%.0f";
+        }
+        return String.format(format, num);
     }
 }

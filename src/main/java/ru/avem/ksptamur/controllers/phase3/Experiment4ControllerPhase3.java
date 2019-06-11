@@ -349,7 +349,7 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
             } else {
                 experiment4ModelPhase3.setResult("Успешно");
             }
-            appendMessageToLog("\n------------------------------------------------\n");
+            appendMessageToLog("------------------------------------------------\n");
 
 
             Platform.runLater(() -> {

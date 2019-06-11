@@ -296,7 +296,7 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
                 }
                 appendMessageToLog("Испытание завершено успешно");
             }
-            appendMessageToLog("\n------------------------------------------------\n");
+            appendMessageToLog("------------------------------------------------\n");
 
             isExperimentStart = false;
             isExperimentEnd = true;

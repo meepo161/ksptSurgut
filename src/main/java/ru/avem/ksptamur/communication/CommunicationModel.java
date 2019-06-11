@@ -69,29 +69,29 @@ public class CommunicationModel extends Observable implements Observer {
 
         ModbusController modbusController = new RTUController(RS485Connection);
 
-        pm130Controller = new PM130Controller(1, this, modbusController, PM130_ID);
-        devicesControllers.add(pm130Controller);
-
-        parmaT400Controller = new ParmaT400Controller(2, this, modbusController, PARMA400_ID);
-        devicesControllers.add(parmaT400Controller);
-
-        phaseMeterController = new PhaseMeterController(4, this, modbusController, PHASEMETER_ID);
-        devicesControllers.add(phaseMeterController);
-
-        ikasController = new IKASController(5, this, modbusController, IKAS_ID);
-        devicesControllers.add(ikasController);
-
-        owenPRController = new OwenPRController(6, this, modbusController, PR200_ID);
-        devicesControllers.add(owenPRController);
-
-        trmController = new TRMController(7, this, modbusController, TRM_ID);
-        devicesControllers.add(trmController);
-
+//        pm130Controller = new PM130Controller(1, this, modbusController, PM130_ID);
+//        devicesControllers.add(pm130Controller);
+//
+//        parmaT400Controller = new ParmaT400Controller(2, this, modbusController, PARMA400_ID);
+//        devicesControllers.add(parmaT400Controller);
+//
+//        phaseMeterController = new PhaseMeterController(4, this, modbusController, PHASEMETER_ID);
+//        devicesControllers.add(phaseMeterController);
+//
+//        ikasController = new IKASController(5, this, modbusController, IKAS_ID);
+//        devicesControllers.add(ikasController);
+//
+//        owenPRController = new OwenPRController(6, this, modbusController, PR200_ID);
+//        devicesControllers.add(owenPRController);
+//
+//        trmController = new TRMController(7, this, modbusController, TRM_ID);
+//        devicesControllers.add(trmController);
+//
         megacsController = new CS02021Controller(8, this, RS485Connection, MEGACS_ID);
         devicesControllers.add(megacsController);
 
-        deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
-        devicesControllers.add(deltaCP2000Controller);
+//        deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
+//        devicesControllers.add(deltaCP2000Controller);
 
         new Thread(() -> {
             while (!isFinished) {
@@ -144,19 +144,19 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void setNeedToReadAllDevices(boolean isNeed) {
-        owenPRController.setNeedToRead(isNeed);
-//        megacsController.setNeedToRead(isNeed);
-        deltaCP2000Controller.setNeedToRead(isNeed);
-        ikasController.setNeedToRead(isNeed);
-        parmaT400Controller.setNeedToRead(isNeed);
-        phaseMeterController.setNeedToRead(isNeed);
-        pm130Controller.setNeedToRead(isNeed);
-        trmController.setNeedToRead(isNeed);
+//        owenPRController.setNeedToRead(isNeed);
+        megacsController.setNeedToRead(isNeed);
+//        deltaCP2000Controller.setNeedToRead(isNeed);
+//        ikasController.setNeedToRead(isNeed);
+//        parmaT400Controller.setNeedToRead(isNeed);
+//        phaseMeterController.setNeedToRead(isNeed);
+//        pm130Controller.setNeedToRead(isNeed);
+//        trmController.setNeedToRead(isNeed);
     }
 
     public void resetAllDevices() {
         owenPRController.resetAllAttempts();
-//        megacsController.resetAllAttempts();
+        megacsController.resetAllAttempts();
         deltaCP2000Controller.resetAllAttempts();
         ikasController.resetAllAttempts();
         parmaT400Controller.resetAllAttempts();
@@ -186,7 +186,7 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void finalizeAllDevices() {
-        owenPRController.write(RES_REGISTER, 1, 0);
+            owenPRController.write(RES_REGISTER, 1, 0);
         offAllKms();
         for (DeviceController deviceController : devicesControllers) {
             deviceController.setNeedToRead(false);
@@ -325,6 +325,7 @@ public class CommunicationModel extends Observable implements Observer {
 
 
     public void setUMgr(int u) {
+        setCS02021ExperimentRun(true);
         megacsController.setVoltage(u);
     }
 
@@ -332,10 +333,12 @@ public class CommunicationModel extends Observable implements Observer {
         return megacsController.readData();
     }
 
+    public void setCS02021ExperimentRun(boolean b) {
+        megacsController.setExperimentRun(b);
+    }
+
     public void initExperiment0Devices() {
         megacsController.setNeedToRead(true);
-        megacsController.resetReadAttempts();
-        megacsController.resetWriteAttempts();
     }
 
     public void initExperiment1Devices() {

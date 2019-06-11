@@ -69,11 +69,11 @@ public class MainViewController implements Statable {
     private RadioButton radioHH;
 
     @FXML
-    private RadioButton radioMegerBH;
+    private CheckBox radioMegerBH;
     @FXML
-    private RadioButton radioMegerHH;
+    private CheckBox radioMegerHH;
     @FXML
-    private RadioButton radioMegerBHHH;
+    private CheckBox radioMegerBHHH;
 
     @FXML
     private RadioButton radioIKASBH;
@@ -649,17 +649,28 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleRadioExperiment0BH() {
-        if (radioMegerBH.isSelected()) {
-            radioMegerBH.setSelected(false);
-        }
+        setStateCheckBox0();
     }
 
     @FXML
     private void handleRadioExperiment0HH() {
+        setStateCheckBox0();
     }
 
     @FXML
     private void handleRadioExperiment0BHHH() {
+        setStateCheckBox0();
+    }
+
+    private void setStateCheckBox0() {
+        checkBoxExperiment0.setIndeterminate(true);
+        if (!radioMegerBH.isSelected() && !radioMegerHH.isSelected() && !radioMegerBHHH.isSelected()) {
+            checkBoxExperiment0.setSelected(false);
+            checkBoxExperiment0.setIndeterminate(false);
+        } else if (radioMegerBH.isSelected() && radioMegerHH.isSelected() && radioMegerBHHH.isSelected()) {
+            checkBoxExperiment0.setIndeterminate(false);
+            checkBoxExperiment0.setSelected(true);
+        }
     }
 
     @FXML
