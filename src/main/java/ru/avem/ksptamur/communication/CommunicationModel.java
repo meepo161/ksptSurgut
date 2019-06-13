@@ -399,191 +399,133 @@ public class CommunicationModel extends Observable implements Observer {
     public void initExperiment8Devices() {
     }
 
-    public void onKM1() {
-        sleep(500);
+    public void onPR1() {
         onRegisterInTheKms(1, 1);
     }
 
-    public void onKM2() {
-        sleep(500);
+    public void onPR2() {
         onRegisterInTheKms(2, 1);
     }
 
-    public void onKM3() {
-        sleep(500);
+    public void onPR3() {
         onRegisterInTheKms(3, 1);
     }
 
-    public void onKM4() {
-        sleep(500);
+    public void onPR4() {
         onRegisterInTheKms(4, 1);
     }
 
-    public void onKM5() {
-
+    public void onPR5() {
         onRegisterInTheKms(5, 1);
     }
 
-    public void onKM6() {
-        sleep(500);
+    public void onPR6() {
         onRegisterInTheKms(6, 1);
     }
 
-    public void onKM7() {
-        sleep(500);
+    public void onPR7() {
         onRegisterInTheKms(7, 1);
     }
 
-    public void onKM8() {
-        sleep(500);
+    public void onPR8() {
         onRegisterInTheKms(8, 1);
     }
 
-    public void onKM1M1() {
-        sleep(500);
+    public void onPR1M1() {
         onRegisterInTheKms(1, 2);
-        sleep(500);
     }
 
-    public void onKM2M1() {
-        sleep(500);
+    public void onPR2M1() {
         onRegisterInTheKms(2, 2);
     }
 
-    public void onKM3M1() {
-        sleep(500);
+    public void onPR3M1() {
         onRegisterInTheKms(3, 2);
     }
 
-    public void onKM4M1() {
-        sleep(500);
+    public void onPR4M1() {
         onRegisterInTheKms(4, 2);
     }
 
-    public void onKM5M1() {
-        sleep(500);
+    public void onPR5M1() {
         onRegisterInTheKms(5, 2);
     }
 
-    public void onKM6M1() {
-        sleep(500);
+    public void onPR6M1() {
         onRegisterInTheKms(6, 2);
     }
 
-    public void onKM7M1() {
-        sleep(500);
+    public void onPR7M1() {
         onRegisterInTheKms(7, 2);
     }
 
-    public void onKM8M1() {
-        sleep(500);
+    public void onPR8M1() {
         onRegisterInTheKms(8, 2);
     }
 
 
-    public void offKM1() {
+    public void offPR1() {
         offRegisterInTheKms(1, 1);
-        sleep(500);
     }
 
-    public void offKM2() {
+    public void offPR2() {
         offRegisterInTheKms(2, 1);
-        sleep(500);
     }
 
-    public void offKM3() {
+    public void offPR3() {
         offRegisterInTheKms(3, 1);
-        sleep(500);
     }
 
-    public void offKM4() {
+    public void offPR4() {
         offRegisterInTheKms(4, 1);
-        sleep(500);
     }
 
-    public void offKM5() {
+    public void offPR5() {
         offRegisterInTheKms(5, 1);
-        sleep(500);
     }
 
-    public void offKM6() {
+    public void offPR6() {
         offRegisterInTheKms(6, 1);
-        sleep(500);
     }
 
-    public void offKM7() {
+    public void offPR7() {
         offRegisterInTheKms(7, 1);
-        sleep(500);
     }
 
-    public void offKM8() {
+    public void offPR8() {
         offRegisterInTheKms(8, 1);
-        sleep(500);
     }
 
     public void offKM1M1() {
         offRegisterInTheKms(1, 2);
-        sleep(500);
     }
 
-    public void offKM2M1() {
+    public void offPR2M1() {
         offRegisterInTheKms(2, 2);
-        sleep(500);
     }
 
-    public void offKM3M1() {
+    public void offPR3M1() {
         offRegisterInTheKms(3, 2);
-        sleep(500);
     }
 
-    public void offKM4M1() {
+    public void offPR4M1() {
         offRegisterInTheKms(4, 2);
-        sleep(500);
     }
 
-    public void offKM5M1() {
+    public void offPR5M1() {
         offRegisterInTheKms(5, 2);
-        sleep(500);
     }
 
-    public void offKM6M1() {
+    public void offPR6M1() {
         offRegisterInTheKms(6, 2);
-        sleep(500);
     }
 
-    public void offKM7M1() {
+    public void offPR7M1() {
         offRegisterInTheKms(7, 2);
-        sleep(500);
     }
 
-    public void offKM8M1() {
+    public void offPR8M1() {
         offRegisterInTheKms(8, 2);
-        sleep(500);
-    }
-
-    public void offKM1M2() {
-        offRegisterInTheKms(1, 3);
-        sleep(500);
-    }
-
-    public void offKM2M2() {
-        offRegisterInTheKms(2, 3);
-        sleep(500);
-    }
-
-    public void offKM3M2() {
-        offRegisterInTheKms(3, 3);
-        sleep(500);
-    }
-
-    public void offKM4M2() {
-        offRegisterInTheKms(4, 3);
-        sleep(500);
-    }
-
-    public void offKM5M2() {
-        offRegisterInTheKms(5, 3);
-        sleep(500);
     }
 
     public void setDeviceStateOn(boolean deviceStateOn) {

@@ -24,7 +24,6 @@ import ru.avem.ksptamur.utils.View;
 
 import java.text.SimpleDateFormat;
 import java.util.Observable;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.avem.ksptamur.Main.setTheme;
 import static ru.avem.ksptamur.communication.devices.DeviceController.*;
@@ -308,33 +307,33 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 appendOneMessageToLog("Инициализация испытания");
                 if (Ikz < 1) {
                     appendOneMessageToLog("1к5 токовая ступень");
-                    communicationModel.onKM6();
+                    communicationModel.onPR6();
                     is5to5State = true;
                     is40to5State = false;
                     is200to5State = false;
                 } else if (Ikz > 1 && Ikz < 15) {
                     appendOneMessageToLog("10к5 токовая ступень");
-                    communicationModel.onKM5();
+                    communicationModel.onPR5();
                     is5to5State = false;
                     is40to5State = true;
                     is200to5State = false;
                 } else {
                     appendOneMessageToLog("75к5 токовая ступень");
-                    communicationModel.onKM4();
+                    communicationModel.onPR4();
                     is5to5State = false;
                     is40to5State = false;
                     is200to5State = true;
                 }
-                communicationModel.onKM7();
-                communicationModel.onKM1M1();
+                communicationModel.onPR7();
+                communicationModel.onPR1M1();
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 if (UHHTestItem < WIDDING400) {
-                    communicationModel.onKM1();
+                    communicationModel.onPR1();
                 } else if (UHHTestItem > WIDDING400) {
-                    communicationModel.onKM2();
-                    communicationModel.onKM2M1();
+                    communicationModel.onPR2();
+                    communicationModel.onPR2M1();
                 } else if (Ukz > 12.0) { //TODO
                     appendOneMessageToLog("Напряжение короткого больше допустимого");
                     appendOneMessageToLog("Проверьте корректность введенных данных в БД");

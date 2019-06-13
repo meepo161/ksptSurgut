@@ -300,7 +300,6 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
 
             isExperimentStart = false;
             isExperimentEnd = true;
-            communicationModel.offAllKms(); //разбираем все возможные схемы
             communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
 
 
@@ -343,8 +342,6 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
 
         appendOneMessageToLog("Конец испытания BH\n_______________________________________________________");
 
-        communicationModel.offKM1M2(); //подаем 0 на выход ПР для подключения ИКАС к ВН обмотки
-
         try {
             double R = Double.parseDouble(experiment1ModelBHPhase1.getR());
 
@@ -363,8 +360,6 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
     private void startHH() {
         if (isExperimentStart && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания НН...");
-            communicationModel.offKM1M2(); //отключаем ВН выход у ИКАС
-            communicationModel.onKM7M1(); //подаем 1 на выход пр для подключения ИКАС к НН обмотки
         }
 
         while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
@@ -391,8 +386,6 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
         }
 
         appendOneMessageToLog("Конец испытания HH\n_______________________________________________________");
-
-        communicationModel.offKM7M1(); //подаем 0 на выход пр для подключения ИКАС к НН обмотки
 
         try {
             double R = Double.parseDouble(experiment1ModelHHPhase1.getR());

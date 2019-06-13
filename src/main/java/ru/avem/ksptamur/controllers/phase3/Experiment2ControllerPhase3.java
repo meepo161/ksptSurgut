@@ -34,10 +34,6 @@ import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment2ControllerPhase3 extends DeviceState implements ExperimentController {
     private static final int WIDDING400 = 400;
-    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
-    private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
-    private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
-    private static final int TIME_DELAY_CURRENT_STAGES = 100;
     private static final double POWER = 100;
 
 
@@ -76,8 +72,8 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
 
     private MainModel mainModel = MainModel.getInstance();
     private Protocol currentProtocol = mainModel.getCurrentProtocol();
-    private double UBHTestItem = currentProtocol.getUbh();
     private double UHHTestItem = currentProtocol.getUhh();
+    private double coef = 1.157;
 
     private CommunicationModel communicationModel = CommunicationModel.getInstance();
     private Experiment2ModelPhase3 experiment2ModelPhase3;
@@ -89,7 +85,6 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
     private volatile boolean isNeedToRefresh = true;
     private volatile boolean isStartButtonOn;
     private volatile boolean isNeedToWaitDelta;
-    private volatile boolean isStopButtonOn;
     private volatile boolean isExperimentStart;
     private volatile boolean isExperimentEnd = true;
 
@@ -100,27 +95,15 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
     private volatile boolean isParmaResponding;
     private volatile boolean isPM130Responding;
     private volatile boolean isPressedOk;
-    private volatile boolean isDeviceOn = false;
 
     private volatile boolean isDoorSHSO;
     private volatile boolean isDoorZone;
     private volatile boolean isCurrent;
     private volatile boolean isCurrentVIU;
 
-    private boolean is200to5State;
-    private boolean is40to5State;
-    private boolean is5to5State;
-
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-SSS");
     private String logBuffer;
     private volatile String cause;
-    private volatile double temperature;
-    private volatile double iA;
-    private volatile double iB;
-    private volatile double iC;
-    private volatile double fParma;
-    private volatile int windingGroup0;
-    private volatile int windingGroup1;
     private volatile double measuringUOutAB;
     private volatile double measuringUOutBC;
     private volatile double measuringUOutCA;
@@ -212,7 +195,6 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
         isExperimentStart = false;
     }
 
-
     private void startExperiment() {
         buttonStartStop.setText("Остановить");
         buttonNext.setDisable(true);
@@ -302,56 +284,56 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                is200to5State = true;
                 if (isExperimentStart && UHHTestItem < WIDDING400) {
-                    communicationModel.onKM1();
+                    communicationModel.onPR2();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (isExperimentStart && UHHTestItem > WIDDING400) {
-                    communicationModel.onKM2();
+                    // TODO
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный ВН в объекте испытания.");
                 }
-                communicationModel.onKM4();
-                communicationModel.onKM1M1();
+                communicationModel.onPR2M1();
+                communicationModel.onPR4();
+                communicationModel.onPR1M1();
             }
 
+
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                sleep(3000);
                 communicationModel.setObjectParams(50 * 100, 5 * 10, 50 * 100);
                 appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
                 communicationModel.startObject();
                 appendOneMessageToLog("Запускаем ЧП");
             }
 
-            while (isExperimentStart && !isDeltaReady50 && isStopButtonOn) {
+            while (isExperimentStart && !isDeltaReady50) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь выйдет к заданным характеристикам");
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                regulation(5 * 10, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
+//                regulation(5 * 10, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
+                communicationModel.setObjectUMax((int) (UHHTestItem/coef) * 10);
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                sleep(4000);
+                sleep(10000); // TODO: 11.06.2019 Время разгона
                 isNeedToRefresh = false;
                 experiment2ModelPhase3.setUDiff(String.valueOf(((int) ((measuringUInAvr / measuringUOutAvr * POWER)) / POWER)));
             }
 
             isNeedToRefresh = false;
-            isDeviceOn = false;
             isExperimentStart = false;
             isExperimentEnd = true;
-            sleep(500);
             communicationModel.stopObject();
 
             while (isExperimentStart && !isDeltaReady0 && isDeltaResponding) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
             }
+            sleep(5000);
 
             communicationModel.offAllKms(); //разбираем все возможные схемы
             communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства

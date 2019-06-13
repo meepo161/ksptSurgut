@@ -213,7 +213,7 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onKM1();
+                communicationModel.onPR1();
                 sleep(1000);
             }
 
@@ -236,15 +236,15 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onKM2();
-                communicationModel.onKM7();
+                communicationModel.onPR2();
+                communicationModel.onPR7();
                 is75to5State = true;
                 if (UBHTestItem < WIDDING400) {
-                    communicationModel.onKM2M1();
+                    communicationModel.onPR2M1();
 
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (UBHTestItem > WIDDING400) {
-                    communicationModel.onKM3M1();
+                    communicationModel.onPR3M1();
 
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
@@ -254,7 +254,7 @@ public class Experiment3ControllerPhase1 extends DeviceState implements Experime
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.onKM5();
+                communicationModel.onPR5();
                 appendOneMessageToLog("Подключена обмотка НН");
             }
 

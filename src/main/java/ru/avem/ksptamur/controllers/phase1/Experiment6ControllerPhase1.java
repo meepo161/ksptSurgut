@@ -238,7 +238,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onKM1();
+                communicationModel.onPR1();
                 isStartButtonOn = true;
                 is75to5State = true;
                 sleep(1000);
@@ -264,14 +264,14 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onKM2();
-                communicationModel.onKM7();
+                communicationModel.onPR2();
+                communicationModel.onPR7();
                 is75to5State = true;
                 if (UBHTestItem <= WIDDING400) {
-                    communicationModel.onKM2M1();
+                    communicationModel.onPR2M1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (UBHTestItem > WIDDING400) {
-                    communicationModel.onKM3M1();
+                    communicationModel.onPR3M1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
@@ -384,67 +384,67 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
     private void pickUpState() {
         if (is75to5State) {
             if (iA < 12.0 && iA > 1.2) {
-                communicationModel.onKM8();
+                communicationModel.onPR8();
                 sleep(200);
                 is75to5State = false;
                 is10to5State = true;
                 is1to5State = false;
-                communicationModel.offKM7();
+                communicationModel.offPR7();
                 communicationModel.offKM1M1();
                 appendOneMessageToLog("Выставляем токовую ступень 10/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onKM1M1();
+                communicationModel.onPR1M1();
                 sleep(200);
                 is75to5State = false;
                 is10to5State = false;
                 is1to5State = true;
-                communicationModel.offKM7();
-                communicationModel.offKM8();
+                communicationModel.offPR7();
+                communicationModel.offPR8();
                 appendOneMessageToLog("Выставляем токовую ступень 1/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
         } else if (is10to5State) {
             if (iA > 12) {
-                communicationModel.onKM7();
+                communicationModel.onPR7();
                 sleep(200);
                 is75to5State = true;
                 is10to5State = false;
                 is1to5State = false;
                 communicationModel.offKM1M1();
-                communicationModel.offKM8();
+                communicationModel.offPR8();
                 appendOneMessageToLog("Выставляем токовую ступень 75/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onKM1M1();
+                communicationModel.onPR1M1();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = false;
                 is1to5State = true;
-                communicationModel.offKM7();
-                communicationModel.offKM8();
+                communicationModel.offPR7();
+                communicationModel.offPR8();
                 appendOneMessageToLog("Выставляем токовую ступень 1/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
         } else if (is1to5State) {
             if (iA > 1.2) {
-                communicationModel.onKM8();
+                communicationModel.onPR8();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = true;
                 is1to5State = false;
-                communicationModel.offKM8();
+                communicationModel.offPR8();
                 communicationModel.offKM1M1();
                 appendOneMessageToLog("Выставляем токовую ступень 10/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onKM1M1();
+                communicationModel.onPR1M1();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = false;
                 is1to5State = true;
-                communicationModel.offKM7();
-                communicationModel.offKM8();
+                communicationModel.offPR7();
+                communicationModel.offPR8();
                 appendOneMessageToLog("Выставляем токовую ступень 1/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }

@@ -273,7 +273,7 @@ public class Experiment8ControllerPhase3 extends DeviceState implements Experime
 
         if (isExperimentStart && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            communicationModel.onKM1();
+            communicationModel.onPR1();
             isStartButtonOn = true;
             sleep(1000);
         }
@@ -297,8 +297,8 @@ public class Experiment8ControllerPhase3 extends DeviceState implements Experime
 
         if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
-            communicationModel.onKM8M1();
-            communicationModel.onKM4();
+            communicationModel.onPR8M1();
+            communicationModel.onPR4();
         }
 
         if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
@@ -393,7 +393,7 @@ public class Experiment8ControllerPhase3 extends DeviceState implements Experime
 
         if (isExperimentStart && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            communicationModel.onKM1();
+            communicationModel.onPR1();
             isStartButtonOn = true;
             sleep(1000);
         }
@@ -417,8 +417,8 @@ public class Experiment8ControllerPhase3 extends DeviceState implements Experime
 
         if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
-            communicationModel.onKM8M1();
-            communicationModel.onKM4();
+            communicationModel.onPR8M1();
+            communicationModel.onPR4();
 
         }
 

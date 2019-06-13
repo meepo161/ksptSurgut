@@ -281,18 +281,18 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                 appendOneMessageToLog("Инициализация испытания");
                 is200to5State = true;
                 if (isExperimentStart && UHHTestItem < WIDDING400) {
-                    communicationModel.onKM1();
+                    communicationModel.onPR1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (isExperimentStart && UHHTestItem > WIDDING400) {
-                    communicationModel.onKM2();
-                    communicationModel.onKM2M1();
+                    communicationModel.onPR2();
+                    communicationModel.onPR2M1();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 1320В ");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный ВН в объекте испытания.");
                 }
-                communicationModel.onKM4();
-                communicationModel.onKM1M1();
+                communicationModel.onPR4();
+                communicationModel.onPR1M1();
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {

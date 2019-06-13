@@ -236,7 +236,7 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onKM1();
+                communicationModel.onPR1();
                 sleep(1000);
             }
 
@@ -258,35 +258,35 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onKM3();
+                communicationModel.onPR3();
                 if (Ikz < 1) {
                     appendOneMessageToLog("1к5 токовая ступень");
-                    communicationModel.onKM1M1();
+                    communicationModel.onPR1M1();
                     is1to5State = true;
                     is10to5State = false;
                     is75to5State = false;
                 } else if (Ikz > 1 && Ikz < 11) {
                     appendOneMessageToLog("10к5 токовая ступень");
-                    communicationModel.onKM8();
+                    communicationModel.onPR8();
                     is1to5State = false;
                     is10to5State = true;
                     is75to5State = false;
                 } else {
                     appendOneMessageToLog("75к5 токовая ступень");
-                    communicationModel.onKM7();
+                    communicationModel.onPR7();
                     is1to5State = false;
                     is10to5State = false;
                     is75to5State = true;
                 }
-                communicationModel.onKM6();
+                communicationModel.onPR6();
             }
 
             if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
                 if (Ukz < 3.0) {
-                    communicationModel.onKM5M1();
+                    communicationModel.onPR5M1();
                     appendOneMessageToLog("KM5M1TP4");
                 } else if (Ukz >= 3.0) {
-                    communicationModel.onKM4M1();
+                    communicationModel.onPR4M1();
                     appendOneMessageToLog("KM4M1TP12");
                 } else if (Ukz > 12.0) {
                     appendOneMessageToLog("Напряжение короткого больше допустимого");
