@@ -78,8 +78,8 @@ public class Experiment5ModelPhase3 {
         return IA;
     }
 
-    public void setIA(double IA) {
-        this.IA.set(String.valueOf(IA));
+    public void setIA(String IA) {
+        this.IA.set(IA);
     }
 
     public String getIB() {
@@ -90,8 +90,8 @@ public class Experiment5ModelPhase3 {
         return IB;
     }
 
-    public void setIB(double IB) {
-        this.IB.set(String.valueOf(IB));
+    public void setIB(String IB) {
+        this.IB.set(IB);
     }
 
     public String getIC() {
@@ -102,8 +102,8 @@ public class Experiment5ModelPhase3 {
         return IC;
     }
 
-    public void setIC(double IC) {
-        this.IC.set(String.valueOf(IC));
+    public void setIC(String IC) {
+        this.IC.set(IC);
     }
 
     public String getPP() {

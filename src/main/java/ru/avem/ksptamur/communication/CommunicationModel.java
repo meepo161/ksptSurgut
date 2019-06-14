@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import static ru.avem.ksptamur.Constants.Measuring.HZ;
+import static ru.avem.ksptamur.Constants.Measuring.VOLT;
 import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Controller.*;
 import static ru.avem.ksptamur.communication.devices.ikas.IKASController.*;
@@ -312,9 +314,9 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void setObjectParams(int fOut, int voltageP1, int fP1) {
-        deltaCP2000Controller.write(MAX_VOLTAGE_REGISTER, 1, 400 * 10);
-        deltaCP2000Controller.write(MAX_FREQUENCY_REGISTER, 1, 210 * 100);
-        deltaCP2000Controller.write(NOM_FREQUENCY_REGISTER, 1, 210 * 100);
+        deltaCP2000Controller.write(MAX_VOLTAGE_REGISTER, 1, 400 * VOLT);
+        deltaCP2000Controller.write(MAX_FREQUENCY_REGISTER, 1, 210 * HZ);
+        deltaCP2000Controller.write(NOM_FREQUENCY_REGISTER, 1, 210 * HZ);
         deltaCP2000Controller.write(CURRENT_FREQUENCY_OUTPUT_REGISTER, 1, fOut);
         deltaCP2000Controller.write(POINT_1_VOLTAGE_REGISTER, 1, voltageP1);
         deltaCP2000Controller.write(POINT_1_FREQUENCY_REGISTER, 1, fP1);
@@ -331,9 +333,9 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
 
-    public void setUMgr(int u) {
+    public boolean setUMgr(int u) {
         setCS02021ExperimentRun(true);
-        megacsController.setVoltage(u);
+        return megacsController.setVoltage(u);
     }
 
     public float[] readDataMgr() {
@@ -379,6 +381,18 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment4Devices() {
+        pm130Controller.setNeedToRead(true);
+        pm130Controller.resetReadAttempts();
+        pm130Controller.resetWriteAttempts();
+        parmaT400Controller.setNeedToRead(true);
+        parmaT400Controller.resetReadAttempts();
+        parmaT400Controller.resetWriteAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetReadAttempts();
+        deltaCP2000Controller.resetWriteAttempts();
+        phaseMeterController.setNeedToRead(true);
+        phaseMeterController.resetReadAttempts();
+        phaseMeterController.resetWriteAttempts();
     }
 
     public void initExperiment5Devices() {
@@ -394,6 +408,12 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment7Devices() {
+        pm130Controller.setNeedToRead(true);
+        pm130Controller.resetReadAttempts();
+        pm130Controller.resetWriteAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetReadAttempts();
+        deltaCP2000Controller.resetWriteAttempts();
     }
 
     public void initExperiment8Devices() {

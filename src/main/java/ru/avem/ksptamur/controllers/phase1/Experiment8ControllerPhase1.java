@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Observable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static ru.avem.ksptamur.Constants.Measuring.HZ;
+import static ru.avem.ksptamur.Constants.Measuring.VOLT;
 import static ru.avem.ksptamur.Main.setTheme;
 import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
@@ -73,7 +75,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
     private volatile boolean isNeedToRefresh;
     private volatile boolean isStartButtonOn;
     private volatile boolean isStopButtonOn;
-    private volatile boolean isExperimentStart;
+    private volatile boolean isExperimentRunning;
     private volatile boolean isExperimentEnd = true;
     private volatile boolean isBHSuccess = false;
 
@@ -170,7 +172,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
     private void stopExperiment() {
         buttonStartStop.setDisable(false);
         cause = "Отменено оператором";
-        isExperimentStart = false;
+        isExperimentRunning = false;
         isExperimentEnd = true;
         buttonStartStop.setText("Запустить");
         buttonNext.setDisable(false);
@@ -183,7 +185,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
         isDoorLockOn = true;
         isInsulationOn = true;
         isDoorZoneOn = true;
-        isExperimentStart = true;
+        isExperimentRunning = true;
         isExperimentEnd = false;
         buttonStartStop.setText("Остановить");
         buttonNext.setDisable(true);
@@ -207,7 +209,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
                 startHH();
             }
 
-            isExperimentStart = false;
+            isExperimentRunning = false;
             isExperimentEnd = true;
 
             Platform.runLater(() -> {
@@ -220,12 +222,12 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
     }
 
     private void startBH() {
-        isExperimentStart = true;
+        isExperimentRunning = true;
         isExperimentEnd = false;
 
         currentStage = 1;
         AtomicBoolean isPressed = new AtomicBoolean(false);
-        if (isExperimentStart) {
+        if (isExperimentRunning) {
             Platform.runLater(() -> {
                 View.showConfirmDialog("Подключены крокодилы к BН и корпусу?",
                         () -> {
@@ -233,7 +235,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
                         },
                         () -> {
                             cause = "Отменено";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                             isPressed.set(true);
                         });
             });
@@ -242,67 +244,67 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
             sleep(100);
         }
 
-        if (isExperimentStart) {
+        if (isExperimentRunning) {
             appendOneMessageToLog("Начало испытания");
             communicationModel.initOwenPrController();
             communicationModel.initExperiment8Devices();
             sleep(3000);
         }
 
-            if (isExperimentStart && !isOwenPRResponding) {
+            if (isExperimentRunning && !isOwenPRResponding) {
                 appendOneMessageToLog("Нет связи с ПР");
                 sleep(100);
-                isExperimentStart = false;
+                isExperimentRunning = false;
             }
 
-        if (isExperimentStart && isThereAreAccidents()) {
+        if (isExperimentRunning && isThereAreAccidents()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
-            isExperimentStart = false;
+            isExperimentRunning = false;
         }
 
-        if (isExperimentStart && isOwenPRResponding) {
+        if (isExperimentRunning && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
             communicationModel.onPR1();
             isStartButtonOn = true;
             sleep(1000);
         }
 
-        while (isExperimentStart && !isStartButtonOn) {
+        while (isExperimentRunning && !isStartButtonOn) {
             sleep(100);
             appendOneMessageToLog("Включите кнопочный пост");
         }
 
-        if (isExperimentStart) {
+        if (isExperimentRunning) {
             appendOneMessageToLog("Идет загрузка ЧП");
             sleep(9000);
             communicationModel.initExperiment8Devices();
         }
 
-        while (isExperimentStart && !isDevicesResponding()) {
+        while (isExperimentRunning && !isDevicesResponding()) {
             appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
             sleep(100);
         }
 
 
-        if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
+        if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
             communicationModel.onPR8M1();
             communicationModel.onPR4();
         }
 
-        if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-            communicationModel.setObjectParams(50 * 100, 50 * 10, 50 * 100);
+        if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            communicationModel.setObjectParams(50 * HZ, 50 * VOLT, 50 * HZ);
             appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
             communicationModel.startObject();
         }
 
-        if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
+        if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Поднимаем напряжение до " + (int) UInsulation + "B");
-            regulation(50 * 10, 40, 15, (int) UInsulation, 0.1, 30, 100, 200);
+            regulation(50 * VOLT, 40, 15, (int) UInsulation, 0.1, 30, 100, 200);
         }
 
         int experimentTime = 60;
-        while (isExperimentStart && isStartButtonOn && isDevicesResponding() && (experimentTime-- > 0)) {
+        while (isExperimentRunning && isStartButtonOn && isDevicesResponding() && (experimentTime-- > 0)) {
             sleep(1000);
             appendOneMessageToLog("Ждем 60 секунд");
             experiment8ModelPhase1BH.setTime(String.valueOf(experimentTime));
@@ -329,12 +331,12 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
 
         communicationModel.stopObject();
         sleep(500);
-        while (isExperimentStart && !isDeltaReady0 && isDeltaResponding) {
+        while (isExperimentRunning && !isDeltaReady0 && isDeltaResponding) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
         }
 
-        isExperimentStart = false;
+        isExperimentRunning = false;
         isExperimentEnd = true;
         communicationModel.offAllKms(); //разбираем все возможные схемы
         communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
@@ -343,12 +345,12 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
 
     private void startHH() {
 
-        isExperimentStart = true;
+        isExperimentRunning = true;
         isExperimentEnd = false;
 
         currentStage = 2;
         AtomicBoolean isPressed = new AtomicBoolean(false);
-        if (isExperimentStart) {
+        if (isExperimentRunning) {
             Platform.runLater(() -> {
                 View.showConfirmDialog("Подключены крокодилы к HН и корпусу?",
                         () -> {
@@ -356,7 +358,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
                         },
                         () -> {
                             cause = "Отменено";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                             isPressed.set(true);
                         });
             });
@@ -365,68 +367,68 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
             sleep(100);
         }
 
-        if (isExperimentStart) {
+        if (isExperimentRunning) {
             appendOneMessageToLog("Начало испытания");
             communicationModel.initOwenPrController();
             communicationModel.initExperiment8Devices();
             sleep(3000);
         }
 
-            if (isExperimentStart && !isOwenPRResponding) {
+            if (isExperimentRunning && !isOwenPRResponding) {
                 appendOneMessageToLog("Нет связи с ПР");
                 sleep(100);
-                isExperimentStart = false;
+                isExperimentRunning = false;
             }
 
-        if (isExperimentStart && isThereAreAccidents()) {
+        if (isExperimentRunning && isThereAreAccidents()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
-            isExperimentStart = false;
+            isExperimentRunning = false;
         }
 
-        if (isExperimentStart && isOwenPRResponding) {
+        if (isExperimentRunning && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
             communicationModel.onPR1();
             isStartButtonOn = true;
             sleep(1000);
         }
 
-        while (isExperimentStart && !isStartButtonOn) {
+        while (isExperimentRunning && !isStartButtonOn) {
             sleep(100);
             appendOneMessageToLog("Включите кнопочный пост");
         }
 
-        if (isExperimentStart) {
+        if (isExperimentRunning) {
             appendOneMessageToLog("Идет загрузка ЧП");
             sleep(9000);
             communicationModel.initExperiment8Devices();
         }
 
-        while (isExperimentStart && !isDevicesResponding()) {
+        while (isExperimentRunning && !isDevicesResponding()) {
             appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
             sleep(100);
         }
 
 
-        if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
+        if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
             communicationModel.onPR8M1();
             communicationModel.onPR4();
 
         }
 
-        if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
-            communicationModel.setObjectParams(50 * 100, 50 * 10, 50 * 100);
+        if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            communicationModel.setObjectParams(50 * HZ, 50 * VOLT, 50 * HZ);
             appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
             communicationModel.startObject();
         }
 
-        if (isExperimentStart && isStartButtonOn && isDevicesResponding()) {
+        if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Поднимаем напряжение до " + (int) UInsulation + "B");
-            regulation(50 * 10, 40, 15, (int) UInsulation, 0.1, 30, 100, 200);
+            regulation(50 * VOLT, 40, 15, (int) UInsulation, 0.1, 30, 100, 200);
         }
 
         int experimentTime = 60;
-        while (isExperimentStart && isStartButtonOn && isDevicesResponding() && (experimentTime-- > 0)) {
+        while (isExperimentRunning && isStartButtonOn && isDevicesResponding() && (experimentTime-- > 0)) {
             sleep(1000);
             appendOneMessageToLog("Ждем 60 секунд");
             experiment8ModelPhase1HH.setTime(String.valueOf(experimentTime));
@@ -453,12 +455,12 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
 
         communicationModel.stopObject();
         sleep(500);
-        while (isExperimentStart && !isDeltaReady0 && isDeltaResponding) {
+        while (isExperimentRunning && !isDeltaReady0 && isDeltaResponding) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
         }
 
-        isExperimentStart = false;
+        isExperimentRunning = false;
         isExperimentEnd = true;
         communicationModel.offAllKms(); //разбираем все возможные схемы
         communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
@@ -511,7 +513,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
     private int regulation(int start, int coarseStep, int fineStep, int end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
         double coarseMinLimit = 1 - coarseLimit;
         double coarseMaxLimit = 1 + coarseLimit;
-        while (isExperimentStart && ((measuringUIn < end * coarseMinLimit) || (measuringUIn > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
+        while (isExperimentRunning && ((measuringUIn < end * coarseMinLimit) || (measuringUIn > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
             if (measuringUIn < end * coarseMinLimit) {
                 communicationModel.setObjectUMax(start += coarseStep);
             } else if (measuringUIn > end * coarseMaxLimit) {
@@ -520,7 +522,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
             sleep(coarseSleep);
             appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
         }
-        while (isExperimentStart && ((measuringUIn < end - fineLimit) || (measuringUIn > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
+        while (isExperimentRunning && ((measuringUIn < end - fineLimit) || (measuringUIn > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
             if (measuringUIn < end - fineLimit) {
                 communicationModel.setObjectUMax(start += fineStep);
             } else if (measuringUIn > end + fineLimit) {
@@ -581,42 +583,42 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
                     case OwenPRModel.PRDI6_FIXED:
                         if ((boolean) value) {
                             cause = "Нажата кнопка (СТОП)";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                         }
                         break;
                     case OwenPRModel.PRDI1:
                         isCurrent1On = (boolean) value;
                         if (!isCurrent1On) {
                             cause = "сработала токовая защита 1";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                         }
                         break;
                     case OwenPRModel.PRDI2:
                         isCurrent2On = (boolean) value;
                         if (!isCurrent2On) {
                             cause = "сработала токовая защита 2";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                         }
                         break;
                     case OwenPRModel.PRDI3:
                         isDoorLockOn = (boolean) value;
                         if (!isDoorLockOn) {
                             cause = "открыта дверь";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                         }
                         break;
                     case OwenPRModel.PRDI4:
                         isInsulationOn = (boolean) value;
                         if (!isInsulationOn) {
                             cause = "пробита изоляция";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                         }
                         break;
                     case OwenPRModel.PRDI7:
                         isDoorZoneOn = (boolean) value;
                         if (!isDoorZoneOn) {
                             cause = "открыта дверь зоны";
-                            isExperimentStart = false;
+                            isExperimentRunning = false;
                         }
                         break;
                 }
@@ -660,7 +662,7 @@ public class Experiment8ControllerPhase1 extends DeviceState implements Experime
         }
         if (iA > 1000.0) {
             cause = "ток превысил";
-            isExperimentStart = false;
+            isExperimentRunning = false;
         } else {
             iAOld = iA;
         }

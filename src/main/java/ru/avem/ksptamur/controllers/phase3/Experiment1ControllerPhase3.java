@@ -67,7 +67,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     private Stage dialogStage;
     private boolean isCanceled;
 
-    private volatile boolean isExperimentStart;
+    private volatile boolean isExperimentRunning;
     private volatile boolean isExperimentEnd = true;
 
     private volatile boolean isOwenPRResponding;
@@ -164,7 +164,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     private void stopExperiment() {
         buttonStartStop.setDisable(false);
         cause = "Отменено оператором";
-        isExperimentStart = false;
+        isExperimentRunning = false;
         isExperimentEnd = true;
         buttonStartStop.setText("Запустить");
         buttonNext.setDisable(false);
@@ -180,35 +180,35 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         isIkasResponding = false;
         cause = "";
         isPressedOk = false;
-        isExperimentStart = true;
+        isExperimentRunning = true;
 
         new Thread(() -> {
 
-            if (isExperimentStart) {
+            if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment1Devices();
                 sleep(2000);
             }
 
-            if (isExperimentStart && !isOwenPRResponding) {
+            if (isExperimentRunning && !isOwenPRResponding) {
                 appendOneMessageToLog("Нет связи с ПР");
                 sleep(100);
-                isExperimentStart = false;
+                isExperimentRunning = false;
             }
 
-            while (isExperimentStart && isThereAreAccidents()) { //если сработали защиты
+            while (isExperimentRunning && isThereAreAccidents()) { //если сработали защиты
                 appendOneMessageToLog(getAccidentsString("Аварии")); //вывод в лог сообщение со списком сработавших защит
                 sleep(100);
             }
-            while (isExperimentStart && !isDevicesResponding()) {  //если устройства не отвечают
+            while (isExperimentRunning && !isDevicesResponding()) {  //если устройства не отвечают
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));//вывод в лог сообщение со списком устройств без связи
                 sleep(100);
             }
 
-            if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH && isExperimentStart) {
+            if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH && isExperimentRunning) {
                 AtomicBoolean isPressed = new AtomicBoolean(false);
-                if (isExperimentStart) {
+                if (isExperimentRunning) {
                     Platform.runLater(() -> {
                         View.showConfirmDialog("Подключите крокодилы ИКАС к ВН",
                                 () -> {
@@ -216,7 +216,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                                 },
                                 () -> {
                                     cause = "Отменено";
-                                    isExperimentStart = false;
+                                    isExperimentRunning = false;
                                     isPressed.set(true);
                                 });
                     });
@@ -231,7 +231,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
 
                 AtomicBoolean isPressed2 = new AtomicBoolean(false);
-                if (isExperimentStart) {
+                if (isExperimentRunning) {
                     Platform.runLater(() -> {
                         View.showConfirmDialog("Отключите крокодилы ИКАС от ВН и подключите к НН",
                                 () -> {
@@ -239,7 +239,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                                 },
                                 () -> {
                                     cause = "Отменено";
-                                    isExperimentStart = false;
+                                    isExperimentRunning = false;
                                     isPressed2.set(true);
                                 });
                     });
@@ -255,7 +255,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
             } else if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BH) {
                 AtomicBoolean isPressed = new AtomicBoolean(false);
-                if (isExperimentStart) {
+                if (isExperimentRunning) {
                     Platform.runLater(() -> {
                         View.showConfirmDialog("Поключите крокодилы ИКАС к ВН",
                                 () -> {
@@ -263,7 +263,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                                 },
                                 () -> {
                                     cause = "Отменено";
-                                    isExperimentStart = false;
+                                    isExperimentRunning = false;
                                     isPressed.set(true);
                                 });
                     });
@@ -281,7 +281,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
 
                 AtomicBoolean isPressed = new AtomicBoolean(false);
-                if (isExperimentStart) {
+                if (isExperimentRunning) {
                     Platform.runLater(() -> {
                         View.showConfirmDialog("Поключите крокодилы ИКАС к НН",
                                 () -> {
@@ -289,7 +289,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                                 },
                                 () -> {
                                     cause = "Отменено";
-                                    isExperimentStart = false;
+                                    isExperimentRunning = false;
                                     isPressed.set(true);
                                 });
                     });
@@ -340,7 +340,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             }
             appendMessageToLog("------------------------------------------------\n");
 
-            isExperimentStart = false;
+            isExperimentRunning = false;
             isExperimentEnd = true;
             communicationModel.offAllKms(); //разбираем все возможные схемы
             communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
@@ -356,27 +356,27 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startBH() {
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания ВН...");
         }
 
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) { //проверка готовности ИКАС
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) { //проверка готовности ИКАС
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Начало измерения обмотки AB");
             communicationModel.startMeasuringAB();
             sleep(2000);
         }
 
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
             appendOneMessageToLog("Измерение обмотки AB завершено");
             experiment1ModelPhase3BH.setAB((double) ((int) (measuringR * 10000000)) / 10000000);
@@ -385,12 +385,12 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             communicationModel.startMeasuringBC();
             sleep(2000);
         }
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
             appendOneMessageToLog("Измерение обмотки BC завершено");
             experiment1ModelPhase3BH.setBC((double) ((int) (measuringR * 10000000)) / 10000000);
@@ -400,12 +400,12 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             sleep(2000);
         }
 
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
             appendOneMessageToLog("Измерение обмотки AC завершено");
             experiment1ModelPhase3BH.setAC((double) ((int) (measuringR * 10000000)) / 10000000);
@@ -443,27 +443,27 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startHH() {
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания НН...");
         }
 
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Начало измерения обмотки AB");
             communicationModel.startMeasuringAB();
             sleep(2000);
         }
 
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
             appendOneMessageToLog("Измерение обмотки AB завершено");
             experiment1ModelPhase3HH.setAB((double) ((int) (measuringR * 10000000)) / 10000000);
@@ -472,12 +472,12 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             communicationModel.startMeasuringBC();
             sleep(2000);
         }
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
             appendOneMessageToLog("Измерение обмотки BC завершено");
             experiment1ModelPhase3HH.setBC((double) ((int) (measuringR * 10000000)) / 10000000);
@@ -487,12 +487,12 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             sleep(2000);
         }
 
-        while (isExperimentStart && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
             appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
             appendOneMessageToLog("Измерение обмотки AC завершено");
             experiment1ModelPhase3HH.setAC((double) ((int) (measuringR * 10000000)) / 10000000);
@@ -542,7 +542,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
     private boolean isThereAreAccidents() {
 //        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
-//            isExperimentStart = false;
+//            isExperimentRunning = false;
 //            isExperimentEnd = true;
 //        }
 //        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
@@ -592,42 +592,42 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 //                    case OwenPRModel.PRDI6_FIXED:
 //                        if ((boolean) value) {
 //                            cause = "Нажата кнопка (СТОП)";
-//                            isExperimentStart = false;
+//                            isExperimentRunning = false;
 //                        }
 //                        break;
 //                    case OwenPRModel.PRDI1:
 //                        isCurrent1On = (boolean) value;
 //                        if (!isCurrent1On) {
 //                            cause = "сработала токовая защита 1";
-//                            isExperimentStart = false;
+//                            isExperimentRunning = false;
 //                        }
 //                        break;
 //                    case OwenPRModel.PRDI2:
 //                        isCurrent2On = (boolean) value;
 //                        if (!isCurrent2On) {
 //                            cause = "сработала токовая защита 2";
-//                            isExperimentStart = false;
+//                            isExperimentRunning = false;
 //                        }
 //                        break;
 //                    case OwenPRModel.PRDI3:
 //                        isDoorLockOn = (boolean) value;
 //                        if (!isDoorLockOn) {
 //                            cause = "открыта дверь";
-//                            isExperimentStart = false;
+//                            isExperimentRunning = false;
 //                        }
 //                        break;
 //                    case OwenPRModel.PRDI4:
 //                        isInsulationOn = (boolean) value;
 //                        if (!isInsulationOn) {
 //                            cause = "пробита изоляция";
-//                            isExperimentStart = false;
+//                            isExperimentRunning = false;
 //                        }
 //                        break;
 //                    case OwenPRModel.PRDI7:
 //                        isDoorZoneOn = (boolean) value;
 //                        if (!isDoorZoneOn) {
 //                            cause = "открыта дверь зоны";
-//                            isExperimentStart = false;
+//                            isExperimentRunning = false;
 //                        }
 //                        break;
                 }

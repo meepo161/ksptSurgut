@@ -10,12 +10,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.Constants;
 import ru.avem.ksptamur.communication.CommunicationModel;
-import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
-import ru.avem.ksptamur.communication.devices.trm.TRMModel;
+import ru.avem.ksptamur.communication.devices.cs02021.CS020201Model;
 import ru.avem.ksptamur.controllers.DeviceState;
 import ru.avem.ksptamur.controllers.ExperimentController;
 import ru.avem.ksptamur.db.model.Protocol;
@@ -28,7 +26,7 @@ import java.util.Observable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.avem.ksptamur.Main.setTheme;
-import static ru.avem.ksptamur.communication.devices.DeviceController.*;
+import static ru.avem.ksptamur.communication.devices.DeviceController.MEGACS_ID;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 
@@ -72,7 +70,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     private Stage dialogStage;
     private boolean isCanceled;
 
-    private volatile boolean isExperimentStart;
+    private volatile boolean isExperimentRunning;
     private volatile boolean isExperimentEnd = true;
 
     private volatile boolean isOwenPRResponding;
@@ -178,9 +176,8 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void stopExperiment() {
-        buttonStartStop.setDisable(false);
         cause = "Отменено оператором";
-        isExperimentStart = false;
+        isExperimentRunning = false;
         isExperimentEnd = true;
         buttonStartStop.setText("Запустить");
         buttonNext.setDisable(false);
@@ -189,8 +186,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startExperiment() {
-
-        buttonStartStop.setText("Остановить");
+        buttonStartStop.setDisable(true);
         buttonNext.setDisable(true);
         buttonCancelAll.setDisable(true);
         experiment0ModelPhase3BH.clearProperties();
@@ -199,30 +195,30 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         isMegaCSResponding = false;
         cause = "";
         isPressedOk = false;
-        isExperimentStart = true;
+        isExperimentRunning = true;
         isExperimentEnd = false;
 
         new Thread(() -> {
 
             communicationModel.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
 
-            if (isExperimentStart) {
+            if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
 //                communicationModel.initOwenPrController();
                 communicationModel.initExperiment0Devices();
             }
 
-//            if (isExperimentStart && !isOwenPRResponding) {
+//            if (isExperimentRunning && !isOwenPRResponding) {
 //                appendOneMessageToLog("Нет связи с ПР");
 //                sleep(100);
-//                isExperimentStart = false;
+//                isExperimentRunning = false;
 //            }
 
-            while (isExperimentStart && isThereAreAccidents()) { //если сработали защиты
+            while (isExperimentRunning && isThereAreAccidents()) { //если сработали защиты
                 appendOneMessageToLog(getAccidentsString("Аварии")); //вывод в лог сообщение со списком сработавших защит
                 sleep(100);
             }
-            while (isExperimentStart && !isDevicesResponding()) {  //если устройства не отвечают
+            while (isExperimentRunning && !isDevicesResponding()) {  //если устройства не отвечают
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));//вывод в лог сообщение со списком устройств без связи
                 sleep(100);
             }
@@ -244,44 +240,23 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
-                    experiment0ModelPhase3BH.setResult("Неуспешно");
-                    experiment0ModelPhase3HH.setResult("Неуспешно");
-                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
-                    experiment0ModelPhase3BH.setResult("Неуспешно");
-                } else {
-                    experiment0ModelPhase3HH.setResult("Неуспешно");
-                }
-            } else if (!isDevicesResponding()) {
-                appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
-                    experiment0ModelPhase3BH.setResult("Неуспешно");
-                    experiment0ModelPhase3HH.setResult("Неуспешно");
-                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
-                    experiment0ModelPhase3BH.setResult("Неуспешно");
-                } else {
-                    experiment0ModelPhase3HH.setResult("Неуспешно");
-                }
+                experiment0ModelPhase3BH.setResult("Неуспешно");
+                experiment0ModelPhase3HH.setResult("Неуспешно");
+                experiment0ModelPhase3BHHH.setResult("Неуспешно");
             } else {
-                if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
-                    experiment0ModelPhase3BH.setResult("Успешно");
-                    experiment0ModelPhase3HH.setResult("Успешно");
-                } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
-                    experiment0ModelPhase3BH.setResult("Успешно");
-                } else {
-                    experiment0ModelPhase3HH.setResult("Успешно");
-                }
+                experiment0ModelPhase3BH.setResult("Успешно");
+                experiment0ModelPhase3HH.setResult("Успешно");
+                experiment0ModelPhase3BHHH.setResult("Успешно");
                 appendMessageToLog("Испытание завершено успешно");
             }
             appendMessageToLog("------------------------------------------------\n");
 
-            isExperimentStart = false;
+            isExperimentRunning = false;
             isExperimentEnd = true;
             communicationModel.finalizeMegaCS();
             communicationModel.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
 
             Platform.runLater(() -> {
-                buttonStartStop.setText("Запустить");
                 buttonStartStop.setDisable(false);
                 buttonNext.setDisable(false);
                 buttonCancelAll.setDisable(false);
@@ -291,7 +266,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
     private void showDialog(String s) {
         AtomicBoolean isPressed = new AtomicBoolean(false);
-        if (isExperimentStart) {
+        if (isExperimentRunning) {
             Platform.runLater(() -> {
                 View.showConfirmDialog(s,
                         () -> {
@@ -310,24 +285,30 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startBH() {
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания ВН...");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
+            if (!communicationModel.setUMgr(uMgr)) {
+                cause = "Мегер не отвечает";
+                isExperimentRunning = false;
+            }
+        }
+
+        if (isExperimentRunning) {
             appendOneMessageToLog("Измерение началось");
-            appendOneMessageToLog("Ожидайте 90 секунд.");
-            communicationModel.setUMgr(uMgr);
+            appendOneMessageToLog("Ожидайте 90 секунд");
             appendOneMessageToLog("Формирование напряжения");
         }
 
         int experimentTime = 90;
-        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment0ModelPhase3BH.setTime(String.valueOf(experimentTime));
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             float[] data = communicationModel.readDataMgr();
             float r15 = formatR(data[3]);
             float r60 = formatR(data[0]);
@@ -341,7 +322,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         communicationModel.setCS02021ExperimentRun(false);
 
         experimentTime = 15;
-        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment0ModelPhase3BH.setTime(String.valueOf(experimentTime));
         }
@@ -360,11 +341,11 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startHH() {
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания HН...");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Измерение началось");
             appendOneMessageToLog("Ожидайте 90 секунд.");
             communicationModel.setUMgr(uMgr);
@@ -372,12 +353,12 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         }
 
         int experimentTime = 90;
-        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment0ModelPhase3HH.setTime(String.valueOf(experimentTime));
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             float[] data = communicationModel.readDataMgr();
             float r15 = formatR(data[3]);
             float r60 = formatR(data[0]);
@@ -392,7 +373,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
 
         experimentTime = 15;
-        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment0ModelPhase3HH.setTime(String.valueOf(experimentTime));
         }
@@ -411,11 +392,11 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startBHHH() {
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания ВН и HН...");
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Измерение началось");
             appendOneMessageToLog("Ожидайте 90 секунд.");
             communicationModel.setUMgr(uMgr);
@@ -423,12 +404,12 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         }
 
         int experimentTime = 90;
-        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment0ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
         }
 
-        if (isExperimentStart && isDevicesResponding()) {
+        if (isExperimentRunning && isDevicesResponding()) {
             float[] data = communicationModel.readDataMgr();
             float r15 = formatR(data[3]);
             float r60 = formatR(data[0]);
@@ -440,7 +421,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         }
 
         experimentTime = 15;
-        while (isExperimentStart && (experimentTime-- > 0) && isDevicesResponding()) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment0ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
         }
@@ -486,7 +467,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
     private boolean isThereAreAccidents() {
 //        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
-//            isExperimentStart = false;
+//            isExperimentRunning = false;
 //            isExperimentEnd = true;
 //        }
 //        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
@@ -525,83 +506,11 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         Object value = (((Object[]) values)[2]);
 
         switch (modelId) {
-            case PR200_ID:
+            case MEGACS_ID:
                 switch (param) {
-                    case OwenPRModel.RESPONDING_PARAM:
-                        isOwenPRResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
-                        break;
-//                    case OwenPRModel.PRDI6:
-//                        isStopButtonOn = (boolean) value;
-//                        break;
-//                    case OwenPRModel.PRDI6_FIXED:
-//                        if ((boolean) value) {
-//                            cause = "Нажата кнопка (СТОП)";
-//                            isExperimentStart = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI1:
-//                        isCurrent1On = (boolean) value;
-//                        if (!isCurrent1On) {
-//                            cause = "сработала токовая защита 1";
-//                            isExperimentStart = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI2:
-//                        isCurrent2On = (boolean) value;
-//                        if (!isCurrent2On) {
-//                            cause = "сработала токовая защита 2";
-//                            isExperimentStart = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI3:
-//                        isDoorLockOn = (boolean) value;
-//                        if (!isDoorLockOn) {
-//                            cause = "открыта дверь";
-//                            isExperimentStart = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI4:
-//                        isInsulationOn = (boolean) value;
-//                        if (!isInsulationOn) {
-//                            cause = "пробита изоляция";
-//                            isExperimentStart = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI7:
-//                        isDoorZoneOn = (boolean) value;
-//                        if (!isDoorZoneOn) {
-//                            cause = "открыта дверь зоны";
-//                            isExperimentStart = false;
-//                        }
-//                        break;
-                }
-                break;
-//            case MEGACS_ID:
-//                switch (param) {
-//                    case CS020201Model.RESPONDING_PARAM:
-//                        isMegaCSResponding = (boolean) value;
+                    case CS020201Model.RESPONDING_PARAM:
+                        isMegaCSResponding = (boolean) value;
 //                        Platform.runLater(() -> deviceStateCircleCS0202.setFill((isMegaCSResponding) ? Color.LIME : Color.RED));
-//                        break;
-//                }
-//                break;
-            case TRM_ID:
-                switch (param) {
-                    case TRMModel.RESPONDING_PARAM:
-//                        isTrmResponding = (boolean) value;
-                        isTrmResponding = true;
-                        Platform.runLater(() -> deviceStateCircleTrm.setFill((isTrmResponding) ? Color.LIME : Color.RED));
-                        break;
-                    case TRMModel.T_AMBIENT_PARAM:
-                        temperature = (float) value;
-                        if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BOTH) {
-                            experiment0ModelPhase3BH.setUr(String.valueOf(temperature));
-                            experiment0ModelPhase3HH.setUr(String.valueOf(temperature));
-                        } else if (mainModel.getExperiment0Choise() == MainModel.EXPERIMENT1_BH) {
-                            experiment0ModelPhase3BH.setUr(String.valueOf(temperature));
-                        } else {
-                            experiment0ModelPhase3HH.setUr(String.valueOf(temperature));
-                        }
                         break;
                 }
                 break;

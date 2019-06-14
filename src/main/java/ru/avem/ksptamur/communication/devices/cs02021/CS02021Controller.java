@@ -3,11 +3,9 @@ package ru.avem.ksptamur.communication.devices.cs02021;
 import ru.avem.ksptamur.communication.connections.Connection;
 import ru.avem.ksptamur.communication.devices.DeviceController;
 import ru.avem.ksptamur.communication.modbus.utils.CRC16;
-import ru.avem.ksptamur.utils.Log;
 import ru.avem.ksptamur.utils.Logger;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Observer;
 
 public class CS02021Controller implements DeviceController {
@@ -24,7 +22,7 @@ public class CS02021Controller implements DeviceController {
         model = new CS020201Model(observer, megacsId);
     }
 
-    public synchronized void setVoltage(int u) {
+    public synchronized boolean setVoltage(int u) {
         byte byteU = (byte) (u / 10);
         ByteBuffer outputBuffer = ByteBuffer.allocate(5)
                 .put((byte) 0x08)
@@ -35,15 +33,18 @@ public class CS02021Controller implements DeviceController {
         byte[] inputArray = new byte[40];
         ByteBuffer inputBuffer = ByteBuffer.allocate(40);
         int attempt = 0;
+        int frameSize = 0;
         do {
             try {
                 Thread.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            int frameSize = mConnection.read(inputArray);
+            frameSize = mConnection.read(inputArray);
             inputBuffer.put(inputArray, 0, frameSize);
         } while (inputBuffer.position() < 5 && (++attempt < 10));
+        System.out.println("666666   = " + frameSize);
+        return frameSize > 0;
     }
 
     public synchronized float[] readData() {
