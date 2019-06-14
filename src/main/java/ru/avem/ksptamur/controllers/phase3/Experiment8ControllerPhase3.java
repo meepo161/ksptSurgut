@@ -209,11 +209,11 @@ public class Experiment8ControllerPhase3 extends DeviceState implements Experime
         iAOld = -1;
 
         new Thread(() -> {
-            if (mainModel.getExperiment8Choise() == MainModel.EXPERIMENT8_BOTH && !isBHSuccess) { //если выбрано испытание ВН и НН обмоток
+            if (mainModel.getExperiment8Choice() == MainModel.EXPERIMENT8_BOTH && !isBHSuccess) { //если выбрано испытание ВН и НН обмоток
                 startBH(); //запуск испытния ВН обмотки
                 sleep(5000);
                 startHH(); //запуск испытния НН обмотки
-            } else if (mainModel.getExperiment8Choise() == MainModel.EXPERIMENT8_BH && !isBHSuccess) { //если выбрано испытание ВН
+            } else if (mainModel.getExperiment8Choice() == MainModel.EXPERIMENT8_BH && !isBHSuccess) { //если выбрано испытание ВН
                 startBH();
             } else { //если выбрано испытание НН обмоток
                 startHH();
@@ -675,7 +675,7 @@ public class Experiment8ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void setCurrentFrequencyObject(short value) {
-        isDeltaReady50 = value == 5000;
+        isDeltaReady50 = value == 50 * HZ;
         isDeltaReady0 = value == 0;
     }
 }

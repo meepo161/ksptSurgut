@@ -205,7 +205,7 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
                 sleep(100);
             }
 
-            if (isExperimentRunning && mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH) {
+            if (isExperimentRunning && mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BOTH) {
                 startBH();
                 startHH();
                 AtomicBoolean isPressed = new AtomicBoolean(false);
@@ -225,7 +225,7 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
                 while (!isPressed.get()) {
                     sleep(100);
                 }
-            } else if (isExperimentRunning && mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BH) {
+            } else if (isExperimentRunning && mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BH) {
                 startBH();
                 AtomicBoolean isPressed = new AtomicBoolean(false);
                 if (isExperimentRunning && isExperimentRunning) {
@@ -267,29 +267,29 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-                if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
+                if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
                     experiment1ModelBHPhase1.setResult("Неуспешно"); //запуск испытния ВН обмотки
                     experiment1ModelHHPhase1.setResult("Неуспешно"); //запуск испытния НН обмотки
-                } else if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
+                } else if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
                     experiment1ModelBHPhase1.setResult("Неуспешно");
                 } else { //если выбрано испытание НН обмоток
                     experiment1ModelHHPhase1.setResult("Неуспешно");
                 }
             } else if (!isDevicesResponding()) {
                 appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-                if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
+                if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
                     experiment1ModelBHPhase1.setResult("Неуспешно"); //запуск испытния ВН обмотки
                     experiment1ModelHHPhase1.setResult("Неуспешно"); //запуск испытния НН обмотки
-                } else if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
+                } else if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
                     experiment1ModelBHPhase1.setResult("Неуспешно");
                 } else { //если выбрано испытание НН обмоток
                     experiment1ModelHHPhase1.setResult("Неуспешно");
                 }
             } else {
-                if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
+                if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
                     experiment1ModelBHPhase1.setResult("Успешно"); //запуск испытния ВН обмотки
                     experiment1ModelHHPhase1.setResult("Успешно"); //запуск испытния НН обмотки
-                } else if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
+                } else if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BH) { //если выбрано испытание ВН
                     experiment1ModelBHPhase1.setResult("Успешно");
                 } else { //если выбрано испытание НН обмоток
                     experiment1ModelHHPhase1.setResult("Успешно");
@@ -526,10 +526,10 @@ public class Experiment1ControllerPhase1 extends DeviceState implements Experime
                         break;
                     case TRMModel.T_AMBIENT_PARAM:
                         temperature = (float) value;
-                        if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BOTH) {
+                        if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BOTH) {
                             experiment1ModelBHPhase1.setTemperature(String.valueOf(temperature));
                             experiment1ModelHHPhase1.setTemperature(String.valueOf(temperature));
-                        } else if (mainModel.getExperiment1Choise() == MainModel.EXPERIMENT1_BH) {
+                        } else if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BH) {
                             experiment1ModelBHPhase1.setTemperature(String.valueOf(temperature));
                         } else {
                             experiment1ModelHHPhase1.setTemperature(String.valueOf(temperature));

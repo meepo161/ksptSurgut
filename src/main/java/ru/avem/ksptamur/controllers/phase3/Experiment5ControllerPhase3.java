@@ -564,8 +564,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                             measuringUInAB = (float) value;
                             String UInAB = String.format("%.2f", measuringUInAB);
                             experiment5ModelPhase3.setUBH(UInAB);
-                            Unom = measuringUInAB * 4.0;
-                            measuringUkzPercent = (Unom * 100.0) / UHHTestItem;
+                            measuringUkzPercent = (measuringUInAB * 100.0) / UBHTestItem;
                             ukzPercent = ((int) ((float) measuringUkzPercent * POWER) / POWER);
                             experiment5ModelPhase3.setUKZPercent(String.valueOf(ukzPercent));
                             String ukzDif = String.format("%.2f", ukzPercent - UKZTestItem);
@@ -615,7 +614,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void setCurrentFrequencyObject(short value) {
-        isDeltaReady50 = value == 5000;
+        isDeltaReady50 = value == 50 * HZ;
         isDeltaReady0 = value == 0;
     }
 }

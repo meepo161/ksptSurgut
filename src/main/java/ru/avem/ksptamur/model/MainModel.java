@@ -41,10 +41,10 @@ public class MainModel {
 
     private Protocol intermediateProtocol;
 
-    private int experiment0Choise;
-    private int experiment1Choise;
-    private int experiment2Choise;
-    private int experiment8Choise;
+    private int experiment0Choice;
+    private int experiment1Choice;
+    private int experiment2Choice;
+    private int experiment8Choice;
 
     private Experiment1ModelPhase1 experiment1ModelPhase1BH = new Experiment1ModelPhase1("BH");
     private Experiment1ModelPhase1 experiment1ModelPhase1HH = new Experiment1ModelPhase1("HH");
@@ -126,12 +126,12 @@ public class MainModel {
         return experiment0ModelPhase3BHHH;
     }
 
-    public int getExperiment0Choise() {
-        return experiment0Choise;
+    public int getExperiment0Choice() {
+        return experiment0Choice;
     }
 
-    public void setExperiment0Choise(int experiment0Choise) {
-        this.experiment0Choise = experiment0Choise;
+    public void setExperiment0Choice(int experiment0Choice) {
+        this.experiment0Choice = experiment0Choice;
     }
 
     public Experiment1ModelPhase3 getExperiment1ModelPhase3BH() {
@@ -142,24 +142,24 @@ public class MainModel {
         return experiment1ModelPhase3HH;
     }
 
-    public int getExperiment1Choise() {
-        return experiment1Choise;
+    public int getExperiment1Choice() {
+        return experiment1Choice;
     }
 
-    public void setExperiment1Choise(int experiment1Choise) {
-        this.experiment1Choise = experiment1Choise;
+    public void setExperiment1Choice(int experiment1Choice) {
+        this.experiment1Choice = experiment1Choice;
     }
 
     public Experiment2ModelPhase3 getExperiment2ModelPhase3() {
         return experiment2ModelPhase3;
     }
 
-    public int getExperiment2Choise() {
-        return experiment2Choise;
+    public int getExperiment2Choice() {
+        return experiment2Choice;
     }
 
-    public void setExperiment2Choise(int experiment2Choise) {
-        this.experiment2Choise = experiment2Choise;
+    public void setExperiment2Choice(int experiment2Choice) {
+        this.experiment2Choice = experiment2Choice;
     }
 
     public Experiment3ModelPhase3 getExperiment3ModelPhase3() {
@@ -190,12 +190,12 @@ public class MainModel {
         return experiment8ModelPhase3HH;
     }
 
-    public int getExperiment8Choise() {
-        return experiment8Choise;
+    public int getExperiment8Choice() {
+        return experiment8Choice;
     }
 
-    public void setExperiment8Choise(int experiment8Choise) {
-        this.experiment8Choise = experiment8Choise;
+    public void setExperiment8Choice(int experiment8Choice) {
+        this.experiment8Choice = experiment8Choice;
     }
 
     public Experiment1ModelPhase1 getExperiment1ModelPhase1BH() {

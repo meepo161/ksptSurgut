@@ -183,13 +183,6 @@ public class CommunicationModel extends Observable implements Observer {
                 Constants.Communication.PARITY);
     }
 
-    public void initOwenPRforCurrentProtection() {
-        offAllKms();
-        owenPRController.resetAllAttempts();
-        resetTimer();
-        owenPRController.write(RES_REGISTER, 1, 1);
-    }
-
     public void finalizeAllDevices() {
         owenPRController.write(RES_REGISTER, 1, 0);
         offAllKms();

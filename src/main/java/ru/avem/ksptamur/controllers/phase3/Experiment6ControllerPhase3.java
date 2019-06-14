@@ -470,7 +470,6 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void pickUpState() {
-//        for (int i = 0; i < 3; i++) {
         if (is200to5State) {
             if (IAvr < 12.0 && IAvr > 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 40/5");
@@ -540,7 +539,6 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
         }
-//        }
     }
 
     @Override
@@ -732,7 +730,7 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void setCurrentFrequencyObject(short value) {
-        isDeltaReady50 = value == 5000;
+        isDeltaReady50 = value == 50 * HZ;
         isDeltaReady0 = value == 0;
     }
 }

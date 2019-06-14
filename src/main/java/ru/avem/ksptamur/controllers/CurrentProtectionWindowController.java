@@ -4,8 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import ru.avem.ksptamur.communication.CommunicationModel;
 
-import java.net.URISyntaxException;
-
 import static ru.avem.ksptamur.Main.setTheme;
 
 public class CurrentProtectionWindowController extends CurrentProtection {
@@ -18,6 +16,6 @@ public class CurrentProtectionWindowController extends CurrentProtection {
         setTheme(root);
         CommunicationModel model = CommunicationModel.getInstance();
         model.addObserver(this);
-        model.initOwenPRforCurrentProtection();
+        model.initOwenPrController();
     }
 }

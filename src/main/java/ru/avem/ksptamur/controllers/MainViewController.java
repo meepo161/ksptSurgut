@@ -678,7 +678,7 @@ public class MainViewController implements Statable {
             radioIKASBH.setDisable(true);
             radioIKASHH.setSelected(false);
             radioIKASHH.setDisable(true);
-            mainModel.setExperiment1Choise(MainModel.EXPERIMENT1_BOTH);
+            mainModel.setExperiment1Choice(MainModel.EXPERIMENT1_BOTH);
         } else {
             radioIKASBH.setSelected(false);
             radioIKASBH.setDisable(false);
@@ -690,13 +690,13 @@ public class MainViewController implements Statable {
     @FXML
     private void handleRadioExperiment1BH() {
         checkBoxExperiment1.setIndeterminate(true);
-        mainModel.setExperiment1Choise(MainModel.EXPERIMENT1_BH);
+        mainModel.setExperiment1Choice(MainModel.EXPERIMENT1_BH);
     }
 
     @FXML
     private void handleRadioExperiment1HH() {
         checkBoxExperiment1.setIndeterminate(true);
-        mainModel.setExperiment1Choise(MainModel.EXPERIMENT1_HH);
+        mainModel.setExperiment1Choice(MainModel.EXPERIMENT1_HH);
     }
 
 
@@ -735,7 +735,7 @@ public class MainViewController implements Statable {
         checkBoxSelectAllItems.setSelected(isAllSelected());
         CheckBox checkBox8 = (CheckBox) e.getSource();
         if (checkBox8.isSelected()) {
-            mainModel.setExperiment8Choise(MainModel.EXPERIMENT8_BOTH);
+            mainModel.setExperiment8Choice(MainModel.EXPERIMENT8_BOTH);
             radioBH.setSelected(false);
             radioBH.setDisable(true);
             radioHH.setSelected(false);
@@ -750,13 +750,13 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleRadioExperiment8BH() {
-        mainModel.setExperiment8Choise(MainModel.EXPERIMENT8_BH);
+        mainModel.setExperiment8Choice(MainModel.EXPERIMENT8_BH);
         checkBoxExperiment8.setIndeterminate(true);
     }
 
     @FXML
     private void handleRadioExperiment8HH() {
-        mainModel.setExperiment8Choise(MainModel.EXPERIMENT8_HH);
+        mainModel.setExperiment8Choice(MainModel.EXPERIMENT8_HH);
         checkBoxExperiment8.setIndeterminate(true);
     }
 
@@ -801,7 +801,7 @@ public class MainViewController implements Statable {
                 mask |= radioMegerBH.isSelected() ? 0b1 : 0;
                 mask |= radioMegerHH.isSelected() ? 0b10 : 0;
                 mask |= radioMegerBHHH.isSelected() ? 0b100 : 0;
-                mainModel.setExperiment0Choise(mask);
+                mainModel.setExperiment0Choice(mask);
 
                 isCanceled = start0Experiment();
             }
@@ -844,13 +844,13 @@ public class MainViewController implements Statable {
     }
 
     private boolean start2Experiment() {
-        mainModel.setExperiment2Choise(MainModel.EXPERIMENT2_ONLY);
+        mainModel.setExperiment2Choice(MainModel.EXPERIMENT2_ONLY);
         if (checkBoxExperiment4.isSelected() && checkBoxExperiment6.isSelected()) {
-            mainModel.setExperiment2Choise(MainModel.EXPERIMENT2_WITH_NOLOAD_AND_PHASEMETER);
+            mainModel.setExperiment2Choice(MainModel.EXPERIMENT2_WITH_NOLOAD_AND_PHASEMETER);
         } else if (checkBoxExperiment4.isSelected()) {
-            mainModel.setExperiment2Choise(MainModel.EXPERIMENT2_WITH_PHASEMETER);
+            mainModel.setExperiment2Choice(MainModel.EXPERIMENT2_WITH_PHASEMETER);
         } else if (checkBoxExperiment6.isSelected()) {
-            mainModel.setExperiment2Choise(MainModel.EXPERIMENT2_WITH_NOLOAD);
+            mainModel.setExperiment2Choice(MainModel.EXPERIMENT2_WITH_NOLOAD);
         }
         return startExperiment(String.format("layouts/phase%d/experiment2ViewPhase%d.fxml", (int) mainModel.getCurrentProtocol().getPhase(), (int) mainModel.getCurrentProtocol().getPhase()));
     }

@@ -223,17 +223,17 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
                 sleep(100);
             }
 
-            if ((mainModel.getExperiment0Choise() & 0b1) > 0) {
+            if ((mainModel.getExperiment0Choice() & 0b1) > 0) {
                 showDialog("Подключите крокодилы Мегаомметра к ВН обмотке и корпусу. После нажмите <Да>");
                 startBH();
             }
 
-            if ((mainModel.getExperiment0Choise() & 0b10) > 0) {
+            if ((mainModel.getExperiment0Choice() & 0b10) > 0) {
                 showDialog("Подключите крокодилы Мегаомметра к HH обмотке и корпусу. После нажмите <Да>");
                 startHH();
             }
 
-            if ((mainModel.getExperiment0Choise() & 0b100) > 0) {
+            if ((mainModel.getExperiment0Choice() & 0b100) > 0) {
                 showDialog("Подключите крокодилы Мегаомметра к ВН и к НН. После нажмите <Да>");
                 startBHHH();
             }

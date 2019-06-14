@@ -562,7 +562,7 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
     }
 
     private void setCurrentFrequencyObject(short value) {
-        isDeltaReady50 = value == 5000;
+        isDeltaReady50 = value == 50 * HZ;
         isDeltaReady0 = value == 0;
     }
 }
