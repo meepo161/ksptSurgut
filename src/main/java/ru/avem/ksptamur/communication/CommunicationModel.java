@@ -362,36 +362,30 @@ public class CommunicationModel extends Observable implements Observer {
         pm130Controller.resetAllAttempts();
         parmaT400Controller.setNeedToRead(true);
         parmaT400Controller.resetAllAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetAllAttempts();
+        phaseMeterController.setNeedToRead(true);
+        phaseMeterController.resetAllAttempts();
     }
 
     public void initExperiment4Devices() {
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
-        parmaT400Controller.setNeedToRead(true);
-        parmaT400Controller.resetAllAttempts();
-        phaseMeterController.setNeedToRead(true);
-        phaseMeterController.resetAllAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment5Devices() {
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment6Devices() {
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment7Devices() {
-        pm130Controller.setNeedToRead(true);
-        pm130Controller.resetAllAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment8Devices() {

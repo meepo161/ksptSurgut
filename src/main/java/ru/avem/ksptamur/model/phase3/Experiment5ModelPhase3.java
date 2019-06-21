@@ -1,5 +1,6 @@
 package ru.avem.ksptamur.model.phase3;
 
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,28 +11,41 @@ import java.util.List;
 public class Experiment5ModelPhase3 {
 
     private final StringProperty UBH;
-    private final StringProperty UKZPercent;
-    private final StringProperty UKZDiff;
     private final StringProperty IA;
     private final StringProperty IB;
     private final StringProperty IC;
+    private final StringProperty IAPercent;
+    private final StringProperty IBPercent;
+    private final StringProperty ICPercent;
+    private final StringProperty IADiff;
+    private final StringProperty IBDiff;
+    private final StringProperty ICDiff;
     private final StringProperty PP;
+    private final StringProperty COS;
     private final StringProperty F;
+    private final StringProperty Time;
     private final StringProperty result;
     private List<StringProperty> properties = new ArrayList<>();
 
 
     public Experiment5ModelPhase3() {
         UBH = new SimpleStringProperty();
-        UKZPercent = new SimpleStringProperty();
-        UKZDiff = new SimpleStringProperty();
         IA = new SimpleStringProperty();
         IB = new SimpleStringProperty();
         IC = new SimpleStringProperty();
+        IAPercent = new SimpleStringProperty();
+        IBPercent = new SimpleStringProperty();
+        ICPercent = new SimpleStringProperty();
+        IADiff = new SimpleStringProperty();
+        IBDiff = new SimpleStringProperty();
+        ICDiff = new SimpleStringProperty();
         PP = new SimpleStringProperty();
+        COS = new SimpleStringProperty();
         F = new SimpleStringProperty();
+        Time = new SimpleStringProperty();
+
         result = new SimpleStringProperty();
-        properties.addAll(Arrays.asList(UBH, UKZPercent, UKZDiff, IA, IB, IC, PP, F, result));
+        properties.addAll(Arrays.asList(UBH, IA, IB, IC, IAPercent, IBPercent, ICPercent, IADiff, IBDiff, ICDiff, PP, COS, F, result));
     }
 
     public String getUBH() {
@@ -44,30 +58,6 @@ public class Experiment5ModelPhase3 {
 
     public void setUBH(String UBH) {
         this.UBH.set(UBH);
-    }
-
-    public String getUKZPercent() {
-        return UKZPercent.get();
-    }
-
-    public StringProperty UKZPercentProperty() {
-        return UKZPercent;
-    }
-
-    public void setUKZPercent(String UKZPercent) {
-        this.UKZPercent.set(UKZPercent);
-    }
-
-    public String getUKZDiff() {
-        return UKZDiff.get();
-    }
-
-    public StringProperty UKZDiffProperty() {
-        return UKZDiff;
-    }
-
-    public void setUKZDiff(String UKZDiff) {
-        this.UKZDiff.set(UKZDiff);
     }
 
     public String getIA() {
@@ -106,28 +96,124 @@ public class Experiment5ModelPhase3 {
         this.IC.set(IC);
     }
 
+    public String getIAPercent() {
+        return IAPercent.get();
+    }
+
+    public StringProperty IAPercentProperty() {
+        return IAPercent;
+    }
+
+    public void setIAPercent(String IAPercent) {
+        this.IAPercent.set(IAPercent);
+    }
+
+    public String getIBPercent() {
+        return IBPercent.get();
+    }
+
+    public StringProperty IBPercentProperty() {
+        return IBPercent;
+    }
+
+    public void setIBPercent(String IBPercent) {
+        this.IBPercent.set(IBPercent);
+    }
+
+    public String getICPercent() {
+        return ICPercent.get();
+    }
+
+    public StringProperty ICPercentProperty() {
+        return ICPercent;
+    }
+
+    public void setICPercent(String ICPercent) {
+        this.ICPercent.set(ICPercent);
+    }
+
+    public String getIADiff() {
+        return IADiff.get();
+    }
+
+    public StringProperty IADiffProperty() {
+        return IADiff;
+    }
+
+    public void setIADiff(String IADiff) {
+        this.IADiff.set(IADiff);
+    }
+
+    public String getIBDiff() {
+        return IBDiff.get();
+    }
+
+    public StringProperty IBDiffProperty() {
+        return IBDiff;
+    }
+
+    public void setIBDiff(String IBDiff) {
+        this.IBDiff.set(IBDiff);
+    }
+
+    public String getICDiff() {
+        return ICDiff.get();
+    }
+
+    public StringProperty ICDiffProperty() {
+        return ICDiff;
+    }
+
+    public void setICDiff(String ICDiff) {
+        this.ICDiff.set(ICDiff);
+    }
+
+    public void setPP(String pp) {
+        this.PP.set(pp);
+    }
+
     public String getPP() {
         return PP.get();
     }
 
-    public StringProperty PPProperty() {
+    public StringProperty PProperty() {
         return PP;
-    }
-
-    public void setPP(String PP) {
-        this.PP.set(PP);
     }
 
     public String getF() {
         return F.get();
     }
 
-    public StringProperty fProperty() {
+    public StringProperty FProperty() {
         return F;
     }
 
     public void setF(String f) {
-        this.F.set(f);
+        this.F.set(String.valueOf(f));
+    }
+
+    public String getCOS() {
+        return COS.get();
+    }
+
+    public StringProperty COSProperty() {
+        return COS;
+    }
+
+    public void setCOS(String COS) {
+        this.COS.set(COS);
+    }
+
+    public String getTime() {
+        return Time.get();
+    }
+
+    public StringProperty timeProperty() {
+        return Time;
+    }
+
+    public void setTime(String T) {
+        this.Time.set(String.valueOf(T));
     }
 
     public String getResult() {
@@ -146,4 +232,3 @@ public class Experiment5ModelPhase3 {
         properties.forEach(stringProperty -> stringProperty.set(""));
     }
 }
-

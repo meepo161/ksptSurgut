@@ -182,6 +182,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         buttonStartStop.setText("Запустить");
         buttonNext.setDisable(false);
         buttonCancelAll.setDisable(false);
+        buttonStartStop.setDisable(false);
         communicationModel.finalizeMegaCS();
     }
 
@@ -204,15 +205,8 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
-//                communicationModel.initOwenPrController();
                 communicationModel.initExperiment0Devices();
             }
-
-//            if (isExperimentRunning && !isOwenPRResponding) {
-//                appendOneMessageToLog("Нет связи с ПР");
-//                sleep(100);
-//                isExperimentRunning = false;
-//            }
 
             while (isExperimentRunning && isThereAreAccidents()) { //если сработали защиты
                 appendOneMessageToLog(getAccidentsString("Аварии")); //вывод в лог сообщение со списком сработавших защит
@@ -292,7 +286,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         if (isExperimentRunning && isDevicesResponding()) {
             if (!communicationModel.setUMgr(uMgr)) {
                 cause = "Мегер не отвечает";
-                isExperimentRunning = false;
+                stopExperiment();
             }
         }
 
@@ -342,13 +336,19 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
     private void startHH() {
         if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация испытания HН...");
+            appendOneMessageToLog("Инициализация испытания ВН...");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
+            if (!communicationModel.setUMgr(uMgr)) {
+                cause = "Мегер не отвечает";
+                stopExperiment();
+            }
+        }
+
+        if (isExperimentRunning) {
             appendOneMessageToLog("Измерение началось");
-            appendOneMessageToLog("Ожидайте 90 секунд.");
-            communicationModel.setUMgr(uMgr);
+            appendOneMessageToLog("Ожидайте 90 секунд");
             appendOneMessageToLog("Формирование напряжения");
         }
 
@@ -371,7 +371,6 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
         communicationModel.setCS02021ExperimentRun(false);
 
-
         experimentTime = 15;
         while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
@@ -393,13 +392,19 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
     private void startBHHH() {
         if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация испытания ВН и HН...");
+            appendOneMessageToLog("Инициализация испытания ВН...");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
+            if (!communicationModel.setUMgr(uMgr)) {
+                stopExperiment();
+                cause = "Мегер не отвечает";
+            }
+        }
+
+        if (isExperimentRunning) {
             appendOneMessageToLog("Измерение началось");
-            appendOneMessageToLog("Ожидайте 90 секунд.");
-            communicationModel.setUMgr(uMgr);
+            appendOneMessageToLog("Ожидайте 90 секунд");
             appendOneMessageToLog("Формирование напряжения");
         }
 
@@ -420,13 +425,13 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
             appendMessageToLog("Ждём 15 секунд пока разрядится.");
         }
 
+        communicationModel.setCS02021ExperimentRun(false);
+
         experimentTime = 15;
         while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment0ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
         }
-
-        communicationModel.setCS02021ExperimentRun(false);
 
         if (!cause.equals("")) {
             appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));

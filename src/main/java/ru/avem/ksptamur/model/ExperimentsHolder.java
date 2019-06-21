@@ -10,6 +10,9 @@ public class ExperimentsHolder {
     private static final List<ru.avem.ksptamur.model.Experiment> experiments = new ArrayList<>();
 
     static {
+        experiments.add(new ru.avem.ksptamur.model.Experiment("layouts/phase3/experiment0ViewPhase3.fxml",
+                Constants.Experiments.EXPERIMENT0_NAME));
+
         experiments.add(new ru.avem.ksptamur.model.Experiment("layouts/phase3/experiment1ViewPhase3.fxml",
                 Constants.Experiments.EXPERIMENT1_NAME));
 
@@ -30,9 +33,6 @@ public class ExperimentsHolder {
 
         experiments.add(new ru.avem.ksptamur.model.Experiment("layouts/phase3/experiment7ViewPhase3.fxml",
                 Constants.Experiments.EXPERIMENT7_NAME));
-
-        experiments.add(new ru.avem.ksptamur.model.Experiment("layouts/phase3/experiment8ViewPhase3.fxml",
-                Constants.Experiments.EXPERIMENT8_NAME));
     }
 
     public static ru.avem.ksptamur.model.Experiment getExperimentByName(String name) {

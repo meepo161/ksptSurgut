@@ -1,3 +1,4 @@
+
 package ru.avem.ksptamur.controllers.phase3;
 
 import javafx.application.Platform;
@@ -12,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
+import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.controllers.DeviceState;
@@ -24,9 +26,10 @@ import ru.avem.ksptamur.utils.View;
 import java.text.SimpleDateFormat;
 import java.util.Observable;
 
+import static ru.avem.ksptamur.Constants.Measuring.HZ;
+import static ru.avem.ksptamur.Constants.Measuring.VOLT;
 import static ru.avem.ksptamur.Main.setTheme;
-import static ru.avem.ksptamur.communication.devices.DeviceController.PM130_ID;
-import static ru.avem.ksptamur.communication.devices.DeviceController.PR200_ID;
+import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment6ControllerPhase3 extends DeviceState implements ExperimentController {
@@ -35,41 +38,24 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
     private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
     private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
-    private static final int TIME_DELAY_CURRENT_STAGES = 1000;
+    private static final int TIME_DELAY_CURRENT_STAGES = 100;
     private static final double POWER = 100;
+
 
     @FXML
     private TableView<Experiment6ModelPhase3> tableViewExperiment6;
     @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnUBH;
+    private TableColumn<Experiment6ModelPhase3, String> tableColumnUInput;
     @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnIA;
+    private TableColumn<Experiment6ModelPhase3, String> tableColumnUOutput;
     @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnIB;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnIC;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnIAPercent;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnIBPercent;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnICPercent;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnIADiff;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnIBDiff;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnICDiff;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnPP;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnCOS;
-    @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnF;
+    private TableColumn<Experiment6ModelPhase3, String> tableColumnIBH;
     @FXML
     private TableColumn<Experiment6ModelPhase3, String> tableColumnTime;
     @FXML
-    private TableColumn<Experiment6ModelPhase3, String> tableColumnResultExperiment6;
+    private TableColumn<Experiment6ModelPhase3, String> tableColumnF;
+    @FXML
+    private TableColumn<Experiment6ModelPhase3, String> tableColumnResult;
     @FXML
     private TextArea textAreaExperiment6Log;
     @FXML
@@ -81,35 +67,26 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
 
     private MainModel mainModel = MainModel.getInstance();
     private Protocol currentProtocol = mainModel.getCurrentProtocol();
-    private double UBHTestItem = currentProtocol.getUbh();
-    private double coef = 1;
-    private double Pkva = currentProtocol.getP();
     private double UHHTestItem = currentProtocol.getUhh();
-    private double IxxPercent = currentProtocol.getIxx();
-    private double Inom = Pkva * 1000 / (UBHTestItem * Math.sqrt(3));
-    private double Ixx = Inom / 100 * IxxPercent;
-    private double Time = currentProtocol.getXxtime();
-    private int XXTime = (int) Time;
-    private double UBHTestItem418 = (int) (UBHTestItem / 1.1);
-    private double UBHTestItem1312 = (int) (UBHTestItem / 3.158);
-    private CommunicationModel communicationModel = CommunicationModel.getInstance();
-    private Experiment6ModelPhase3 experiment6ModelPhase3;
-    private ObservableList<Experiment6ModelPhase3> experiment6Data = FXCollections.observableArrayList();
+    private double UHHTestItemX2 = UHHTestItem * 2;
+    private double coef = 2.16;
 
+    private CommunicationModel communicationModel = CommunicationModel.getInstance();
+    private Experiment6ModelPhase3 Experiment6ModelPhase3;
+    private ObservableList<Experiment6ModelPhase3> Experiment6Data = FXCollections.observableArrayList();
 
     private Stage dialogStage;
     private boolean isCanceled;
 
     private volatile boolean isNeedToRefresh;
+    private volatile boolean isStartButtonOn;
     private volatile boolean isNeedToWaitDelta;
-    private volatile boolean isStopButtonOn;
     private volatile boolean isExperimentRunning;
     private volatile boolean isExperimentEnd = true;
-    private volatile boolean isStartButtonOn;
 
     private volatile boolean isOwenPRResponding;
     private volatile boolean isDeltaResponding;
-    private volatile boolean isDeltaReady50;
+    private volatile boolean isDeltaReady200;
     private volatile boolean isDeltaReady0;
     private volatile boolean isPM130Responding;
     private volatile boolean isPressedOk;
@@ -126,51 +103,43 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-SSS");
     private String logBuffer;
     private volatile String cause;
-    private volatile double temperature;
-    private volatile double iAOld = -1;
-    private volatile double iA;
-    private volatile double iB;
-    private volatile double iC;
-    private volatile double fParma;
-    private volatile double measuringP;
-    private volatile double measuringUInAB;
-    private volatile double measuringUInBC;
-    private volatile double measuringUInCA;
-    private volatile double measuringUInAvr;
-    private volatile double iAPercentD;
-    private volatile double iBPercentD;
-    private volatile double iCPercentD;
-    private double cosParma;
+    private float temperature;
+    private double iA;
+    private double iAOld;
+    private double iB;
+    private double iBOld;
+    private double iC;
+    private double iCOld;
+    private int phaseMeterState;
+    private int windingGroup0;
+    private int windingGroup1;
+    private float measuringUOutAB;
+    private double measuringU;
+    private double measuringUA;
+    private double measuringUB;
+    private double measuringUC;
+    private double measuringF;
 
-    private double IAvr;
+    private volatile double F;
+    private volatile double measuringIAvr;
+
     @FXML
     private AnchorPane root;
 
     @FXML
     public void initialize() {
         setTheme(root);
-        experiment6ModelPhase3 = mainModel.getExperiment6ModelPhase3();
-        experiment6Data.add(experiment6ModelPhase3);
-        tableViewExperiment6.setItems(experiment6Data);
+        Experiment6ModelPhase3 = mainModel.getExperiment6ModelPhase3();
+        Experiment6Data.add(Experiment6ModelPhase3);
+        tableViewExperiment6.setItems(Experiment6Data);
         tableViewExperiment6.setSelectionModel(null);
         communicationModel.addObserver(this);
 
-
-        tableColumnUBH.setCellValueFactory(cellData -> cellData.getValue().UBHProperty());
-        tableColumnIA.setCellValueFactory(cellData -> cellData.getValue().IAProperty());
-        tableColumnIB.setCellValueFactory(cellData -> cellData.getValue().IBProperty());
-        tableColumnIC.setCellValueFactory(cellData -> cellData.getValue().ICProperty());
-        tableColumnIAPercent.setCellValueFactory(cellData -> cellData.getValue().IAPercentProperty());
-        tableColumnIBPercent.setCellValueFactory(cellData -> cellData.getValue().IBPercentProperty());
-        tableColumnICPercent.setCellValueFactory(cellData -> cellData.getValue().ICPercentProperty());
-        tableColumnIADiff.setCellValueFactory(cellData -> cellData.getValue().IADiffProperty());
-        tableColumnIBDiff.setCellValueFactory(cellData -> cellData.getValue().IBDiffProperty());
-        tableColumnICDiff.setCellValueFactory(cellData -> cellData.getValue().ICDiffProperty());
-        tableColumnPP.setCellValueFactory(cellData -> cellData.getValue().PProperty());
-        tableColumnF.setCellValueFactory(cellData -> cellData.getValue().FProperty());
-        tableColumnCOS.setCellValueFactory(cellData -> cellData.getValue().COSProperty());
+        tableColumnUInput.setCellValueFactory(cellData -> cellData.getValue().UINProperty());
+        tableColumnIBH.setCellValueFactory(cellData -> cellData.getValue().IBHProperty());
+        tableColumnF.setCellValueFactory(cellData -> cellData.getValue().fProperty());
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
-        tableColumnResultExperiment6.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
+        tableColumnResult.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
     }
 
     @Override
@@ -186,20 +155,10 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
 
     private void fillProtocolExperimentFields() {
         Protocol currentProtocol = mainModel.getCurrentProtocol();
-        currentProtocol.setE6UBH(experiment6ModelPhase3.getUBH());
-        currentProtocol.setE6IA(experiment6ModelPhase3.getIA());
-        currentProtocol.setE6IB(experiment6ModelPhase3.getIB());
-        currentProtocol.setE6IC(experiment6ModelPhase3.getIC());
-        currentProtocol.setE6IAPercent(experiment6ModelPhase3.getIAPercent());
-        currentProtocol.setE6IBPercent(experiment6ModelPhase3.getIBPercent());
-        currentProtocol.setE6ICPercent(experiment6ModelPhase3.getICPercent());
-        currentProtocol.setE6IADiff(experiment6ModelPhase3.getIADiff());
-        currentProtocol.setE6IBDiff(experiment6ModelPhase3.getIBDiff());
-        currentProtocol.setE6ICDiff(experiment6ModelPhase3.getICDiff());
-        currentProtocol.setE6Pp(experiment6ModelPhase3.getPP());
-        currentProtocol.setE6F(experiment6ModelPhase3.getF());
-        currentProtocol.setE6Cos(experiment6ModelPhase3.getCOS());
-        currentProtocol.setE6Result(experiment6ModelPhase3.getResult());
+        currentProtocol.setE7UInput(Experiment6ModelPhase3.getUIN());
+        currentProtocol.setE7IBH(Experiment6ModelPhase3.getIBH());
+        currentProtocol.setE7F(Experiment6ModelPhase3.getF());
+        currentProtocol.setE7Result(Experiment6ModelPhase3.getResult());
     }
 
     @FXML
@@ -237,10 +196,9 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
 
         communicationModel.offAllKms();
         communicationModel.finalizeAllDevices();
-        experiment6ModelPhase3.clearProperties();
+        Experiment6ModelPhase3.clearProperties();
 
         isNeedToRefresh = true;
-        isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnd = false;
 
@@ -251,12 +209,17 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
 
         isPressedOk = false;
         cause = "";
+        iAOld = -1;
+        iBOld = -1;
+        iCOld = -1;
+
+        isPressedOk = false;
 
         new Thread(() -> {
 
             if (isExperimentRunning) {
                 Platform.runLater(() -> {
-                    View.showConfirmDialog("Подключите ОИ для определения ХХ",
+                    View.showConfirmDialog("межвитковая изоляция",
                             () -> {
                                 isPressedOk = true;
                                 isNeedToRefresh = true;
@@ -276,7 +239,6 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
-                experiment6ModelPhase3.setTime(String.valueOf(XXTime));
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -301,6 +263,14 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentRunning) {
+                appendOneMessageToLog("Идет загрузка ЧП");
+            }
+
+            if (isExperimentRunning && isNeedToWaitDelta) {
+                sleep(8000);
+            }
+
+            if (isExperimentRunning) {
                 communicationModel.initExperiment6Devices();
             }
 
@@ -309,10 +279,10 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 sleep(100);
             }
 
-            if (isExperimentRunning && isDevicesResponding()) {
+            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING400) {
-                    communicationModel.onKM11();
+                    communicationModel.onKM2();
                     communicationModel.onKM5();
                     communicationModel.onKM13();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
@@ -326,49 +296,51 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 is200to5State = true;
             }
 
-            if (isExperimentRunning && isDevicesResponding()) {
-                appendOneMessageToLog("Идет подбор токовой ступени");
-                sleep(5000);
-                pickUpState();
+            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+                communicationModel.setObjectParams(200 * HZ, 5 * VOLT, 200 * HZ);
+                appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
+                communicationModel.startObject();
+                appendOneMessageToLog("Запускаем ЧП");
+            }
+
+            while (isExperimentRunning && !isDeltaReady200) {
                 sleep(100);
-                appendOneMessageToLog("Токовая ступень подобрана");
-                appendOneMessageToLog("Измерение тока первичной обмотки и мощности потерь");
+                appendOneMessageToLog("Ожидаем, пока частотный преобразователь выйдет к заданным характеристикам");
             }
 
-            if (isExperimentRunning  && isDevicesResponding()) {
-                XXTime = (int) currentProtocol.getXxtime();
-                appendOneMessageToLog("Ждем " + XXTime + " секунд");
+            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem * 2);
+                regulation(5 * VOLT, 40, 8, UHHTestItem * 2, 0.1, 2, 100, 200);
             }
 
-            while (isExperimentRunning && isDevicesResponding() && (XXTime-- > 0)) {
+            int experimentTime = 30;
+            while (isExperimentRunning && isStartButtonOn && isDevicesResponding() && (experimentTime-- > 0)) {
                 sleep(1000);
-                experiment6ModelPhase3.setTime(String.valueOf(XXTime));
-            }
-
-            if (isExperimentRunning && isDevicesResponding()) {
-                experiment6ModelPhase3.setTime(String.valueOf((int) currentProtocol.getXxtime()));
+                appendOneMessageToLog("Ждем 30 секунд");
+                Experiment6ModelPhase3.setTime(String.valueOf(experimentTime));
             }
 
             isNeedToRefresh = false;
             isExperimentRunning = false;
             isExperimentEnd = true;
+            communicationModel.stopObject();
 
             while (isExperimentRunning && !isDeltaReady0 && isDeltaResponding) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
             }
 
-            communicationModel.offAllKms();
-            communicationModel.finalizeAllDevices();
+            communicationModel.offAllKms(); //разбираем все возможные схемы
+            communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-                experiment6ModelPhase3.setResult("Неуспешно");
+                Experiment6ModelPhase3.setResult("Неуспешно");
             } else if (!isDevicesResponding()) {
                 appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-                experiment6ModelPhase3.setResult("Неуспешно");
+                Experiment6ModelPhase3.setResult("Неуспешно");
             } else {
-                experiment6ModelPhase3.setResult("Успешно");
+                Experiment6ModelPhase3.setResult("Успешно");
                 appendMessageToLog("Испытание завершено успешно");
             }
             appendMessageToLog("------------------------------------------------\n");
@@ -410,87 +382,41 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isDevicesResponding() {
-        return isOwenPRResponding && isPM130Responding;
+        return isOwenPRResponding && isPM130Responding && isDeltaResponding;
     }
 
     private String getNotRespondingDevicesString(String mainText) {
-        return String.format("%s %s%s",
+        return String.format("%s %s%s%s",
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
-                isPM130Responding ? "" : "Парма ");
+                isDeltaResponding ? "" : "Дельта ",
+                isPM130Responding ? "" : "PM130 ");
     }
 
-    private void pickUpState() {
-        if (is200to5State) {
-            if (IAvr < 12.0 && IAvr > 4) {
-                appendOneMessageToLog("Выставляем токовую ступень 40/5");
-                communicationModel.onKM6();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-                is200to5State = false;
-                is40to5State = true;
-                is5to5State = false;
-                communicationModel.offPR6();
-                communicationModel.offPR4();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-            } else if (IAvr < 4) {
-                appendOneMessageToLog("Выставляем токовую ступень 5/5");
-                communicationModel.onKM7();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-                is200to5State = false;
-                is40to5State = false;
-                is5to5State = true;
-                communicationModel.offPR4();
-                communicationModel.offPR5();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-            } else {
-                appendOneMessageToLog("Выставляем токовую ступень 200/5");
+    private int regulation(int start, int coarseStep, int fineStep, double end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
+        double coarseMinLimit = 1 - coarseLimit;
+        double coarseMaxLimit = 1 + coarseLimit;
+        while (isExperimentRunning && ((measuringU < end * coarseMinLimit) || (measuringU > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
+            if (measuringU < end * coarseMinLimit) {
+                communicationModel.setObjectUMax(start += coarseStep);
+            } else if (measuringU > end * coarseMaxLimit) {
+                communicationModel.setObjectUMax(start -= coarseStep);
             }
-        } else if (is40to5State) {
-            if (IAvr > 12) {
-                appendOneMessageToLog("Выставляем токовую ступень 200/5");
-                communicationModel.onKM5();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-                is200to5State = true;
-                is40to5State = false;
-                is5to5State = false;
-                communicationModel.offPR5();
-                communicationModel.offPR6();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-            } else if (IAvr < 4) {
-                appendOneMessageToLog("Выставляем токовую ступень 5/5");
-                communicationModel.onKM7();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-                is200to5State = false;
-                is40to5State = false;
-                is5to5State = true;
-                communicationModel.offPR4();
-                communicationModel.offPR5();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-            }
-        } else if (is5to5State) {
-            if (IAvr > 4) {
-                appendOneMessageToLog("Выставляем токовую ступень 40/5");
-                communicationModel.onKM6();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-                is200to5State = false;
-                is40to5State = true;
-                is5to5State = false;
-                communicationModel.offPR6();
-                communicationModel.offPR4();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-            } else if (IAvr < 4) {
-                appendOneMessageToLog("Выставляем токовую ступень 5/5");
-                communicationModel.onKM7();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-                is200to5State = false;
-                is40to5State = false;
-                is5to5State = true;
-                communicationModel.offPR4();
-                communicationModel.offPR5();
-                sleep(TIME_DELAY_CURRENT_STAGES);
-            }
+            sleep(coarseSleep);
+            appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
         }
+        while (isExperimentRunning && ((measuringU < end - fineLimit) || (measuringU > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
+            if (measuringU < end - fineLimit) {
+                communicationModel.setObjectUMax(start += fineStep);
+            } else if (measuringU > end + fineLimit) {
+                communicationModel.setObjectUMax(start -= fineStep);
+            }
+            sleep(fineSleep);
+            appendOneMessageToLog("Выводим напряжение для получения заданного значения точно");
+        }
+        return start;
     }
+
 
     @Override
     public void update(Observable o, Object values) {
@@ -536,11 +462,6 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                     case OwenPRModel.PRDI6_FIXED:
                         break;
                     case OwenPRModel.PRDI7:
-//                        isCurrentVIU = (boolean) value;
-//                        if (isCurrentVIU) {
-//                            cause = "сработала токовая защита ВИУ";
-//                            isExperimentRunning = false;
-//                        }
                         break;
                 }
                 break;
@@ -561,14 +482,15 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                             } else if (is5to5State) {
                                 iA *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            if (iA > 0.001) {
-                                String iAString = String.format("%.2f", iA);
-                                experiment6ModelPhase3.setIA(iAString);
-                                iAPercentD = Ixx / iA;
-                                String iAPercent = String.format("%.2f", iAPercentD);
-                                experiment6ModelPhase3.setIAPercent(iAPercent);
-                                String iADiff = String.format("%.2f", IxxPercent - iAPercentD);
-                                experiment6ModelPhase3.setIADiff(iADiff);
+                            if (iAOld != -1) {
+                                if (iA > iAOld * 4 && iA > 2) {
+                                    cause = "ток A превысил";
+                                    isExperimentRunning = false;
+                                } else {
+                                    iAOld = iA;
+                                }
+                            } else {
+                                iAOld = iA;
                             }
                         }
                         break;
@@ -582,14 +504,15 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                             } else if (is5to5State) {
                                 iB *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            if (iB > 0.001) {
-                                String iBString = String.format("%.2f", iB);
-                                experiment6ModelPhase3.setIB(iBString);
-                                iBPercentD = Ixx / iB;
-                                String iBPercent = String.format("%.2f", iBPercentD);
-                                experiment6ModelPhase3.setIBPercent(iBPercent);
-                                String iBDiff = String.format("%.2f", IxxPercent - iBPercentD);
-                                experiment6ModelPhase3.setIBDiff(iBDiff);
+                            if (iBOld != -1) {
+                                if (iB > iBOld * 4 && iB > 2) {
+                                    cause = "ток B превысил";
+                                    isExperimentRunning = false;
+                                } else {
+                                    iBOld = iB;
+                                }
+                            } else {
+                                iBOld = iB;
                             }
                         }
                         break;
@@ -603,68 +526,58 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                             } else if (is5to5State) {
                                 iC *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            if (iC > 0.001) {
-                                String iCString = String.format("%.2f", iC);
-                                experiment6ModelPhase3.setIC(iCString);
-                                IAvr = (iA + iB + iC) / 3;
-                                iCPercentD = Ixx / iC;
-                                String iCPercent = String.format("%.2f", iCPercentD);
-                                experiment6ModelPhase3.setICPercent(iCPercent);
-                                String iCDiff = String.format("%.2f", IxxPercent - iCPercentD);
-                                experiment6ModelPhase3.setICDiff(iCDiff);
+                            if (iCOld != -1) {
+                                if (iC > iCOld * 4 && iC > 2) {
+                                    cause = "ток C превысил";
+                                    isExperimentRunning = false;
+                                } else {
+                                    iCOld = iC;
+                                }
+                            } else {
+                                iCOld = iC;
                             }
-                        }
-                        break;
-                    case PM130Model.P_PARAM:
-                        if (isNeedToRefresh) {
-                            measuringP = (float) value;
-                            if (is200to5State) {
-                                measuringP *= STATE_200_TO_5_MULTIPLIER;
-                            } else if (is40to5State) {
-                                measuringP *= STATE_40_TO_5_MULTIPLIER;
-                            } else if (is5to5State) {
-                                measuringP *= STATE_5_TO_5_MULTIPLIER;
-                            }
-                            String PParma = String.format("%.2f", measuringP);
-                            experiment6ModelPhase3.setPP(PParma);
-                        }
-                        break;
-                    case PM130Model.F_PARAM:
-                        if (isNeedToRefresh) {
-                            fParma = (float) value;
-                            experiment6ModelPhase3.setF(String.format("%.2f", fParma));
-                        }
-                        break;
-                    case PM130Model.COS_PARAM:
-                        if (isNeedToRefresh) {
-                            cosParma = (float) value;
-                            if (cosParma > 0.001) {
-                                experiment6ModelPhase3.setCOS(String.format("%.2f", cosParma));
-                            }
+                            measuringIAvr = (iA + iB + iC) / 3;
+                            Experiment6ModelPhase3.setIBH(String.format("%.2f", measuringIAvr));
                         }
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (float) value * coef;
+                            measuringUA = (float) value * coef;
                         }
                         break;
                     case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInBC = (float) value * coef;
+                            measuringUB = (float) value * coef;
                         }
                         break;
                     case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInCA = (float) value * coef;
-                            measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3.0;
-                            String UInAvr = String.format("%.2f", measuringUInAvr);
-                            if (measuringUInAvr > 0.001) {
-                                experiment6ModelPhase3.setUBH(UInAvr);
-                            }
+                            measuringUC = (float) value * coef;
+                            measuringU = (measuringUA + measuringUB + measuringUC) / 3;
+                            Experiment6ModelPhase3.setUIN(String.format("%.2f", measuringU));
                         }
                         break;
                 }
                 break;
+            case DELTACP2000_ID:
+                switch (param) {
+                    case DeltaCP2000Model.RESPONDING_PARAM:
+                        isDeltaResponding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
+
+                        break;
+                    case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
+                        setCurrentFrequencyObject((short) value);
+                        measuringF = (short) value / HZ;
+                        Experiment6ModelPhase3.setF(String.format("%.2f", measuringF));
+                        break;
+                }
+                break;
         }
+    }
+
+    private void setCurrentFrequencyObject(short value) {
+        isDeltaReady200 = value == 200 * HZ;
+        isDeltaReady0 = value == 0;
     }
 }

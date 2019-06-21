@@ -1,6 +1,5 @@
 package ru.avem.ksptamur.model.phase3;
 
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,21 +9,44 @@ import java.util.List;
 
 public class Experiment7ModelPhase3 {
 
+    private final StringProperty type;
     private final StringProperty UIN;
     private final StringProperty IBH;
-    private final StringProperty F;
     private final StringProperty time;
     private final StringProperty result;
     private List<StringProperty> properties = new ArrayList<>();
 
+    public Experiment7ModelPhase3(String type) {
+        this.type = new SimpleStringProperty(type);
+        this.UIN = new SimpleStringProperty("");
+        this.IBH = new SimpleStringProperty("");
+        this.time = new SimpleStringProperty("");
+        this.result = new SimpleStringProperty("");
+        properties.addAll(Arrays.asList(UIN, IBH, time, result));
+    }
 
-    public Experiment7ModelPhase3() {
-        UIN = new SimpleStringProperty();
-        IBH = new SimpleStringProperty();
-        F = new SimpleStringProperty();
-        time = new SimpleStringProperty();
-        result = new SimpleStringProperty();
-        properties.addAll(Arrays.asList(UIN, IBH, F, time, result));
+    public String getType() {
+        return type.get();
+    }
+
+    public StringProperty typeProperty() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type.set(type);
+    }
+
+    public String getTime() {
+        return time.get();
+    }
+
+    public StringProperty timeProperty() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time.set(time);
     }
 
     public String getUIN() {
@@ -51,30 +73,6 @@ public class Experiment7ModelPhase3 {
         this.IBH.set(IBH);
     }
 
-    public String getF() {
-        return F.get();
-    }
-
-    public StringProperty fProperty() {
-        return F;
-    }
-
-    public void setF(String f) {
-        this.F.set(f);
-    }
-
-    public String getTime() {
-        return time.get();
-    }
-
-    public StringProperty timeProperty() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time.set(time);
-    }
-
     public String getResult() {
         return result.get();
     }
@@ -91,4 +89,3 @@ public class Experiment7ModelPhase3 {
         properties.forEach(stringProperty -> stringProperty.set(""));
     }
 }
-

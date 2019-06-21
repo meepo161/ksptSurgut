@@ -3,17 +3,9 @@ package ru.avem.ksptamur.model;
 import ru.avem.ksptamur.db.model.Account;
 import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.db.model.TestItem;
-import ru.avem.ksptamur.model.phase1.*;
 import ru.avem.ksptamur.model.phase3.*;
 
 public class MainModel {
-    public static final int EXPERIMENT0_BH = 1;
-    public static final int EXPERIMENT0_HH = 2;
-    public static final int EXPERIMENT0_BHHH = 3;
-    public static final int EXPERIMENT0_BH_HH = 4;
-    public static final int EXPERIMENT0_BHHH_BH = 5;
-    public static final int EXPERIMENT0_BHHH_HH = 6;
-    public static final int EXPERIMENT0_ALL = 7;
 
     public static final int EXPERIMENT1_BOTH = 0;
     public static final int EXPERIMENT1_BH = 1;
@@ -26,9 +18,9 @@ public class MainModel {
     public static final int EXPERIMENT2_WITH_NOLOAD = 6;
 
 
-    public static final int EXPERIMENT8_BOTH = 0;
-    public static final int EXPERIMENT8_BH = 1;
-    public static final int EXPERIMENT8_HH = 2;
+    public static final int EXPERIMENT7_BOTH = 0;
+    public static final int EXPERIMENT7_BH = 1;
+    public static final int EXPERIMENT7_HH = 2;
 
 
     private static MainModel instance = new MainModel();
@@ -44,19 +36,7 @@ public class MainModel {
     private int experiment0Choice;
     private int experiment1Choice;
     private int experiment2Choice;
-    private int experiment8Choice;
-
-    private Experiment1ModelPhase1 experiment1ModelPhase1BH = new Experiment1ModelPhase1("BH");
-    private Experiment1ModelPhase1 experiment1ModelPhase1HH = new Experiment1ModelPhase1("HH");
-    private Experiment2ModelPhase1 experiment2ModelPhase1 = new Experiment2ModelPhase1();
-    private Experiment3ModelPhase1 experiment3ModelPhase1 = new Experiment3ModelPhase1();
-    private Experiment4ModelPhase1 experiment4ModelPhase1 = new Experiment4ModelPhase1();
-    private Experiment5ModelPhase1 experiment5ModelPhase1 = new Experiment5ModelPhase1();
-    private Experiment6ModelPhase1 experiment6ModelPhase1 = new Experiment6ModelPhase1();
-    private Experiment7ModelPhase1 experiment7ModelPhase1 = new Experiment7ModelPhase1();
-    private Experiment8ModelPhase1 experiment8ModelPhase1BH = new Experiment8ModelPhase1("BH");
-    private Experiment8ModelPhase1 experiment8ModelPhase1HH = new Experiment8ModelPhase1("HH");
-
+    private int experiment7Choice;
 
     private Experiment0ModelPhase3 experiment0ModelPhase3BH = new Experiment0ModelPhase3("BH и К.");
     private Experiment0ModelPhase3 experiment0ModelPhase3HH = new Experiment0ModelPhase3("HH и К.");
@@ -68,9 +48,8 @@ public class MainModel {
     private Experiment4ModelPhase3 experiment4ModelPhase3 = new Experiment4ModelPhase3();
     private Experiment5ModelPhase3 experiment5ModelPhase3 = new Experiment5ModelPhase3();
     private Experiment6ModelPhase3 experiment6ModelPhase3 = new Experiment6ModelPhase3();
-    private Experiment7ModelPhase3 experiment7ModelPhase3 = new Experiment7ModelPhase3();
-    private Experiment8ModelPhase3 experiment8ModelPhase3BH = new Experiment8ModelPhase3("BH");
-    private Experiment8ModelPhase3 experiment8ModelPhase3HH = new Experiment8ModelPhase3("HH");
+    private Experiment7ModelPhase3 experiment7ModelPhase3BH = new Experiment7ModelPhase3("BH");
+    private Experiment7ModelPhase3 experiment7ModelPhase3HH = new Experiment7ModelPhase3("HH");
 
 
     private MainModel() {
@@ -114,32 +93,12 @@ public class MainModel {
         intermediateProtocol = null;
     }
 
-    public Experiment0ModelPhase3 getExperiment0ModelPhase3BH() {
-        return experiment0ModelPhase3BH;
-    }
-
-    public Experiment0ModelPhase3 getExperiment0ModelPhase3HH() {
-        return experiment0ModelPhase3HH;
-    }
-
-    public Experiment0ModelPhase3 getExperiment0ModelPhase3BHHH() {
-        return experiment0ModelPhase3BHHH;
-    }
-
     public int getExperiment0Choice() {
         return experiment0Choice;
     }
 
     public void setExperiment0Choice(int experiment0Choice) {
         this.experiment0Choice = experiment0Choice;
-    }
-
-    public Experiment1ModelPhase3 getExperiment1ModelPhase3BH() {
-        return experiment1ModelPhase3BH;
-    }
-
-    public Experiment1ModelPhase3 getExperiment1ModelPhase3HH() {
-        return experiment1ModelPhase3HH;
     }
 
     public int getExperiment1Choice() {
@@ -150,10 +109,6 @@ public class MainModel {
         this.experiment1Choice = experiment1Choice;
     }
 
-    public Experiment2ModelPhase3 getExperiment2ModelPhase3() {
-        return experiment2ModelPhase3;
-    }
-
     public int getExperiment2Choice() {
         return experiment2Choice;
     }
@@ -162,79 +117,107 @@ public class MainModel {
         this.experiment2Choice = experiment2Choice;
     }
 
+    public int getExperiment7Choice() {
+        return experiment7Choice;
+    }
+
+    public void setExperiment7Choice(int experiment7Choice) {
+        this.experiment7Choice = experiment7Choice;
+    }
+
+    public Experiment0ModelPhase3 getExperiment0ModelPhase3BH() {
+        return experiment0ModelPhase3BH;
+    }
+
+    public void setExperiment0ModelPhase3BH(Experiment0ModelPhase3 experiment0ModelPhase3BH) {
+        this.experiment0ModelPhase3BH = experiment0ModelPhase3BH;
+    }
+
+    public Experiment0ModelPhase3 getExperiment0ModelPhase3HH() {
+        return experiment0ModelPhase3HH;
+    }
+
+    public void setExperiment0ModelPhase3HH(Experiment0ModelPhase3 experiment0ModelPhase3HH) {
+        this.experiment0ModelPhase3HH = experiment0ModelPhase3HH;
+    }
+
+    public Experiment0ModelPhase3 getExperiment0ModelPhase3BHHH() {
+        return experiment0ModelPhase3BHHH;
+    }
+
+    public void setExperiment0ModelPhase3BHHH(Experiment0ModelPhase3 experiment0ModelPhase3BHHH) {
+        this.experiment0ModelPhase3BHHH = experiment0ModelPhase3BHHH;
+    }
+
+    public Experiment1ModelPhase3 getExperiment1ModelPhase3BH() {
+        return experiment1ModelPhase3BH;
+    }
+
+    public void setExperiment1ModelPhase3BH(Experiment1ModelPhase3 experiment1ModelPhase3BH) {
+        this.experiment1ModelPhase3BH = experiment1ModelPhase3BH;
+    }
+
+    public Experiment1ModelPhase3 getExperiment1ModelPhase3HH() {
+        return experiment1ModelPhase3HH;
+    }
+
+    public void setExperiment1ModelPhase3HH(Experiment1ModelPhase3 experiment1ModelPhase3HH) {
+        this.experiment1ModelPhase3HH = experiment1ModelPhase3HH;
+    }
+
+    public Experiment2ModelPhase3 getExperiment2ModelPhase3() {
+        return experiment2ModelPhase3;
+    }
+
+    public void setExperiment2ModelPhase3(Experiment2ModelPhase3 experiment2ModelPhase3) {
+        this.experiment2ModelPhase3 = experiment2ModelPhase3;
+    }
+
     public Experiment3ModelPhase3 getExperiment3ModelPhase3() {
         return experiment3ModelPhase3;
+    }
+
+    public void setExperiment3ModelPhase3(Experiment3ModelPhase3 experiment3ModelPhase3) {
+        this.experiment3ModelPhase3 = experiment3ModelPhase3;
     }
 
     public Experiment4ModelPhase3 getExperiment4ModelPhase3() {
         return experiment4ModelPhase3;
     }
 
+    public void setExperiment4ModelPhase3(Experiment4ModelPhase3 experiment4ModelPhase3) {
+        this.experiment4ModelPhase3 = experiment4ModelPhase3;
+    }
+
     public Experiment5ModelPhase3 getExperiment5ModelPhase3() {
         return experiment5ModelPhase3;
+    }
+
+    public void setExperiment5ModelPhase3(Experiment5ModelPhase3 experiment5ModelPhase3) {
+        this.experiment5ModelPhase3 = experiment5ModelPhase3;
     }
 
     public Experiment6ModelPhase3 getExperiment6ModelPhase3() {
         return experiment6ModelPhase3;
     }
 
-    public Experiment7ModelPhase3 getExperiment7ModelPhase3() {
-        return experiment7ModelPhase3;
+    public void setExperiment6ModelPhase3(Experiment6ModelPhase3 experiment6ModelPhase3) {
+        this.experiment6ModelPhase3 = experiment6ModelPhase3;
     }
 
-    public Experiment8ModelPhase3 getExperiment8ModelPhase3BH() {
-        return experiment8ModelPhase3BH;
+    public Experiment7ModelPhase3 getExperiment7ModelPhase3BH() {
+        return experiment7ModelPhase3BH;
     }
 
-    public Experiment8ModelPhase3 getExperiment8ModelPhase3HH() {
-        return experiment8ModelPhase3HH;
+    public void setExperiment7ModelPhase3BH(Experiment7ModelPhase3 experiment7ModelPhase3BH) {
+        this.experiment7ModelPhase3BH = experiment7ModelPhase3BH;
     }
 
-    public int getExperiment8Choice() {
-        return experiment8Choice;
+    public Experiment7ModelPhase3 getExperiment7ModelPhase3HH() {
+        return experiment7ModelPhase3HH;
     }
 
-    public void setExperiment8Choice(int experiment8Choice) {
-        this.experiment8Choice = experiment8Choice;
-    }
-
-    public Experiment1ModelPhase1 getExperiment1ModelPhase1BH() {
-        return experiment1ModelPhase1BH;
-    }
-
-    public Experiment1ModelPhase1 getExperiment1ModelPhase1HH() {
-        return experiment1ModelPhase1HH;
-    }
-
-    public Experiment2ModelPhase1 getExperiment2ModelPhase1() {
-        return experiment2ModelPhase1;
-    }
-
-    public Experiment3ModelPhase1 getExperiment3ModelPhase1() {
-        return experiment3ModelPhase1;
-    }
-
-    public Experiment4ModelPhase1 getExperiment4ModelPhase1() {
-        return experiment4ModelPhase1;
-    }
-
-    public Experiment5ModelPhase1 getExperiment5ModelPhase1() {
-        return experiment5ModelPhase1;
-    }
-
-    public Experiment6ModelPhase1 getExperiment6ModelPhase1() {
-        return experiment6ModelPhase1;
-    }
-
-    public Experiment7ModelPhase1 getExperiment7ModelPhase1() {
-        return experiment7ModelPhase1;
-    }
-
-    public Experiment8ModelPhase1 getExperiment8ModelPhase1BH() {
-        return experiment8ModelPhase1BH;
-    }
-
-    public Experiment8ModelPhase1 getExperiment8ModelPhase1HH() {
-        return experiment8ModelPhase1HH;
+    public void setExperiment7ModelPhase3HH(Experiment7ModelPhase3 experiment7ModelPhase3HH) {
+        this.experiment7ModelPhase3HH = experiment7ModelPhase3HH;
     }
 }

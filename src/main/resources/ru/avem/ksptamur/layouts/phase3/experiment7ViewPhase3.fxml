@@ -31,7 +31,7 @@
                <children>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <Label style="-fx-font-weight: bold; -fx-font-size: 20;" text="Испытание прочности межвитковой изоляции(3ф)" />
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 20;" text="Испытание электрической прочности изоляции(3ф)" />
                      </children>
                      <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -42,14 +42,14 @@
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                      </padding>
                      <children>
-                            <TableView fx:id="tableViewExperiment7" maxHeight="84.0" maxWidth="1.7976931348623157E308" prefHeight="52.0" prefWidth="965.0">
+                            <TableView fx:id="tableViewExperiment7" prefHeight="78.0" prefWidth="965.0">
                                 <placeholder>
                                     <Label text="Нет данных" />
                                 </placeholder>
                                 <columns>
-                                    <TableColumn fx:id="tableColumnUInput" prefWidth="75.0" text="Uвх, В" />
-                                    <TableColumn fx:id="tableColumnIBH" prefWidth="75.0" text="Iвх, А" />
-                                    <TableColumn fx:id="tableColumnF" prefWidth="75.0" text="f, Гц" />
+                              <TableColumn fx:id="tableColumnType" prefWidth="75.0" text="Тип" />
+                                    <TableColumn fx:id="tableColumnU" prefWidth="75.0" text="U, В" />
+                                    <TableColumn fx:id="tableColumnI" prefWidth="75.0" text="I, мА" />
                                     <TableColumn fx:id="tableColumnTime" prefWidth="75.0" text="t, сек" />
                               <TableColumn fx:id="tableColumnResult" prefWidth="75.0" text="Результат" />
                                 </columns>

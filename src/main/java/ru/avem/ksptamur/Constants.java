@@ -22,14 +22,14 @@ public final class Constants {
     }
 
     public static final class Experiments {
+        public static final String EXPERIMENT0_NAME = "0. Измерение сопротивления изоляции";
         public static final String EXPERIMENT1_NAME = "1. Измерение сопротивления обмоток постоянному току";
         public static final String EXPERIMENT2_NAME = "2. Определение коэффициента трансформации";
-        public static final String EXPERIMENT3_NAME = "3. Проверка напряжений вторичных обмоток в режиме холостого хода";
-        public static final String EXPERIMENT4_NAME = "4. Проверка группы соединений обмоток";
-        public static final String EXPERIMENT5_NAME = "5. Реализация опыта короткого замыкания";
-        public static final String EXPERIMENT6_NAME = "6. Реализация опыта холостого хода";
-        public static final String EXPERIMENT7_NAME = "7. Испытание прочности межвитковой изоляции";
-        public static final String EXPERIMENT8_NAME = "8. Испытание электрической прочности изоляции";
+        public static final String EXPERIMENT3_NAME = "3. Проверка группы соединений обмоток";
+        public static final String EXPERIMENT4_NAME = "4. Реализация опыта короткого замыкания";
+        public static final String EXPERIMENT5_NAME = "5. Реализация опыта холостого хода";
+        public static final String EXPERIMENT6_NAME = "6. Испытание прочности межвитковой изоляции";
+        public static final String EXPERIMENT7_NAME = "7. Испытание электрической прочности изоляции";
     }
 
     public static final class Measuring {
