@@ -47,20 +47,20 @@ public class Experiment7ModelPhase3 {
         return IBH;
     }
 
-    public void setIBH(double IBH) {
-        this.IBH.set(String.valueOf(IBH));
+    public void setIBH(String IBH) {
+        this.IBH.set(IBH);
     }
 
     public String getF() {
         return F.get();
     }
 
-    public StringProperty FProperty() {
+    public StringProperty fProperty() {
         return F;
     }
 
     public void setF(String f) {
-        this.F.set(String.valueOf(f));
+        this.F.set(f);
     }
 
     public String getTime() {
@@ -71,8 +71,8 @@ public class Experiment7ModelPhase3 {
         return time;
     }
 
-    public void setTime(String T) {
-        this.time.set(String.valueOf(T));
+    public void setTime(String time) {
+        this.time.set(time);
     }
 
     public String getResult() {

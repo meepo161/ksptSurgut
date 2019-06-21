@@ -345,110 +345,95 @@ public class CommunicationModel extends Observable implements Observer {
 
     public void initExperiment1Devices() {
         ikasController.setNeedToRead(true);
-        ikasController.resetReadAttempts();
-        ikasController.resetWriteAttempts();
+        ikasController.resetAllAttempts();
+        trmController.setNeedToRead(true);
+        trmController.resetAllAttempts();
     }
 
     public void initExperiment2Devices() {
         pm130Controller.setNeedToRead(true);
-        pm130Controller.resetReadAttempts();
-        pm130Controller.resetWriteAttempts();
+        pm130Controller.resetAllAttempts();
         parmaT400Controller.setNeedToRead(true);
-        parmaT400Controller.resetReadAttempts();
-        parmaT400Controller.resetWriteAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetReadAttempts();
-        deltaCP2000Controller.resetWriteAttempts();
+        parmaT400Controller.resetAllAttempts();
     }
 
     public void initExperiment3Devices() {
         pm130Controller.setNeedToRead(true);
-        pm130Controller.resetReadAttempts();
-        pm130Controller.resetWriteAttempts();
+        pm130Controller.resetAllAttempts();
         parmaT400Controller.setNeedToRead(true);
-        parmaT400Controller.resetReadAttempts();
-        parmaT400Controller.resetWriteAttempts();
+        parmaT400Controller.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetReadAttempts();
-        deltaCP2000Controller.resetWriteAttempts();
+        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment4Devices() {
         pm130Controller.setNeedToRead(true);
-        pm130Controller.resetReadAttempts();
-        pm130Controller.resetWriteAttempts();
+        pm130Controller.resetAllAttempts();
         parmaT400Controller.setNeedToRead(true);
-        parmaT400Controller.resetReadAttempts();
-        parmaT400Controller.resetWriteAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetReadAttempts();
-        deltaCP2000Controller.resetWriteAttempts();
+        parmaT400Controller.resetAllAttempts();
         phaseMeterController.setNeedToRead(true);
-        phaseMeterController.resetReadAttempts();
-        phaseMeterController.resetWriteAttempts();
+        phaseMeterController.resetAllAttempts();
     }
 
     public void initExperiment5Devices() {
+        pm130Controller.setNeedToRead(true);
+        pm130Controller.resetAllAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment6Devices() {
         pm130Controller.setNeedToRead(true);
-        pm130Controller.resetReadAttempts();
-        pm130Controller.resetWriteAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetReadAttempts();
-        deltaCP2000Controller.resetWriteAttempts();
+        pm130Controller.resetAllAttempts();
     }
 
     public void initExperiment7Devices() {
         pm130Controller.setNeedToRead(true);
-        pm130Controller.resetReadAttempts();
-        pm130Controller.resetWriteAttempts();
+        pm130Controller.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetReadAttempts();
-        deltaCP2000Controller.resetWriteAttempts();
+        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment8Devices() {
     }
 
-    public void onPR1() {
+    public void onKM2() {
         onRegisterInTheKms(1, 1);
     }
 
-    public void onPR2() {
+    public void onKM3() {
         onRegisterInTheKms(2, 1);
     }
 
-    public void onPR3() {
+    public void onKM4() {
         onRegisterInTheKms(3, 1);
     }
 
-    public void onPR4() {
+    public void onKM5() {
         onRegisterInTheKms(4, 1);
     }
 
-    public void onPR5() {
+    public void onKM6() {
         onRegisterInTheKms(5, 1);
     }
 
-    public void onPR6() {
+    public void onKM7() {
         onRegisterInTheKms(6, 1);
     }
 
-    public void onPR7() {
+    public void onKM11() {
         onRegisterInTheKms(7, 1);
     }
 
-    public void onPR8() {
+    public void onKM12() {
         onRegisterInTheKms(8, 1);
     }
 
-    public void onPR1M1() {
+    public void onKM13() {
         onRegisterInTheKms(1, 2);
     }
 
-    public void onPR2M1() {
+    public void onKM17() {
         onRegisterInTheKms(2, 2);
     }
 

@@ -114,13 +114,14 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
     private boolean is40to5State;
     private boolean is5to5State;
 
+    private double iA;
+    private double iB;
+    private double iC;
+
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-SSS");
     private String logBuffer;
     private volatile String cause;
     private volatile double temperature;
-    private volatile double iA;
-    private volatile double iB;
-    private volatile double iC;
     private volatile double iAvr;
     private volatile double iAkz;
     private volatile double measuringP;
@@ -298,7 +299,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentRunning) {
-                communicationModel.initExperiment3Devices();
+                communicationModel.initExperiment5Devices();
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
@@ -310,19 +311,19 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 appendOneMessageToLog("Инициализация испытания");
                 if (Ikz < 1) {
                     appendOneMessageToLog("5к5 токовая ступень");
-                    communicationModel.onPR6();
+                    communicationModel.onKM7();
                     is5to5State = true;
                     is40to5State = false;
                     is200to5State = false;
-                } else if (Ikz > 1 && Ikz < 15) {
+                } else if (Ikz > 1 && Ikz < 46) {
                     appendOneMessageToLog("40к5 токовая ступень");
-                    communicationModel.onPR5();
+                    communicationModel.onKM6();
                     is5to5State = false;
                     is40to5State = true;
                     is200to5State = false;
                 } else {
                     appendOneMessageToLog("200к5 токовая ступень");
-                    communicationModel.onPR4();
+                    communicationModel.onKM5();
                     is5to5State = false;
                     is40to5State = false;
                     is200to5State = true;
@@ -331,19 +332,19 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 if (UHHTestItem < WIDDING400) {
-                    communicationModel.onPR2();
+                    communicationModel.onKM3();
+                    communicationModel.onKM17();
+                    communicationModel.onKM13();
                 } else if (UHHTestItem > WIDDING400) {
                     appendOneMessageToLog("Напряжение короткого больше допустимого");
                     appendOneMessageToLog("Проверьте корректность введенных данных в БД");
-                } else if (Ukz > 12.0) {
+                }
+                if (Ukz > 380.0) {
                     appendOneMessageToLog("Напряжение короткого больше допустимого");
                     appendOneMessageToLog("Проверьте корректность введенных данных в БД");
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный ВН в объекте испытания.");
                 }
-                communicationModel.onPR2M1();
-                communicationModel.onPR4();
-                communicationModel.onPR1M1();
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
@@ -361,7 +362,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
 //                communicationModel.setObjectUMax((int) (UHHTestItem / coef) * VOLT);
-                regulation(5 * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
+                regulation(5 * VOLT, 30, 5, UHHTestItem / coef, 0.1, 2, 100, 200);
             }
 
             isNeedToRefresh = false;
@@ -505,13 +506,21 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                     case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
                             iA = (float) value;
+
+
                             if (is200to5State) {
                                 iA *= STATE_200_TO_5_MULTIPLIER;
+
+
                             } else if (is40to5State) {
                                 iA *= STATE_40_TO_5_MULTIPLIER;
+
+
                             } else if (is5to5State) {
                                 iA *= STATE_5_TO_5_MULTIPLIER;
                             }
+
+
                             if (iA > 0.001) {
                                 experiment5ModelPhase3.setIA(String.format("%.3f", iA));
                             }
@@ -555,7 +564,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                             }
                         }
                         if (iC > Ikz) {
-                            appendOneMessageToLog("Достигли I короткого замыкания на фазе Ca. Испытание остановлено");
+                            appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
                             isExperimentRunning = false;
                         }
                         break;
@@ -565,10 +574,9 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                             String UInAB = String.format("%.2f", measuringUInAB);
                             experiment5ModelPhase3.setUBH(UInAB);
                             measuringUkzPercent = (measuringUInAB * 100.0) / UBHTestItem;
-                            ukzPercent = ((int) ((float) measuringUkzPercent * POWER) / POWER);
-                            experiment5ModelPhase3.setUKZPercent(String.valueOf(ukzPercent));
-                            String ukzDif = String.format("%.2f", ukzPercent - UKZTestItem);
-                            experiment5ModelPhase3.setUKZDiff(String.valueOf(ukzDif));
+                            ukzPercent = (measuringUkzPercent * POWER) / POWER;
+                            experiment5ModelPhase3.setUKZPercent(String.format("%.2f", ukzPercent));
+                            experiment5ModelPhase3.setUKZDiff(String.format("%.2f", ukzPercent - UKZTestItem));
                             if (measuringUInAB > UHHTestItem) {
                                 appendOneMessageToLog("Напряжение достигло номинального, испытание прервано");
                                 isExperimentRunning = false;

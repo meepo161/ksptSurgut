@@ -255,16 +255,16 @@ public class Experiment3ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING400) {
-                    communicationModel.onPR2();
+                    communicationModel.onKM3();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный HH в объекте испытания.");
                     isExperimentRunning = false;
                 }
-                communicationModel.onPR2M1();
-                communicationModel.onPR4();
-                communicationModel.onPR1M1();
+                communicationModel.onKM17();
+                communicationModel.onKM5();
+                communicationModel.onKM13();
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {

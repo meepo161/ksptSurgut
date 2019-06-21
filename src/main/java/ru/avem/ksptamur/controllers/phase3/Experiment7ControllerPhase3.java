@@ -41,6 +41,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     private static final int TIME_DELAY_CURRENT_STAGES = 100;
     private static final double POWER = 100;
 
+
     @FXML
     private TableView<Experiment7ModelPhase3> tableViewExperiment7;
     @FXML
@@ -113,15 +114,14 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     private int windingGroup0;
     private int windingGroup1;
     private float measuringUOutAB;
-    private double measuringUInAB;
-    private float measuringF;
+    private double measuringU;
+    private double measuringUA;
+    private double measuringUB;
+    private double measuringUC;
+    private double measuringF;
 
     private volatile double F;
     private volatile double measuringIAvr;
-    private volatile double measuringIA;
-    private volatile double measuringIB;
-    private volatile double measuringIC;
-    private double measuringUInABWithCoef;
 
     @FXML
     private AnchorPane root;
@@ -137,7 +137,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
 
         tableColumnUInput.setCellValueFactory(cellData -> cellData.getValue().UINProperty());
         tableColumnIBH.setCellValueFactory(cellData -> cellData.getValue().IBHProperty());
-        tableColumnF.setCellValueFactory(cellData -> cellData.getValue().FProperty());
+        tableColumnF.setCellValueFactory(cellData -> cellData.getValue().fProperty());
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         tableColumnResult.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
     }
@@ -282,16 +282,18 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING400) {
-//                    communicationModel.onPR2();
-//                    appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
+                    communicationModel.onKM2();
+                    communicationModel.onKM5();
+                    communicationModel.onKM13();
+                    appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный HH в объекте испытания.");
                     isExperimentRunning = false;
                 }
-                communicationModel.onPR1();
-                communicationModel.onPR4();
-                communicationModel.onPR1M1();
+                is5to5State = false;
+                is40to5State = false;
+                is200to5State = true;
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
@@ -307,9 +309,8 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                communicationModel.setObjectUMax(360 * VOLT);
-                regulation((int) (UHHTestItem / coef) * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
+                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem * 2);
+                regulation(5 * VOLT, 40, 8, UHHTestItem * 2, 0.1, 2, 100, 200);
             }
 
             int experimentTime = 30;
@@ -323,7 +324,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
             isExperimentRunning = false;
             isExperimentEnd = true;
             communicationModel.stopObject();
-            
+
             while (isExperimentRunning && !isDeltaReady0 && isDeltaResponding) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
@@ -395,19 +396,19 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     private int regulation(int start, int coarseStep, int fineStep, double end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
         double coarseMinLimit = 1 - coarseLimit;
         double coarseMaxLimit = 1 + coarseLimit;
-        while (isExperimentRunning && ((measuringUInAB < end * coarseMinLimit) || (measuringUInAB > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUInAB < end * coarseMinLimit) {
+        while (isExperimentRunning && ((measuringU < end * coarseMinLimit) || (measuringU > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
+            if (measuringU < end * coarseMinLimit) {
                 communicationModel.setObjectUMax(start += coarseStep);
-            } else if (measuringUInAB > end * coarseMaxLimit) {
+            } else if (measuringU > end * coarseMaxLimit) {
                 communicationModel.setObjectUMax(start -= coarseStep);
             }
             sleep(coarseSleep);
             appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
         }
-        while (isExperimentRunning && ((measuringUInAB < end - fineLimit) || (measuringUInAB > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUInAB < end - fineLimit) {
+        while (isExperimentRunning && ((measuringU < end - fineLimit) || (measuringU > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
+            if (measuringU < end - fineLimit) {
                 communicationModel.setObjectUMax(start += fineStep);
-            } else if (measuringUInAB > end + fineLimit) {
+            } else if (measuringU > end + fineLimit) {
                 communicationModel.setObjectUMax(start -= fineStep);
             }
             sleep(fineSleep);
@@ -461,11 +462,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                     case OwenPRModel.PRDI6_FIXED:
                         break;
                     case OwenPRModel.PRDI7:
-//                        isCurrentVIU = (boolean) value;
-//                        if (isCurrentVIU) {
-//                            cause = "сработала токовая защита ВИУ";
-//                            isExperimentRunning = false;
-//                        }
                         break;
                 }
                 break;
@@ -473,12 +469,12 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                 switch (param) {
                     case PM130Model.RESPONDING_PARAM:
                         isPM130Responding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        Platform.runLater(() -> deviceStateCirclePM130.setFill(((boolean) value) ? Color.LIME : Color.RED));
 
                         break;
                     case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
-                            iA = (double) value;
+                            iA = (float) value;
                             if (is200to5State) {
                                 iA *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is40to5State) {
@@ -496,12 +492,11 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             } else {
                                 iAOld = iA;
                             }
-                            measuringIA = (double) ((int) (iA * 10000)) / 10000;
                         }
                         break;
                     case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
-                            iB = (double) value;
+                            iB = (float) value;
                             if (is200to5State) {
                                 iB *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is40to5State) {
@@ -509,7 +504,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             } else if (is5to5State) {
                                 iB *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            iB = (int) ((double) value * POWER) / POWER;
                             if (iBOld != -1) {
                                 if (iB > iBOld * 4 && iB > 2) {
                                     cause = "ток B превысил";
@@ -520,12 +514,11 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             } else {
                                 iBOld = iB;
                             }
-                            measuringIB = (double) ((int) (iB * 10000)) / 10000;
                         }
                         break;
                     case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
-                            iC = (double) value;
+                            iC = (float) value;
                             if (is200to5State) {
                                 iC *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is40to5State) {
@@ -533,7 +526,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             } else if (is5to5State) {
                                 iC *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            iC = ((int) ((double) value * POWER) / POWER);
                             if (iCOld != -1) {
                                 if (iC > iCOld * 4 && iC > 2) {
                                     cause = "ток C превысил";
@@ -544,20 +536,25 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                             } else {
                                 iCOld = iC;
                             }
-                            measuringIC = (double) ((int) (iC * 10000)) / 10000;
-                            measuringIAvr = (int) (((measuringIA + measuringIB + measuringIC) / 3.0) * POWER) / POWER;
-                            experiment7ModelPhase3.setIBH((double) ((int) (measuringIAvr * 10000)) / 10000);
+                            measuringIAvr = (iA + iB + iC) / 3;
+                            experiment7ModelPhase3.setIBH(String.format("%.2f", measuringIAvr));
                         }
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (double) value;
-                            measuringUInABWithCoef = measuringUInAB;
-                            String UInAB = String.format("%.2f", measuringUInABWithCoef);
-                            if (measuringUInAB > 0.001) {
-                                experiment7ModelPhase3.setUIN(UInAB);
-                                sleep(50);
-                            }
+                            measuringUA = (float) value * coef;
+                        }
+                        break;
+                    case PM130Model.V2_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUB = (float) value * coef;
+                        }
+                        break;
+                    case PM130Model.V3_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUC = (float) value * coef;
+                            measuringU = (measuringUA + measuringUB + measuringUC) / 3;
+                            experiment7ModelPhase3.setUIN(String.format("%.2f", measuringU));
                         }
                         break;
                 }
@@ -571,6 +568,8 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
                         setCurrentFrequencyObject((short) value);
+                        measuringF = (short) value / HZ;
+                        experiment7ModelPhase3.setF(String.format("%.2f", measuringF));
                         break;
                 }
                 break;
@@ -578,7 +577,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void setCurrentFrequencyObject(short value) {
-        isDeltaReady200 = value == 20000;
+        isDeltaReady200 = value == 200 * HZ;
         isDeltaReady0 = value == 0;
     }
 }

@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
-import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptamur.communication.devices.parmaT400.ParmaT400Model;
 import ru.avem.ksptamur.communication.devices.phasemeter.PhaseMeterModel;
 import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
@@ -27,8 +26,6 @@ import ru.avem.ksptamur.utils.View;
 import java.text.SimpleDateFormat;
 import java.util.Observable;
 
-import static ru.avem.ksptamur.Constants.Measuring.HZ;
-import static ru.avem.ksptamur.Constants.Measuring.VOLT;
 import static ru.avem.ksptamur.Main.setTheme;
 import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
@@ -71,15 +68,13 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
     private boolean isCanceled;
 
     private volatile boolean isNeedToRefresh = true;
-    private volatile boolean isStartButtonOn;
     private volatile boolean isNeedToWaitDelta;
     private volatile boolean isExperimentRunning;
     private volatile boolean isExperimentEnd = true;
+    private volatile boolean isStartButtonOn;
 
     private volatile boolean isOwenPRResponding;
     private volatile boolean isDeltaResponding;
-    private volatile boolean isDeltaReady50;
-    private volatile boolean isDeltaReady0;
     private volatile boolean isParmaResponding;
     private volatile boolean isPM130Responding;
     private volatile boolean isPhaseMeterResponding;
@@ -248,13 +243,6 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                 isNeedToWaitDelta = true;
             }
 
-            if (isExperimentRunning) {
-                appendOneMessageToLog("Идет загрузка ЧП");
-            }
-
-            if (isExperimentRunning && isNeedToWaitDelta) {
-                sleep(8000);
-            }
 
             if (isExperimentRunning) {
                 communicationModel.initExperiment4Devices();
@@ -265,40 +253,22 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                 sleep(100);
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING400) {
-                    communicationModel.onPR2();
+                    communicationModel.onKM11();
+                    communicationModel.onKM5();
+                    communicationModel.onKM13();
+                    sleep(5000);
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный HH в объекте испытания.");
                     isExperimentRunning = false;
                 }
-                communicationModel.onPR2M1();
-                communicationModel.onPR4();
-                communicationModel.onPR1M1();
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.setObjectParams(50 * HZ, 5 * VOLT, 50 * HZ);
-                appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
-                communicationModel.startObject();
-                appendOneMessageToLog("Запускаем ЧП");
-            }
-
-            while (isExperimentRunning && !isDeltaReady50) {
-                sleep(100);
-                appendOneMessageToLog("Ожидаем, пока частотный преобразователь выйдет к заданным характеристикам");
-            }
-
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                communicationModel.setObjectUMax((int) (UHHTestItem / coef) * VOLT);
-//                regulation((int) (UHHTestItem / coef) * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
-            }
-
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 communicationModel.startPhaseMeter();
                 appendOneMessageToLog("Началось измерение");
                 sleep(2000);
@@ -312,11 +282,6 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
             isExperimentRunning = false;
             isExperimentEnd = true;
             communicationModel.stopObject();
-
-            while (isExperimentRunning && !isDeltaReady0 && isDeltaResponding) {
-                sleep(100);
-                appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
-            }
 
             communicationModel.offAllKms(); //разбираем все возможные схемы
             communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
@@ -369,44 +334,17 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isDevicesResponding() {
-        return isOwenPRResponding && isParmaResponding && isPM130Responding &&
-                isDeltaResponding && isPhaseMeterResponding;
+        return isOwenPRResponding && isParmaResponding && isPM130Responding && isPhaseMeterResponding;
     }
 
     private String getNotRespondingDevicesString(String mainText) {
-        return String.format("%s %s%s%s%s%s",
+        return String.format("%s %s%s%s%s",
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
-                isDeltaResponding ? "" : "Дельта ",
                 isParmaResponding ? "" : "Парма ",
                 isPM130Responding ? "" : "ПМ130 ",
                 isPhaseMeterResponding ? "" : "Фазометр ");
     }
-
-    private int regulation(int start, int coarseStep, int fineStep, double end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
-        double coarseMinLimit = 1 - coarseLimit;
-        double coarseMaxLimit = 1 + coarseLimit;
-        while (isExperimentRunning && ((measuringUInAvr < end * coarseMinLimit) || (measuringUInAvr > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUInAvr < end * coarseMinLimit) {
-                communicationModel.setObjectUMax(start += coarseStep);
-            } else if (measuringUInAvr > end * coarseMaxLimit) {
-                communicationModel.setObjectUMax(start -= coarseStep);
-            }
-            sleep(coarseSleep);
-            appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
-        }
-        while (isExperimentRunning && ((measuringUInAvr < end - fineLimit) || (measuringUInAvr > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUInAvr < end - fineLimit) {
-                communicationModel.setObjectUMax(start += fineStep);
-            } else if (measuringUInAvr > end + fineLimit) {
-                communicationModel.setObjectUMax(start -= fineStep);
-            }
-            sleep(fineSleep);
-            appendOneMessageToLog("Выводим напряжение для получения заданного значения точно");
-        }
-        return start;
-    }
-
 
     @Override
     public void update(Observable o, Object values) {
@@ -510,23 +448,6 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                         break;
                 }
                 break;
-            case DELTACP2000_ID:
-                switch (param) {
-                    case DeltaCP2000Model.RESPONDING_PARAM:
-                        isDeltaResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
-                        break;
-                    case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
-                        setCurrentFrequencyObject((short) value);
-                        break;
-                }
-                break;
         }
-    }
-
-    private void setCurrentFrequencyObject(short value) {
-        isDeltaReady50 = value == 50 * HZ;
-        isDeltaReady0 = value == 0;
     }
 }

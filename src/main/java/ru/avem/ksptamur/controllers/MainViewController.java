@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -41,6 +43,10 @@ import static ru.avem.ksptamur.Main.*;
 
 @SuppressWarnings("ALL")
 public class MainViewController implements Statable {
+
+
+    @FXML
+    private ImageView imgSerialNumber;
 
 
     @FXML
@@ -931,10 +937,20 @@ public class MainViewController implements Statable {
             if (!checkMenuItemTheme.isSelected()) { //сначала галочка ставится, потом срабатывает handle
                 root.getStylesheets().set(0, Main.class.getResource("styles/main_css.css").toURI().toString());
                 css = "white";
+                ColorAdjust blackout = new ColorAdjust();
+                blackout.setBrightness(0);
+
+                imgSerialNumber.setEffect(blackout);
+
             } else {
                 root.getStylesheets().set(0, Main.class.getResource("styles/main_css_black.css").toURI().toString());
                 css = "black";
+                ColorAdjust blackout = new ColorAdjust();
+                blackout.setBrightness(0.7);
+
+                imgSerialNumber.setEffect(blackout);
             }
+
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

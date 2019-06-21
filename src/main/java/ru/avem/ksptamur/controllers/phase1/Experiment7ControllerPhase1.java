@@ -223,7 +223,7 @@ public class Experiment7ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onPR1();
+                communicationModel.onKM2();
                 isStartButtonOn = true;
                 is75to5State = true;
                 sleep(1000);
@@ -248,12 +248,12 @@ public class Experiment7ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onPR2();
-                communicationModel.onPR7();
+                communicationModel.onKM3();
+                communicationModel.onKM11();
                 is75to5State = true;
                 if (UHHTestItemX2 <= 380) {
 
-                    communicationModel.onPR2M1();
+                    communicationModel.onKM17();
                     appendOneMessageToLog("Собрана схема для испытания 418В трансформатора");
                 } else if (UHHTestItemX2 > 380) {
 

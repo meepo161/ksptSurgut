@@ -17,6 +17,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -28,18 +30,67 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Протокол">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBarProtocolNew" text="Новый" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBarProtocolOpen" text="Открыть" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBarProtocolOpenFromDB" text="Открыть из базы данных" />
-                        <MenuItem fx:id="menuBarProtocolSaveAs" mnemonicParsing="false" onAction="#handleMenuBarProtocolSaveAs" text="Сохранить как..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBarProtocolNew" text="Новый">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../icon/protocolNew.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBarProtocolOpen" text="Открыть">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../icon/protocolOpen.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBarProtocolOpenFromDB" text="Открыть из базы данных">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../icon/protocolOpenFromDB.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem fx:id="menuBarProtocolSaveAs" mnemonicParsing="false" onAction="#handleMenuBarProtocolSaveAs" text="Сохранить как...">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../icon/protocolSaveAs.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="handleExit" mnemonicParsing="false" onAction="#handleExit" text="Выход" />
+                        <MenuItem fx:id="handleExit" mnemonicParsing="false" onAction="#handleExit" text="Выход">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../icon/protocolExit.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="База данных">
                     <items>
-                        <MenuItem fx:id="menuBarDBTestItems" mnemonicParsing="false" onAction="#handleTestItems" text="Объекты испытания" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleProtocols" text="Протоколы" />
+                        <MenuItem fx:id="menuBarDBTestItems" mnemonicParsing="false" onAction="#handleTestItems" text="Объекты испытания">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../icon/dataBaseTestItem.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#handleProtocols" text="Протоколы">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../icon/dataBaseProtocol.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuProfiles" text="Профили" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#handleImportDB" text="Импорт..." />
@@ -77,6 +128,11 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
                                  <children>
+                                    <ImageView fx:id="imgSerialNumber" fitHeight="26.0" fitWidth="26.0">
+                                       <image>
+                                          <Image url="@../icon/serialNumber.png" />
+                                       </image>
+                                    </ImageView>
                                     <Label text="Заводской номер: " />
                                     <TextField fx:id="labelProtocolSerialNumber" prefWidth="320.0" />
                                  </children>
@@ -86,6 +142,11 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
                                  <children>
+                                    <ImageView fitHeight="26.0" fitWidth="26.0">
+                                       <image>
+                                          <Image url="@../icon/testitem.png" />
+                                       </image>
+                                    </ImageView>
                                     <Label text="Объект испытания:" />
                                     <ComboBox fx:id="comboBoxProtocolTestItem" onShowing="#handleSelectTestItem" prefWidth="320.0" promptText="..." />
                                  </children>

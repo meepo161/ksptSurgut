@@ -240,7 +240,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onPR1();
+                communicationModel.onKM2();
                 isStartButtonOn = true;
                 is75to5State = true;
                 sleep(1000);
@@ -266,11 +266,11 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onPR2();
-                communicationModel.onPR7();
+                communicationModel.onKM3();
+                communicationModel.onKM11();
                 is75to5State = true;
                 if (UBHTestItem <= WIDDING400) {
-                    communicationModel.onPR2M1();
+                    communicationModel.onKM17();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с ВН до 418В");
                 } else if (UBHTestItem > WIDDING400) {
                     communicationModel.onPR3M1();
@@ -386,7 +386,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
     private void pickUpState() {
         if (is75to5State) {
             if (iA < 12.0 && iA > 1.2) {
-                communicationModel.onPR8();
+                communicationModel.onKM12();
                 sleep(200);
                 is75to5State = false;
                 is10to5State = true;
@@ -396,7 +396,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
                 appendOneMessageToLog("Выставляем токовую ступень 10/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onPR1M1();
+                communicationModel.onKM13();
                 sleep(200);
                 is75to5State = false;
                 is10to5State = false;
@@ -408,7 +408,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
             }
         } else if (is10to5State) {
             if (iA > 12) {
-                communicationModel.onPR7();
+                communicationModel.onKM11();
                 sleep(200);
                 is75to5State = true;
                 is10to5State = false;
@@ -418,7 +418,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
                 appendOneMessageToLog("Выставляем токовую ступень 75/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onPR1M1();
+                communicationModel.onKM13();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = false;
@@ -430,7 +430,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
             }
         } else if (is1to5State) {
             if (iA > 1.2) {
-                communicationModel.onPR8();
+                communicationModel.onKM12();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = true;
@@ -440,7 +440,7 @@ public class Experiment6ControllerPhase1 extends DeviceState implements Experime
                 appendOneMessageToLog("Выставляем токовую ступень 10/5");
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (iA < 1.2) {
-                communicationModel.onPR1M1();
+                communicationModel.onKM13();
                 sleep(100);
                 is75to5State = false;
                 is10to5State = false;

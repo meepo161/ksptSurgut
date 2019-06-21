@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
-import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.controllers.DeviceState;
@@ -25,10 +24,9 @@ import ru.avem.ksptamur.utils.View;
 import java.text.SimpleDateFormat;
 import java.util.Observable;
 
-import static ru.avem.ksptamur.Constants.Measuring.HZ;
-import static ru.avem.ksptamur.Constants.Measuring.VOLT;
 import static ru.avem.ksptamur.Main.setTheme;
-import static ru.avem.ksptamur.communication.devices.DeviceController.*;
+import static ru.avem.ksptamur.communication.devices.DeviceController.PM130_ID;
+import static ru.avem.ksptamur.communication.devices.DeviceController.PR200_ID;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment6ControllerPhase3 extends DeviceState implements ExperimentController {
@@ -84,7 +82,7 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     private MainModel mainModel = MainModel.getInstance();
     private Protocol currentProtocol = mainModel.getCurrentProtocol();
     private double UBHTestItem = currentProtocol.getUbh();
-    private double coef = 1.16;
+    private double coef = 1;
     private double Pkva = currentProtocol.getP();
     private double UHHTestItem = currentProtocol.getUhh();
     private double IxxPercent = currentProtocol.getIxx();
@@ -103,11 +101,11 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     private boolean isCanceled;
 
     private volatile boolean isNeedToRefresh;
-    private volatile boolean isStartButtonOn;
     private volatile boolean isNeedToWaitDelta;
     private volatile boolean isStopButtonOn;
     private volatile boolean isExperimentRunning;
     private volatile boolean isExperimentEnd = true;
+    private volatile boolean isStartButtonOn;
 
     private volatile boolean isOwenPRResponding;
     private volatile boolean isDeltaResponding;
@@ -134,7 +132,7 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     private volatile double iB;
     private volatile double iC;
     private volatile double fParma;
-    private volatile double pPM130;
+    private volatile double measuringP;
     private volatile double measuringUInAB;
     private volatile double measuringUInBC;
     private volatile double measuringUInCA;
@@ -278,6 +276,7 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
+                experiment6ModelPhase3.setTime(String.valueOf(XXTime));
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -302,14 +301,6 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentRunning) {
-                appendOneMessageToLog("Идет загрузка ЧП");
-            }
-
-            if (isExperimentRunning && isNeedToWaitDelta) {
-                sleep(8000);
-            }
-
-            if (isExperimentRunning) {
                 communicationModel.initExperiment6Devices();
             }
 
@@ -318,72 +309,57 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 sleep(100);
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING400) {
-                    communicationModel.onPR2();
+                    communicationModel.onKM11();
+                    communicationModel.onKM5();
+                    communicationModel.onKM13();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный HH в объекте испытания.");
                     isExperimentRunning = false;
                 }
-                communicationModel.onPR2M1();
-                communicationModel.onPR4();
-                communicationModel.onPR1M1();
                 is5to5State = false;
                 is40to5State = false;
                 is200to5State = true;
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.setObjectParams(50 * HZ, 5 * VOLT, 50 * HZ);
-                appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
-                communicationModel.startObject();
-                appendOneMessageToLog("Запускаем ЧП");
-            }
-
-            while (isExperimentRunning && !isDeltaReady50) {
-                sleep(100);
-                appendOneMessageToLog("Ожидаем, пока частотный преобразователь выйдет к заданным характеристикам");
-            }
-
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                communicationModel.setObjectUMax((int) (UHHTestItem / coef) * VOLT);
-                regulation((int) (UHHTestItem / coef) * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
-            }
-
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog("Идет подбор токовой ступени");
+                sleep(5000);
                 pickUpState();
                 sleep(100);
                 appendOneMessageToLog("Токовая ступень подобрана");
                 appendOneMessageToLog("Измерение тока первичной обмотки и мощности потерь");
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning  && isDevicesResponding()) {
                 XXTime = (int) currentProtocol.getXxtime();
                 appendOneMessageToLog("Ждем " + XXTime + " секунд");
             }
 
-            while (isExperimentRunning && isStartButtonOn && isDevicesResponding() && (XXTime-- > 0)) {
+            while (isExperimentRunning && isDevicesResponding() && (XXTime-- > 0)) {
                 sleep(1000);
                 experiment6ModelPhase3.setTime(String.valueOf(XXTime));
+            }
+
+            if (isExperimentRunning && isDevicesResponding()) {
+                experiment6ModelPhase3.setTime(String.valueOf((int) currentProtocol.getXxtime()));
             }
 
             isNeedToRefresh = false;
             isExperimentRunning = false;
             isExperimentEnd = true;
-            communicationModel.stopObject();
 
             while (isExperimentRunning && !isDeltaReady0 && isDeltaResponding) {
                 sleep(100);
                 appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
             }
 
-            communicationModel.offAllKms(); //разбираем все возможные схемы
-            communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
+            communicationModel.offAllKms();
+            communicationModel.finalizeAllDevices();
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
@@ -434,47 +410,22 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isDevicesResponding() {
-        return isOwenPRResponding && isPM130Responding && isDeltaResponding;
+        return isOwenPRResponding && isPM130Responding;
     }
 
     private String getNotRespondingDevicesString(String mainText) {
-        return String.format("%s %s%s%s",
+        return String.format("%s %s%s",
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
-                isDeltaResponding ? "" : "Дельта ",
                 isPM130Responding ? "" : "Парма ");
-    }
-
-    private int regulation(int start, int coarseStep, int fineStep, double end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
-        double coarseMinLimit = 1 - coarseLimit;
-        double coarseMaxLimit = 1 + coarseLimit;
-        while (isExperimentRunning && ((measuringUInAvr < end * coarseMinLimit) || (measuringUInAvr > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUInAvr < end * coarseMinLimit) {
-                communicationModel.setObjectUMax(start += coarseStep);
-            } else if (measuringUInAvr > end * coarseMaxLimit) {
-                communicationModel.setObjectUMax(start -= coarseStep);
-            }
-            sleep(coarseSleep);
-            appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
-        }
-        while (isExperimentRunning && ((measuringUInAvr < end - fineLimit) || (measuringUInAvr > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUInAvr < end - fineLimit) {
-                communicationModel.setObjectUMax(start += fineStep);
-            } else if (measuringUInAvr > end + fineLimit) {
-                communicationModel.setObjectUMax(start -= fineStep);
-            }
-            sleep(fineSleep);
-            appendOneMessageToLog("Выводим напряжение для получения заданного значения точно");
-        }
-        return start;
     }
 
     private void pickUpState() {
         if (is200to5State) {
             if (IAvr < 12.0 && IAvr > 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 40/5");
-                communicationModel.onPR5();
-                sleep(200);
+                communicationModel.onKM6();
+                sleep(TIME_DELAY_CURRENT_STAGES);
                 is200to5State = false;
                 is40to5State = true;
                 is5to5State = false;
@@ -483,8 +434,8 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 5/5");
-                communicationModel.onPR6();
-                sleep(200);
+                communicationModel.onKM7();
+                sleep(TIME_DELAY_CURRENT_STAGES);
                 is200to5State = false;
                 is40to5State = false;
                 is5to5State = true;
@@ -497,8 +448,8 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
         } else if (is40to5State) {
             if (IAvr > 12) {
                 appendOneMessageToLog("Выставляем токовую ступень 200/5");
-                communicationModel.onPR4();
-                sleep(200);
+                communicationModel.onKM5();
+                sleep(TIME_DELAY_CURRENT_STAGES);
                 is200to5State = true;
                 is40to5State = false;
                 is5to5State = false;
@@ -507,8 +458,8 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 5/5");
-                communicationModel.onPR6();
-                sleep(200);
+                communicationModel.onKM7();
+                sleep(TIME_DELAY_CURRENT_STAGES);
                 is200to5State = false;
                 is40to5State = false;
                 is5to5State = true;
@@ -519,8 +470,8 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
         } else if (is5to5State) {
             if (IAvr > 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 40/5");
-                communicationModel.onPR5();
-                sleep(200);
+                communicationModel.onKM6();
+                sleep(TIME_DELAY_CURRENT_STAGES);
                 is200to5State = false;
                 is40to5State = true;
                 is5to5State = false;
@@ -529,8 +480,8 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 5/5");
-                communicationModel.onPR6();
-                sleep(200);
+                communicationModel.onKM7();
+                sleep(TIME_DELAY_CURRENT_STAGES);
                 is200to5State = false;
                 is40to5State = false;
                 is5to5State = true;
@@ -597,7 +548,7 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 switch (param) {
                     case PM130Model.RESPONDING_PARAM:
                         isPM130Responding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        Platform.runLater(() -> deviceStateCirclePM130.setFill(((boolean) value) ? Color.LIME : Color.RED));
 
                         break;
                     case PM130Model.I1_PARAM:
@@ -666,15 +617,15 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.P_PARAM:
                         if (isNeedToRefresh) {
-                            pPM130 = (float) value;
+                            measuringP = (float) value;
                             if (is200to5State) {
-                                pPM130 *= STATE_200_TO_5_MULTIPLIER;
+                                measuringP *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is40to5State) {
-                                pPM130 *= STATE_40_TO_5_MULTIPLIER;
+                                measuringP *= STATE_40_TO_5_MULTIPLIER;
                             } else if (is5to5State) {
-                                pPM130 *= STATE_5_TO_5_MULTIPLIER;
+                                measuringP *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            String PParma = String.format("%.2f", pPM130);
+                            String PParma = String.format("%.2f", measuringP);
                             experiment6ModelPhase3.setPP(PParma);
                         }
                         break;
@@ -694,17 +645,17 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (float) value;
+                            measuringUInAB = (float) value * coef;
                         }
                         break;
                     case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInBC = (float) value;
+                            measuringUInBC = (float) value * coef;
                         }
                         break;
                     case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInCA = (float) value;
+                            measuringUInCA = (float) value * coef;
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3.0;
                             String UInAvr = String.format("%.2f", measuringUInAvr);
                             if (measuringUInAvr > 0.001) {
@@ -714,23 +665,6 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                         break;
                 }
                 break;
-            case DELTACP2000_ID:
-                switch (param) {
-                    case DeltaCP2000Model.RESPONDING_PARAM:
-                        isDeltaResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
-                        break;
-                    case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
-                        setCurrentFrequencyObject((short) value);
-                        break;
-                }
-                break;
         }
-    }
-
-    private void setCurrentFrequencyObject(short value) {
-        isDeltaReady50 = value == 50 * HZ;
-        isDeltaReady0 = value == 0;
     }
 }

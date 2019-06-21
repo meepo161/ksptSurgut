@@ -238,7 +238,7 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                communicationModel.onPR1();
+                communicationModel.onKM2();
                 sleep(1000);
             }
 
@@ -260,27 +260,27 @@ public class Experiment5ControllerPhase1 extends DeviceState implements Experime
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
-                communicationModel.onPR3();
+                communicationModel.onKM4();
                 if (Ikz < 1) {
                     appendOneMessageToLog("1к5 токовая ступень");
-                    communicationModel.onPR1M1();
+                    communicationModel.onKM13();
                     is1to5State = true;
                     is10to5State = false;
                     is75to5State = false;
                 } else if (Ikz > 1 && Ikz < 11) {
                     appendOneMessageToLog("10к5 токовая ступень");
-                    communicationModel.onPR8();
+                    communicationModel.onKM12();
                     is1to5State = false;
                     is10to5State = true;
                     is75to5State = false;
                 } else {
                     appendOneMessageToLog("75к5 токовая ступень");
-                    communicationModel.onPR7();
+                    communicationModel.onKM11();
                     is1to5State = false;
                     is10to5State = false;
                     is75to5State = true;
                 }
-                communicationModel.onPR6();
+                communicationModel.onKM7();
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {

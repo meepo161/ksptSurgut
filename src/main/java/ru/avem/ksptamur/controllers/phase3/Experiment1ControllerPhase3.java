@@ -14,7 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.communication.CommunicationModel;
 import ru.avem.ksptamur.communication.devices.ikas.IKASModel;
-import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.communication.devices.trm.TRMModel;
 import ru.avem.ksptamur.controllers.DeviceState;
 import ru.avem.ksptamur.controllers.ExperimentController;
@@ -28,7 +27,8 @@ import java.util.Observable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.avem.ksptamur.Main.setTheme;
-import static ru.avem.ksptamur.communication.devices.DeviceController.*;
+import static ru.avem.ksptamur.communication.devices.DeviceController.IKAS_ID;
+import static ru.avem.ksptamur.communication.devices.DeviceController.TRM_ID;
 import static ru.avem.ksptamur.model.phase3.Experiment1ModelPhase3.BREAK_IKAS;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 
@@ -186,21 +186,10 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
-                communicationModel.initOwenPrController();
                 communicationModel.initExperiment1Devices();
                 sleep(2000);
             }
 
-            if (isExperimentRunning && !isOwenPRResponding) {
-                appendOneMessageToLog("Нет связи с ПР");
-                sleep(100);
-                isExperimentRunning = false;
-            }
-
-            while (isExperimentRunning && isThereAreAccidents()) { //если сработали защиты
-                appendOneMessageToLog(getAccidentsString("Аварии")); //вывод в лог сообщение со списком сработавших защит
-                sleep(100);
-            }
             while (isExperimentRunning && !isDevicesResponding()) {  //если устройства не отвечают
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));//вывод в лог сообщение со списком устройств без связи
                 sleep(100);
@@ -305,7 +294,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
             }
 
-
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
                 if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BOTH) { //если выбрано испытание ВН и НН обмоток
@@ -342,7 +330,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
 
             isExperimentRunning = false;
             isExperimentEnd = true;
-            communicationModel.offAllKms(); //разбираем все возможные схемы
             communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
 
 
@@ -539,35 +526,13 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             appendMessageToLog(message);
         }
     }
-
-    private boolean isThereAreAccidents() {
-//        if (!isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn) {
-//            isExperimentRunning = false;
-//            isExperimentEnd = true;
-//        }
-//        return !isCurrent1On || !isCurrent2On || !isDoorLockOn || !isInsulationOn || isCanceled || !isDoorZoneOn;
-        return false;
-    }
-
-    private String getAccidentsString(String mainText) {
-        return String.format("%s: %s%s%s%s%s%s",
-                mainText,
-                isCurrent1On ? "" : "сработала токовая защита 1, ",
-                isCurrent2On ? "" : "сработала токовая защита 2, ",
-                isDoorLockOn ? "" : "открылась дверь, ",
-                isInsulationOn ? "" : "обрыв изоляции, ",
-                isCanceled ? "" : "нажата кнопка отмены, ",
-                isDoorZoneOn ? "" : "открылась дверь зоны");
-    }
-
     private boolean isDevicesResponding() {
-        return isOwenPRResponding && isIkasResponding /*&& isTrmResponding*/;
+        return isIkasResponding && isTrmResponding;
     }
 
     private String getNotRespondingDevicesString(String mainText) {
-        return String.format("%s %s%s%s",
+        return String.format("%s %s%s",
                 mainText,
-                isOwenPRResponding ? "" : "Овен ПР ",
                 isIkasResponding ? "" : "ИКАС ",
                 isTrmResponding ? "" : "ТРМ ");
     }
@@ -580,58 +545,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         Object value = (((Object[]) values)[2]);
 
         switch (modelId) {
-            case PR200_ID:
-                switch (param) {
-                    case OwenPRModel.RESPONDING_PARAM:
-                        isOwenPRResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
-                        break;
-//                    case OwenPRModel.PRDI6:
-//                        isStopButtonOn = (boolean) value;
-//                        break;
-//                    case OwenPRModel.PRDI6_FIXED:
-//                        if ((boolean) value) {
-//                            cause = "Нажата кнопка (СТОП)";
-//                            isExperimentRunning = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI1:
-//                        isCurrent1On = (boolean) value;
-//                        if (!isCurrent1On) {
-//                            cause = "сработала токовая защита 1";
-//                            isExperimentRunning = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI2:
-//                        isCurrent2On = (boolean) value;
-//                        if (!isCurrent2On) {
-//                            cause = "сработала токовая защита 2";
-//                            isExperimentRunning = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI3:
-//                        isDoorLockOn = (boolean) value;
-//                        if (!isDoorLockOn) {
-//                            cause = "открыта дверь";
-//                            isExperimentRunning = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI4:
-//                        isInsulationOn = (boolean) value;
-//                        if (!isInsulationOn) {
-//                            cause = "пробита изоляция";
-//                            isExperimentRunning = false;
-//                        }
-//                        break;
-//                    case OwenPRModel.PRDI7:
-//                        isDoorZoneOn = (boolean) value;
-//                        if (!isDoorZoneOn) {
-//                            cause = "открыта дверь зоны";
-//                            isExperimentRunning = false;
-//                        }
-//                        break;
-                }
-                break;
             case IKAS_ID:
                 switch (param) {
                     case IKASModel.RESPONDING_PARAM:
@@ -649,8 +562,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
             case TRM_ID:
                 switch (param) {
                     case TRMModel.RESPONDING_PARAM:
-//                        isTrmResponding = (boolean) value;
-                        isTrmResponding = true;
+                        isTrmResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCircleTrm.setFill((isTrmResponding) ? Color.LIME : Color.RED));
                         break;
                     case TRMModel.T_AMBIENT_PARAM:

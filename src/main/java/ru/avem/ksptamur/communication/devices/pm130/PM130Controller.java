@@ -8,13 +8,13 @@ import java.util.Observer;
 
 
 public class PM130Controller implements DeviceController {
-    private static final short I1_REGISTER = 13318; // мгновенные
-    private static final short VL1_REGISTER = 13372;
-    private static final short P_REGISTER = 13696;
+//    private static final short I1_REGISTER = 13318; // мгновенные
+//    private static final short VL1_REGISTER = 13372;
+//    private static final short P_REGISTER = 13696;
 
-    //    private static final short I1_REGISTER = 13958; // за 1 секунду
-//    private static final short VL1_REGISTER = 14012;
-//    private static final short P_REGISTER = 14336;
+    private static final short I1_REGISTER = 13958; // за 1 секунду
+    private static final short VL1_REGISTER = 14012;
+    private static final short P_REGISTER = 14336;
     private static final short F_REGISTER = 14468;
 
     private static final int CONVERT_BUFFER_SIZE = 4;
