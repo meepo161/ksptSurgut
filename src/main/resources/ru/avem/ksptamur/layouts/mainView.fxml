@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -99,74 +99,81 @@
                             </graphic>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuProfiles" text="Профили">
-                     <graphic>
-                        <ImageView fx:id="imgDBProfiles">
-                           <image>
-                              <Image url="@../icon/dataBaseProfiles.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
+                            <graphic>
+                                <ImageView fx:id="imgDBProfiles">
+                                    <image>
+                                        <Image url="@../icon/dataBaseProfiles.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#handleImportDB" text="Импорт...">
-                     <graphic>
-                        <ImageView fx:id="imgDBImport">
-                           <image>
-                              <Image url="@../icon/dataBaseImport.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
+                            <graphic>
+                                <ImageView fx:id="imgDBImport">
+                                    <image>
+                                        <Image url="@../icon/dataBaseImport.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#handleExportDB" text="Экспорт...">
-                     <graphic>
-                        <ImageView fx:id="imgDBExport">
-                           <image>
-                              <Image url="@../icon/dataBaseExport.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
+                            <graphic>
+                                <ImageView fx:id="imgDBExport">
+                                    <image>
+                                        <Image url="@../icon/dataBaseExport.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Инструменты">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleDeviceState" text="Состояние устройств">
-                     <graphic>
-                        <ImageView fx:id="imgInstrumentsDeviceStates">
-                           <image>
-                              <Image url="@../icon/InstrumentsDeviceStates.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
+                            <graphic>
+                                <ImageView fx:id="imgInstrumentsDeviceStates">
+                                    <image>
+                                        <Image url="@../icon/InstrumentsDeviceStates.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#handleCurrentProtection" text="Состояние защит">
-                     <graphic>
-                        <ImageView fx:id="imgInstrumentsCurrentProtection">
-                           <image>
-                              <Image url="@../icon/InstrumentsCurrentProtection.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
+                            <graphic>
+                                <ImageView fx:id="imgInstrumentsCurrentProtection">
+                                    <image>
+                                        <Image url="@../icon/InstrumentsCurrentProtection.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="О КСПТ ПО">
-                     <graphic>
-                        <ImageView fx:id="imgInstrumentsInfo">
-                           <image>
-                              <Image url="@../icon/InstrumentsInfo.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
+                            <graphic>
+                                <ImageView fx:id="imgInstrumentsInfo">
+                                    <image>
+                                        <Image url="@../icon/InstrumentsInfo.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CheckMenuItem fx:id="checkMenuItemTheme" mnemonicParsing="false" onAction="#handleCheckMenuItemTheme" text="Темная тема">
-                     <graphic>
-                        <ImageView fx:id="imgInstrumentsTheme">
-                           <image>
-                              <Image url="@../icon/InstrumentsTheme.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></CheckMenuItem>
+                            <graphic>
+                                <ImageView fx:id="imgInstrumentsTheme">
+                                    <image>
+                                        <Image url="@../icon/InstrumentsTheme.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </CheckMenuItem>
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
     </top>
     <center>
-        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <JFXTabPane fx:id="tabPane" BorderPane.alignment="CENTER">
             <tabs>
                 <Tab fx:id="tabProtocol" text="Протокол">
                     <content>
@@ -190,7 +197,7 @@
                                                     </image>
                                                 </ImageView>
                                                 <Label text="Заводской номер: " />
-                                                <TextField fx:id="labelProtocolSerialNumber" prefWidth="320.0" />
+                                                <JFXTextField fx:id="labelProtocolSerialNumber" prefWidth="320.0" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -204,7 +211,7 @@
                                                     </image>
                                                 </ImageView>
                                                 <Label text="Объект испытания:" />
-                                                <ComboBox fx:id="comboBoxProtocolTestItem" onShowing="#handleSelectTestItem" prefWidth="320.0" promptText="..." />
+                                                <JFXComboBox fx:id="comboBoxProtocolTestItem" prefWidth="320.0" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -236,7 +243,7 @@
                                     <children>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxSelectAllItems" mnemonicParsing="false" onAction="#handleSelectAllTests" text="Выделить все" />
+                                                <JFXCheckBox fx:id="checkBoxSelectAllItems" onAction="#handleSelectAllTests" text="Выделить все" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -244,7 +251,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxExperiment0" mnemonicParsing="false" onAction="#handleCheckBox0" text="0. Измерение сопротивления изоляции" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment0" onAction="#handleCheckBox0" text="0. Измерение сопротивления изоляции" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -252,9 +259,9 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="radioMegerBH" mnemonicParsing="false" onAction="#handleRadioExperiment0BH" text="0.1 ВН и корпус" />
-                                                <CheckBox fx:id="radioMegerHH" layoutX="610.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0HH" text="0.2 НН и корпус" />
-                                                <CheckBox fx:id="radioMegerBHHH" layoutX="961.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0BHHH" text="0.3 ВН и НН" />
+                                                <JFXCheckBox fx:id="radioMegerBH" mnemonicParsing="false" onAction="#handleRadioExperiment0BH" text="0.1 ВН и корпус" />
+                                                <JFXCheckBox fx:id="radioMegerHH" layoutX="610.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0HH" text="0.2 НН и корпус" />
+                                                <JFXCheckBox fx:id="radioMegerBHHH" layoutX="961.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0BHHH" text="0.3 ВН и НН" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
@@ -262,7 +269,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxExperiment1" mnemonicParsing="false" onAction="#handleCheckBox1" text="1. Измерение сопротивления обмоток постоянному току" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment1" mnemonicParsing="false" onAction="#handleCheckBox1" text="1. Измерение сопротивления обмоток постоянному току" wrapText="true" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -271,12 +278,12 @@
                                         <HBox spacing="16.0">
                                             <children>
 
-                                                <RadioButton fx:id="radioIKASBH" mnemonicParsing="false" onAction="#handleRadioExperiment1BH" text="1.1 ВН">
+                                                <JFXRadioButton fx:id="radioIKASBH" mnemonicParsing="false" onAction="#handleRadioExperiment1BH" text="1.1 ВН">
                                                     <toggleGroup>
                                                         <ToggleGroup fx:id="toggleExp1" />
                                                     </toggleGroup>
-                                                </RadioButton>
-                                                <RadioButton fx:id="radioIKASHH" mnemonicParsing="false" onAction="#handleRadioExperiment1HH" text="1.2 НН" toggleGroup="$toggleExp1" />
+                                                </JFXRadioButton>
+                                                <JFXRadioButton fx:id="radioIKASHH" mnemonicParsing="false" onAction="#handleRadioExperiment1HH" text="1.2 НН" toggleGroup="$toggleExp1" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
@@ -285,7 +292,7 @@
                                         <HBox spacing="16.0">
                                             <children>
 
-                                                <CheckBox fx:id="checkBoxExperiment2" mnemonicParsing="false" onAction="#handleCheckBox2" text="2. Определение коэффициента трансформации" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment2" mnemonicParsing="false" onAction="#handleCheckBox2" text="2. Определение коэффициента трансформации" wrapText="true" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -293,7 +300,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxExperiment3" mnemonicParsing="false" onAction="#handleCheckBox3" text="3. Проверка группы соединений обмоток" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment3" mnemonicParsing="false" onAction="#handleCheckBox3" text="3. Проверка группы соединений обмоток" wrapText="true" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -301,7 +308,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxExperiment4" mnemonicParsing="false" onAction="#handleCheckBox4" text="4. Реализация опыта короткого замыкания" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment4" mnemonicParsing="false" onAction="#handleCheckBox4" text="4. Реализация опыта короткого замыкания" wrapText="true" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -309,7 +316,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxExperiment5" mnemonicParsing="false" onAction="#handleCheckBox5" text="5. Реализация опыта холостого хода" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment5" mnemonicParsing="false" onAction="#handleCheckBox5" text="5. Реализация опыта холостого хода" wrapText="true" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -317,7 +324,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxExperiment6" mnemonicParsing="false" onAction="#handleCheckBox6" text="6. Испытание прочности межвитковой изоляции" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment6" mnemonicParsing="false" onAction="#handleCheckBox6" text="6. Испытание прочности межвитковой изоляции" wrapText="true" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -325,7 +332,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <CheckBox fx:id="checkBoxExperiment7" mnemonicParsing="false" onAction="#handleCheckBox7" text="7. Испытание электрической прочности изоляции" wrapText="true" />
+                                                <JFXCheckBox fx:id="checkBoxExperiment7" mnemonicParsing="false" onAction="#handleCheckBox7" text="7. Испытание электрической прочности изоляции" wrapText="true" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
@@ -333,11 +340,11 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <RadioButton fx:id="radioBH" mnemonicParsing="false" onAction="#handleRadioExperiment7BH" text="7.1. между ВН и корпусом">
+                                                <JFXRadioButton fx:id="radioBH" mnemonicParsing="false" onAction="#handleRadioExperiment7BH" text="7.1. между ВН и корпусом">
                                                     <toggleGroup>
                                                         <ToggleGroup fx:id="toggleExp8" />
                                                     </toggleGroup>
-                                                </RadioButton>
+                                                </JFXRadioButton>
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
@@ -345,7 +352,7 @@
                                         </HBox>
                                         <HBox spacing="16.0">
                                             <children>
-                                                <RadioButton fx:id="radioHH" mnemonicParsing="false" onAction="#handleRadioExperiment7HH" text="7.2. между НН и корпусом" toggleGroup="$toggleExp8" />
+                                                <JFXRadioButton fx:id="radioHH" mnemonicParsing="false" onAction="#handleRadioExperiment7HH" text="7.2. между НН и корпусом" toggleGroup="$toggleExp8" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
@@ -373,15 +380,12 @@
                                     <children>
                                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
                                             <children>
-                                                <Label alignment="CENTER" text="Выберите испытание для просмотра результатов:" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
-                                            <children>
-                                                <ComboBox fx:id="comboBoxResult" prefHeight="25.0" prefWidth="338.0" promptText="..." />
+                                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                       <children>
+                                                      <Label alignment="CENTER" text="Выберите испытание для просмотра результатов:" />
+                                                      <JFXComboBox fx:id="comboBoxResult" prefHeight="25.0" prefWidth="490.0" promptText="..." />
+                                       </children>
+                                    </VBox>
                                             </children>
                                             <padding>
                                                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -417,6 +421,6 @@
                     </content>
                 </Tab>
             </tabs>
-        </TabPane>
+        </JFXTabPane>
     </center>
 </BorderPane>

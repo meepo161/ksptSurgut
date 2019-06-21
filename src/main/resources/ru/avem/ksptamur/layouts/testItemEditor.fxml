@@ -23,7 +23,6 @@
                   <TableColumn fx:id="columnTestItemUBH" text="U ВН, В" />
                   <TableColumn fx:id="columnTestItemUHH" text="U НН, В" />
                   <TableColumn fx:id="columnTestItemP" text="P, КВА" />
-                  <TableColumn fx:id="columnTestItemPhase" text="Фазы" />
                   <TableColumn fx:id="columnTestItemIxx" text="I хх, %" />
                   <TableColumn fx:id="columnTestItemUkz" text="U КЗ, %" />
                   <TableColumn fx:id="columnTestItemXXTime" text="ХХ, с" />
@@ -40,7 +39,6 @@
                   <TextField fx:id="textTestItemUBH" alignment="CENTER" prefWidth="153.0" promptText="U ВН, В" />
                   <TextField fx:id="textTestItemUHH" alignment="CENTER" prefWidth="153.0" promptText="U HН, В" />
                   <TextField fx:id="textTestItemP" alignment="CENTER" prefWidth="151.0" promptText="P, КВА" />
-                      <TextField fx:id="textTestItemPhase" alignment="CENTER" prefWidth="151.0" promptText="Кол-во фаз" />
                   <TextField fx:id="textTestItemIxx" alignment="CENTER" prefWidth="153.0" promptText="I хх, %" />
                   <TextField fx:id="textTestItemUkz" alignment="CENTER" prefWidth="151.0" promptText="U КЗ, %" />
                   <TextField fx:id="textTestItemXXTime" alignment="CENTER" prefWidth="151.0" promptText="ХХ, с" />

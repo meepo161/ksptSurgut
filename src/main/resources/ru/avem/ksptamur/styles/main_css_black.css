@@ -8,3 +8,50 @@
 .table-column {
 	-fx-alignment: CENTER;
 }
+
+.jfx-text-field {
+    -jfx-focus-color: #FF6F61;
+    -jfx-unfocus-color: #898989;
+    -fx-padding: 0.333333em 0 0.333333em 0;
+    -fx-text-fill: #FFFFFF;
+}
+
+.jfx-combo-box {
+    -jfx-focus-color: #FF6F61;
+    -jfx-unfocus-color: #898989;
+    -fx-prompt-text-fill: #898989;
+    -fx-text-fill: #FFFFFF;
+}
+
+.menu-bar {
+ -fx-background-color: #444444;
+ }
+
+
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: #4F4F4F;
+}
+
+.jfx-tab-pane .headers-region .tab:selected .tab-container .tab-label {
+    -fx-text-fill: WHITE;
+}
+.jfx-tab-pane .headers-region .tab-label {
+    -fx-text-fill: #AAAAAA;
+}
+
+.jfx-tab-pane .headers-region .tab-selected-line {
+    -fx-background-color: #FF6F61;
+}
+
+.jfx-tab-pane .headers-region > .tab > .jfx-rippler {
+    -jfx-rippler-fill: #FF6F61;
+}
+
+.jfx-tab-pane .headers-region .tab-selected-line {
+    -fx-background-color: #FF6F61;
+}
+
+.jfx-check-box {
+    -jfx-unchecked-color: #999999;
+    -jfx-checked-color: #FF6F61;
+}

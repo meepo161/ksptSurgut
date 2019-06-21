@@ -22,9 +22,9 @@ public abstract class DataBaseRepository {
 
             TestItemRepository.createTable(TestItem.class);
 
-            TestItem testItem1 = new TestItem("500В", 500.0, 220.0, 2.0, 3.0, 32.0, 4.0, 60.0, 3000, 1.0);
+            TestItem testItem1 = new TestItem("500В", 500.0, 220.0, 2.0, 32.0, 4.0, 60.0, 3000, 1.0);
             TestItemRepository.insertTestItem(testItem1);
-            TestItemRepository.insertTestItem(new TestItem("1000В", 1000.0, 220.0, 2.0, 3.0, 32.0, 4.0, 60.0, 3000, 1.0));
+            TestItemRepository.insertTestItem(new TestItem("1000В", 1000.0, 220.0, 2.0, 32.0, 4.0, 60.0, 3000, 1.0));
 
             ProtocolRepository.createTable(Protocol.class);
 

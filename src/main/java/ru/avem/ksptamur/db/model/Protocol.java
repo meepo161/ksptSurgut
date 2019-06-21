@@ -222,8 +222,6 @@ public class Protocol {
     @DatabaseField
     private double p;
     @DatabaseField
-    private double phase;
-    @DatabaseField
     private double ixx;
     @DatabaseField
     private double ukz;
@@ -289,7 +287,7 @@ public class Protocol {
 
     public ru.avem.ksptamur.db.model.TestItem getObject() {
         return new ru.avem.ksptamur.db.model.TestItem(type, ubh,
-                uhh, p, phase, ixx, ukz, xxtime, uinsulation, umeger);
+                uhh, p, ixx, ukz, xxtime, uinsulation, umeger);
     }
 
     public void setObject(ru.avem.ksptamur.db.model.TestItem object) {
@@ -297,7 +295,6 @@ public class Protocol {
         ubh = object.getUbh();
         uhh = object.getUhh();
         p = object.getP();
-        phase = object.getPhase();
         ixx = object.getIxx();
         ukz = object.getUkz();
         xxtime = object.getXxtime();
@@ -1074,14 +1071,6 @@ public class Protocol {
         this.p = p;
     }
 
-    public double getPhase() {
-        return phase;
-    }
-
-    public void setPhase(double phase) {
-        this.phase = phase;
-    }
-
     public double getIxx() {
         return ixx;
     }
@@ -1201,7 +1190,6 @@ public class Protocol {
                 Double.compare(protocol.ubh, ubh) == 0 &&
                 Double.compare(protocol.uhh, uhh) == 0 &&
                 Double.compare(protocol.p, p) == 0 &&
-                Double.compare(protocol.phase, phase) == 0 &&
                 Double.compare(protocol.ixx, ixx) == 0 &&
                 Double.compare(protocol.ukz, ukz) == 0 &&
                 Double.compare(protocol.xxtime, xxtime) == 0 &&
@@ -1313,6 +1301,6 @@ public class Protocol {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, e0WindingBH, e0UBH, e0R15BH, e0R60BH, e0CoefBH, e0TBH, e0ResultBH, e0WindingHH, e0UHH, e0R15HH, e0R60HH, e0CoefHH, e0THH, e0ResultHH, e0WindingBHHH, e0UBHHH, e0R15BHHH, e0R60BHHH, e0CoefBHHH, e0TBHHH, e0ResultBHHH, e1WindingBH, e1ABBH, e1BCBH, e1CABH, e1TBH, e1ResultBH, e1WindingHH, e1ABHH, e1BCHH, e1CAHH, e1THH, e1ResultHH, e2UInputAB, e2UInputBC, e2UInputCA, e2UInputAvr, e2UOutputAB, e2UOutputBC, e2UOutputCA, e2UOutputAvr, e2DiffU, e2F, e2Result, e3UBH, e3UHH, e3F, e3Result, e4WindingBH, e4WindingHH, e4UBH, e4UHH, e4Result, e5UKZV, e5UKZPercent, e5UKZDiff, e5IA, e5IB, e5IC, e5Pp, e5F, e5Result, e6UBH, e6IA, e6IB, e6IC, e6IAPercent, e6IBPercent, e6ICPercent, e6IADiff, e6IBDiff, e6ICDiff, e6Pp, e6Cos, e6F, e6Result, e7UInput, e7IBH, e7F, e7Time, e7Result, e8TypeBHandCorps, e8IBHandCorps, e8UBHandCorps, e8TimeBHandCorps, e8ResultBHandCorps, e8TypeHHandCorps, e8IHHandCorps, e8UHHandCorps, e8TimeHHandCorps, e8ResultHHandCorps, serialNumber, type, ubh, uhh, p, phase, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
+        return Objects.hash(id, e0WindingBH, e0UBH, e0R15BH, e0R60BH, e0CoefBH, e0TBH, e0ResultBH, e0WindingHH, e0UHH, e0R15HH, e0R60HH, e0CoefHH, e0THH, e0ResultHH, e0WindingBHHH, e0UBHHH, e0R15BHHH, e0R60BHHH, e0CoefBHHH, e0TBHHH, e0ResultBHHH, e1WindingBH, e1ABBH, e1BCBH, e1CABH, e1TBH, e1ResultBH, e1WindingHH, e1ABHH, e1BCHH, e1CAHH, e1THH, e1ResultHH, e2UInputAB, e2UInputBC, e2UInputCA, e2UInputAvr, e2UOutputAB, e2UOutputBC, e2UOutputCA, e2UOutputAvr, e2DiffU, e2F, e2Result, e3UBH, e3UHH, e3F, e3Result, e4WindingBH, e4WindingHH, e4UBH, e4UHH, e4Result, e5UKZV, e5UKZPercent, e5UKZDiff, e5IA, e5IB, e5IC, e5Pp, e5F, e5Result, e6UBH, e6IA, e6IB, e6IC, e6IAPercent, e6IBPercent, e6ICPercent, e6IADiff, e6IBDiff, e6ICDiff, e6Pp, e6Cos, e6F, e6Result, e7UInput, e7IBH, e7F, e7Time, e7Result, e8TypeBHandCorps, e8IBHandCorps, e8UBHandCorps, e8TimeBHandCorps, e8ResultBHandCorps, e8TypeHHandCorps, e8IHHandCorps, e8UHHandCorps, e8TimeHHandCorps, e8ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
     }
 }

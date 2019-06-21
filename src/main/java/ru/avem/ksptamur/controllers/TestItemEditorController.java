@@ -17,7 +17,6 @@ import ru.avem.ksptamur.db.model.TestItem;
 import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.utils.Toast;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static ru.avem.ksptamur.Main.PRIMARY_STAGE;
@@ -48,9 +47,6 @@ public class TestItemEditorController {
     private TextField textTestItemP;
 
     @FXML
-    private TextField textTestItemPhase;
-
-    @FXML
     private TextField textTestItemIxx;
 
     @FXML
@@ -77,9 +73,6 @@ public class TestItemEditorController {
 
     @FXML
     private TableColumn<TestItem, Double> columnTestItemP;
-
-    @FXML
-    private TableColumn<TestItem, Double> columnTestItemPhase;
 
     @FXML
     private TableColumn<TestItem, Double> columnTestItemIxx;
@@ -136,15 +129,6 @@ public class TestItemEditorController {
         columnTestItemP.setOnEditCommit(t -> {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setP(t.getNewValue());
-                    TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
-                }
-        );
-        columnTestItemPhase.setCellValueFactory(new PropertyValueFactory<>("phase"));
-        columnTestItemPhase.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        columnTestItemPhase.setOnEditCommit(t -> {
-                    TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    editingTestItem.setPhase(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
                     mainModel.setNeedRefresh(true);
                 }
@@ -215,7 +199,6 @@ public class TestItemEditorController {
                     Double.parseDouble(textTestItemUBH.getText()),
                     Double.parseDouble(textTestItemUHH.getText()),
                     Double.parseDouble(textTestItemP.getText()),
-                    Double.parseDouble(textTestItemPhase.getText()),
                     Double.parseDouble(textTestItemIxx.getText()),
                     Double.parseDouble(textTestItemUkz.getText()),
                     Double.parseDouble(textTestItemXXTime.getText()),
@@ -262,9 +245,6 @@ public class TestItemEditorController {
             errorMessage += "Неверное значение U HH\n";
         }
         if (textTestItemP.getText() == null || textTestItemP.getText().length() == 0) {
-            errorMessage += "Неверное значение P\n";
-        }
-        if (textTestItemPhase.getText() == null || textTestItemPhase.getText().length() == 0 || textTestItemPhase.getText().length() == 0 || textTestItemPhase.getText().length() == 0) {
             errorMessage += "Неверное значение P\n";
         }
         if (textTestItemIxx.getText() == null || textTestItemIxx.getText().length() == 0) {

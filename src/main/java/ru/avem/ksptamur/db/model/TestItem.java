@@ -24,9 +24,6 @@ public class TestItem {
     private double p;
 
     @DatabaseField
-    private double phase;
-
-    @DatabaseField
     private double ixx;
 
     @DatabaseField
@@ -48,12 +45,11 @@ public class TestItem {
         // ORMLite needs a no-arg constructor
     }
 
-    public TestItem(String type, double ubh, double uhh, double p, double phase, double ixx, double ukz, double xxtime, double uinsulation, double umeger) {
+    public TestItem(String type, double ubh, double uhh, double p, double ixx, double ukz, double xxtime, double uinsulation, double umeger) {
         this.type = type;
         this.ubh = ubh;
         this.uhh = uhh;
         this.p = p;
-        this.phase = phase;
         this.ixx = ixx;
         this.ukz = ukz;
         this.xxtime = xxtime;
@@ -100,14 +96,6 @@ public class TestItem {
 
     public void setP(double p) {
         this.p = p;
-    }
-
-    public double getPhase() {
-        return phase;
-    }
-
-    public void setPhase(double phase) {
-        this.phase = phase;
     }
 
     public double getIxx() {
@@ -164,7 +152,6 @@ public class TestItem {
                 Double.compare(testItem.ubh, ubh) == 0 &&
                 Double.compare(testItem.uhh, uhh) == 0 &&
                 Double.compare(testItem.p, p) == 0 &&
-                Double.compare(testItem.phase, phase) == 0 &&
                 Double.compare(testItem.ixx, ixx) == 0 &&
                 Double.compare(testItem.ukz, ukz) == 0 &&
                 Double.compare(testItem.xxtime, xxtime) == 0 &&
@@ -175,6 +162,6 @@ public class TestItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, ubh, uhh, p, phase, ixx, ukz, xxtime, uinsulation, withMeger);
+        return Objects.hash(id, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, withMeger);
     }
 }

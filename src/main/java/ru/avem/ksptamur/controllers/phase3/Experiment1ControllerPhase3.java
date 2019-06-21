@@ -169,6 +169,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         buttonStartStop.setText("Запустить");
         buttonNext.setDisable(false);
         buttonCancelAll.setDisable(false);
+        communicationModel.finalizeAllDevices();
     }
 
     private void startExperiment() {

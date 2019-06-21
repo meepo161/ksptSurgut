@@ -179,6 +179,9 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         buttonNext.setDisable(false);
         buttonCancelAll.setDisable(false);
         isCanceled = true;
+        communicationModel.finalizeAllDevices();
+        communicationModel.stopObject();
+        communicationModel.offAllKms();
     }
 
     private void startExperiment() {

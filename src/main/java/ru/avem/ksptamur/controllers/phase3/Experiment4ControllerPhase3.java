@@ -216,6 +216,9 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
         buttonStartStop.setDisable(true);
         cause = "Отменено оператором";
         isExperimentRunning = false;
+        communicationModel.finalizeAllDevices();
+        communicationModel.stopObject();
+        communicationModel.offAllKms();
     }
 
 

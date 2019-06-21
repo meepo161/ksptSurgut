@@ -187,6 +187,9 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
         buttonStartStop.setDisable(true);
         cause = "Отменено оператором";
         isExperimentRunning = false;
+        communicationModel.finalizeAllDevices();
+        communicationModel.stopObject();
+        communicationModel.offAllKms();
     }
 
     private void startExperiment() {
@@ -295,7 +298,6 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 is40to5State = false;
                 is200to5State = true;
             }
-            sleep(9000000);
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 communicationModel.setObjectParams(200 * HZ, 5 * VOLT, 200 * HZ);

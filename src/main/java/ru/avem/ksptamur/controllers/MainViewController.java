@@ -1,5 +1,6 @@
 package ru.avem.ksptamur.controllers;
 
+import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -45,7 +46,6 @@ import static ru.avem.ksptamur.Main.*;
 public class MainViewController implements Statable {
 
 
-
     @FXML
     private ImageView imgProtocolNew;
     @FXML
@@ -86,7 +86,10 @@ public class MainViewController implements Statable {
     private Button buttonProtocolNext;
 
     @FXML
-    private TextField labelProtocolSerialNumber;
+    private JFXTextField labelProtocolSerialNumber;
+    @FXML
+    private JFXComboBox<TestItem> comboBoxProtocolTestItem;
+
     @FXML
     private MenuItem menuBarProtocolSaveAs;
     @FXML
@@ -99,24 +102,24 @@ public class MainViewController implements Statable {
     private CheckMenuItem checkMenuItemTheme;
 
     @FXML
-    private RadioButton radioBH;
+    private JFXRadioButton radioBH;
     @FXML
-    private RadioButton radioHH;
+    private JFXRadioButton radioHH;
 
     @FXML
-    private CheckBox radioMegerBH;
+    private JFXCheckBox radioMegerBH;
     @FXML
-    private CheckBox radioMegerHH;
+    private JFXCheckBox radioMegerHH;
     @FXML
-    private CheckBox radioMegerBHHH;
+    private JFXCheckBox radioMegerBHHH;
 
     @FXML
-    private RadioButton radioIKASBH;
+    private JFXRadioButton radioIKASBH;
     @FXML
-    private RadioButton radioIKASHH;
+    private JFXRadioButton radioIKASHH;
 
     @FXML
-    private TabPane tabPane;
+    private JFXTabPane tabPane;
     @FXML
     private Tab tabProtocol;
     @FXML
@@ -125,26 +128,24 @@ public class MainViewController implements Statable {
     private Tab tabResults;
 
     @FXML
-    private CheckBox checkBoxSelectAllItems;
+    private JFXCheckBox checkBoxSelectAllItems;
     @FXML
-    private CheckBox checkBoxExperiment0;
+    private JFXCheckBox checkBoxExperiment0;
     @FXML
-    private CheckBox checkBoxExperiment1;
+    private JFXCheckBox checkBoxExperiment1;
     @FXML
-    private CheckBox checkBoxExperiment2;
+    private JFXCheckBox checkBoxExperiment2;
     @FXML
-    private CheckBox checkBoxExperiment3;
+    private JFXCheckBox checkBoxExperiment3;
     @FXML
-    private CheckBox checkBoxExperiment4;
+    private JFXCheckBox checkBoxExperiment4;
     @FXML
-    private CheckBox checkBoxExperiment5;
+    private JFXCheckBox checkBoxExperiment5;
     @FXML
-    private CheckBox checkBoxExperiment6;
+    private JFXCheckBox checkBoxExperiment6;
     @FXML
-    private CheckBox checkBoxExperiment7;
+    private JFXCheckBox checkBoxExperiment7;
 
-    @FXML
-    private ComboBox<TestItem> comboBoxProtocolTestItem;
     @FXML
     private ComboBox<String> comboBoxResult;
 
