@@ -184,12 +184,12 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void stopExperiment() {
+        isExperimentRunning = false;
         isNeedToRefresh = false;
         buttonStartStop.setDisable(true);
         cause = "Отменено оператором";
-        isExperimentRunning = false;
-        communicationModel.finalizeAllDevices();
         communicationModel.stopObject();
+        communicationModel.finalizeAllDevices();
         communicationModel.offAllKms();
     }
 
@@ -295,10 +295,6 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
             isNeedToRefresh = false;
             isExperimentRunning = false;
             isExperimentEnd = true;
-            communicationModel.stopObject();
-
-            communicationModel.offAllKms();
-            communicationModel.finalizeAllDevices();
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));

@@ -211,7 +211,7 @@
                                                     </image>
                                                 </ImageView>
                                                 <Label text="Объект испытания:" />
-                                                <JFXComboBox fx:id="comboBoxProtocolTestItem" prefWidth="320.0" />
+                                                <JFXComboBox fx:id="comboBoxTestItem" onAction="#handleSelectTestItem" prefWidth="320.0" />
                                             </children>
                                             <padding>
                                                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

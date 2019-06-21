@@ -88,7 +88,7 @@ public class MainViewController implements Statable {
     @FXML
     private JFXTextField labelProtocolSerialNumber;
     @FXML
-    private JFXComboBox<TestItem> comboBoxProtocolTestItem;
+    private JFXComboBox<TestItem> comboBoxTestItem;
 
     @FXML
     private MenuItem menuBarProtocolSaveAs;
@@ -200,7 +200,7 @@ public class MainViewController implements Statable {
 
     private void refreshTestItems() {
         List<TestItem> allTestItems = TestItemRepository.getAllTestItems();
-        comboBoxProtocolTestItem.getItems().setAll(allTestItems);
+        comboBoxTestItem.getItems().setAll(allTestItems);
     }
 
     private void initializeComboBoxResult() {
@@ -326,8 +326,8 @@ public class MainViewController implements Statable {
         toInitIdleState();
         labelProtocolSerialNumber.clear();
         labelProtocolSerialNumber.setDisable(false);
-        comboBoxProtocolTestItem.getSelectionModel().clearSelection();
-        comboBoxProtocolTestItem.setDisable(false);
+        comboBoxTestItem.getSelectionModel().clearSelection();
+        comboBoxTestItem.setDisable(false);
         buttonProtocolCancel.setText("Очистить");
         buttonProtocolNext.setText("Создать");
         setLeftStatus("");
@@ -343,11 +343,11 @@ public class MainViewController implements Statable {
         tabExperiments.setDisable(false);
         tabPane.getSelectionModel().select(tabExperiments);
         labelProtocolSerialNumber.setDisable(true);
-        comboBoxProtocolTestItem.setDisable(true);
+        comboBoxTestItem.setDisable(true);
         buttonProtocolCancel.setText("Новый");
         buttonProtocolNext.setText("Далее");
         setLeftStatus("Заводской номер: " + labelProtocolSerialNumber.getText());
-        setRightStatus("Объект испытания: " + comboBoxProtocolTestItem.getSelectionModel().getSelectedItem());
+        setRightStatus("Объект испытания: " + comboBoxTestItem.getSelectionModel().getSelectedItem());
         menuBarProtocolSaveAs.setDisable(false);
         menuBarDBTestItems.setDisable(true);
         currentState = waitState;
@@ -387,7 +387,7 @@ public class MainViewController implements Statable {
             Unmarshaller um = context.createUnmarshaller();
             Protocol protocol = (Protocol) um.unmarshal(file);
             labelProtocolSerialNumber.setText(protocol.getSerialNumber());
-            comboBoxProtocolTestItem.getSelectionModel().select(protocol.getObject());
+            comboBoxTestItem.getSelectionModel().select(protocol.getObject());
             mainModel.setCurrentProtocol(protocol);
             currentState.toWaitState();
             Toast.makeText(String.format("Протокол %s успешно загружен", file.getName())).show(Toast.ToastType.INFORMATION);
@@ -420,7 +420,7 @@ public class MainViewController implements Statable {
             if (!controller.isCanceled()) {
                 mainModel.applyIntermediateProtocol();
                 labelProtocolSerialNumber.setText(mainModel.getCurrentProtocol().getSerialNumber());
-                comboBoxProtocolTestItem.getSelectionModel().select(mainModel.getCurrentProtocol().getObject());
+                comboBoxTestItem.getSelectionModel().select(mainModel.getCurrentProtocol().getObject());
                 currentState.toWaitState();
             }
         }
@@ -610,8 +610,8 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleButtonProtocolNext() {
-        if (!labelProtocolSerialNumber.getText().isEmpty() && !comboBoxProtocolTestItem.getSelectionModel().isEmpty()) {
-            mainModel.createNewProtocol(labelProtocolSerialNumber.getText(), comboBoxProtocolTestItem.getSelectionModel().getSelectedItem());
+        if (!labelProtocolSerialNumber.getText().isEmpty() && !comboBoxTestItem.getSelectionModel().isEmpty()) {
+            mainModel.createNewProtocol(labelProtocolSerialNumber.getText(), comboBoxTestItem.getSelectionModel().getSelectedItem());
             currentState.toWaitState();
         } else {
             Toast.makeText("Введите заводской номер и выберите объект испытания").show(Toast.ToastType.INFORMATION);

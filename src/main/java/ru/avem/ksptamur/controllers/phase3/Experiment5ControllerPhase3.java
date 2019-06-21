@@ -228,8 +228,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
         buttonStartStop.setDisable(true);
         cause = "Отменено оператором";
         isExperimentRunning = false;
-        communicationModel.finalizeAllDevices();
         communicationModel.stopObject();
+        communicationModel.finalizeAllDevices();
         communicationModel.offAllKms();
     }
 
@@ -338,7 +338,7 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 appendOneMessageToLog("Измерение тока первичной обмотки и мощности потерь");
             }
 
-            if (isExperimentRunning  && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 XXTime = (int) currentProtocol.getXxtime();
                 appendOneMessageToLog("Ждем " + XXTime + " секунд");
             }
