@@ -282,7 +282,7 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING400) {
-                    communicationModel.onKM2();
+                    communicationModel.onKM3();
                     communicationModel.onKM5();
                     communicationModel.onKM13();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
@@ -295,6 +295,7 @@ public class Experiment6ControllerPhase3 extends DeviceState implements Experime
                 is40to5State = false;
                 is200to5State = true;
             }
+            sleep(9000000);
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 communicationModel.setObjectParams(200 * HZ, 5 * VOLT, 200 * HZ);

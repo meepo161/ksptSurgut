@@ -294,8 +294,8 @@ public class Experiment2ControllerPhase3 extends DeviceState implements Experime
             isExperimentEnd = true;
             communicationModel.stopObject();
 
-            communicationModel.offAllKms(); //разбираем все возможные схемы
-            communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
+            communicationModel.offAllKms();
+            communicationModel.finalizeAllDevices();
 
             if (!cause.equals("")) {
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));

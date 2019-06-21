@@ -45,8 +45,39 @@ import static ru.avem.ksptamur.Main.*;
 public class MainViewController implements Statable {
 
 
+
+    @FXML
+    private ImageView imgProtocolNew;
+    @FXML
+    private ImageView imgProtocolOpen;
+    @FXML
+    private ImageView imgProtocolOpenFromDB;
+    @FXML
+    private ImageView imgProtocolSaveAs;
+    @FXML
+    private ImageView imgProtocolExit;
+    @FXML
+    private ImageView imgTestItem;
     @FXML
     private ImageView imgSerialNumber;
+    @FXML
+    private ImageView imgDBTestItem;
+    @FXML
+    private ImageView imgDBProtocols;
+    @FXML
+    private ImageView imgDBProfiles;
+    @FXML
+    private ImageView imgDBImport;
+    @FXML
+    private ImageView imgDBExport;
+    @FXML
+    private ImageView imgInstrumentsDeviceStates;
+    @FXML
+    private ImageView imgInstrumentsCurrentProtection;
+    @FXML
+    private ImageView imgInstrumentsInfo;
+    @FXML
+    private ImageView imgInstrumentsTheme;
 
 
     @FXML
@@ -178,26 +209,26 @@ public class MainViewController implements Statable {
             switch (comboBoxResult.getSelectionModel().getSelectedItem()) {
                 case Constants.Experiments.EXPERIMENT0_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("ВН и корпус",   currentProtocol.getE0WindingBH()));
-                    resultData.add(new ResultModel("R15",           currentProtocol.getE0R15BH()));
-                    resultData.add(new ResultModel("R60",           currentProtocol.getE0R60BH()));
-                    resultData.add(new ResultModel("Коэф",          currentProtocol.getE0CoefBH()));
-                    resultData.add(new ResultModel("t, °С",         currentProtocol.getE0TBH()));
-                    resultData.add(new ResultModel("Результат",     currentProtocol.getE0ResultBH()));
+                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE0WindingBH()));
+                    resultData.add(new ResultModel("R15", currentProtocol.getE0R15BH()));
+                    resultData.add(new ResultModel("R60", currentProtocol.getE0R60BH()));
+                    resultData.add(new ResultModel("Коэф", currentProtocol.getE0CoefBH()));
+                    resultData.add(new ResultModel("t, °С", currentProtocol.getE0TBH()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE0ResultBH()));
 
-                    resultData.add(new ResultModel("ВН и корпус",   currentProtocol.getE0WindingHH()));
-                    resultData.add(new ResultModel("R15",           currentProtocol.getE0R15HH()));
-                    resultData.add(new ResultModel("R60",           currentProtocol.getE0R60HH()));
-                    resultData.add(new ResultModel("Коэф",          currentProtocol.getE0CoefHH()));
-                    resultData.add(new ResultModel("t, °С",         currentProtocol.getE0THH()));
-                    resultData.add(new ResultModel("Результат",     currentProtocol.getE0ResultHH()));
+                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE0WindingHH()));
+                    resultData.add(new ResultModel("R15", currentProtocol.getE0R15HH()));
+                    resultData.add(new ResultModel("R60", currentProtocol.getE0R60HH()));
+                    resultData.add(new ResultModel("Коэф", currentProtocol.getE0CoefHH()));
+                    resultData.add(new ResultModel("t, °С", currentProtocol.getE0THH()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE0ResultHH()));
 
-                    resultData.add(new ResultModel("ВН и корпус",   currentProtocol.getE0WindingBHHH()));
-                    resultData.add(new ResultModel("R15",           currentProtocol.getE0R15BHHH()));
-                    resultData.add(new ResultModel("R60",           currentProtocol.getE0R60BHHH()));
-                    resultData.add(new ResultModel("Коэф",          currentProtocol.getE0CoefBHHH()));
-                    resultData.add(new ResultModel("t, °С",         currentProtocol.getE0TBHHH()));
-                    resultData.add(new ResultModel("Результат",     currentProtocol.getE0ResultBHHH()));
+                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE0WindingBHHH()));
+                    resultData.add(new ResultModel("R15", currentProtocol.getE0R15BHHH()));
+                    resultData.add(new ResultModel("R60", currentProtocol.getE0R60BHHH()));
+                    resultData.add(new ResultModel("Коэф", currentProtocol.getE0CoefBHHH()));
+                    resultData.add(new ResultModel("t, °С", currentProtocol.getE0TBHHH()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE0ResultBHHH()));
 
                     break;
                 case Constants.Experiments.EXPERIMENT1_NAME:
@@ -926,14 +957,51 @@ public class MainViewController implements Statable {
                 blackout.setBrightness(0);
 
                 imgSerialNumber.setEffect(blackout);
+                imgTestItem.setEffect(blackout);
+
+                imgProtocolNew.setEffect(blackout);
+                imgProtocolOpen.setEffect(blackout);
+                imgProtocolOpenFromDB.setEffect(blackout);
+                imgProtocolSaveAs.setEffect(blackout);
+                imgProtocolExit.setEffect(blackout);
+
+                imgDBTestItem.setEffect(blackout);
+                imgDBProtocols.setEffect(blackout);
+                imgDBProfiles.setEffect(blackout);
+                imgDBExport.setEffect(blackout);
+                imgDBImport.setEffect(blackout);
+
+                imgInstrumentsDeviceStates.setEffect(blackout);
+                imgInstrumentsCurrentProtection.setEffect(blackout);
+                imgInstrumentsInfo.setEffect(blackout);
+                imgInstrumentsTheme.setEffect(blackout);
+
 
             } else {
                 root.getStylesheets().set(0, Main.class.getResource("styles/main_css_black.css").toURI().toString());
                 css = "black";
                 ColorAdjust blackout = new ColorAdjust();
-                blackout.setBrightness(0.7);
+                blackout.setBrightness(1);
 
                 imgSerialNumber.setEffect(blackout);
+                imgTestItem.setEffect(blackout);
+
+                imgProtocolNew.setEffect(blackout);
+                imgProtocolOpen.setEffect(blackout);
+                imgProtocolOpenFromDB.setEffect(blackout);
+                imgProtocolSaveAs.setEffect(blackout);
+                imgProtocolExit.setEffect(blackout);
+
+                imgDBTestItem.setEffect(blackout);
+                imgDBProtocols.setEffect(blackout);
+                imgDBProfiles.setEffect(blackout);
+                imgDBExport.setEffect(blackout);
+                imgDBImport.setEffect(blackout);
+
+                imgInstrumentsDeviceStates.setEffect(blackout);
+                imgInstrumentsCurrentProtection.setEffect(blackout);
+                imgInstrumentsInfo.setEffect(blackout);
+                imgInstrumentsTheme.setEffect(blackout);
             }
 
         } catch (URISyntaxException e) {

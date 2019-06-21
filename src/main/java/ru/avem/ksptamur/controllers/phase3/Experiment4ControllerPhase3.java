@@ -331,13 +331,12 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                if (UHHTestItem < WIDDING400) {
-                    communicationModel.onKM3();
-                    communicationModel.onKM17();
+                if (Ukz < 380) {
+                    communicationModel.onKM2();
                     communicationModel.onKM13();
-                } else if (UHHTestItem > WIDDING400) {
-                    appendOneMessageToLog("Напряжение короткого больше допустимого");
-                    appendOneMessageToLog("Проверьте корректность введенных данных в БД");
+                } else if (Ukz > 380) {
+                    communicationModel.onKM3();
+                    communicationModel.onKM13();
                 }
                 if (Ukz > 380.0) {
                     appendOneMessageToLog("Напряжение короткого больше допустимого");
