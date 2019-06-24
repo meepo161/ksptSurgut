@@ -2,6 +2,14 @@
 	-fx-alignment: CENTER;
 }
 
+.jfx-text-field {
+    -jfx-focus-color: #0096C9;
+}
+
+.jfx-combo-box {
+    -jfx-focus-color: #0096C9;
+}
+
 .jfx-tab-pane .tab-header-background {
     -fx-background-color: #CCCCCC;
 }
@@ -14,18 +22,24 @@
 }
 
 .jfx-tab-pane .headers-region .tab-selected-line {
-    -fx-background-color: #1560BD;
+ /*   -fx-background-color: #1560BD; */
+    -fx-background-color: #0096C9;
 }
 
 .jfx-tab-pane .headers-region > .tab > .jfx-rippler {
-    -jfx-rippler-fill: #1560BD;
+    -jfx-rippler-fill: #0096C9;
 }
 
 .jfx-tab-pane .headers-region .tab-selected-line {
-    -fx-background-color: #1560BD;
+    -fx-background-color: #0096C9;
 }
 
 .jfx-check-box {
     -jfx-unchecked-color: #5A5A5A;
-    -jfx-checked-color: #1560BD;
+    -jfx-checked-color: #0096C9;
+}
+
+.jfx-radio-button{
+    -jfx-selected-color: #0096C9;
+    -jfx-unselected-color: #5A5A5A;
 }

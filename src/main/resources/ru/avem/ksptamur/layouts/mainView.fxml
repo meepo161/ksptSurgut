@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -16,12 +15,14 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768" prefWidth="1366" stylesheets="@../styles/main_css.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptamur.controllers.MainViewController">
@@ -175,201 +176,213 @@
     <center>
         <JFXTabPane fx:id="tabPane" BorderPane.alignment="CENTER">
             <tabs>
-                <Tab fx:id="tabProtocol" text="Протокол">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <VBox alignment="CENTER" spacing="16.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <HBox alignment="CENTER" spacing="16.0">
-                                            <children>
-                                                <Label alignment="TOP_CENTER" text="Заполните поля для создания нового протокола" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
-                                            <children>
-                                                <ImageView fx:id="imgSerialNumber" fitHeight="26.0" fitWidth="26.0">
-                                                    <image>
-                                                        <Image url="@../icon/serialNumber.png" />
-                                                    </image>
-                                                </ImageView>
-                                                <Label text="Заводской номер: " />
-                                                <JFXTextField fx:id="labelProtocolSerialNumber" prefWidth="320.0" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
-                                            <children>
-                                                <ImageView fx:id="imgTestItem" fitHeight="26.0" fitWidth="26.0">
-                                                    <image>
-                                                        <Image url="@../icon/testitem.png" />
-                                                    </image>
-                                                </ImageView>
-                                                <Label text="Объект испытания:" />
-                                                <JFXComboBox fx:id="comboBoxTestItem" onAction="#handleSelectTestItem" prefWidth="320.0" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
-                                            <children>
-                                                <Button fx:id="buttonProtocolCancel" mnemonicParsing="false" onAction="#handleButtonProtocolCancel" text="Очистить" />
-                                                <Button fx:id="buttonProtocolNext" mnemonicParsing="false" onAction="#handleButtonProtocolNext" text="Создать" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                            </padding>
-                                        </HBox>
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                    </padding>
-                                </VBox>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
                 <Tab fx:id="tabExperiments" text="Испытания">
                     <content>
-                        <AnchorPane>
-                            <children>
-                                <VBox alignment="CENTER" prefHeight="714.0" prefWidth="1366.0" spacing="8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxSelectAllItems" onAction="#handleSelectAllTests" text="Выделить все" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxExperiment0" onAction="#handleCheckBox0" text="0. Измерение сопротивления изоляции" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="radioMegerBH" mnemonicParsing="false" onAction="#handleRadioExperiment0BH" text="0.1 ВН и корпус" />
-                                                <JFXCheckBox fx:id="radioMegerHH" layoutX="610.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0HH" text="0.2 НН и корпус" />
-                                                <JFXCheckBox fx:id="radioMegerBHHH" layoutX="961.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRadioExperiment0BHHH" text="0.3 ВН и НН" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxExperiment1" mnemonicParsing="false" onAction="#handleCheckBox1" text="1. Измерение сопротивления обмоток постоянному току" wrapText="true" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-
-                                                <JFXRadioButton fx:id="radioIKASBH" mnemonicParsing="false" onAction="#handleRadioExperiment1BH" text="1.1 ВН">
-                                                    <toggleGroup>
-                                                        <ToggleGroup fx:id="toggleExp1" />
-                                                    </toggleGroup>
-                                                </JFXRadioButton>
-                                                <JFXRadioButton fx:id="radioIKASHH" mnemonicParsing="false" onAction="#handleRadioExperiment1HH" text="1.2 НН" toggleGroup="$toggleExp1" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-
-                                                <JFXCheckBox fx:id="checkBoxExperiment2" mnemonicParsing="false" onAction="#handleCheckBox2" text="2. Определение коэффициента трансформации" wrapText="true" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxExperiment3" mnemonicParsing="false" onAction="#handleCheckBox3" text="3. Проверка группы соединений обмоток" wrapText="true" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxExperiment4" mnemonicParsing="false" onAction="#handleCheckBox4" text="4. Реализация опыта короткого замыкания" wrapText="true" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxExperiment5" mnemonicParsing="false" onAction="#handleCheckBox5" text="5. Реализация опыта холостого хода" wrapText="true" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxExperiment6" mnemonicParsing="false" onAction="#handleCheckBox6" text="6. Испытание прочности межвитковой изоляции" wrapText="true" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXCheckBox fx:id="checkBoxExperiment7" mnemonicParsing="false" onAction="#handleCheckBox7" text="7. Испытание электрической прочности изоляции" wrapText="true" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="560.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXRadioButton fx:id="radioBH" mnemonicParsing="false" onAction="#handleRadioExperiment7BH" text="7.1. между ВН и корпусом">
-                                                    <toggleGroup>
-                                                        <ToggleGroup fx:id="toggleExp8" />
-                                                    </toggleGroup>
-                                                </JFXRadioButton>
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox spacing="16.0">
-                                            <children>
-                                                <JFXRadioButton fx:id="radioHH" mnemonicParsing="false" onAction="#handleRadioExperiment7HH" text="7.2. между НН и корпусом" toggleGroup="$toggleExp8" />
-                                            </children>
-                                            <padding>
-                                                <Insets bottom="8.0" left="600.0" right="8.0" top="8.0" />
-                                            </padding>
-                                        </HBox>
-                                        <HBox alignment="CENTER" spacing="16.0">
-                                            <children>
-                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleStartExperiments" text="Начать испытания" />
-                                            </children>
-                                        </HBox>
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                    </padding>
-                                </VBox>
-                            </children>
-                        </AnchorPane>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <GridPane>
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                          <AnchorPane>
+                                              <children>
+                                          <VBox alignment="CENTER" prefHeight="706.0" prefWidth="1366.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <HBox alignment="CENTER">
+                                                   <children>
+                                                              <VBox alignment="CENTER" spacing="16.0">
+                                                                  <children>
+                                                                      <HBox alignment="CENTER" spacing="16.0">
+                                                                          <children>
+                                                                              <Label alignment="TOP_CENTER" text="Заполните поля для создания нового протокола" />
+                                                                          </children>
+                                                                          <padding>
+                                                                              <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                                                          </padding>
+                                                                      </HBox>
+                                                                      <HBox alignment="CENTER" spacing="16.0">
+                                                                          <children>
+                                                                              <ImageView fx:id="imgSerialNumber" fitHeight="26.0" fitWidth="26.0">
+                                                                                  <image>
+                                                                                      <Image url="@../icon/serialNumber.png" />
+                                                                                  </image>
+                                                                              </ImageView>
+                                                                              <Label text="Заводской номер: " wrapText="true" />
+                                                                              <JFXTextField fx:id="labelProtocolSerialNumber" prefWidth="320.0" />
+                                                                          </children>
+                                                                          <padding>
+                                                                              <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                                                          </padding>
+                                                                      </HBox>
+                                                                      <HBox alignment="CENTER" spacing="16.0">
+                                                                          <children>
+                                                                              <ImageView fx:id="imgTestItem" fitHeight="26.0" fitWidth="26.0">
+                                                                                  <image>
+                                                                                      <Image url="@../icon/testitem.png" />
+                                                                                  </image>
+                                                                              </ImageView>
+                                                                              <Label text="Объект испытания:" wrapText="true" />
+                                                                              <JFXComboBox fx:id="comboBoxTestItem" onAction="#handleSelectTestItem" prefWidth="320.0" />
+                                                                          </children>
+                                                                          <padding>
+                                                                              <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                                                          </padding>
+                                                                      </HBox>
+                                                                  </children>
+                                                                  <padding>
+                                                                      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                                                  </padding>
+                                                              </VBox>
+                                                              <VBox alignment="CENTER" spacing="8.0">
+                                                                  <children>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxSelectAllItems" onAction="#handleSelectAllTests" text="Выделить все" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxExperiment0" onAction="#handleCheckBox0" text="0. Измерение сопротивления изоляции" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="rCheckBoxMegerBH" mnemonicParsing="false" onAction="#handleRCheckBoxExperiment0BH" text="0.1 ВН и корпус" />
+                                                                              <JFXCheckBox fx:id="rCheckBoxMegerHH" layoutX="610.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRCheckBoxExperiment0HH" text="0.2 НН и корпус" />
+                                                                              <JFXCheckBox fx:id="rCheckBoxMegerBHHH" layoutX="961.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRCheckBoxExperiment0BHHH" text="0.3 ВН и НН" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="64.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxExperiment1" mnemonicParsing="false" onAction="#handleCheckBox1" text="1. Измерение сопротивления обмоток постоянному току" wrapText="true" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                              
+                                                                                                <JFXCheckBox fx:id="rCheckBoxIKASBH" mnemonicParsing="false" onAction="#handleRCheckBoxIkasBH" text="1.1 ВН">
+                                                </JFXCheckBox>
+                                                                              <JFXCheckBox fx:id="rCheckBoxIKASHH" mnemonicParsing="false" onAction="#handleRCheckBoxIkasHH" text="1.2 НН" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="64.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                              
+                                                                                                <JFXCheckBox fx:id="checkBoxExperiment2" mnemonicParsing="false" onAction="#handleCheckBox2" text="2. Определение коэффициента трансформации" wrapText="true" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxExperiment3" mnemonicParsing="false" onAction="#handleCheckBox3" text="3. Проверка группы соединений обмоток" wrapText="true" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxExperiment4" mnemonicParsing="false" onAction="#handleCheckBox4" text="4. Реализация опыта короткого замыкания" wrapText="true" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxExperiment5" mnemonicParsing="false" onAction="#handleCheckBox5" text="5. Реализация опыта холостого хода" wrapText="true" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxExperiment6" mnemonicParsing="false" onAction="#handleCheckBox6" text="6. Испытание прочности межвитковой изоляции" wrapText="true" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="checkBoxExperiment7" mnemonicParsing="false" onAction="#handleCheckBox7" text="7. Испытание электрической прочности изоляции" wrapText="true" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                      <HBox spacing="16.0">
+                                                                          <children>
+                                                                              <JFXCheckBox fx:id="rCheckBoxExp7BH" mnemonicParsing="false" onAction="#handleRCheckBox7BH" text="7.1. между ВН и корпусом">
+                                                </JFXCheckBox>
+                                                                              <JFXCheckBox fx:id="rCheckBoxExp7HH" mnemonicParsing="false" onAction="#handleRCheckBox7HH" text="7.2. между НН и корпусом" />
+                                                                          </children>
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="64.0" right="8.0" top="8.0" />
+                                                               </padding>
+                                                                      </HBox>
+                                                                  </children>
+                                                                  <padding>
+                                                                      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                                                  </padding>
+                                                              </VBox>
+                                                   </children>
+                                                </HBox>
+                                                          <HBox alignment="CENTER" spacing="16.0">
+                                                              <children>
+                                                                  <Button fx:id="buttonProtocolCancel" mnemonicParsing="false" onAction="#handleButtonProtocolCancel" text="Очистить" />
+                                                                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleStartExperiments" text="Начать испытания" />
+                                                              </children>
+                                                   <padding>
+                                                      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                                   </padding>
+                                                          </HBox>
+                                             </children>
+                                          </VBox>
+                                              </children>
+                                          </AnchorPane>
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </GridPane>
                     </content>
                 </Tab>
                 <Tab fx:id="tabResults" text="Результаты">

@@ -12,7 +12,6 @@
 .jfx-text-field {
     -jfx-focus-color: #FF6F61;
     -jfx-unfocus-color: #898989;
-    -fx-padding: 0.333333em 0 0.333333em 0;
     -fx-text-fill: #FFFFFF;
 }
 
@@ -24,9 +23,16 @@
 }
 
 .menu-bar {
- -fx-background-color: #444444;
- }
+    -fx-background-color: #444444;
+}
 
+.menu-item {
+    -fx-background-color: #444444;
+}
+
+.menu-item:focused > .label {
+    -fx-text-fill: #FFFFFF;
+}
 
 .jfx-tab-pane .tab-header-background {
     -fx-background-color: #4F4F4F;
@@ -54,4 +60,9 @@
 .jfx-check-box {
     -jfx-unchecked-color: #999999;
     -jfx-checked-color: #FF6F61;
+}
+
+.jfx-radio-button{
+    -jfx-selected-color: #FF6F61;
+    -jfx-unselected-color: #999999;
 }
