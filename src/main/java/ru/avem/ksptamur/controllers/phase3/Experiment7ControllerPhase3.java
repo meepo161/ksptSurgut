@@ -581,47 +581,47 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRDI5:
+                    case OwenPRModel.PRI5:
                         isStartButtonOn = (boolean) value;
                         break;
-                    case OwenPRModel.PRDI6:
+                    case OwenPRModel.PRI6:
                         isStopButtonOn = (boolean) value;
                         break;
-                    case OwenPRModel.PRDI6_FIXED:
+                    case OwenPRModel.PRI6_FIXED:
                         if ((boolean) value) {
                             cause = "Нажата кнопка (СТОП)";
                             isExperimentRunning = false;
                         }
                         break;
-                    case OwenPRModel.PRDI1:
+                    case OwenPRModel.PRI1:
                         isCurrent1On = (boolean) value;
                         if (!isCurrent1On) {
                             cause = "сработала токовая защита 1";
                             isExperimentRunning = false;
                         }
                         break;
-                    case OwenPRModel.PRDI2:
+                    case OwenPRModel.PRI2:
                         isCurrent2On = (boolean) value;
                         if (!isCurrent2On) {
                             cause = "сработала токовая защита 2";
                             isExperimentRunning = false;
                         }
                         break;
-                    case OwenPRModel.PRDI3:
+                    case OwenPRModel.PRI3:
                         isDoorLockOn = (boolean) value;
                         if (!isDoorLockOn) {
                             cause = "открыта дверь";
                             isExperimentRunning = false;
                         }
                         break;
-                    case OwenPRModel.PRDI4:
+                    case OwenPRModel.PRI4:
                         isInsulationOn = (boolean) value;
                         if (!isInsulationOn) {
                             cause = "пробита изоляция";
                             isExperimentRunning = false;
                         }
                         break;
-                    case OwenPRModel.PRDI7:
+                    case OwenPRModel.PRI7:
                         isDoorZoneOn = (boolean) value;
                         if (!isDoorZoneOn) {
                             cause = "открыта дверь зоны";

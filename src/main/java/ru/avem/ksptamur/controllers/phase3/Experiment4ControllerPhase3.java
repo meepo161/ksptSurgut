@@ -532,22 +532,22 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRDI1:
+                    case OwenPRModel.PRI1:
                         break;
-                    case OwenPRModel.PRDI2:
+                    case OwenPRModel.PRI2:
                         break;
-                    case OwenPRModel.PRDI3:
+                    case OwenPRModel.PRI3:
                         break;
-                    case OwenPRModel.PRDI4:
+                    case OwenPRModel.PRI4:
                         break;
-                    case OwenPRModel.PRDI5:
+                    case OwenPRModel.PRI5:
                         break;
-                    case OwenPRModel.PRDI6:
+                    case OwenPRModel.PRI6:
                         isStartButtonOn = (boolean) value;
                         break;
-                    case OwenPRModel.PRDI6_FIXED:
+                    case OwenPRModel.PRI6_FIXED:
                         break;
-                    case OwenPRModel.PRDI7:
+                    case OwenPRModel.PRI7:
                         break;
                 }
                 break;

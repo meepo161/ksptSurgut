@@ -148,6 +148,11 @@ public class CommunicationModel extends Observable implements Observer {
         trmController.setNeedToRead(isNeed);
     }
 
+    public void setNeedToReadForDebug(boolean isNeed) {
+        owenPRController.setNeedToRead(isNeed);
+        deltaCP2000Controller.setNeedToRead(isNeed);
+    }
+
     public void resetAllDevices() {
         owenPRController.resetAllAttempts();
         megacsController.resetAllAttempts();
@@ -222,6 +227,15 @@ public class CommunicationModel extends Observable implements Observer {
         kms2 = 0;
         writeToKms2Register(kms2);
         kms3 = 0;
+        writeToKms3Register(kms3);
+    }
+
+    public void onAllKms() {
+        kms1 = 1;
+        writeToKms1Register(kms1);
+        kms2 = 2;
+        writeToKms2Register(kms2);
+        kms3 = 3;
         writeToKms3Register(kms3);
     }
 

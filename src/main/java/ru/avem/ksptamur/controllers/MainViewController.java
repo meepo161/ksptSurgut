@@ -1,6 +1,9 @@
 package ru.avem.ksptamur.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,7 +31,6 @@ import ru.avem.ksptamur.model.ExperimentsHolder;
 import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.model.ResultModel;
 import ru.avem.ksptamur.states.main.*;
-import ru.avem.ksptamur.utils.BuildConfig;
 import ru.avem.ksptamur.utils.Toast;
 import ru.avem.ksptamur.utils.Utils;
 
@@ -548,7 +550,6 @@ public class MainViewController implements Statable {
         dialogStage.setScene(scene);
 
         dialogStage.setOnCloseRequest(event -> {
-
             CommunicationModel communicationModel = CommunicationModel.getInstance();
             communicationModel.finalizeAllDevices();
             communicationModel.deleteObservers();
@@ -570,6 +571,29 @@ public class MainViewController implements Statable {
         dialogStage.setScene(new Scene(page));
 
         dialogStage.setOnCloseRequest(event -> {
+            communicationModel.finalizeAllDevices();
+            communicationModel.deleteObservers();
+            communicationModel.setDeviceStateOn(false);
+        });
+        dialogStage.showAndWait();
+    }
+
+    public void handleDebug() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("layouts/debugWindow.fxml"));
+        Parent page = loader.load();
+        DebugWindowController controller = loader.getController();
+
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Отладка");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(PRIMARY_STAGE);
+        Scene scene = new Scene(page);
+        dialogStage.setResizable(false);
+        dialogStage.setScene(scene);
+
+        dialogStage.setOnCloseRequest(event -> {
+            CommunicationModel communicationModel = CommunicationModel.getInstance();
             communicationModel.finalizeAllDevices();
             communicationModel.deleteObservers();
             communicationModel.setDeviceStateOn(false);

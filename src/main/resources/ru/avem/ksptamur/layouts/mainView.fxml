@@ -158,6 +158,7 @@
                                 </ImageView>
                             </graphic>
                         </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleDebug" text="Отладка" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CheckMenuItem fx:id="checkMenuItemTheme" mnemonicParsing="false" onAction="#handleCheckMenuItemTheme" text="Темная тема">
                             <graphic>

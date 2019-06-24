@@ -31,7 +31,7 @@
 }
 
 .menu-item:focused > .label {
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #FF6F61;
 }
 
 .jfx-tab-pane .tab-header-background {
@@ -39,7 +39,7 @@
 }
 
 .jfx-tab-pane .headers-region .tab:selected .tab-container .tab-label {
-    -fx-text-fill: WHITE;
+    -fx-text-fill: #FF6F61;
 }
 .jfx-tab-pane .headers-region .tab-label {
     -fx-text-fill: #AAAAAA;
@@ -65,4 +65,8 @@
 .jfx-radio-button{
     -jfx-selected-color: #FF6F61;
     -jfx-unselected-color: #999999;
+}
+
+.check-menu-item:focused:checked > .left-container > .check {
+    -fx-background-color: #FF6F61;
 }
