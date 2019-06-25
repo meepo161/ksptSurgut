@@ -216,6 +216,7 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
         buttonStartStop.setDisable(true);
         cause = "Отменено оператором";
         isExperimentRunning = false;
+        communicationModel.stopObject();
         communicationModel.finalizeAllDevices();
         communicationModel.offAllKms();
     }
@@ -372,53 +373,61 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
 //             appendOneMessageToLog("реальное значение 60 /Парма: " + measuringUInAvr);
 //            communicationModel.setObjectUMax(60 * VOLT);
 //            sleep(5000);
+
+            communicationModel.setObjectUMax(380 * VOLT);
+            sleep(2000);
             appendOneMessageToLog("реальное значение 70 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(70 * VOLT);
-            sleep(99999999);
-            appendOneMessageToLog("реальное значение 80 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(80 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 90 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(90 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 100 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(100 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 110 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(110 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 120 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(120 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 130 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(130 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 140 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(140 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 150 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(150 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 160 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(160 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 170 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(170 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 180 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(180 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 190 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(190 * VOLT);
-            sleep(5000);
-            appendOneMessageToLog("реальное значение 200 /Парма: " + measuringUInAvr);
-            communicationModel.setObjectUMax(200 * VOLT);
-            sleep(5000);
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-//                communicationModel.setObjectUMax((int) (UHHTestItem / coef) * VOLT);
-                regulation(5 * VOLT, 30, 5, UHHTestItem / coef, 0.1, 2, 100, 200);
+            int Time = 9999999;
+            while (isExperimentRunning && isDevicesResponding() && (Time-- > 0)) {
+                sleep(1000);
             }
+
+//            appendOneMessageToLog("реальное значение 80 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(80 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 90 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(90 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 100 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(100 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 110 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(110 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 120 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(120 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 130 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(130 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 140 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(140 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 150 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(150 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 160 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(160 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 170 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(170 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 180 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(180 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 190 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(190 * VOLT);
+//            sleep(5000);
+//            appendOneMessageToLog("реальное значение 200 /Парма: " + measuringUInAvr);
+//            communicationModel.setObjectUMax(200 * VOLT);
+//            sleep(5000);
+//            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+//                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
+//                communicationModel.setObjectUMax((int) (UHHTestItem / coef) * VOLT);
+//                regulation(5 * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
+//            }
+//            sleep(99999999);
+
 
             isNeedToRefresh = false;
             isExperimentRunning = false;
@@ -580,10 +589,10 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                                 Experiment4ModelPhase3.setIA(String.format("%.3f", iA));
                             }
                         }
-                        if (iA > Ikz) {
-                            appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
-                            isExperimentRunning = false;
-                        }
+//                        if (iA > Ikz) {
+//                            appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
+//                            isExperimentRunning = false;
+//                        }
                         break;
                     case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
@@ -599,10 +608,10 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                                 Experiment4ModelPhase3.setIB(String.format("%.3f", iB));
                             }
                         }
-                        if (iB > Ikz) {
-                            appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
-                            isExperimentRunning = false;
-                        }
+//                        if (iB > Ikz) {
+//                            appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
+//                            isExperimentRunning = false;
+//                        }
                         break;
                     case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
@@ -618,10 +627,10 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                                 Experiment4ModelPhase3.setIC(String.format("%.3f", iC));
                             }
                         }
-                        if (iC > Ikz) {
-                            appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
-                            isExperimentRunning = false;
-                        }
+//                        if (iC > Ikz) {
+//                            appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
+//                            isExperimentRunning = false;
+//                        }
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
@@ -642,11 +651,11 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                             ukzPercent = (measuringUkzPercent * POWER) / POWER;
                             Experiment4ModelPhase3.setUKZPercent(String.format("%.2f", ukzPercent));
                             Experiment4ModelPhase3.setUKZDiff(String.format("%.2f", ukzPercent - UKZTestItem));
-                            if (measuringUInAvr > UHHTestItem) {
-                                appendOneMessageToLog("Напряжение достигло номинального, испытание прервано");
-                                isExperimentRunning = false;
-                                cause = "Неуспешно";
-                            }
+//                            if (measuringUInAvr > UHHTestItem) {
+//                                appendOneMessageToLog("Напряжение достигло номинального, испытание прервано");
+//                                isExperimentRunning = false;
+//                                cause = "Неуспешно";
+//                            }
                         }
                         break;
                     case PM130Model.P_PARAM:

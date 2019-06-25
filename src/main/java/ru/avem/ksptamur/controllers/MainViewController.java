@@ -310,6 +310,8 @@ public class MainViewController implements Statable {
 
     @Override
     public void toIdleState() {
+        menuBarProtocolSaveAs.setDisable(true);
+        tabResults.setDisable(true);
         tabPane.getSelectionModel().select(tabExperiments);
         labelProtocolSerialNumber.clear();
         labelProtocolSerialNumber.setDisable(false);

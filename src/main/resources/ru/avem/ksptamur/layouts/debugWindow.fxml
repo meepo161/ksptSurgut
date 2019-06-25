@@ -40,22 +40,22 @@
                                                         <Font name="System Bold" size="14.0"/>
                                                     </font>
                                                 </Label>
-                                                <JFXCheckBox fx:id="rbPRI1" text="1"/>
-                                                <JFXCheckBox fx:id="rbPRI2" text="2"/>
-                                                <JFXCheckBox fx:id="rbPRI3" text="3"/>
-                                                <JFXCheckBox fx:id="rbPRI4" text="4"/>
-                                                <JFXCheckBox fx:id="rbPRI5" text="5"/>
-                                                <JFXCheckBox fx:id="rbPRI6" text="6"/>
-                                                <JFXCheckBox fx:id="rbPRI7" text="7"/>
-                                                <JFXCheckBox fx:id="rbPRI8" text="8"/>
-                                                <JFXCheckBox fx:id="rbPRI1M1" text="1M1"/>
-                                                <JFXCheckBox fx:id="rbPRI2M1" text="2M1"/>
-                                                <JFXCheckBox fx:id="rbPRI3M1" text="3M1"/>
-                                                <JFXCheckBox fx:id="rbPRI4M1" text="4M1"/>
-                                                <JFXCheckBox fx:id="rbPRI5M1" text="5M1"/>
-                                                <JFXCheckBox fx:id="rbPRI6M1" text="6M1"/>
-                                                <JFXCheckBox fx:id="rbPRI7M1" text="7M1"/>
-                                                <JFXCheckBox fx:id="rbPRI8M1" text="8M1"/>
+                                                <JFXCheckBox fx:id="rbPRI1" disable="true" text="1"/>
+                                                <JFXCheckBox fx:id="rbPRI2" disable="true" text="2"/>
+                                                <JFXCheckBox fx:id="rbPRI3" disable="true" text="3"/>
+                                                <JFXCheckBox fx:id="rbPRI4" disable="true" text="4"/>
+                                                <JFXCheckBox fx:id="rbPRI5" disable="true" text="5"/>
+                                                <JFXCheckBox fx:id="rbPRI6" disable="true" text="6"/>
+                                                <JFXCheckBox fx:id="rbPRI7" disable="true" text="7"/>
+                                                <JFXCheckBox fx:id="rbPRI8" disable="true" text="8"/>
+                                                <JFXCheckBox fx:id="rbPRI1M1" disable="true" text="1M1"/>
+                                                <JFXCheckBox fx:id="rbPRI2M1" disable="true" text="2M1"/>
+                                                <JFXCheckBox fx:id="rbPRI3M1" disable="true" text="3M1"/>
+                                                <JFXCheckBox fx:id="rbPRI4M1" disable="true" text="4M1"/>
+                                                <JFXCheckBox fx:id="rbPRI5M1" disable="true" text="5M1"/>
+                                                <JFXCheckBox fx:id="rbPRI6M1" disable="true" text="6M1"/>
+                                                <JFXCheckBox fx:id="rbPRI7M1" disable="true" text="7M1"/>
+                                                <JFXCheckBox fx:id="rbPRI8M1" disable="true" text="8M1"/>
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
@@ -120,6 +120,8 @@
                                                 <JFXTextField fx:id="tfCurrentVoltage" layoutX="18.0" layoutY="68.0"/>
                                                 <Button layoutX="81.0" layoutY="104.0" mnemonicParsing="false"
                                                         onAction="#handleBtnStopObject" text="Остановить"/>
+                                                <Button layoutX="77.0" layoutY="227.0" mnemonicParsing="false"
+                                                        onAction="#handleBtnPR1" text="PR1"/>
                                             </children>
                                             <padding>
                                                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>

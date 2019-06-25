@@ -216,9 +216,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 }
                 isPressed.set(false);
 
-
                 startBH();
-
 
                 AtomicBoolean isPressed2 = new AtomicBoolean(false);
                 if (isExperimentRunning) {
@@ -239,9 +237,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 }
                 isPressed.set(false);
 
-
                 startHH();
-
 
             } else if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_BH) {
                 AtomicBoolean isPressed = new AtomicBoolean(false);
@@ -263,9 +259,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 }
                 isPressed.set(false);
 
-
                 startBH();
-
 
             } else if (mainModel.getExperiment1Choice() == MainModel.EXPERIMENT1_HH) {
 
@@ -289,9 +283,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
                 }
                 isPressed.set(false);
 
-
                 startHH();
-
 
             }
 

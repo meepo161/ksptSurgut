@@ -19,6 +19,7 @@ import static ru.avem.ksptamur.Constants.Measuring.VOLT;
 import static ru.avem.ksptamur.Main.setTheme;
 import static ru.avem.ksptamur.communication.devices.DeviceController.DELTACP2000_ID;
 import static ru.avem.ksptamur.communication.devices.DeviceController.PR200_ID;
+import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class DebugWindowController extends DeviceState implements ExperimentController {
 
@@ -103,6 +104,8 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
         setTheme(root);
         communicationModel.addObserver(this);
         communicationModel.setNeedToReadForDebug(true);
+        communicationModel.setDeviceStateOn(true);
+        communicationModel.initOwenPrController();
     }
 
     @Override
@@ -180,78 +183,98 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
     public void handleBtnSetVoltage() {
         try {
             communicationModel.setObjectParams(50 * HZ, 5 * VOLT, 50 * HZ);
+            sleep(1000);
             communicationModel.startObject();
+            sleep(1000);
             communicationModel.setObjectUMax(Integer.parseInt(tfVoltage.getText()));
         } catch (NumberFormatException e) {
             Toast.makeText("Введите верное напряжение").show(Toast.ToastType.ERROR);
         }
     }
 
-    public void handleRBPR1() {
+    @FXML
+    private void handleRBPR1() {
+        System.out.println("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
         setRadioPR(rbPR1, 1, 1);
     }
 
-    public void handleRBPR2() {
+    @FXML
+    private void handleRBPR2() {
         setRadioPR(rbPR2, 2, 1);
     }
 
-    public void handleRBPR3() {
-        setRadioPR(rbPR8, 3, 1);
+    @FXML
+    private void handleRBPR3() {
+        setRadioPR(rbPR3, 3, 1);
     }
 
-    public void handleRBPR4() {
-        setRadioPR(rbPR8, 4, 1);
+    @FXML
+    private void handleRBPR4() {
+        setRadioPR(rbPR4, 4, 1);
     }
 
-    public void handleRBPR5() {
+    @FXML
+    private void handleRBPR5() {
         setRadioPR(rbPR5, 5, 1);
     }
 
-    public void handleRBPR6() {
+    @FXML
+    private void handleRBPR6() {
         setRadioPR(rbPR6, 6, 1);
     }
 
-    public void handleRBPR7() {
+    @FXML
+    private void handleRBPR7() {
         setRadioPR(rbPR7, 7, 1);
     }
 
-    public void handleRBPR8() {
+    @FXML
+    private void handleRBPR8() {
         setRadioPR(rbPR8, 8, 1);
     }
 
-    public void handleRBPR1M1() {
+    @FXML
+    private void handleRBPR1M1() {
         setRadioPR(rbPR1M1, 1, 2);
     }
 
-    public void handleRBPR2M1() {
+    @FXML
+    private void handleRBPR2M1() {
         setRadioPR(rbPR2M1, 2, 2);
     }
 
-    public void handleRBPR3M1() {
+    @FXML
+    private void handleRBPR3M1() {
         setRadioPR(rbPR3M1, 3, 2);
     }
 
-    public void handleRBPR4M1() {
+    @FXML
+    private void handleRBPR4M1() {
         setRadioPR(rbPR4M1, 4, 2);
     }
 
-    public void handleRBPR5M1() {
+    @FXML
+    private void handleRBPR5M1() {
         setRadioPR(rbPR5M1, 5, 2);
     }
 
-    public void handleRBPR6M1() {
+    @FXML
+    private void handleRBPR6M1() {
         setRadioPR(rbPR6M1, 6, 2);
     }
 
-    public void handleRBPR7M1() {
+    @FXML
+    private void handleRBPR7M1() {
         setRadioPR(rbPR7M1, 7, 2);
     }
 
-    public void handleRBPR8M1() {
+    @FXML
+    private void handleRBPR8M1() {
         setRadioPR(rbPR8M1, 8, 2);
     }
 
     private void setRadioPR(JFXCheckBox rb, int register, int kms) {
+        System.out.println("setRadioPR" + rb.isSelected());
         if (!rb.isSelected()) {
             communicationModel.onRegisterInTheKms(register, kms);
         } else {
@@ -259,15 +282,18 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
         }
     }
 
-    public void handleBtnStopObject() {
+    @FXML
+    private void handleBtnStopObject() {
         communicationModel.stopObject();
     }
 
-    public void handleAllOn() {
+    @FXML
+    private void handleAllOn() {
         communicationModel.onAllKms();
     }
 
-    public void handleAllOff() {
+    @FXML
+    private void handleAllOff() {
         communicationModel.offAllKms();
     }
 
@@ -280,5 +306,9 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
     @Override
     public boolean isCanceled() {
         return false;
+    }
+
+    @FXML
+    private void handleBtnPR1() {
     }
 }

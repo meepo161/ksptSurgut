@@ -432,8 +432,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 is200to5State = false;
                 is40to5State = true;
                 is5to5State = false;
-                communicationModel.offPR6();
-                communicationModel.offPR4();
+                communicationModel.offKM7();
+                communicationModel.offKM5();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 5/5");
@@ -442,8 +442,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 is200to5State = false;
                 is40to5State = false;
                 is5to5State = true;
-                communicationModel.offPR4();
-                communicationModel.offPR5();
+                communicationModel.offKM5();
+                communicationModel.offKM6();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else {
                 appendOneMessageToLog("Выставляем токовую ступень 200/5");
@@ -456,8 +456,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 is200to5State = true;
                 is40to5State = false;
                 is5to5State = false;
-                communicationModel.offPR5();
-                communicationModel.offPR6();
+                communicationModel.offKM6();
+                communicationModel.offKM7();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 5/5");
@@ -466,8 +466,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 is200to5State = false;
                 is40to5State = false;
                 is5to5State = true;
-                communicationModel.offPR4();
-                communicationModel.offPR5();
+                communicationModel.offKM5();
+                communicationModel.offKM6();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
         } else if (is5to5State) {
@@ -478,8 +478,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 is200to5State = false;
                 is40to5State = true;
                 is5to5State = false;
-                communicationModel.offPR6();
-                communicationModel.offPR4();
+                communicationModel.offKM7();
+                communicationModel.offKM5();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 4) {
                 appendOneMessageToLog("Выставляем токовую ступень 5/5");
@@ -488,8 +488,8 @@ public class Experiment5ControllerPhase3 extends DeviceState implements Experime
                 is200to5State = false;
                 is40to5State = false;
                 is5to5State = true;
-                communicationModel.offPR4();
-                communicationModel.offPR5();
+                communicationModel.offKM5();
+                communicationModel.offKM6();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             }
         }

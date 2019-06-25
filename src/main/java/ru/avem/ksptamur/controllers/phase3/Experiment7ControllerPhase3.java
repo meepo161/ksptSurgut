@@ -420,7 +420,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
-            communicationModel.onPR8M1();
             communicationModel.onKM5();
 
         }

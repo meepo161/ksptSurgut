@@ -318,6 +318,7 @@ public class CommunicationModel extends Observable implements Observer {
 
     public void stopObject() {
         deltaCP2000Controller.write(CONTROL_REGISTER, 1, 0b1);
+        sleep(3000);
     }
 
     public void setObjectParams(int fOut, int voltageP1, int fP1) {
@@ -400,9 +401,11 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment7Devices() {
+
     }
 
     public void initExperiment8Devices() {
+
     }
 
     public void onKM2() {
@@ -482,15 +485,15 @@ public class CommunicationModel extends Observable implements Observer {
         offRegisterInTheKms(3, 1);
     }
 
-    public void offPR4() {
+    public void offKM5() {
         offRegisterInTheKms(4, 1);
     }
 
-    public void offPR5() {
+    public void offKM6() {
         offRegisterInTheKms(5, 1);
     }
 
-    public void offPR6() {
+    public void offKM7() {
         offRegisterInTheKms(6, 1);
     }
 
