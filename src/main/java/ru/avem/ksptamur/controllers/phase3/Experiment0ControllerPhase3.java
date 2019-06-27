@@ -100,7 +100,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         tableColumnResultExperiment.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
 
-        tableViewExperimentValues.setItems(FXCollections.observableArrayList(Experiment0ModelPhase3BH, Experiment0ModelPhase3HH));
+        tableViewExperimentValues.setItems(FXCollections.observableArrayList(Experiment0ModelPhase3BH, Experiment0ModelPhase3HH, Experiment0ModelPhase3BHHH));
         tableViewExperimentValues.setSelectionModel(null);
     }
 
@@ -139,6 +139,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
         Experiment0ModelPhase3BH.clearProperties();
         Experiment0ModelPhase3HH.clearProperties();
+        Experiment0ModelPhase3BHHH.clearProperties();
 
         isOwenPRResponding = true;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);

@@ -80,51 +80,40 @@ public class MainViewController implements Statable {
     private ImageView imgInstrumentsInfo;
     @FXML
     private ImageView imgInstrumentsTheme;
-
-
     @FXML
     private Button buttonCancel;
-
     @FXML
     private JFXTextField textFieldSerialNumber;
     @FXML
     private JFXComboBox<TestItem> comboBoxTestItem;
-
     @FXML
     private MenuItem menuBarProtocolSaveAs;
     @FXML
     private MenuItem menuBarDBTestItems;
-
     @FXML
     private Parent root;
-
     @FXML
     private CheckMenuItem checkMenuItemTheme;
-
     @FXML
     private JFXCheckBox rCheckBoxExp7BH;
     @FXML
     private JFXCheckBox rCheckBoxExp7HH;
-
     @FXML
     private JFXCheckBox rCheckBoxMegerBH;
     @FXML
     private JFXCheckBox rCheckBoxMegerHH;
     @FXML
     private JFXCheckBox rCheckBoxMegerBHHH;
-
     @FXML
     private JFXCheckBox rCheckBoxIKASBH;
     @FXML
     private JFXCheckBox rCheckBoxIKASHH;
-
     @FXML
     private JFXTabPane tabPane;
     @FXML
     private Tab tabSourceData;
     @FXML
     private Tab tabResults;
-
     @FXML
     private JFXCheckBox checkBoxSelectAllItems;
     @FXML
@@ -143,7 +132,6 @@ public class MainViewController implements Statable {
     private JFXCheckBox checkBoxExperiment6;
     @FXML
     private JFXCheckBox checkBoxExperiment7;
-
     @FXML
     private ComboBox<String> comboBoxResult;
 
@@ -189,6 +177,8 @@ public class MainViewController implements Statable {
         DBFileChooser = new FileChooser();
         DBFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         DBFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("AVEM Database (*.adb)", "*.adb"));
+
+        toInitIdleState();
     }
 
     private void refreshTestItems() {
@@ -856,29 +846,16 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleStartExperiments() {
-        if (!textFieldSerialNumber.getText().isEmpty() && !comboBoxTestItem.getSelectionModel().isEmpty()) {
-            mainModel.createNewProtocol(textFieldSerialNumber.getText(), comboBoxTestItem.getSelectionModel().getSelectedItem());
-            currentState.toWaitState();
-        } else {
-            Toast.makeText("Введите заводской номер и выберите объект испытания").show(Toast.ToastType.INFORMATION);
-        }
-        if (!rCheckBoxIKASBH.isSelected() &&
-                !rCheckBoxIKASHH.isSelected() &&
-                !rCheckBoxMegerBH.isSelected() &&
-                !rCheckBoxMegerHH.isSelected() &&
-                !rCheckBoxMegerBHHH.isSelected() &&
-                !checkBoxExperiment0.isSelected() &&
-                !checkBoxExperiment1.isSelected() &&
-                !checkBoxExperiment2.isSelected() &&
-                !checkBoxExperiment3.isSelected() &&
-                !checkBoxExperiment4.isSelected() &&
-                !checkBoxExperiment5.isSelected() &&
-                !checkBoxExperiment6.isSelected() &&
-                !checkBoxExperiment7.isSelected() &&
-                !rCheckBoxExp7BH.isSelected() &&
-                !rCheckBoxExp7HH.isSelected()) {
+        if (textFieldSerialNumber.getText().isEmpty() || comboBoxTestItem.getSelectionModel().isEmpty()) {
+            Toast.makeText("Введите заводской номер и выберите объект испытания").show(Toast.ToastType.WARNING);
+        } else if (!isAtLeastOneIsSelected()) {
             Toast.makeText("Выберите хотя бы одно испытание из списка").show(Toast.ToastType.WARNING);
         } else {
+            if (currentState instanceof IdleState) {
+                mainModel.createNewProtocol(textFieldSerialNumber.getText(), comboBoxTestItem.getSelectionModel().getSelectedItem());
+                currentState.toWaitState();
+            }
+
             boolean isCanceled = false;
             if ((checkBoxExperiment0.isSelected() || checkBoxExperiment0.isIndeterminate()) && !isCanceled) {
 
@@ -918,8 +895,28 @@ public class MainViewController implements Statable {
             }
             if (!isCanceled) {
                 currentState.toResultState();
+            } else {
+                Toast.makeText("Отменено").show(Toast.ToastType.INFORMATION);
             }
         }
+    }
+
+    private boolean isAtLeastOneIsSelected() {
+        return checkBoxExperiment0.isSelected() ||
+                rCheckBoxMegerBH.isSelected() ||
+                rCheckBoxMegerHH.isSelected() ||
+                rCheckBoxMegerBHHH.isSelected() ||
+                checkBoxExperiment1.isSelected() ||
+                rCheckBoxIKASBH.isSelected() ||
+                rCheckBoxIKASHH.isSelected() ||
+                checkBoxExperiment2.isSelected() ||
+                checkBoxExperiment3.isSelected() ||
+                checkBoxExperiment4.isSelected() ||
+                checkBoxExperiment5.isSelected() ||
+                checkBoxExperiment6.isSelected() ||
+                checkBoxExperiment7.isSelected() ||
+                rCheckBoxExp7BH.isSelected() ||
+                rCheckBoxExp7HH.isSelected();
     }
 
     private boolean start0Experiment() {

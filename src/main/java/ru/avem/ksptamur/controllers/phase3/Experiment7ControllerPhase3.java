@@ -501,9 +501,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
     }
 
     private boolean isDevicesResponding() {
-        for (int attempts = 5; !(isOwenPRResponding && isPM130Responding && isDeltaResponding && isAvemResponding) && attempts >= 0; attempts--) {
-            sleep(50);
-        }
         return isOwenPRResponding && isPM130Responding && isDeltaResponding && isAvemResponding;
     }
 

@@ -27,7 +27,7 @@ public class Main extends Application implements ru.avem.ksptamur.Exitappable {
     private static Label statusBarRight;
 
     public static Stage PRIMARY_STAGE;
-    public static String css;
+    public static String css = "white";
 
     private Scene loginScene;
     private LoginController loginWindowController;

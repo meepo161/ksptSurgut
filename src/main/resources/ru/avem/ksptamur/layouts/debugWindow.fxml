@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXCheckBox?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-
 <AnchorPane fx:id="root" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../styles/main_css.css"
             xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.avem.ksptamur.controllers.DebugWindowController">
@@ -86,10 +81,10 @@
                                                 <JFXCheckBox fx:id="rbPR8M1" onAction="#handleRBPR8M1" text="8M1"/>
                                                 <HBox spacing="8.0">
                                                     <children>
-                                                        <Button mnemonicParsing="false" onAction="#handleAllOn"
+                                                        <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleAllOn"
                                                                 text="ON"/>
-                                                        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
-                                                                onAction="#handleAllOff" text="OFF"/>
+                                                        <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                                                                   onAction="#handleAllOff" text="OFF"/>
                                                     </children>
                                                     <padding>
                                                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
@@ -109,7 +104,7 @@
                                                 </Label>
                                                 <Label layoutX="18.0" layoutY="18.0" text="Напряжение" wrapText="true"/>
                                                 <JFXTextField fx:id="tfVoltage"/>
-                                                <Button mnemonicParsing="false" onAction="#handleBtnSetVoltage"
+                                                <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleBtnSetVoltage"
                                                         text="Выставить"/>
                                                 <Label layoutX="62.0" layoutY="43.0" text="Текущее напряжение"
                                                        wrapText="true">
@@ -118,9 +113,9 @@
                                                     </VBox.margin>
                                                 </Label>
                                                 <JFXTextField fx:id="tfCurrentVoltage" layoutX="18.0" layoutY="68.0"/>
-                                                <Button layoutX="81.0" layoutY="104.0" mnemonicParsing="false"
+                                                <JFXButton buttonType="RAISED" layoutX="81.0" layoutY="104.0" mnemonicParsing="false"
                                                         onAction="#handleBtnStopObject" text="Остановить"/>
-                                                <Button layoutX="77.0" layoutY="227.0" mnemonicParsing="false"
+                                                <JFXButton buttonType="RAISED" layoutX="77.0" layoutY="227.0" mnemonicParsing="false"
                                                         onAction="#handleBtnPR1" text="PR1"/>
                                             </children>
                                             <padding>

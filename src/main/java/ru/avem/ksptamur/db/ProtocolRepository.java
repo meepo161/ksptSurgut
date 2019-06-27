@@ -28,7 +28,7 @@ public class ProtocolRepository extends ru.avem.ksptamur.db.DataBaseRepository {
     }
 
     public static void updateProtocol(Protocol protocol) {
-        sendAction((protocolDao) -> protocolDao.update(protocol));
+        sendAction((protocolDao) -> protocolDao.createOrUpdate(protocol));
     }
 
     public static void deleteProtocol(Protocol protocol) {

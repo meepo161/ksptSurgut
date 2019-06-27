@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <AnchorPane fx:id="root" prefHeight="618.0" prefWidth="1200.0" stylesheets="@../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptamur.controllers.ProtocolEditorController">
     <children>
       <VBox prefHeight="618.0" prefWidth="1200.0" spacing="16.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -37,9 +31,9 @@
               </TableView>
             <HBox alignment="CENTER" spacing="16.0">
                <children>
-                      <Button mnemonicParsing="false" onAction="#handleProtocolOpen" text="Открыть" />
-                      <Button mnemonicParsing="false" onAction="#handleProtocolSaveAs" text="Сохранить как..." />
-                      <Button alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleProtocolDelete" text="Удалить" />
+                      <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleProtocolOpen" text="Открыть" />
+                      <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleProtocolSaveAs" text="Сохранить как..." />
+                      <JFXButton buttonType="RAISED" alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleProtocolDelete" text="Удалить" />
                </children>
                <padding>
                   <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

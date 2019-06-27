@@ -1,8 +1,17 @@
+.root {
+    -fx-focus-color: #0096C9;
+    -fx-selection-bar: #0096C9;
+}
+
 .table-column {
-	-fx-alignment: CENTER;
+    -fx-alignment: CENTER;
 }
 
 .jfx-text-field {
+    -jfx-focus-color: #0096C9;
+}
+
+.jfx-password-field {
     -jfx-focus-color: #0096C9;
 }
 
@@ -22,7 +31,6 @@
 }
 
 .jfx-tab-pane .headers-region .tab-selected-line {
- /*   -fx-background-color: #1560BD; */
     -fx-background-color: #0096C9;
 }
 
@@ -39,7 +47,20 @@
     -jfx-checked-color: #0096C9;
 }
 
-.jfx-radio-button{
+.jfx-radio-button {
     -jfx-selected-color: #0096C9;
     -jfx-unselected-color: #5A5A5A;
 }
+
+
+
+
+.jfx-button {
+    -fx-background-color: #F4F4F4;
+}
+
+.jfx-text-area {
+    -fx-text-fill: #FF6F61;
+    -fx-background-color: #EFEFEF;
+}
+
