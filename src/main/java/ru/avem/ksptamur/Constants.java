@@ -3,6 +3,8 @@ package ru.avem.ksptamur;
 import ru.avem.ksptamur.communication.serial.driver.UsbSerialPort;
 import ru.avem.ksptamur.utils.BuildConfig;
 
+import java.text.SimpleDateFormat;
+
 
 public final class Constants {
     public static final class Display {
@@ -35,5 +37,18 @@ public final class Constants {
     public static final class Measuring {
         public static final int VOLT = 10;
         public static final int HZ = 100;
+    }
+
+    public static final class Info {
+        public static final String TITLE = "КСПТ (ООО \"РН-Комсомольский НПЗ\")";
+        public static final String VERSION = "Версия: 0.0.1";
+        public static final String DATE = "Дата: xx.06.2019";
+    }
+
+    public static final class Formatting {
+        public static final SimpleDateFormat EXPERIMENT_FORMAT = new SimpleDateFormat("HH:mm:ss-SSS");
+        public static final SimpleDateFormat PROTOCOL_FORMAT = new SimpleDateFormat("Время проведения испытания: HH:mm:ss");
+        public static final SimpleDateFormat LOGGING_FILE_FORMAT = new SimpleDateFormat("dd_MM(HH-mm-ss)");
+        public static final SimpleDateFormat PROTOCOL_DATE_FORMAT = new SimpleDateFormat("dd-MM-yy");
     }
 }

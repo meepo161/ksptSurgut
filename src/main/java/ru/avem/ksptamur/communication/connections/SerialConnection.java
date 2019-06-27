@@ -1,5 +1,6 @@
 package ru.avem.ksptamur.communication.connections;
 
+import ru.avem.ksptamur.Constants;
 import ru.avem.ksptamur.communication.serial.driver.UsbSerialDriver;
 import ru.avem.ksptamur.communication.serial.driver.UsbSerialPort;
 import ru.avem.ksptamur.communication.serial.driver.UsbSerialProber;
@@ -68,6 +69,15 @@ public class SerialConnection implements Connection {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setConnectionBaudrate(int baudrate) {
+        setPortParameters(
+                baudrate,
+                Constants.Communication.DATABITS,
+                Constants.Communication.STOPBITS,
+                Constants.Communication.PARITY);
     }
 
     private UsbSerialDriver getSerialDriver() {

@@ -212,7 +212,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         iAOld = -1;
 
         new Thread(() -> {
-            if (mainModel.getExperiment7Choice() == MainModel.EXPERIMENT7_BOTH && !isBHSuccess) { //если выбрано испытание ВН и НН обмоток
+            if (mainModel.getExperiment7Choice() == MainModel.  EXPERIMENT7_BOTH && !isBHSuccess) { //если выбрано испытание ВН и НН обмоток
                 startBH(); //запуск испытния ВН обмотки
                 sleep(5000);
                 startHH(); //запуск испытния НН обмотки
@@ -380,8 +380,8 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         if (isExperimentRunning) {
             appendOneMessageToLog("Начало испытания");
             communicationModel.initOwenPrController();
-            communicationModel.initExperiment7Devices();
-            sleep(3000);
+            communicationModel.onK9();
+            sleep(999999999);
         }
 
         if (isExperimentRunning && !isOwenPRResponding) {

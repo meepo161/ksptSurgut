@@ -22,6 +22,11 @@ public class PhaseMeterModel extends Observable {
         addObserver(observer);
         this.deviceID = deviceID;
     }
+ void resetResponding() {
+        readResponding = true;
+        writeResponding = true;
+    }
+
     void setReadResponding(boolean readResponding) {
         this.readResponding = readResponding;
         setResponding();

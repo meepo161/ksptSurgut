@@ -2,7 +2,6 @@ package ru.avem.ksptamur.utils;
 
 import java.awt.*;
 import java.io.*;
-import java.util.Locale;
 
 public class Utils {
 
@@ -58,6 +57,20 @@ public class Utils {
                     + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
         }
         System.out.println();
+    }
+
+    public static String formatRMrg(float measuringR) {
+        String units;
+        if (measuringR > 1_000_000_000) {
+            measuringR = measuringR / 1_000_000_000f;
+            units = "GΩ";
+        } else if (measuringR > 1_000_000) {
+            measuringR = measuringR / 1_000_000f;
+            units = "MΩ";
+        } else {
+            units = "Ω";
+        }
+        return String.format("%.2f, %s", measuringR, units);
     }
 
     public static String formatRealNumber(double num) {

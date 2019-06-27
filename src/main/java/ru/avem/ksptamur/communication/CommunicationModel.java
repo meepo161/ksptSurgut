@@ -33,6 +33,7 @@ import static ru.avem.ksptamur.utils.Utils.sleep;
 
 
 public class CommunicationModel extends Observable implements Observer {
+    public static final Object LOCK = new Object();
 
     private static CommunicationModel instance = new CommunicationModel();
 
@@ -50,7 +51,6 @@ public class CommunicationModel extends Observable implements Observer {
 
     private int kms1;
     private int kms2;
-    private int kms3;
 
     private boolean lastOne;
     private boolean isFinished;
@@ -82,7 +82,7 @@ public class CommunicationModel extends Observable implements Observer {
         trmController = new TRMController(7, this, modbusController, TRM_ID);
         devicesControllers.add(trmController);
 
-        megacsController = new CS02021Controller(8, this, RS485Connection, MEGACS_ID);
+        megacsController = new CS02021Controller(MEGACS_ID, this, RS485Connection);
         devicesControllers.add(megacsController);
 
         deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
@@ -164,7 +164,7 @@ public class CommunicationModel extends Observable implements Observer {
         trmController.resetAllAttempts();
     }
 
-    public void connectMainBus() {
+    private void connectMainBus() {
         RS485Connection = new SerialConnection(
                 Constants.Communication.RS485_DEVICE_NAME,
                 Constants.Communication.BAUDRATE_MAIN,
@@ -176,21 +176,16 @@ public class CommunicationModel extends Observable implements Observer {
         Logger.withTag("DEBUG_TAG").log("connectMainBus");
         if (!RS485Connection.isInitiatedConnection()) {
             Logger.withTag("DEBUG_TAG").log("!isInitiatedMainBus");
+            RS485Connection.closeConnection();
             RS485Connection.initConnection();
         }
     }
 
-    public void setConnectionBaudrate(int baudrate) {
-        RS485Connection.setPortParameters(
-                baudrate,
-                Constants.Communication.DATABITS,
-                Constants.Communication.STOPBITS,
-                Constants.Communication.PARITY);
+    public void deinitPR() {
+        owenPRController.write(RES_REGISTER, 1, 0);
     }
 
     public void finalizeAllDevices() {
-        owenPRController.write(RES_REGISTER, 1, 0);
-        offAllKms();
         for (DeviceController deviceController : devicesControllers) {
             deviceController.setNeedToRead(false);
         }
@@ -202,11 +197,9 @@ public class CommunicationModel extends Observable implements Observer {
 
     private void resetDog() {
         if (lastOne) {
-            Logger.withTag("StatusActivity").log("Dog off");
             owenPRController.write(RESET_DOG, 1, 0);
             lastOne = false;
         } else {
-            Logger.withTag("StatusActivity").log("Dog on");
             owenPRController.write(RESET_DOG, 1, 1);
             lastOne = true;
         }
@@ -226,8 +219,6 @@ public class CommunicationModel extends Observable implements Observer {
         writeToKms1Register(kms1);
         kms2 = 0;
         writeToKms2Register(kms2);
-        kms3 = 0;
-        writeToKms3Register(kms3);
     }
 
     public void onAllKms() {
@@ -235,8 +226,6 @@ public class CommunicationModel extends Observable implements Observer {
         writeToKms1Register(kms1);
         kms2 = 2;
         writeToKms2Register(kms2);
-        kms3 = 3;
-        writeToKms3Register(kms3);
     }
 
     private void writeToKms1Register(int value) {
@@ -246,11 +235,6 @@ public class CommunicationModel extends Observable implements Observer {
     private void writeToKms2Register(int value) {
         owenPRController.write(KMS2_REGISTER, 1, value);
     }
-
-    private void writeToKms3Register(int value) {
-        owenPRController.write(KMS3_REGISTER, 1, value);
-    }
-
 
     public void onRegisterInTheKms(int numberOfRegister, int kms) {
         int mask = (int) Math.pow(2, --numberOfRegister);
@@ -262,7 +246,7 @@ public class CommunicationModel extends Observable implements Observer {
         } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) {
         }
         Logger.withTag("DEBUG_TAG").log("numberOfRegister=" + numberOfRegister + " kms=" + kms);
-        Logger.withTag("DEBUG_TAG").log("1=" + kms1 + " 2=" + kms2 + " 3=" + kms3);
+        Logger.withTag("DEBUG_TAG").log("1=" + kms1 + " 2=" + kms2);
     }
 
     public void offRegisterInTheKms(int numberOfRegister, int kms) {
@@ -275,13 +259,13 @@ public class CommunicationModel extends Observable implements Observer {
         } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
         }
         Logger.withTag("DEBUG_TAG").log("numberOfRegister=" + numberOfRegister + " kms=" + kms);
-        Logger.withTag("DEBUG_TAG").log("1=" + kms1 + " 2=" + kms2 + " 3=" + kms3);
+        Logger.withTag("DEBUG_TAG").log("1=" + kms1 + " 2=" + kms2);
     }
 
     public void initOwenPrController() {
+        owenPRController.resetAllAttempts();
         owenPRController.setNeedToRead(true);
         offAllKms();
-        owenPRController.resetAllAttempts();
         resetTimer();
         owenPRController.write(RES_REGISTER, 1, 1);
     }
@@ -444,11 +428,11 @@ public class CommunicationModel extends Observable implements Observer {
         onRegisterInTheKms(1, 2);
     }
 
-    public void onKM17() {
+    public void onK10() {
         onRegisterInTheKms(2, 2);
     }
 
-    public void onPR3M1() {
+    public void onK9() {
         onRegisterInTheKms(3, 2);
     }
 

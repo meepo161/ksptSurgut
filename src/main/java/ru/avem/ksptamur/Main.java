@@ -15,15 +15,11 @@ import ru.avem.ksptamur.communication.CommunicationModel;
 import ru.avem.ksptamur.controllers.LoginController;
 import ru.avem.ksptamur.controllers.MainViewController;
 import ru.avem.ksptamur.db.DataBaseRepository;
-import ru.avem.ksptamur.utils.BuildConfig;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
+import static ru.avem.ksptamur.Constants.Info.TITLE;
 import static ru.avem.ksptamur.utils.View.showConfirmDialog;
 
 public class Main extends Application implements ru.avem.ksptamur.Exitappable {
@@ -120,7 +116,7 @@ public class Main extends Application implements ru.avem.ksptamur.Exitappable {
     }
 
     public void showMainView() {
-        PRIMARY_STAGE.setTitle("КСПТ");
+        PRIMARY_STAGE.setTitle(TITLE);
         PRIMARY_STAGE.setScene(mainViewScene);
     }
 

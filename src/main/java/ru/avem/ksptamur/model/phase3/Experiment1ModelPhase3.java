@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.avem.ksptamur.utils.Utils.formatRealNumber;
+
 public class Experiment1ModelPhase3 {
 
-    public static final double BREAK_IKAS = 1.0E9;
+    private static final double BREAK_IKAS = 1.0E9;
+
     private final StringProperty winding;
     private final StringProperty AB;
     private final StringProperty BC;
@@ -52,7 +55,7 @@ public class Experiment1ModelPhase3 {
         if (AB == BREAK_IKAS) {
             this.AB.set("Обрыв");
         } else {
-            this.AB.set(String.valueOf(AB));
+            this.AB.set(formatRealNumber(AB));
         }
     }
 
@@ -68,7 +71,7 @@ public class Experiment1ModelPhase3 {
         if (BC == BREAK_IKAS) {
             this.BC.set("Обрыв");
         } else {
-            this.BC.set(String.valueOf(BC));
+            this.BC.set(formatRealNumber(BC));
         }
     }
 
@@ -84,7 +87,7 @@ public class Experiment1ModelPhase3 {
         if (AC == BREAK_IKAS) {
             this.AC.set("Обрыв");
         } else {
-            this.AC.set(String.valueOf(AC));
+            this.AC.set(formatRealNumber(AC));
         }
     }
 

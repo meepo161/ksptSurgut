@@ -26,6 +26,11 @@ public class PM130Model extends Observable {
         this.deviceID = deviceID;
     }
 
+ void resetResponding() {
+        readResponding = true;
+        writeResponding = true;
+    }
+
     void setReadResponding(boolean readResponding) {
         this.readResponding = readResponding;
         setResponding();

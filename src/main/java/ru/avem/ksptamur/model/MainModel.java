@@ -11,12 +11,7 @@ public class MainModel {
     public static final int EXPERIMENT1_BH = 1;
     public static final int EXPERIMENT1_HH = 2;
 
-
-    public static final int EXPERIMENT2_ONLY = 3;
-    public static final int EXPERIMENT2_WITH_NOLOAD_AND_PHASEMETER = 4;
-    public static final int EXPERIMENT2_WITH_PHASEMETER = 5;
-    public static final int EXPERIMENT2_WITH_NOLOAD = 6;
-
+    private int experiment1ChoiceMask;
 
     public static final int EXPERIMENT7_BOTH = 0;
     public static final int EXPERIMENT7_BH = 1;

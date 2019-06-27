@@ -135,17 +135,16 @@ public class PhaseMeterController implements DeviceController {
     @Override
     public void setNeedToRead(boolean needToRead) {
         if (needToRead) {
-            model.setReadResponding(true);
-            model.setWriteResponding(true);
+            model.resetResponding();
         }
         needToReed = needToRead;
     }
 
     @Override
     public void resetAllDeviceStateOnAttempts() {
-        resetReadAttempts();
+        readAttempt = 1;
         readAttemptOfAttempt = 0;
-        resetWriteAttempts();
+        writeAttempt = 1;
         writeAttemptOfAttempt = 0;
     }
 }

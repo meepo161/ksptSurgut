@@ -6,12 +6,17 @@ import java.util.Observer;
 public class CS020201Model extends Observable {
     public static final int RESPONDING_PARAM = 0;
     private int deviceID;
-    private boolean readResponding;
-    private boolean writeResponding;
+    private boolean readResponding = true;
+    private boolean writeResponding = true;
 
     CS020201Model(Observer observer, int deviceID) {
         addObserver(observer);
         this.deviceID = deviceID;
+    }
+
+    void resetResponding() {
+        readResponding = true;
+        writeResponding = true;
     }
 
     void setReadResponding(boolean readResponding) {

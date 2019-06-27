@@ -19,6 +19,11 @@ public class DeltaCP2000Model extends Observable {
     }
 
 
+ void resetResponding() {
+        readResponding = true;
+        writeResponding = true;
+    }
+
     void setReadResponding(boolean readResponding) {
         this.readResponding = readResponding;
         setResponding();

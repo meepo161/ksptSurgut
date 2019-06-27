@@ -1,10 +1,13 @@
 package ru.avem.ksptamur.utils;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import ru.avem.ksptamur.Main;
@@ -47,5 +50,27 @@ public class View {
         } else if (result.isPresent() && result.get() == buttonTypeNo) {
             actionNo.onAction();
         }
+    }
+
+    public enum DeviceState {
+        UNDEFINED,
+        RESPONDING,
+        NOT_RESPONDING
+    }
+
+    public static void setDeviceState(Circle deviceStatus, DeviceState deviceState) {
+        Platform.runLater(() -> {
+            switch (deviceState) {
+                case UNDEFINED:
+                    deviceStatus.setFill(Color.DODGERBLUE);
+                    break;
+                case RESPONDING:
+                    deviceStatus.setFill(Color.LIME);
+                    break;
+                case NOT_RESPONDING:
+                    deviceStatus.setFill(Color.RED);
+                    break;
+            }
+        });
     }
 }

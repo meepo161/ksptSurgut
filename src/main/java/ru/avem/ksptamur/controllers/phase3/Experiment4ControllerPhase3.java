@@ -374,13 +374,13 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
 //            communicationModel.setObjectUMax(60 * VOLT);
 //            sleep(5000);
 
-            communicationModel.setObjectUMax(380 * VOLT);
-            sleep(2000);
-            appendOneMessageToLog("реальное значение 70 /Парма: " + measuringUInAvr);
-            int Time = 9999999;
-            while (isExperimentRunning && isDevicesResponding() && (Time-- > 0)) {
-                sleep(1000);
-            }
+//            communicationModel.setObjectUMax(380 * VOLT);
+//            sleep(2000);
+//            appendOneMessageToLog("реальное значение 70 /Парма: " + measuringUInAvr);
+//            int Time = 9999999;
+//            while (isExperimentRunning && isDevicesResponding() && (Time-- > 0)) {
+//                sleep(1000);
+//            }
 
 //            appendOneMessageToLog("реальное значение 80 /Парма: " + measuringUInAvr);
 //            communicationModel.setObjectUMax(80 * VOLT);
@@ -421,11 +421,10 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
 //            appendOneMessageToLog("реальное значение 200 /Парма: " + measuringUInAvr);
 //            communicationModel.setObjectUMax(200 * VOLT);
 //            sleep(5000);
-//            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-//                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-//                communicationModel.setObjectUMax((int) (UHHTestItem / coef) * VOLT);
-//                regulation(5 * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
-//            }
+            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
+                regulation(5 * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
+            }
 //            sleep(99999999);
 
 
@@ -589,10 +588,10 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                                 Experiment4ModelPhase3.setIA(String.format("%.3f", iA));
                             }
                         }
-//                        if (iA > Ikz) {
-//                            appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
-//                            isExperimentRunning = false;
-//                        }
+                        if (iA > Ikz) {
+                            appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
+                            isExperimentRunning = false;
+                        }
                         break;
                     case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
@@ -608,10 +607,10 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                                 Experiment4ModelPhase3.setIB(String.format("%.3f", iB));
                             }
                         }
-//                        if (iB > Ikz) {
-//                            appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
-//                            isExperimentRunning = false;
-//                        }
+                        if (iB > Ikz) {
+                            appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
+                            isExperimentRunning = false;
+                        }
                         break;
                     case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
@@ -627,10 +626,10 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                                 Experiment4ModelPhase3.setIC(String.format("%.3f", iC));
                             }
                         }
-//                        if (iC > Ikz) {
-//                            appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
-//                            isExperimentRunning = false;
-//                        }
+                        if (iC > Ikz) {
+                            appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
+                            isExperimentRunning = false;
+                        }
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
@@ -651,11 +650,11 @@ public class Experiment4ControllerPhase3 extends DeviceState implements Experime
                             ukzPercent = (measuringUkzPercent * POWER) / POWER;
                             Experiment4ModelPhase3.setUKZPercent(String.format("%.2f", ukzPercent));
                             Experiment4ModelPhase3.setUKZDiff(String.format("%.2f", ukzPercent - UKZTestItem));
-//                            if (measuringUInAvr > UHHTestItem) {
-//                                appendOneMessageToLog("Напряжение достигло номинального, испытание прервано");
-//                                isExperimentRunning = false;
-//                                cause = "Неуспешно";
-//                            }
+                            if (measuringUInAvr > UHHTestItem) {
+                                appendOneMessageToLog("Напряжение достигло номинального, испытание прервано");
+                                isExperimentRunning = false;
+                                cause = "Неуспешно";
+                            }
                         }
                         break;
                     case PM130Model.P_PARAM:

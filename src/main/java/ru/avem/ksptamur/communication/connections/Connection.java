@@ -1,6 +1,7 @@
 package ru.avem.ksptamur.communication.connections;
 
 public interface Connection {
+
     boolean initConnection();
 
     void closeConnection();
@@ -12,4 +13,6 @@ public interface Connection {
     int read(byte[] inputArray);
 
     void setPortParameters(int baudRate, int dataBits, int stopBits, int parity);
+
+    void setConnectionBaudrate(int baudrate);
 }

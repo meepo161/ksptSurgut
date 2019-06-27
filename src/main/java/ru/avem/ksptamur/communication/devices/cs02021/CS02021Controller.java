@@ -1,5 +1,7 @@
 package ru.avem.ksptamur.communication.devices.cs02021;
 
+
+import ru.avem.ksptamur.Constants;
 import ru.avem.ksptamur.communication.connections.Connection;
 import ru.avem.ksptamur.communication.devices.DeviceController;
 import ru.avem.ksptamur.communication.modbus.utils.CRC16;
@@ -7,6 +9,10 @@ import ru.avem.ksptamur.utils.Logger;
 
 import java.nio.ByteBuffer;
 import java.util.Observer;
+
+import static ru.avem.ksptamur.communication.CommunicationModel.LOCK;
+import static ru.avem.ksptamur.utils.Utils.sleep;
+
 
 public class CS02021Controller implements DeviceController {
     private byte address;
@@ -16,121 +22,119 @@ public class CS02021Controller implements DeviceController {
     private CS020201Model model;
     private boolean needToReed;
 
-    public CS02021Controller(int address, Observer observer, Connection connection, int megacsId) {
-        this.address = (byte) address;
+    public CS02021Controller(int deviceID, Observer observer, Connection connection) {
+        address = (byte) deviceID;
         mConnection = connection;
-        model = new CS020201Model(observer, megacsId);
+        model = new CS020201Model(observer, deviceID);
     }
 
-    public synchronized boolean setVoltage(int u) {
-        byte byteU = (byte) (u / 10);
-        ByteBuffer outputBuffer = ByteBuffer.allocate(5)
-                .put((byte) 0x08)
-                .put((byte) 0x01)
-                .put(byteU);
-        CRC16.signReversWithSlice(outputBuffer);
-        mConnection.write(outputBuffer.array());
-        byte[] inputArray = new byte[40];
-        ByteBuffer inputBuffer = ByteBuffer.allocate(40);
-        int attempt = 0;
-        int frameSize = 0;
-        do {
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            frameSize = mConnection.read(inputArray);
-            inputBuffer.put(inputArray, 0, frameSize);
-        } while (inputBuffer.position() < 5 && (++attempt < 10));
-        System.out.println("666666   = " + frameSize);
-        return frameSize > 0;
-    }
-
-    public synchronized float[] readData() {
-        float[] data = new float[4];
-        ByteBuffer outputBuffer = ByteBuffer.allocate(5)
-                .put((byte) 0x08)
-                .put((byte) 0x07)
-                .put((byte) 0x71)
-                .put((byte) 0x64)
-                .put((byte) 0x7F);
-
-        ByteBuffer inputBuffer = ByteBuffer.allocate(40);
-        ByteBuffer finalBuffer = ByteBuffer.allocate(40);
-
-        while (isExperimentRun) {
-            Logger.withTag("StatusActivity").log("isExperimentRun=" + isExperimentRun);
-            inputBuffer.clear();
+    public boolean setVoltage(int u) {
+        synchronized (LOCK) {
+            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
+            byte byteU = (byte) (u / 10);
+            ByteBuffer outputBuffer = ByteBuffer.allocate(5)
+                    .put(address)
+                    .put((byte) 0x01)
+                    .put(byteU);
+            CRC16.signReversWithSlice(outputBuffer);
             mConnection.write(outputBuffer.array());
+            byte[] inputArray = new byte[40];
+            ByteBuffer inputBuffer = ByteBuffer.allocate(40);
+            int attempt = 0;
+            int frameSize = 0;
+            do {
+                sleep(2);
+                frameSize = mConnection.read(inputArray);
+                inputBuffer.put(inputArray, 0, frameSize);
+            } while (inputBuffer.position() < 5 && (++attempt < 10));
+            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
+            return frameSize > 0;
+        }
+    }
+
+    public float[] readData() {
+        synchronized (LOCK) {
+            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
+            float[] data = new float[4];
+            ByteBuffer outputBuffer = ByteBuffer.allocate(5)
+                    .put(address)
+                    .put((byte) 0x07)
+                    .put((byte) 0x71)
+                    .put((byte) 0x64)
+                    .put((byte) 0x7F);
+
+            ByteBuffer inputBuffer = ByteBuffer.allocate(40);
+            ByteBuffer finalBuffer = ByteBuffer.allocate(40);
+
+            while (isExperimentRun) {
+                inputBuffer.clear();
+                mConnection.write(outputBuffer.array());
+                byte[] inputArray = new byte[40];
+                int attempt = 0;
+                do {
+                    sleep(2);
+                    int frameSize = mConnection.read(inputArray);
+                    inputBuffer.put(inputArray, 0, frameSize);
+                } while (inputBuffer.position() < 16 && (++attempt < 15));
+                if (attempt < 15) {
+                    break;
+                }
+            }
+
+            if (inputBuffer.position() == 16) {
+                inputBuffer.flip().position(2);
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put((byte) 0);
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put((byte) 0);
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put((byte) 0);
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put(inputBuffer.get());
+                finalBuffer.put((byte) 0);
+                finalBuffer.flip();
+                data[0] = finalBuffer.getFloat();
+                data[1] = finalBuffer.getFloat();
+                data[2] = finalBuffer.getFloat();
+                data[3] = finalBuffer.getFloat();
+            }
+            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
+            return data;
+        }
+    }
+
+    private boolean isResponding() {
+        synchronized (LOCK) {
+            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
+            ByteBuffer outputBuffer = ByteBuffer.allocate(5)
+                    .put(address)
+                    .put((byte) 0x07)
+                    .put((byte) 0x71)
+                    .put((byte) 0x64)
+                    .put((byte) 0x7F);
+
+            ByteBuffer inputBuffer = ByteBuffer.allocate(40);
+
+            inputBuffer.clear();
+            int writtenBytes = mConnection.write(outputBuffer.array());
+            Logger.withTag("TAG").log("writtenBytes=" + writtenBytes);
             byte[] inputArray = new byte[40];
             int attempt = 0;
             do {
-                try {
-                    Thread.sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                sleep(2);
                 int frameSize = mConnection.read(inputArray);
                 inputBuffer.put(inputArray, 0, frameSize);
             } while (inputBuffer.position() < 16 && (++attempt < 15));
-            if (attempt < 15) {
-                break;
-            }
+            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
+            return inputBuffer.position() >= 16;
         }
-
-        if (inputBuffer.position() == 16) {
-            inputBuffer.flip().position(2);
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put((byte) 0);
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put((byte) 0);
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put((byte) 0);
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put(inputBuffer.get());
-            finalBuffer.put((byte) 0);
-            finalBuffer.flip();
-            data[0] = finalBuffer.getFloat();
-            data[1] = finalBuffer.getFloat();
-            data[2] = finalBuffer.getFloat();
-            data[3] = finalBuffer.getFloat();
-        }
-        return data;
-    }
-
-    public synchronized boolean isResponding() {
-        ByteBuffer outputBuffer = ByteBuffer.allocate(5)
-                .put((byte) 0x08)
-                .put((byte) 0x07)
-                .put((byte) 0x71)
-                .put((byte) 0x64)
-                .put((byte) 0x7F);
-
-        ByteBuffer inputBuffer = ByteBuffer.allocate(40);
-
-        inputBuffer.clear();
-        int writtenBytes = mConnection.write(outputBuffer.array());
-        Logger.withTag("TAG").log("writtenBytes=" + writtenBytes);
-        byte[] inputArray = new byte[40];
-        int attempt = 0;
-        do {
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            int frameSize = mConnection.read(inputArray);
-            inputBuffer.put(inputArray, 0, frameSize);
-        } while (inputBuffer.position() < 16 && (++attempt < 15));
-        return inputBuffer.position() >= 16;
     }
 
     public void setExperimentRun(boolean experimentRun) {
@@ -158,8 +162,6 @@ public class CS02021Controller implements DeviceController {
         needToReed = needToRead;
     }
 
-
-    // TODO: 14.05.2019
     @Override
     public boolean thereAreReadAttempts() {
         return false;

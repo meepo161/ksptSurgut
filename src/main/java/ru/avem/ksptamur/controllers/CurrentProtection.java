@@ -36,25 +36,25 @@ public class CurrentProtection implements Observer {
         switch (modelId) {
             case PR200_ID:
                 switch (param) {
-                    case OwenPRModel.PRI1_FIXED:
+                    case OwenPRModel.PRI1:
                         Platform.runLater(() -> deviceStateKM1.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRI2_FIXED:
+                    case OwenPRModel.PRI2:
                         Platform.runLater(() -> deviceStateKM2.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRI3_FIXED:
+                    case OwenPRModel.PRI3:
                         Platform.runLater(() -> deviceStateKM3.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRI4_FIXED:
+                    case OwenPRModel.PRI4:
                         Platform.runLater(() -> deviceStateKM4.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRI5_FIXED:
+                    case OwenPRModel.PRI5:
                         Platform.runLater(() -> deviceStateKM5.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRI6_FIXED:
+                    case OwenPRModel.PRI6:
                         Platform.runLater(() -> deviceStateKM6.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRI7_FIXED:
+                    case OwenPRModel.PRI7:
                         Platform.runLater(() -> deviceStateKM7.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
                 }

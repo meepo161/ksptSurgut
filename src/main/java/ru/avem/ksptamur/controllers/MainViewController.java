@@ -42,9 +42,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import static ru.avem.ksptamur.Constants.Info.*;
 import static ru.avem.ksptamur.Main.*;
 
-@SuppressWarnings("ALL")
 public class MainViewController implements Statable {
 
 
@@ -83,10 +83,10 @@ public class MainViewController implements Statable {
 
 
     @FXML
-    private Button buttonProtocolCancel;
+    private Button buttonCancel;
 
     @FXML
-    private JFXTextField labelProtocolSerialNumber;
+    private JFXTextField textFieldSerialNumber;
     @FXML
     private JFXComboBox<TestItem> comboBoxTestItem;
 
@@ -121,7 +121,7 @@ public class MainViewController implements Statable {
     @FXML
     private JFXTabPane tabPane;
     @FXML
-    private Tab tabExperiments;
+    private Tab tabSourceData;
     @FXML
     private Tab tabResults;
 
@@ -172,7 +172,6 @@ public class MainViewController implements Statable {
 
     @FXML
     private void initialize() {
-        css = "white";
         setTheme(root);
         mainModel = MainModel.getInstance();
         communicationModel = CommunicationModel.getInstance();
@@ -308,18 +307,26 @@ public class MainViewController implements Statable {
         });
     }
 
-    @Override
-    public void toIdleState() {
+
+    private void toInitIdleState() {
         menuBarProtocolSaveAs.setDisable(true);
         tabResults.setDisable(true);
-        tabPane.getSelectionModel().select(tabExperiments);
-        labelProtocolSerialNumber.clear();
-        labelProtocolSerialNumber.setDisable(false);
+    }
+
+    @Override
+    public void toIdleState() {
+        toInitIdleState();
+
+        textFieldSerialNumber.clear();
+        textFieldSerialNumber.setDisable(false);
         comboBoxTestItem.getSelectionModel().clearSelection();
         comboBoxTestItem.setDisable(false);
-        buttonProtocolCancel.setText("Очистить");
+        buttonCancel.setText("Очистить");
         setLeftStatus("");
         setRightStatus("");
+
+        tabSourceData.setDisable(false);
+        tabPane.getSelectionModel().select(tabSourceData);
         mainModel.setCurrentProtocol(null);
         menuBarDBTestItems.setDisable(false);
         currentState = idleState;
@@ -327,27 +334,34 @@ public class MainViewController implements Statable {
 
     @Override
     public void toWaitState() {
-        tabResults.setDisable(true);
-        tabPane.getSelectionModel().select(tabExperiments);
-        labelProtocolSerialNumber.setDisable(true);
+        textFieldSerialNumber.setDisable(true);
         comboBoxTestItem.setDisable(true);
-        buttonProtocolCancel.setText("Новый");
-        setLeftStatus("Заводской номер: " + labelProtocolSerialNumber.getText());
+        buttonCancel.setText("Новый");
+        setLeftStatus("Заводской номер: " + textFieldSerialNumber.getText());
         setRightStatus("Объект испытания: " + comboBoxTestItem.getSelectionModel().getSelectedItem());
         menuBarProtocolSaveAs.setDisable(false);
+
+        tabSourceData.setDisable(false);
+        tabPane.getSelectionModel().select(tabSourceData);
         menuBarDBTestItems.setDisable(true);
         currentState = waitState;
     }
 
     @Override
     public void toResultState() {
+        tabSourceData.setDisable(true);
         tabResults.setDisable(false);
         tabPane.getSelectionModel().select(tabResults);
         currentState = resultState;
         Protocol currentProtocol = mainModel.getCurrentProtocol();
         currentProtocol.setMillis(System.currentTimeMillis());
-        ProtocolRepository.insertProtocol(currentProtocol);
+        ProtocolRepository.updateProtocol(currentProtocol);
         Toast.makeText("Результаты проведенных испытаний сохранены").show(Toast.ToastType.INFORMATION);
+    }
+
+    @FXML
+    private void handleContinueProtocol() {
+        currentState.toWaitState();
     }
 
     @FXML
@@ -372,7 +386,7 @@ public class MainViewController implements Statable {
             JAXBContext context = JAXBContext.newInstance(Protocol.class);
             Unmarshaller um = context.createUnmarshaller();
             Protocol protocol = (Protocol) um.unmarshal(file);
-            labelProtocolSerialNumber.setText(protocol.getSerialNumber());
+            textFieldSerialNumber.setText(protocol.getSerialNumber());
             comboBoxTestItem.getSelectionModel().select(protocol.getObject());
             mainModel.setCurrentProtocol(protocol);
             currentState.toWaitState();
@@ -405,7 +419,7 @@ public class MainViewController implements Statable {
 
             if (!controller.isCanceled()) {
                 mainModel.applyIntermediateProtocol();
-                labelProtocolSerialNumber.setText(mainModel.getCurrentProtocol().getSerialNumber());
+                textFieldSerialNumber.setText(mainModel.getCurrentProtocol().getSerialNumber());
                 comboBoxTestItem.getSelectionModel().select(mainModel.getCurrentProtocol().getObject());
                 currentState.toWaitState();
             }
@@ -458,6 +472,8 @@ public class MainViewController implements Statable {
         Scene scene = new Scene(page);
         dialogStage.setScene(scene);
         dialogStage.setResizable(false);
+        dialogStage.setOnCloseRequest(event -> {
+        });
         dialogStage.showAndWait();
         toIdleState();
     }
@@ -541,7 +557,6 @@ public class MainViewController implements Statable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("layouts/deviceStateWindow.fxml"));
         Parent page = loader.load();
-        DeviceStateWindowController controller = loader.getController();
 
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Состояние устройств");
@@ -568,7 +583,7 @@ public class MainViewController implements Statable {
 
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Состояние защит");
-        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.setResizable(false);
         dialogStage.setScene(new Scene(page));
 
@@ -616,6 +631,7 @@ public class MainViewController implements Statable {
         currentState.toIdleState();
     }
 
+    @FXML
     public void handleMenuBarProtocolNew() {
         currentState.toIdleState();
     }
@@ -840,8 +856,8 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleStartExperiments() {
-        if (!labelProtocolSerialNumber.getText().isEmpty() && !comboBoxTestItem.getSelectionModel().isEmpty()) {
-            mainModel.createNewProtocol(labelProtocolSerialNumber.getText(), comboBoxTestItem.getSelectionModel().getSelectedItem());
+        if (!textFieldSerialNumber.getText().isEmpty() && !comboBoxTestItem.getSelectionModel().isEmpty()) {
+            mainModel.createNewProtocol(textFieldSerialNumber.getText(), comboBoxTestItem.getSelectionModel().getSelectedItem());
             currentState.toWaitState();
         } else {
             Toast.makeText("Введите заводской номер и выберите объект испытания").show(Toast.ToastType.INFORMATION);
@@ -875,6 +891,11 @@ public class MainViewController implements Statable {
                 isCanceled = start0Experiment();
             }
             if ((checkBoxExperiment1.isSelected() || checkBoxExperiment1.isIndeterminate()) && !isCanceled) {
+                int experiment1ChoiceMask = 0;
+                experiment1ChoiceMask |= rCheckBoxIKASBH.isSelected() ? 0b1 : 0;
+                experiment1ChoiceMask |= rCheckBoxIKASHH.isSelected() ? 0b10 : 0;
+                mainModel.setExperiment1Choice(experiment1ChoiceMask);
+
                 isCanceled = start1Experiment();
             }
             if (checkBoxExperiment2.isSelected() && !isCanceled) {
@@ -961,10 +982,6 @@ public class MainViewController implements Statable {
         return controller != null && controller.isCanceled();
     }
 
-    public void handleEventLog() {
-
-    }
-
     public void setMain(Exitappable exitappable) {
         this.exitappable = exitappable;
     }
@@ -1040,9 +1057,9 @@ public class MainViewController implements Statable {
     @FXML
     public void handleAbout() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Версия ПО");
-        alert.setHeaderText("Версия: 1.3.3");
-        alert.setContentText("Дата: 08.05.2019");
+        alert.setTitle(TITLE);
+        alert.setHeaderText(VERSION);
+        alert.setContentText(DATE);
 
         alert.showAndWait();
     }
