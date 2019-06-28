@@ -1,38 +1,25 @@
 package ru.avem.ksptamur.controllers.phase3;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextArea;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import ru.avem.ksptamur.communication.CommunicationModel;
 import ru.avem.ksptamur.communication.devices.ikas.IKASModel;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.communication.devices.trm.TRMModel;
-import ru.avem.ksptamur.controllers.DeviceState;
-import ru.avem.ksptamur.controllers.ExperimentController;
-import ru.avem.ksptamur.db.model.Protocol;
-import ru.avem.ksptamur.model.MainModel;
+import ru.avem.ksptamur.controllers.AbstractExperiment;
 import ru.avem.ksptamur.model.phase3.Experiment1ModelPhase3;
 import ru.avem.ksptamur.utils.View;
 
 import java.util.Observable;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import static ru.avem.ksptamur.Constants.Formatting.EXPERIMENT_FORMAT;
 import static ru.avem.ksptamur.Main.setTheme;
 import static ru.avem.ksptamur.communication.devices.DeviceController.*;
 import static ru.avem.ksptamur.utils.Utils.sleep;
 import static ru.avem.ksptamur.utils.View.setDeviceState;
 
-public class Experiment1ControllerPhase3 extends DeviceState implements ExperimentController {
-    @FXML
-    private AnchorPane root;
-
+public class Experiment1ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableView<Experiment1ModelPhase3> tableViewExperimentValues;
     @FXML
@@ -48,46 +35,16 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     @FXML
     private TableColumn<Experiment1ModelPhase3, String> tableColumnResultExperiment;
 
-    @FXML
-    private JFXButton buttonCancelAll;
-    @FXML
-    private JFXButton buttonStartStop;
-    @FXML
-    private JFXButton buttonNext;
-
-    @FXML
-    private JFXTextArea textAreaExperimentProcessLog;
-
-    private CommunicationModel communicationModel = CommunicationModel.getInstance();
-
-    private MainModel experimentsValuesModel = MainModel.getInstance();
     private Experiment1ModelPhase3 Experiment1ModelPhase3BH = experimentsValuesModel.getExperiment1ModelPhase3BH();
     private Experiment1ModelPhase3 Experiment1ModelPhase3HH = experimentsValuesModel.getExperiment1ModelPhase3HH();
-
-    private Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
 
     private boolean isBHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b1) > 0;
     private boolean isHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b10) > 0;
 
-    private Stage dialogStage;
-    private boolean isCanceled;
-
-    private volatile boolean isExperimentRunning;
-    private volatile boolean isExperimentEnded = true;
-
-    private String logBuffer;
-
-    private volatile boolean isOwenPRResponding;
-    private volatile boolean isStartButtonOn;
-
-    private volatile boolean isIkasResponding;
     private volatile float ikasReadyParam;
     private volatile float measuringR;
 
-    private volatile boolean isTrmResponding;
     private volatile float temperature;
-
-    private volatile String cause;
 
     @FXML
     public void initialize() {
@@ -107,31 +64,7 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     }
 
     @Override
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-
-    @Override
-    public boolean isCanceled() {
-        return isCanceled;
-    }
-
-    @FXML
-    private void handleExperimentCancel() {
-        dialogStage.close();
-        isCanceled = true;
-    }
-
-    @FXML
-    private void handleRunStopExperiment() {
-        if (isExperimentEnded) {
-            initExperiment();
-        } else {
-            setCause("Отменено оператором");
-        }
-    }
-
-    private void initExperiment() {
+    protected void initExperiment() {
         isExperimentEnded = false;
         isExperimentRunning = true;
 
@@ -156,7 +89,8 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         runExperiment();
     }
 
-    private void runExperiment() {
+    @Override
+    protected void runExperiment() {
         new Thread(() -> {
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
@@ -322,24 +256,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         appendOneMessageToLog("После завершения опыта не забудьте отсоединить провода от ИКАС");
     }
 
-    private void showRequestDialog(String request) {
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
-            AtomicBoolean isPressed = new AtomicBoolean(false);
-            Platform.runLater(() -> {
-                View.showConfirmDialog(request,
-                        () -> isPressed.set(true),
-                        () -> {
-                            setCause("Отменено оператором");
-                            isPressed.set(true);
-                        });
-            });
-
-            while (!isPressed.get()) {
-                sleep(100);
-            }
-        }
-    }
-
     private void startHHExperiment() {
         showRequestDialog("Подключите крокодилы ИКАС к обмотке HH. После нажмите <Да>");
 
@@ -440,7 +356,8 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         }
     }
 
-    private void finalizeExperiment() {
+    @Override
+    protected void finalizeExperiment() {
         communicationModel.offAllKms();
         communicationModel.deinitPR();
         communicationModel.finalizeAllDevices();
@@ -455,52 +372,22 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
         });
     }
 
-    private void appendOneMessageToLog(String message) {
-        if (logBuffer == null || !logBuffer.equals(message)) {
-            logBuffer = message;
-            appendMessageToLog(message);
-        }
-    }
-
-    private void appendMessageToLog(String message) {
-        Platform.runLater(() -> textAreaExperimentProcessLog.appendText(String.format("%s | %s\n", EXPERIMENT_FORMAT.format(System.currentTimeMillis()), message)));
-    }
-
-    private boolean isThereAreAccidents() {
-        return false;
-    }
-
-    private String getAccidentsString(String mainText) {
-        return String.format("%s: ",
-                mainText);
-    }
-
-    private void setCause(String cause) {
-        this.cause = cause;
-        if (!cause.isEmpty()) {
-            isExperimentRunning = false;
-        }
-    }
-
-    private boolean isDevicesResponding() {
+    @Override
+    protected boolean isDevicesResponding() {
         return isOwenPRResponding && isIkasResponding && isTrmResponding;
     }
 
-    private String getNotRespondingDevicesString(String mainText) {
+    @Override
+    protected String getNotRespondingDevicesString(String mainText) {
         return String.format("%s %s%s%s",
                 mainText,
-                isOwenPRResponding ? "" : "БСУ ",
+                isOwenPRResponding ? "" : "ПР200 ",
                 isIkasResponding ? "" : "ИКАС ",
                 isTrmResponding ? "" : "ТРМ");
     }
 
-    @FXML
-    private void handleNextExperiment() {
-        fillFieldsOfExperimentProtocol();
-        dialogStage.close();
-    }
-
-    private void fillFieldsOfExperimentProtocol() {
+    @Override
+    protected void fillFieldsOfExperimentProtocol() {
         currentProtocol.setE1WindingBH(Experiment1ModelPhase3BH.getWinding());
         currentProtocol.setE1ABBH(Experiment1ModelPhase3BH.getAB());
         currentProtocol.setE1BCBH(Experiment1ModelPhase3BH.getBC());

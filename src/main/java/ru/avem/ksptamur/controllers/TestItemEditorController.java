@@ -14,7 +14,7 @@ import javafx.util.converter.DoubleStringConverter;
 import org.controlsfx.control.Notifications;
 import ru.avem.ksptamur.db.TestItemRepository;
 import ru.avem.ksptamur.db.model.TestItem;
-import ru.avem.ksptamur.model.MainModel;
+import ru.avem.ksptamur.model.ExperimentValuesModel;
 import ru.avem.ksptamur.utils.Toast;
 
 import java.util.List;
@@ -24,7 +24,7 @@ import static ru.avem.ksptamur.Main.setTheme;
 
 public class TestItemEditorController {
 
-    private MainModel mainModel;
+    private ExperimentValuesModel experimentsValuesModel;
 
     private ObservableList<TestItem> testItems;
 
@@ -94,7 +94,7 @@ public class TestItemEditorController {
     private void initialize() {
         setTheme(root);
 
-        mainModel = MainModel.getInstance();
+        experimentsValuesModel = ExperimentValuesModel.getInstance();
         initData();
 
         columnTestItemType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -103,7 +103,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setType(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
         columnTestItemUBH.setCellValueFactory(new PropertyValueFactory<>("ubh"));
@@ -112,7 +112,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setUbh(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
         columnTestItemUHH.setCellValueFactory(new PropertyValueFactory<>("uhh"));
@@ -121,7 +121,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setUhh(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
         columnTestItemP.setCellValueFactory(new PropertyValueFactory<>("p"));
@@ -130,7 +130,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setP(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
         columnTestItemIxx.setCellValueFactory(new PropertyValueFactory<>("ixx"));
@@ -139,7 +139,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setIxx(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
 
@@ -149,7 +149,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setUkz(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
 
@@ -159,7 +159,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setXxtime(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
 
@@ -169,7 +169,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setUinsulation(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
 
@@ -179,7 +179,7 @@ public class TestItemEditorController {
                     TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
                     editingTestItem.setUmeger(t.getNewValue());
                     TestItemRepository.updateTestItem(editingTestItem);
-                    mainModel.setNeedRefresh(true);
+                    experimentsValuesModel.setNeedRefresh(true);
                 }
         );
 
@@ -206,7 +206,7 @@ public class TestItemEditorController {
                     Double.parseDouble(textTestItemUMeger.getText()));
             TestItemRepository.insertTestItem(testItem);
             testItems.add(testItem);
-            mainModel.setNeedRefresh(true);
+            experimentsValuesModel.setNeedRefresh(true);
         } else {
             Toast.makeText("Проверьте правильность ввода");
         }
@@ -219,7 +219,7 @@ public class TestItemEditorController {
         if (selectedIndex >= 0) {
             tableTestItems.getItems().remove(selectedIndex);
             TestItemRepository.deleteTestItem(testItem);
-            mainModel.setNeedRefresh(true);
+            experimentsValuesModel.setNeedRefresh(true);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(PRIMARY_STAGE);

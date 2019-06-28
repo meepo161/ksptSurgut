@@ -11,16 +11,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import ru.avem.ksptamur.db.ProtocolRepository;
 import ru.avem.ksptamur.db.model.Protocol;
-import ru.avem.ksptamur.model.MainModel;
+import ru.avem.ksptamur.model.ExperimentValuesModel;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static ru.avem.ksptamur.Main.setTheme;
 
 public class ProtocolSelectorController implements ExperimentController {
 
-    private MainModel mainModel;
+    private ExperimentValuesModel experimentsValuesModel;
 
     private ObservableList<Protocol> protocols;
 
@@ -51,7 +50,7 @@ public class ProtocolSelectorController implements ExperimentController {
     @FXML
     public void initialize() {
         setTheme(root);
-        mainModel = MainModel.getInstance();
+        experimentsValuesModel = ExperimentValuesModel.getInstance();
         initData();
 
         columnProtocolID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -73,7 +72,7 @@ public class ProtocolSelectorController implements ExperimentController {
     private void handleProtocolSelect() {
         int selectedIndex = tableProtocols.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            mainModel.setIntermediateProtocol(tableProtocols.getSelectionModel().getSelectedItem());
+            experimentsValuesModel.setIntermediateProtocol(tableProtocols.getSelectionModel().getSelectedItem());
             isCanceled = false;
             dialogStage.close();
         } else {

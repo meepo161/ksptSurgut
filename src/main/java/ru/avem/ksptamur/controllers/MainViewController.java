@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,8 +28,8 @@ import ru.avem.ksptamur.db.ProtocolRepository;
 import ru.avem.ksptamur.db.TestItemRepository;
 import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.db.model.TestItem;
+import ru.avem.ksptamur.model.ExperimentValuesModel;
 import ru.avem.ksptamur.model.ExperimentsHolder;
-import ru.avem.ksptamur.model.MainModel;
 import ru.avem.ksptamur.model.ResultModel;
 import ru.avem.ksptamur.states.main.*;
 import ru.avem.ksptamur.utils.Toast;
@@ -91,7 +92,7 @@ public class MainViewController implements Statable {
     @FXML
     private MenuItem menuBarDBTestItems;
     @FXML
-    private Parent root;
+    private BorderPane root;
     @FXML
     private CheckMenuItem checkMenuItemTheme;
     @FXML
@@ -135,7 +136,7 @@ public class MainViewController implements Statable {
     @FXML
     private ComboBox<String> comboBoxResult;
 
-    private MainModel mainModel;
+    private ExperimentValuesModel experimentsValuesModel;
 
     private CommunicationModel communicationModel;
 
@@ -161,7 +162,7 @@ public class MainViewController implements Statable {
     @FXML
     private void initialize() {
         setTheme(root);
-        mainModel = MainModel.getInstance();
+        experimentsValuesModel = ExperimentValuesModel.getInstance();
         communicationModel = CommunicationModel.getInstance();
         refreshTestItems();
 
@@ -189,7 +190,7 @@ public class MainViewController implements Statable {
     private void initializeComboBoxResult() {
         comboBoxResult.getItems().setAll(ExperimentsHolder.getNamesOfExperiments());
         comboBoxResult.setOnAction(event -> {
-            Protocol currentProtocol = mainModel.getCurrentProtocol();
+            Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
             switch (comboBoxResult.getSelectionModel().getSelectedItem()) {
                 case Constants.Experiments.EXPERIMENT0_NAME:
                     resultData.clear();
@@ -317,7 +318,7 @@ public class MainViewController implements Statable {
 
         tabSourceData.setDisable(false);
         tabPane.getSelectionModel().select(tabSourceData);
-        mainModel.setCurrentProtocol(null);
+        experimentsValuesModel.setCurrentProtocol(null);
         menuBarDBTestItems.setDisable(false);
         currentState = idleState;
     }
@@ -343,7 +344,7 @@ public class MainViewController implements Statable {
         tabResults.setDisable(false);
         tabPane.getSelectionModel().select(tabResults);
         currentState = resultState;
-        Protocol currentProtocol = mainModel.getCurrentProtocol();
+        Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
         currentProtocol.setMillis(System.currentTimeMillis());
         ProtocolRepository.updateProtocol(currentProtocol);
         Toast.makeText("Результаты проведенных испытаний сохранены").show(Toast.ToastType.INFORMATION);
@@ -378,7 +379,7 @@ public class MainViewController implements Statable {
             Protocol protocol = (Protocol) um.unmarshal(file);
             textFieldSerialNumber.setText(protocol.getSerialNumber());
             comboBoxTestItem.getSelectionModel().select(protocol.getObject());
-            mainModel.setCurrentProtocol(protocol);
+            experimentsValuesModel.setCurrentProtocol(protocol);
             currentState.toWaitState();
             Toast.makeText(String.format("Протокол %s успешно загружен", file.getName())).show(Toast.ToastType.INFORMATION);
         } catch (Exception e) {
@@ -408,9 +409,9 @@ public class MainViewController implements Statable {
             dialogStage.showAndWait();
 
             if (!controller.isCanceled()) {
-                mainModel.applyIntermediateProtocol();
-                textFieldSerialNumber.setText(mainModel.getCurrentProtocol().getSerialNumber());
-                comboBoxTestItem.getSelectionModel().select(mainModel.getCurrentProtocol().getObject());
+                experimentsValuesModel.applyIntermediateProtocol();
+                textFieldSerialNumber.setText(experimentsValuesModel.getCurrentProtocol().getSerialNumber());
+                comboBoxTestItem.getSelectionModel().select(experimentsValuesModel.getCurrentProtocol().getObject());
                 currentState.toWaitState();
             }
         }
@@ -433,7 +434,7 @@ public class MainViewController implements Statable {
             JAXBContext context = JAXBContext.newInstance(Protocol.class);
             Marshaller m = context.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            m.marshal(mainModel.getCurrentProtocol(), file);
+            m.marshal(experimentsValuesModel.getCurrentProtocol(), file);
             Toast.makeText(String.format("Протокол %s успешно сохранён", file.getName())).show(Toast.ToastType.INFORMATION);
         } catch (Exception e) {
             e.printStackTrace();
@@ -610,9 +611,9 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleSelectTestItem() {
-        if (mainModel.isNeedRefresh()) {
+        if (experimentsValuesModel.isNeedRefresh()) {
             refreshTestItems();
-            mainModel.setNeedRefresh(false);
+            experimentsValuesModel.setNeedRefresh(false);
         }
     }
 
@@ -749,13 +750,13 @@ public class MainViewController implements Statable {
     @FXML
     private void handleRadioExperiment1BH() {
         checkBoxExperiment1.setIndeterminate(true);
-        mainModel.setExperiment1Choice(MainModel.EXPERIMENT1_BH);
+        experimentsValuesModel.setExperiment1Choice(ExperimentValuesModel.EXPERIMENT1_BH);
     }
 
     @FXML
     private void handleRadioExperiment1HH() {
         checkBoxExperiment1.setIndeterminate(true);
-        mainModel.setExperiment1Choice(MainModel.EXPERIMENT1_HH);
+        experimentsValuesModel.setExperiment1Choice(ExperimentValuesModel.EXPERIMENT1_HH);
     }
 
 
@@ -821,13 +822,13 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleRadioExperiment7BH() {
-        mainModel.setExperiment7Choice(MainModel.EXPERIMENT7_BH);
+        experimentsValuesModel.setExperiment7Choice(ExperimentValuesModel.EXPERIMENT7_BH);
         checkBoxExperiment7.setIndeterminate(true);
     }
 
     @FXML
     private void handleRadioExperiment7HH() {
-        mainModel.setExperiment7Choice(MainModel.EXPERIMENT7_BH);
+        experimentsValuesModel.setExperiment7Choice(ExperimentValuesModel.EXPERIMENT7_BH);
         checkBoxExperiment7.setIndeterminate(true);
     }
 
@@ -846,13 +847,16 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleStartExperiments() {
+
+//        showJFXDialog(root, "11111", "222222", 800, 600);
+
         if (textFieldSerialNumber.getText().isEmpty() || comboBoxTestItem.getSelectionModel().isEmpty()) {
             Toast.makeText("Введите заводской номер и выберите объект испытания").show(Toast.ToastType.WARNING);
         } else if (!isAtLeastOneIsSelected()) {
             Toast.makeText("Выберите хотя бы одно испытание из списка").show(Toast.ToastType.WARNING);
         } else {
             if (currentState instanceof IdleState) {
-                mainModel.createNewProtocol(textFieldSerialNumber.getText(), comboBoxTestItem.getSelectionModel().getSelectedItem());
+                experimentsValuesModel.createNewProtocol(textFieldSerialNumber.getText(), comboBoxTestItem.getSelectionModel().getSelectedItem());
                 currentState.toWaitState();
             }
 
@@ -863,7 +867,7 @@ public class MainViewController implements Statable {
                 mask |= rCheckBoxMegerBH.isSelected() ? 0b1 : 0;
                 mask |= rCheckBoxMegerHH.isSelected() ? 0b10 : 0;
                 mask |= rCheckBoxMegerBHHH.isSelected() ? 0b100 : 0;
-                mainModel.setExperiment0Choice(mask);
+                experimentsValuesModel.setExperiment0Choice(mask);
 
                 isCanceled = start0Experiment();
             }
@@ -871,7 +875,7 @@ public class MainViewController implements Statable {
                 int experiment1ChoiceMask = 0;
                 experiment1ChoiceMask |= rCheckBoxIKASBH.isSelected() ? 0b1 : 0;
                 experiment1ChoiceMask |= rCheckBoxIKASHH.isSelected() ? 0b10 : 0;
-                mainModel.setExperiment1Choice(experiment1ChoiceMask);
+                experimentsValuesModel.setExperiment1Choice(experiment1ChoiceMask);
 
                 isCanceled = start1Experiment();
             }
@@ -891,7 +895,12 @@ public class MainViewController implements Statable {
                 isCanceled = start6Experiment();
             }
             if ((checkBoxExperiment7.isSelected() || checkBoxExperiment7.isIndeterminate()) && !isCanceled) {
-                isCanceled = start7Experiment();
+                int experiment7ChoiceMask = 0;
+                experiment7ChoiceMask |= rCheckBoxExp7BH.isSelected() ? 0b1 : 0;
+                experiment7ChoiceMask |= rCheckBoxExp7HH.isSelected() ? 0b10 : 0;
+                experimentsValuesModel.setExperiment7Choice(experiment7ChoiceMask);
+
+                isCanceled = start1Experiment();
             }
             if (!isCanceled) {
                 currentState.toResultState();
@@ -985,7 +994,7 @@ public class MainViewController implements Statable {
 
     @FXML
     public void handleSaveCurrentProtocol() {
-        ProtocolRepository.insertProtocol(mainModel.getCurrentProtocol());
+        ProtocolRepository.insertProtocol(experimentsValuesModel.getCurrentProtocol());
         Toast.makeText("Результаты проведенных испытаний сохранены").show(Toast.ToastType.INFORMATION);
     }
 

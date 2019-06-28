@@ -83,10 +83,8 @@
 }
 
 .jfx-text-area {
-    -fx-text-fill: #FF6F61;
-
+    -fx-text-fill: #CCCCCC;
     -jfx-focus-color: #FF6F61;
     -jfx-unfocus-color: #898989;
-
     -fx-background-color: #303030;
 }

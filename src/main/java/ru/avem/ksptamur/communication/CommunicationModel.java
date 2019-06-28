@@ -443,7 +443,7 @@ public class CommunicationModel extends Observable implements Observer {
         onRegisterInTheKms(5, 2);
     }
 
-    public void onPR6M1() {
+    public void onK8() {
         onRegisterInTheKms(6, 2);
     }
 

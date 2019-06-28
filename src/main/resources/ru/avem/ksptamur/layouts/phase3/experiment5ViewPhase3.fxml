@@ -42,7 +42,7 @@
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                      </padding>
                      <children>
-                            <TableView fx:id="tableViewExperiment5" prefHeight="52.0" prefWidth="1120.0">
+                            <TableView fx:id="tableViewExperimentValues" prefHeight="52.0" prefWidth="1120.0">
                                 <placeholder>
                                     <Label text="Нет данных" />
                                 </placeholder>
@@ -72,7 +72,7 @@
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
                         <JFXButton fx:id="buttonCancelAll" buttonType="RAISED" mnemonicParsing="false" onAction="#handleExperimentCancel" text="Отменить все" />
-                        <JFXButton fx:id="buttonStartStop" buttonType="RAISED" mnemonicParsing="false" onAction="#handleStartExperiment" text="Запустить" />
+                        <JFXButton fx:id="buttonStartStop" buttonType="RAISED" mnemonicParsing="false" onAction="#handleRunStopExperiment" text="Запустить" />
                         <JFXButton fx:id="buttonNext" buttonType="RAISED" mnemonicParsing="false" onAction="#handleNextExperiment" text="Далее" />
                      </children>
                      <padding>
@@ -135,7 +135,7 @@
                   <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                </GridPane.margin>
                <children>
-                      <JFXTextArea fx:id="textAreaExperiment5Log" prefHeight="764.0" prefWidth="1620.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                      <JFXTextArea fx:id="textAreaExperimentProcessLog" prefHeight="764.0" prefWidth="1620.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>

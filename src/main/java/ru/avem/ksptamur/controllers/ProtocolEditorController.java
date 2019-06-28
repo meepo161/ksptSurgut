@@ -12,11 +12,10 @@ import javafx.stage.FileChooser;
 import ru.avem.ksptamur.db.ProtocolRepository;
 import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.logging.Logging;
-import ru.avem.ksptamur.model.MainModel;
+import ru.avem.ksptamur.model.ExperimentValuesModel;
 import ru.avem.ksptamur.utils.Toast;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static ru.avem.ksptamur.Main.setTheme;
@@ -47,13 +46,13 @@ public class ProtocolEditorController {
     @FXML
     private ComboBox<String> comboBoxExperiments;
 
-    private MainModel mainModel;
+    private ExperimentValuesModel experimentsValuesModel;
     private ObservableList<Protocol> protocols;
 
     @FXML
     private void initialize() {
         setTheme(root);
-        mainModel = MainModel.getInstance();
+        experimentsValuesModel = ExperimentValuesModel.getInstance();
         initData();
 
         columnProtocolID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -137,7 +136,7 @@ public class ProtocolEditorController {
         if (selectedIndex >= 0) {
             protocols.remove(selectedIndex);
             ProtocolRepository.deleteProtocol(protocol);
-            mainModel.setNeedRefresh(true);
+            experimentsValuesModel.setNeedRefresh(true);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Не выбрано");

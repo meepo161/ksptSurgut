@@ -5,7 +5,7 @@ import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.db.model.TestItem;
 import ru.avem.ksptamur.model.phase3.*;
 
-public class MainModel {
+public class ExperimentValuesModel {
 
     public static final int EXPERIMENT1_BOTH = 0;
     public static final int EXPERIMENT1_BH = 1;
@@ -18,7 +18,7 @@ public class MainModel {
     public static final int EXPERIMENT7_HH = 2;
 
 
-    private static MainModel instance = new MainModel();
+    private static ExperimentValuesModel instance = new ExperimentValuesModel();
 
     private Account firstTester = new Account("ADMIN", "ADMIN", "ADMIN", "ADMIN", "ADMIN");
     private Account secondTester = new Account("ADMIN", "ADMIN", "ADMIN", "ADMIN", "ADMIN");
@@ -47,10 +47,10 @@ public class MainModel {
     private Experiment7ModelPhase3 experiment7ModelPhase3HH = new Experiment7ModelPhase3("HH");
 
 
-    private MainModel() {
+    private ExperimentValuesModel() {
     }
 
-    public static MainModel getInstance() {
+    public static ExperimentValuesModel getInstance() {
         return instance;
     }
 

@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import ru.avem.ksptamur.Main;
 import ru.avem.ksptamur.db.AccountRepository;
 import ru.avem.ksptamur.db.model.Account;
-import ru.avem.ksptamur.model.MainModel;
+import ru.avem.ksptamur.model.ExperimentValuesModel;
 import ru.avem.ksptamur.utils.Toast;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class LoginController {
     private ComboBox<Account> secondTester;
 
     private Main main;
-    private MainModel mainModel = MainModel.getInstance();
+    private ExperimentValuesModel experimentsValuesModel = ExperimentValuesModel.getInstance();
 
     @FXML
     private void handleLogIn() {
@@ -54,7 +54,7 @@ public class LoginController {
                         Toast.makeText("Первый и второй испытатель не могут быть одним и тем же лицом").show(Toast.ToastType.WARNING);
                         return;
                     }
-                    mainModel.setTesters(account, secondTesterAccount);
+                    experimentsValuesModel.setTesters(account, secondTesterAccount);
                     main.showMainView();
                     break;
                 } else {
