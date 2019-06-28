@@ -2,11 +2,19 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<AnchorPane fx:id = "root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptamur.controllers.phase3.Experiment1ControllerPhase3">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptamur.controllers.phase3.Experiment1ControllerPhase3">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -54,9 +62,9 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <JFXButton buttonType="RAISED" fx:id="buttonCancelAll" mnemonicParsing="false" onAction="#handleExperimentCancel" text="Отменить все" />
-                        <JFXButton buttonType="RAISED" fx:id="buttonStartStop" mnemonicParsing="false" onAction="#handleRunStopExperiment" text="Запустить" />
-                        <JFXButton buttonType="RAISED" fx:id="buttonNext" mnemonicParsing="false" onAction="#handleNextExperiment" text="Далее" />
+                        <JFXButton fx:id="buttonCancelAll" buttonType="RAISED" mnemonicParsing="false" onAction="#handleExperimentCancel" text="Отменить все" />
+                        <JFXButton fx:id="buttonStartStop" buttonType="RAISED" mnemonicParsing="false" onAction="#handleRunStopExperiment" text="Запустить" />
+                        <JFXButton fx:id="buttonNext" buttonType="RAISED" mnemonicParsing="false" onAction="#handleNextExperiment" text="Далее" />
                      </children>
                      <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -69,7 +77,7 @@
                   <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                </GridPane.margin>
                <children>
-                  <JFXTextArea fx:id="textAreaExperiment1Log" editable="false" prefHeight="449.0" prefWidth="1155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <JFXTextArea fx:id="textAreaExperimentProcessLog" editable="false" prefHeight="449.0" prefWidth="1155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <AnchorPane GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
@@ -82,42 +90,6 @@
                            </children>
                            <padding>
                               <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCirclePM130" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="PM-130" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCircleParma400" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="Парма 400" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCircleAvem" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="AVEM3-4" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCirclePhaseMeter" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="Фазометр" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="241.0" spacing="8.0">
@@ -133,15 +105,6 @@
                            <children>
                               <Circle fx:id="deviceStateCirclePR200" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
                               <Label text="ПР200" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="194.0" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCircleDELTACP2000" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="DELTA CP2000" />
                            </children>
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

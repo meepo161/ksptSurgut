@@ -102,6 +102,8 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
 
         tableViewExperimentValues.setItems(FXCollections.observableArrayList(Experiment0ModelPhase3BH, Experiment0ModelPhase3HH, Experiment0ModelPhase3BHHH));
         tableViewExperimentValues.setSelectionModel(null);
+
+        communicationModel.addObserver(this);
     }
 
     @Override
@@ -156,14 +158,14 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment1Devices();
+                communicationModel.initExperiment0Devices();
                 sleep(2000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
-                communicationModel.initExperiment1Devices();
+                communicationModel.initExperiment0Devices();
             }
 
             if (isBHSelected && isExperimentRunning && isDevicesResponding()) {
@@ -195,23 +197,6 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
                     }
                 }
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-            } else if (!isStartButtonOn) {
-                if (isBHSelected) {
-                    if (Experiment0ModelPhase3BH.getResult().isEmpty()) {
-                        Experiment0ModelPhase3BH.setResult("Прервано");
-                    }
-                }
-                if (isHHSelected) {
-                    if (Experiment0ModelPhase3HH.getResult().isEmpty()) {
-                        Experiment0ModelPhase3HH.setResult("Прервано");
-                    }
-                }
-                if (isBHHHSelected) {
-                    if (Experiment0ModelPhase3BHHH.getResult().isEmpty()) {
-                        Experiment0ModelPhase3BHHH.setResult("Прервано");
-                    }
-                }
-                appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
             } else if (!isDevicesResponding()) {
                 if (isBHSelected) {
                     if (Experiment0ModelPhase3BH.getResult().isEmpty()) {
@@ -229,6 +214,23 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
                     }
                 }
                 appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+            } else if (!isStartButtonOn) {
+                if (isBHSelected) {
+                    if (Experiment0ModelPhase3BH.getResult().isEmpty()) {
+                        Experiment0ModelPhase3BH.setResult("Прервано");
+                    }
+                }
+                if (isHHSelected) {
+                    if (Experiment0ModelPhase3HH.getResult().isEmpty()) {
+                        Experiment0ModelPhase3HH.setResult("Прервано");
+                    }
+                }
+                if (isBHHHSelected) {
+                    if (Experiment0ModelPhase3BHHH.getResult().isEmpty()) {
+                        Experiment0ModelPhase3BHHH.setResult("Прервано");
+                    }
+                }
+                appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
             }
             appendMessageToLog("------------------------------------------------\n");
 
@@ -523,7 +525,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     private String getNotRespondingDevicesString(String mainText) {
         return String.format("%s %s",
                 mainText,
-                isOwenPRResponding ? "" : "БСУ ");
+                isOwenPRResponding ? "" : "ПР200 ");
     }
 
     @FXML

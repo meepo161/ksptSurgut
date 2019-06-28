@@ -339,7 +339,6 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment0Devices() {
-        megacsController.setNeedToRead(true);
     }
 
     public void initExperiment1Devices() {

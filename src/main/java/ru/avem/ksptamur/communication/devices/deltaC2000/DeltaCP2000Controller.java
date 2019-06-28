@@ -83,6 +83,7 @@ public class DeltaCP2000Controller implements DeviceController {
             }
         } else {
             readAttemptOfAttempt--;
+            resetReadAttempts();
             if (readAttemptOfAttempt <= 0) {
                 model.setReadResponding(false);
             }
@@ -116,6 +117,7 @@ public class DeltaCP2000Controller implements DeviceController {
             }
         } else {
             writeAttemptOfAttempt--;
+            resetWriteAttempts();
             if (writeAttemptOfAttempt <= 0) {
                 model.setWriteResponding(false);
             }
