@@ -280,7 +280,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         }
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
-            float[] data = communicationModel.readDataMgr();// TODO: 24.06.2019 проверять получили ли что-либо
+            float[] data = communicationModel.readDataMgr();
             Experiment0ModelPhase3BH.setUr(String.format("%.2f", data[1]));
             Experiment0ModelPhase3BH.setR15(formatRMrg(data[3]));
             Experiment0ModelPhase3BH.setR60(formatRMrg(data[0]));
@@ -403,7 +403,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
     }
 
     private void startBHHHExperiment() {
-        showRequestDialog("Подключите крокодилы мегаомметра к обмотке BHHH и корпусу. После нажмите <Да>");
+        showRequestDialog("Подключите крокодилы мегаомметра к обмоткам BH и HH. После нажмите <Да>");
 
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
@@ -421,7 +421,7 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         }
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
-            appendOneMessageToLog("Инициализация испытания обмотки BHHH...");
+            appendOneMessageToLog("Инициализация испытания обмоток BH и HH...");
         }
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
@@ -466,24 +466,24 @@ public class Experiment0ControllerPhase3 extends DeviceState implements Experime
         }
 
         if (cause.equals("Мегер не отвечает на запросы")) {
-            appendMessageToLog("Испытание обмотки BHHH прервано по причине: Мегер не отвечает на запросы");
+            appendMessageToLog("Испытание обмоток BH и HH прервано по причине: Мегер не отвечает на запросы");
             Experiment0ModelPhase3BHHH.setResult("Прервано");
             setCause("");
         } else if (cause.isEmpty()) {
             Experiment0ModelPhase3BHHH.setResult("Успешно");
-            appendMessageToLog("Испытание обмотки BHHH завершено успешно");
+            appendMessageToLog("Испытание обмоток BH и HH завершено успешно");
         }
         appendMessageToLog("------------------------------------------------\n");
     }
 
     private void finalizeExperiment() {
         communicationModel.setCS02021ExperimentRun(false);
-
+        communicationModel.finalizeMegaCS();
         Platform.runLater(() -> {
             isExperimentRunning = false;
             isExperimentEnded = true;
             buttonCancelAll.setDisable(false);
-            buttonStartStop.setDisable(false);// TODO: 24.06.2019 научиться перегружать ус-во
+            buttonStartStop.setDisable(false);
             buttonNext.setDisable(false);
         });
     }

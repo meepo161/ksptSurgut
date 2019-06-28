@@ -44,8 +44,6 @@ public class Experiment1ControllerPhase3 extends DeviceState implements Experime
     @FXML
     private TableColumn<Experiment1ModelPhase3, String> tableColumnResistanceAC;
     @FXML
-    private TableColumn<Experiment1ModelPhase3, String> tableColumnResistanceR20;
-    @FXML
     private TableColumn<Experiment1ModelPhase3, String> tableColumnTemperature;
     @FXML
     private TableColumn<Experiment1ModelPhase3, String> tableColumnResultExperiment;

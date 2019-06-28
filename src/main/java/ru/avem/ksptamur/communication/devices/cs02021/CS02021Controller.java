@@ -20,7 +20,7 @@ public class CS02021Controller implements DeviceController {
     private boolean isExperimentRun;
 
     private CS020201Model model;
-    private boolean needToReed;
+    private boolean isNeedToRead;
 
     public CS02021Controller(int deviceID, Observer observer, Connection connection) {
         address = (byte) deviceID;
@@ -153,13 +153,13 @@ public class CS02021Controller implements DeviceController {
     }
 
     @Override
-    public boolean needToRead() {
-        return needToReed;
+    public boolean isNeedToRead() {
+        return isNeedToRead;
     }
 
     @Override
-    public void setNeedToRead(boolean needToRead) {
-        needToReed = needToRead;
+    public void setNeedToRead(boolean isNeedToRead) {
+        this.isNeedToRead = isNeedToRead;
     }
 
     @Override

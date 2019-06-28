@@ -35,7 +35,7 @@ import static ru.avem.ksptamur.utils.Utils.sleep;
 
 public class Experiment7ControllerPhase3 extends DeviceState implements ExperimentController {
     private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
-    private static final double POWER = 100;
+    private static final double mA = 1000;
 
     @FXML
     private TableView<Experiment7ModelPhase3> tableViewExperiment7;
@@ -212,7 +212,7 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         iAOld = -1;
 
         new Thread(() -> {
-            if (mainModel.getExperiment7Choice() == MainModel.  EXPERIMENT7_BOTH && !isBHSuccess) { //если выбрано испытание ВН и НН обмоток
+            if (mainModel.getExperiment7Choice() == MainModel.EXPERIMENT7_BOTH && !isBHSuccess) { //если выбрано испытание ВН и НН обмоток
                 startBH(); //запуск испытния ВН обмотки
                 sleep(5000);
                 startHH(); //запуск испытния НН обмотки
@@ -417,11 +417,9 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
             sleep(100);
         }
 
-
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
             communicationModel.onKM5();
-
         }
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
@@ -472,7 +470,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         communicationModel.finalizeAllDevices(); //прекращаем опрашивать устройства
 
     }
-
 
     private void appendMessageToLog(String message) {
         Platform.runLater(() -> textAreaExperiment7Log.appendText(String.format("%s \t| %s\n", sdf.format(System.currentTimeMillis()), message)));
@@ -537,7 +534,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         return start;
     }
 
-
     @Override
     public void update(Observable o, Object values) {
         int modelId = (int) (((Object[]) values)[0]);
@@ -545,20 +541,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         Object value = (((Object[]) values)[2]);
 
         switch (modelId) {
-//            case AVEM_ID:
-//                switch (param) {
-//                    case AvemVoltmeterModel.RESPONDING_PARAM:
-//                        isAvemResponding = (boolean) value;
-//                        Platform.runLater(() -> deviceStateCircleAvem.setFill(((boolean) value) ? Color.LIME : Color.RED));
-//                        break;
-//                    case AvemVoltmeterModel.U_PARAM:
-//                        if (isNeedToRefresh) {
-//                            setU((float) value);
-//                            sleep(25);
-//                        }
-//                        break;
-//                }
-//                break;
             case PM130_ID:
                 switch (param) {
                     case PM130Model.RESPONDING_PARAM:
@@ -567,7 +549,9 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                         break;
                     case PM130Model.I1_PARAM:
                         setI((float) value);
-                        sleep(25);
+                        break;
+                    case PM130Model.V1_PARAM:
+                        setU((float) value);
                         break;
                 }
                 break;
@@ -577,52 +561,8 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                         isOwenPRResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case OwenPRModel.PRI5:
-                        isStartButtonOn = (boolean) value;
-                        break;
                     case OwenPRModel.PRI6:
-                        isStopButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRI6_FIXED:
-                        if ((boolean) value) {
-                            cause = "Нажата кнопка (СТОП)";
-                            isExperimentRunning = false;
-                        }
-                        break;
-                    case OwenPRModel.PRI1:
-                        isCurrent1On = (boolean) value;
-                        if (!isCurrent1On) {
-                            cause = "сработала токовая защита 1";
-                            isExperimentRunning = false;
-                        }
-                        break;
-                    case OwenPRModel.PRI2:
-                        isCurrent2On = (boolean) value;
-                        if (!isCurrent2On) {
-                            cause = "сработала токовая защита 2";
-                            isExperimentRunning = false;
-                        }
-                        break;
-                    case OwenPRModel.PRI3:
-                        isDoorLockOn = (boolean) value;
-                        if (!isDoorLockOn) {
-                            cause = "открыта дверь";
-                            isExperimentRunning = false;
-                        }
-                        break;
-                    case OwenPRModel.PRI4:
-                        isInsulationOn = (boolean) value;
-                        if (!isInsulationOn) {
-                            cause = "пробита изоляция";
-                            isExperimentRunning = false;
-                        }
-                        break;
-                    case OwenPRModel.PRI7:
-                        isDoorZoneOn = (boolean) value;
-                        if (!isDoorZoneOn) {
-                            cause = "открыта дверь зоны";
-                            isExperimentRunning = false;
-                        }
+                        isStartButtonOn = (boolean) value;
                         break;
                 }
                 break;
@@ -631,7 +571,6 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
                     case DeltaCP2000Model.RESPONDING_PARAM:
                         isDeltaResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
                         break;
                     case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
                         setCurrentFrequencyObject((short) value);
@@ -641,26 +580,25 @@ public class Experiment7ControllerPhase3 extends DeviceState implements Experime
         }
     }
 
-    private void setU(double value) {
-        measuringUIn = (int) (value * POWER) / POWER;
+    private void setU(float value) {
         switch (currentStage) {
             case 1:
-                Experiment7ModelPhase3BH.setUIN(String.valueOf(measuringUIn));
+                Experiment7ModelPhase3BH.setUIN(String.format("%.2f", value));
                 break;
             case 2:
-                Experiment7ModelPhase3HH.setUIN(String.valueOf(measuringUIn));
+                Experiment7ModelPhase3HH.setUIN(String.format("%.2f", value));
                 break;
         }
     }
 
-    private void setI(double value) {
-        iA = (int) (value * STATE_5_TO_5_MULTIPLIER * 1000 * POWER) / POWER;
+    private void setI(float value) {
+        iA = value * mA;
         switch (currentStage) {
             case 1:
-                Experiment7ModelPhase3BH.setIBH(String.valueOf(iA));
+                Experiment7ModelPhase3BH.setIBH(String.format("%.2f", value * mA));
                 break;
             case 2:
-                Experiment7ModelPhase3HH.setIBH(String.valueOf(iA));
+                Experiment7ModelPhase3HH.setIBH(String.format("%.2f", value * mA));
                 break;
         }
         if (iA > 1000.0) {

@@ -31,7 +31,7 @@ public class PM130Controller implements DeviceController {
     public byte readAttemptOfAttempt = NUMBER_OF_READ_ATTEMPTS_OF_ATTEMPTS;
     public byte writeAttempt = NUMBER_OF_WRITE_ATTEMPTS;
     public byte writeAttemptOfAttempt = NUMBER_OF_WRITE_ATTEMPTS_OF_ATTEMPTS;
-    private boolean needToReed;
+    private boolean isNeedToRead;
     private byte address;
 
     public PM130Controller(int address, Observer observer, ModbusController controller, int deviceID) {
@@ -218,16 +218,16 @@ public class PM130Controller implements DeviceController {
     }
 
     @Override
-    public boolean needToRead() {
-        return needToReed;
+    public boolean isNeedToRead() {
+        return isNeedToRead;
     }
 
     @Override
-    public void setNeedToRead(boolean needToRead) {
-        if (needToRead) {
+    public void setNeedToRead(boolean isNeedToRead) {
+        if (isNeedToRead) {
             model.resetResponding();
         }
-        needToReed = needToRead;
+        this.isNeedToRead = isNeedToRead;
     }
 
     @Override

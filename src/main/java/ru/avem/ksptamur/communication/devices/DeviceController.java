@@ -26,9 +26,9 @@ public interface DeviceController {
 
     boolean thereAreWriteAttempts();
 
-    boolean needToRead();
+    boolean isNeedToRead();
 
-    void setNeedToRead(boolean needToRead);
+    void setNeedToRead(boolean isNeedToRead);
 
     void resetAllAttempts();
 

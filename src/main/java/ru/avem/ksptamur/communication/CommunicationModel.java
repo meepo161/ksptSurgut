@@ -91,7 +91,7 @@ public class CommunicationModel extends Observable implements Observer {
         new Thread(() -> {
             while (!isFinished) {
                 for (DeviceController deviceController : devicesControllers) {
-                    if (deviceController.needToRead()) {
+                    if (deviceController.isNeedToRead()) {
                         if (deviceController instanceof PM130Controller) {
                             for (int i = 1; i <= 4; i++) {
                                 deviceController.read(i);
