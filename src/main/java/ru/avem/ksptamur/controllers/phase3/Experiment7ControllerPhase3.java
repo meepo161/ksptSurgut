@@ -125,6 +125,8 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
         isDeltaResponding = false;
         setDeviceState(deviceStateCircleDELTACP2000, View.DeviceState.UNDEFINED);
+        isAvemResponding = false;
+        setDeviceState(deviceStateCircleAVEM, View.DeviceState.UNDEFINED);
 
 
         isNeedToRefresh = true;
@@ -194,6 +196,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
+            communicationModel.onK10();
             communicationModel.onK9();
             communicationModel.onK8();
             communicationModel.onKM4();

@@ -222,7 +222,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                     communicationModel.onKM11();
                     communicationModel.onKM5();
                     communicationModel.onKM13();
-                    communicationModel.onK10();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
                 } else {
                     communicationModel.offAllKms();
