@@ -99,11 +99,10 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
         isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnded = false;
+        isStartButtonOn = false;
 
         isOwenPRResponding = false;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
-        isDeltaResponding = false;
-        setDeviceState(deviceStateCircleDELTACP2000, View.DeviceState.UNDEFINED);
         isParmaResponding = false;
         setDeviceState(deviceStateCirclePM130, View.DeviceState.UNDEFINED);
         isPhaseMeterResponding = false;
@@ -126,6 +125,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
+                communicationModel.initExperiment3Devices();
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -139,8 +139,6 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                isStartButtonOn = false;
-                sleep(1000);
             }
 
             while (isExperimentRunning && !isStartButtonOn) {
@@ -151,13 +149,15 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
                 appendOneMessageToLog("Идет загрузка ЧП");
-                sleep(8000);
+                sleep(6000);
                 communicationModel.initExperiment3Devices();
+                sleep(3000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
+                communicationModel.initExperiment3Devices();
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
@@ -193,10 +193,6 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     protected void finalizeExperiment() {
         isNeedToRefresh = false;
         sleep(100);
-
-        appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
-        communicationModel.stopObject();
-        sleep(3000);
 
         communicationModel.offAllKms();
         communicationModel.deinitPR();

@@ -342,6 +342,7 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment1Devices() {
+        resetTimer();
         ikasController.setNeedToRead(true);
         ikasController.resetAllAttempts();
         trmController.setNeedToRead(true);
@@ -349,6 +350,7 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment2Devices() {
+        resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
         parmaT400Controller.setNeedToRead(true);
@@ -356,6 +358,7 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment3Devices() {
+        resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
         parmaT400Controller.setNeedToRead(true);
@@ -365,6 +368,7 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment4Devices() {
+        resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
@@ -372,11 +376,13 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment5Devices() {
+        resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
     }
 
     public void initExperiment6Devices() {
+        resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
@@ -384,11 +390,11 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment7Devices() {
-
-    }
-
-    public void initExperiment8Devices() {
-
+        resetTimer();
+        pm130Controller.setNeedToRead(true);
+        pm130Controller.resetAllAttempts();
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void onKM2() {

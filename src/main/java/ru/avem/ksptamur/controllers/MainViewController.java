@@ -900,7 +900,7 @@ public class MainViewController implements Statable {
                 experiment7ChoiceMask |= rCheckBoxExp7HH.isSelected() ? 0b10 : 0;
                 experimentsValuesModel.setExperiment7Choice(experiment7ChoiceMask);
 
-                isCanceled = start1Experiment();
+                isCanceled = start7Experiment();
             }
             if (!isCanceled) {
                 currentState.toResultState();

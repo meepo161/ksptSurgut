@@ -94,6 +94,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     private volatile double iCPercentD;
     private volatile double cosParma;
     private volatile double IAvr;
+    private volatile double coef = 2.16;
 
     @FXML
     public void initialize() {
@@ -158,10 +159,8 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
 
         isOwenPRResponding = false;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
-        isDeltaResponding = false;
-        setDeviceState(deviceStateCircleDELTACP2000, View.DeviceState.UNDEFINED);
-
-        isNeedToWaitDelta = false;
+        isPM130Responding = false;
+        setDeviceState(deviceStateCirclePM130, View.DeviceState.UNDEFINED);
 
         isNeedToRefresh = true;
 
@@ -208,6 +207,10 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 communicationModel.initExperiment5Devices();
             }
 
+            if (isExperimentRunning && isStartButtonOn) {
+                communicationModel.initExperiment5Devices();
+            }
+
             while (isExperimentRunning && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
@@ -219,6 +222,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                     communicationModel.onKM11();
                     communicationModel.onKM5();
                     communicationModel.onKM13();
+                    communicationModel.onK10();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
                 } else {
                     communicationModel.offAllKms();
@@ -261,10 +265,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     protected void finalizeExperiment() {
         isNeedToRefresh = false;
         sleep(100);
-
-        appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
         communicationModel.stopObject();
-        sleep(3000);
 
         communicationModel.offAllKms();
         communicationModel.deinitPR();
@@ -302,7 +303,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         return String.format("%s %s%s",
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
-                isPM130Responding ? "" : "Парма ");
+                isPM130Responding ? "" : "ПМ130 ");
     }
 
     private void pickUpState() {
@@ -510,8 +511,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                             } else if (is5to5State) {
                                 measuringP *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            String PParma = formatRealNumber(measuringP);
-                            experiment5ModelPhase3.setPP(PParma);
+                            experiment5ModelPhase3.setPP(formatRealNumber(measuringP));
                         }
                         break;
                     case PM130Model.F_PARAM:
@@ -530,17 +530,17 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (float) value;
+                            measuringUInAB = (float) value * coef;
                         }
                         break;
                     case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInBC = (float) value;
+                            measuringUInBC = (float) value * coef;
                         }
                         break;
                     case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInCA = (float) value;
+                            measuringUInCA = (float) value * coef;
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3.0;
                             String UInAvr = formatRealNumber(measuringUInAvr);
                             if (measuringUInAvr > 0.001) {

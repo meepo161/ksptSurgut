@@ -125,13 +125,13 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
         isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnded = false;
+        isStartButtonOn = false;
 
         isOwenPRResponding = false;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
         isDeltaResponding = false;
         setDeviceState(deviceStateCircleDELTACP2000, View.DeviceState.UNDEFINED);
 
-        isNeedToWaitDelta = false;
 
         isNeedToRefresh = true;
 
@@ -148,6 +148,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
+                communicationModel.initExperiment4Devices();
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -161,8 +162,6 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                isStartButtonOn = false;
-                sleep(1000);
             }
 
             while (isExperimentRunning && !isStartButtonOn) {
@@ -173,13 +172,15 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
                 appendOneMessageToLog("Идет загрузка ЧП");
-                sleep(8000);
+                sleep(6000);
                 communicationModel.initExperiment4Devices();
+                sleep(3000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
+                communicationModel.initExperiment4Devices();
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
@@ -268,7 +269,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected boolean isDevicesResponding() {
-        return isOwenPRResponding && isParmaResponding &&
+        return isOwenPRResponding && isPM130Responding &&
                 isDeltaResponding;
     }
 
@@ -341,28 +342,19 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             case PM130_ID:
                 switch (param) {
                     case PM130Model.RESPONDING_PARAM:
-                        isParmaResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
+                        isPM130Responding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCirclePM130.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
                     case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
                             iA = (float) value;
-
-
                             if (is200to5State) {
                                 iA *= STATE_200_TO_5_MULTIPLIER;
-
-
                             } else if (is40to5State) {
                                 iA *= STATE_40_TO_5_MULTIPLIER;
-
-
                             } else if (is5to5State) {
                                 iA *= STATE_5_TO_5_MULTIPLIER;
                             }
-
-
                             if (iA > 0.001) {
                                 experiment4ModelPhase3.setIA(String.format("%.3f", iA));
                             }

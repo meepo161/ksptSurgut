@@ -110,6 +110,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnded = false;
+        isStartButtonOn = false;
 
         isOwenPRResponding = false;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
@@ -147,6 +148,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         if (isExperimentRunning) {
             appendOneMessageToLog("Начало испытания");
             communicationModel.initOwenPrController();
+            communicationModel.initExperiment7Devices();
         }
 
         if (isExperimentRunning && !isOwenPRResponding) {
@@ -160,8 +162,6 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = false;
-            sleep(1000);
         }
 
         while (isExperimentRunning && !isStartButtonOn) {
@@ -172,34 +172,46 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
             appendOneMessageToLog("Идет загрузка ЧП");
-            sleep(8000);
+            sleep(6000);
             communicationModel.initExperiment7Devices();
+            sleep(3000);
         }
 
         while (isExperimentRunning && !isDevicesResponding()) {
             appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
             sleep(100);
+            communicationModel.initExperiment7Devices();
         }
 
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания");
-            communicationModel.initExperiment7Devices();
             communicationModel.onK9();
             communicationModel.onK8();
             communicationModel.onKM4();
             communicationModel.onKM12();
+            sleep(1000);
         }
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-            communicationModel.setObjectParams(50 * HZ, 5 * VOLT, 50 * HZ);
+            communicationModel.setObjectParams(50 * HZ, 1 * VOLT, 50 * HZ);
             appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
             communicationModel.startObject();
+            sleep(1000);
         }
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Поднимаем напряжение до " + (int) UInsulation + "B");
-            regulation(5 * VOLT, 40, 15, (int) UInsulation, 0.1, 30, 100, 200);
+//            regulation(1 * VOLT, 6, 2, (int) UInsulation, 0.1, 30, 100, 200);
+            communicationModel.setObjectUMax(1 * VOLT);
+            sleep(5000);
+            communicationModel.setObjectUMax(2 * VOLT);
+            sleep(5000);
+            communicationModel.setObjectUMax(3 * VOLT);
+            sleep(5000);
+            communicationModel.setObjectUMax(4 * VOLT);
+            sleep(5000);
+            communicationModel.setObjectUMax(5 * VOLT);
         }
 
         int experimentTime = 60;
@@ -391,7 +403,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
                 isDeltaResponding ? "" : "Дельта ",
-                isPM130Responding ? "" : "Парма ");
+                isPM130Responding ? "" : "ПМ130 ");
     }
 
     private int regulation(int start, int coarseStep, int fineStep, int end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {

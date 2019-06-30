@@ -94,7 +94,6 @@ public class Experiment0ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment0Devices();
-                sleep(2000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {

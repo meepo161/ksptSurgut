@@ -119,15 +119,6 @@
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="194.0" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCircleDELTACP2000" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="DELTA CP2000" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </HBox>
                      </children>
                      <padding>
                         <Insets right="16.0" />
