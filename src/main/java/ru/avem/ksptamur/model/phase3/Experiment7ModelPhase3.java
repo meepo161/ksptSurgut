@@ -11,6 +11,7 @@ public class Experiment7ModelPhase3 {
 
     private final StringProperty type;
     private final StringProperty UIN;
+    private final StringProperty UAVEM;
     private final StringProperty IBH;
     private final StringProperty time;
     private final StringProperty result;
@@ -19,10 +20,11 @@ public class Experiment7ModelPhase3 {
     public Experiment7ModelPhase3(String type) {
         this.type = new SimpleStringProperty(type);
         this.UIN = new SimpleStringProperty("");
+        this.UAVEM = new SimpleStringProperty("");
         this.IBH = new SimpleStringProperty("");
         this.time = new SimpleStringProperty("");
         this.result = new SimpleStringProperty("");
-        properties.addAll(Arrays.asList(UIN, IBH, time, result));
+        properties.addAll(Arrays.asList(UIN, UAVEM, IBH, time, result));
     }
 
     public String getType() {
@@ -59,6 +61,18 @@ public class Experiment7ModelPhase3 {
 
     public void setUIN(String UIN) {
         this.UIN.set(UIN);
+    }
+
+    public String getUAVEM() {
+        return UAVEM.get();
+    }
+
+    public StringProperty UAVEMProperty() {
+        return UAVEM;
+    }
+
+    public void setUAVEM(String UAVEM) {
+        this.UAVEM.set(UAVEM);
     }
 
     public String getIBH() {

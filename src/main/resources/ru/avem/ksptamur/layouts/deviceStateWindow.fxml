@@ -75,6 +75,15 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="16.0">
                      <children>
+                          <Circle fx:id="deviceStateCircleAVEM" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="АВЭМ4-03" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
                           <Circle fx:id="deviceStateCirclePhaseMeter" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
                           <Label text="Фазометр" />
                      </children>

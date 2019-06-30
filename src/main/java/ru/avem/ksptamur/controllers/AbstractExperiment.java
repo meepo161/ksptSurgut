@@ -47,6 +47,7 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     protected volatile boolean isDeltaResponding;
     protected volatile boolean isParmaResponding;
     protected volatile boolean isPM130Responding;
+    protected volatile boolean isAvemResponding;
     protected volatile boolean isIkasResponding;
     protected volatile boolean isTrmResponding;
     protected volatile boolean isPhaseMeterResponding;

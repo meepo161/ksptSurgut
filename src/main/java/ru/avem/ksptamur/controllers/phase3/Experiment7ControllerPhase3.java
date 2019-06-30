@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
+import ru.avem.ksptamur.communication.devices.avem_voltmeter.AvemVoltmeterModel;
 import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
@@ -37,6 +38,8 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableColumn<Experiment7ModelPhase3, String> tableColumnU;
     @FXML
+    private TableColumn<Experiment7ModelPhase3, String> tableColumnUAVEM;
+    @FXML
     private TableColumn<Experiment7ModelPhase3, String> tableColumnI;
     @FXML
     private TableColumn<Experiment7ModelPhase3, String> tableColumnTime;
@@ -54,9 +57,12 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     private double UInsulation = currentProtocol.getUinsulation();
 
     private volatile double iA;
-    private volatile double coef = 500;
+    private volatile double coefAvem = 500;
+    private volatile double coef = 250;
     private volatile double iAOld;
+    private volatile double measuringUAvem;
     private volatile double measuringUIn;
+    private volatile double coefTransformationRatio;
     private volatile int currentStage;
 
     @FXML
@@ -73,6 +79,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         tableColumnType.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         tableColumnU.setCellValueFactory(cellData -> cellData.getValue().UINProperty());
+        tableColumnUAVEM.setCellValueFactory(cellData -> cellData.getValue().UAVEMProperty());
         tableColumnI.setCellValueFactory(cellData -> cellData.getValue().IBHProperty());
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         tableColumnResult.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
@@ -83,12 +90,14 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
         currentProtocol.setE8TypeBHandCorps(experiment7ModelPhase3BH.getType());
         currentProtocol.setE8UBHandCorps(experiment7ModelPhase3BH.getUIN());
+        currentProtocol.setE8UBHAvem(experiment7ModelPhase3BH.getUAVEM());
         currentProtocol.setE8IBHandCorps(experiment7ModelPhase3BH.getIBH());
         currentProtocol.setE8TimeBHandCorps(experiment7ModelPhase3BH.getTime());
         currentProtocol.setE8ResultBHandCorps(experiment7ModelPhase3BH.getResult());
 
         currentProtocol.setE8TypeHHandCorps(experiment7ModelPhase3HH.getType());
         currentProtocol.setE8UHHandCorps(experiment7ModelPhase3HH.getUIN());
+        currentProtocol.setE8UHHAvem(experiment7ModelPhase3BH.getUAVEM());
         currentProtocol.setE8IHHandCorps(experiment7ModelPhase3HH.getIBH());
         currentProtocol.setE8TimeHHandCorps(experiment7ModelPhase3HH.getTime());
         currentProtocol.setE8ResultHHandCorps(experiment7ModelPhase3HH.getResult());
@@ -174,7 +183,6 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             appendOneMessageToLog("Идет загрузка ЧП");
             sleep(6000);
             communicationModel.initExperiment7Devices();
-            sleep(3000);
         }
 
         while (isExperimentRunning && !isDevicesResponding()) {
@@ -202,16 +210,19 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
             appendOneMessageToLog("Поднимаем напряжение до " + (int) UInsulation + "B");
-//            regulation(1 * VOLT, 6, 2, (int) UInsulation, 0.1, 30, 100, 200);
-            communicationModel.setObjectUMax(1 * VOLT);
-            sleep(5000);
-            communicationModel.setObjectUMax(2 * VOLT);
-            sleep(5000);
-            communicationModel.setObjectUMax(3 * VOLT);
-            sleep(5000);
-            communicationModel.setObjectUMax(4 * VOLT);
-            sleep(5000);
             communicationModel.setObjectUMax(5 * VOLT);
+            sleep(500);
+            communicationModel.setObjectUMax(15 * VOLT);
+            sleep(500);
+            communicationModel.setObjectUMax(25 * VOLT);
+            sleep(1000);
+            if (coefTransformationRatio > 1.5 && coefTransformationRatio < 2.5) {
+                setCause("Коэффициент трансформации выходит за пределы");
+            }
+        }
+
+        if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            regulation(25 * VOLT, 6, 2, (int) UInsulation, 0.1, 30, 100, 200);
         }
 
         int experimentTime = 60;
@@ -409,19 +420,19 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     private int regulation(int start, int coarseStep, int fineStep, int end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
         double coarseMinLimit = 1 - coarseLimit;
         double coarseMaxLimit = 1 + coarseLimit;
-        while (isExperimentRunning && ((measuringUIn < end * coarseMinLimit) || (measuringUIn > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUIn < end * coarseMinLimit) {
+        while (isExperimentRunning && ((measuringUAvem < end * coarseMinLimit) || (measuringUAvem > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
+            if (measuringUAvem < end * coarseMinLimit) {
                 communicationModel.setObjectUMax(start += coarseStep);
-            } else if (measuringUIn > end * coarseMaxLimit) {
+            } else if (measuringUAvem > end * coarseMaxLimit) {
                 communicationModel.setObjectUMax(start -= coarseStep);
             }
             sleep(coarseSleep);
             appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
         }
-        while (isExperimentRunning && ((measuringUIn < end - fineLimit) || (measuringUIn > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
-            if (measuringUIn < end - fineLimit) {
+        while (isExperimentRunning && ((measuringUAvem < end - fineLimit) || (measuringUAvem > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
+            if (measuringUAvem < end - fineLimit) {
                 communicationModel.setObjectUMax(start += fineStep);
-            } else if (measuringUIn > end + fineLimit) {
+            } else if (measuringUAvem > end + fineLimit) {
                 communicationModel.setObjectUMax(start -= fineStep);
             }
             sleep(fineSleep);
@@ -451,6 +462,20 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
                         break;
                 }
                 break;
+            case AVEM_ID:
+                switch (param) {
+                    case AvemVoltmeterModel.RESPONDING_PARAM:
+                        isAvemResponding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleAVEM.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        break;
+                    case AvemVoltmeterModel.U_PARAM:
+                        if (isNeedToRefresh) {
+                            setUAvem((float) value);
+                            coefTransformationRatio = measuringUIn / measuringUAvem;
+                        }
+                        break;
+                }
+                break;
             case PR200_ID:
                 switch (param) {
                     case OwenPRModel.RESPONDING_PARAM:
@@ -473,6 +498,20 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         }
     }
 
+    private void setUAvem(double value) {
+        if (isNeedToRefresh) {
+            measuringUAvem = value * coefAvem;
+            switch (currentStage) {
+                case 1:
+                    experiment7ModelPhase3BH.setUAVEM(formatRealNumber(measuringUAvem));
+                    break;
+                case 2:
+                    experiment7ModelPhase3HH.setUAVEM(formatRealNumber(measuringUAvem));
+                    break;
+            }
+        }
+    }
+
     private void setU(float value) {
         if (isNeedToRefresh) {
             measuringUIn = value * coef;
@@ -486,6 +525,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             }
         }
     }
+
 
     private void setI(float value) {
         if (isNeedToRefresh) {

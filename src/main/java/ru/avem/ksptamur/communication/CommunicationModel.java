@@ -4,6 +4,7 @@ import ru.avem.ksptamur.Constants;
 import ru.avem.ksptamur.communication.connections.Connection;
 import ru.avem.ksptamur.communication.connections.SerialConnection;
 import ru.avem.ksptamur.communication.devices.DeviceController;
+import ru.avem.ksptamur.communication.devices.avem_voltmeter.AvemVoltmeterController;
 import ru.avem.ksptamur.communication.devices.cs02021.CS02021Controller;
 import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Controller;
 import ru.avem.ksptamur.communication.devices.ikas.IKASController;
@@ -41,6 +42,7 @@ public class CommunicationModel extends Observable implements Observer {
 
     public OwenPRController owenPRController;
     public PM130Controller pm130Controller;
+    public AvemVoltmeterController avemVoltmeterController;
     public IKASController ikasController;
     public ParmaT400Controller parmaT400Controller;
     public PhaseMeterController phaseMeterController;
@@ -69,6 +71,9 @@ public class CommunicationModel extends Observable implements Observer {
 
         parmaT400Controller = new ParmaT400Controller(2, this, modbusController, PARMA400_ID);
         devicesControllers.add(parmaT400Controller);
+
+        avemVoltmeterController = new AvemVoltmeterController(3, this, modbusController, AVEM_ID);
+        devicesControllers.add(avemVoltmeterController);
 
         phaseMeterController = new PhaseMeterController(4, this, modbusController, PHASEMETER_ID);
         devicesControllers.add(phaseMeterController);
@@ -395,6 +400,8 @@ public class CommunicationModel extends Observable implements Observer {
         pm130Controller.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
         deltaCP2000Controller.resetAllAttempts();
+        avemVoltmeterController.setNeedToRead(true);
+        avemVoltmeterController.resetAllAttempts();
     }
 
     public void onKM2() {

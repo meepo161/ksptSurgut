@@ -10,6 +10,7 @@ public interface DeviceController {
 
     int PM130_ID = 1;
     int PARMA400_ID = 2;
+    int AVEM_ID = 3;
     int PHASEMETER_ID = 4;
     int IKAS_ID = 5;
     int PR200_ID = 6;

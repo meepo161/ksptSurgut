@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import ru.avem.ksptamur.communication.devices.avem_voltmeter.AvemVoltmeterModel;
 import ru.avem.ksptamur.communication.devices.cs02021.CS020201Model;
 //import ru.avem.ksptamur.communication.devices.fr_a800.FRA800Model;
 import ru.avem.ksptamur.communication.devices.deltaC2000.DeltaCP2000Model;
@@ -26,6 +27,8 @@ public class DeviceState implements Observer {
     protected Circle deviceStateCirclePM130;
     @FXML
     protected Circle deviceStateCircleParma400;
+    @FXML
+    protected Circle deviceStateCircleAVEM;
     @FXML
     protected Circle deviceStateCircleCS0202;
     @FXML
@@ -55,6 +58,10 @@ public class DeviceState implements Observer {
             case PR200_ID:
                 if (param == OwenPRModel.RESPONDING_PARAM) {
                     Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                }
+            case AVEM_ID:
+                if (param == AvemVoltmeterModel.RESPONDING_PARAM) {
+                    Platform.runLater(() -> deviceStateCircleAVEM.setFill(((boolean) value) ? Color.LIME : Color.RED));
                 }
                 break;
             case PM130_ID:

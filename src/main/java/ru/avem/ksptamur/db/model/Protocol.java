@@ -194,6 +194,8 @@ public class Protocol {
     @DatabaseField
     private String e8UBHandCorps = "";
     @DatabaseField
+    private String e8UBHAvem = "";
+    @DatabaseField
     private String e8TimeBHandCorps = "";
     @DatabaseField
     private String e8ResultBHandCorps = "";
@@ -203,6 +205,8 @@ public class Protocol {
     private String e8IHHandCorps = "";
     @DatabaseField
     private String e8UHHandCorps = "";
+    @DatabaseField
+    private String e8UHHAvem = "";
     @DatabaseField
     private String e8TimeHHandCorps = "";
     @DatabaseField
@@ -1039,6 +1043,22 @@ public class Protocol {
         this.e8ResultHHandCorps = e8ResultHHandCorps;
     }
 
+    public String getE8UBHAvem() {
+        return e8UBHAvem;
+    }
+
+    public void setE8UBHAvem(String e8UBHAvem) {
+        this.e8UBHAvem = e8UBHAvem;
+    }
+
+    public String getE8UHHAvem() {
+        return e8UHHAvem;
+    }
+
+    public void setE8UHHAvem(String e8UHHAvem) {
+        this.e8UHHAvem = e8UHHAvem;
+    }
+
     public String getType() {
         return type;
     }
@@ -1280,11 +1300,13 @@ public class Protocol {
                 Objects.equals(e8TypeBHandCorps, protocol.e8TypeBHandCorps) &&
                 Objects.equals(e8IBHandCorps, protocol.e8IBHandCorps) &&
                 Objects.equals(e8UBHandCorps, protocol.e8UBHandCorps) &&
+                Objects.equals(e8UBHAvem, protocol.e8UBHAvem) &&
                 Objects.equals(e8TimeBHandCorps, protocol.e8TimeBHandCorps) &&
                 Objects.equals(e8ResultBHandCorps, protocol.e8ResultBHandCorps) &&
                 Objects.equals(e8TypeHHandCorps, protocol.e8TypeHHandCorps) &&
                 Objects.equals(e8IHHandCorps, protocol.e8IHHandCorps) &&
                 Objects.equals(e8UHHandCorps, protocol.e8UHHandCorps) &&
+                Objects.equals(e8UHHAvem, protocol.e8UHHAvem) &&
                 Objects.equals(e8TimeHHandCorps, protocol.e8TimeHHandCorps) &&
                 Objects.equals(e8ResultHHandCorps, protocol.e8ResultHHandCorps) &&
                 Objects.equals(serialNumber, protocol.serialNumber) &&
@@ -1301,6 +1323,6 @@ public class Protocol {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, e0WindingBH, e0UBH, e0R15BH, e0R60BH, e0CoefBH, e0TBH, e0ResultBH, e0WindingHH, e0UHH, e0R15HH, e0R60HH, e0CoefHH, e0THH, e0ResultHH, e0WindingBHHH, e0UBHHH, e0R15BHHH, e0R60BHHH, e0CoefBHHH, e0TBHHH, e0ResultBHHH, e1WindingBH, e1ABBH, e1BCBH, e1CABH, e1TBH, e1ResultBH, e1WindingHH, e1ABHH, e1BCHH, e1CAHH, e1THH, e1ResultHH, e2UInputAB, e2UInputBC, e2UInputCA, e2UInputAvr, e2UOutputAB, e2UOutputBC, e2UOutputCA, e2UOutputAvr, e2DiffU, e2F, e2Result, e3UBH, e3UHH, e3F, e3Result, e4WindingBH, e4WindingHH, e4UBH, e4UHH, e4Result, e5UKZV, e5UKZPercent, e5UKZDiff, e5IA, e5IB, e5IC, e5Pp, e5F, e5Result, e6UBH, e6IA, e6IB, e6IC, e6IAPercent, e6IBPercent, e6ICPercent, e6IADiff, e6IBDiff, e6ICDiff, e6Pp, e6Cos, e6F, e6Result, e7UInput, e7IBH, e7F, e7Time, e7Result, e8TypeBHandCorps, e8IBHandCorps, e8UBHandCorps, e8TimeBHandCorps, e8ResultBHandCorps, e8TypeHHandCorps, e8IHHandCorps, e8UHHandCorps, e8TimeHHandCorps, e8ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
+        return Objects.hash(id, e0WindingBH, e0UBH, e0R15BH, e0R60BH, e0CoefBH, e0TBH, e0ResultBH, e0WindingHH, e0UHH, e0R15HH, e0R60HH, e0CoefHH, e0THH, e0ResultHH, e0WindingBHHH, e0UBHHH, e0R15BHHH, e0R60BHHH, e0CoefBHHH, e0TBHHH, e0ResultBHHH, e1WindingBH, e1ABBH, e1BCBH, e1CABH, e1TBH, e1ResultBH, e1WindingHH, e1ABHH, e1BCHH, e1CAHH, e1THH, e1ResultHH, e2UInputAB, e2UInputBC, e2UInputCA, e2UInputAvr, e2UOutputAB, e2UOutputBC, e2UOutputCA, e2UOutputAvr, e2DiffU, e2F, e2Result, e3UBH, e3UHH, e3F, e3Result, e4WindingBH, e4WindingHH, e4UBH, e4UHH, e4Result, e5UKZV, e5UKZPercent, e5UKZDiff, e5IA, e5IB, e5IC, e5Pp, e5F, e5Result, e6UBH, e6IA, e6IB, e6IC, e6IAPercent, e6IBPercent, e6ICPercent, e6IADiff, e6IBDiff, e6ICDiff, e6Pp, e6Cos, e6F, e6Result, e7UInput, e7IBH, e7F, e7Time, e7Result, e8TypeBHandCorps, e8IBHandCorps, e8UBHandCorps, e8UBHAvem, e8TimeBHandCorps, e8ResultBHandCorps, e8TypeHHandCorps, e8IHHandCorps, e8UHHandCorps, e8UHHAvem, e8TimeHHandCorps, e8ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
     }
 }
