@@ -43,8 +43,11 @@ public class Experiment0ControllerPhase3 extends AbstractExperiment {
     private int uMgr = (int) currentProtocol.getUmeger();
 
     private boolean isBHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b1) > 0;
+    private boolean isBHStarted;
     private boolean isHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b10) > 0;
+    private boolean isHHStarted;
     private boolean isBHHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b100) > 0;
+    private boolean isBHHHStarted;
 
     @FXML
     public void initialize() {
@@ -72,6 +75,10 @@ public class Experiment0ControllerPhase3 extends AbstractExperiment {
         buttonCancelAll.setDisable(true);
         buttonStartStop.setDisable(true);
         buttonNext.setDisable(true);
+
+        isBHStarted = false;
+        isHHStarted = false;
+        isBHHHStarted = false;
 
         experiment0ModelPhase3BH.clearProperties();
         experiment0ModelPhase3HH.clearProperties();
@@ -175,6 +182,10 @@ public class Experiment0ControllerPhase3 extends AbstractExperiment {
     private void startBHExperiment() {
         showRequestDialog("Подключите крокодилы мегаомметра к обмотке BH и корпусу. После нажмите <Да>");
 
+        if (isExperimentRunning) {
+            isBHStarted = true;
+        }
+
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
         }
@@ -244,10 +255,15 @@ public class Experiment0ControllerPhase3 extends AbstractExperiment {
             appendMessageToLog("Испытание обмотки BH завершено успешно");
         }
         appendMessageToLog("------------------------------------------------\n");
+        isBHStarted = false;
     }
 
     private void startHHExperiment() {
         showRequestDialog("Подключите крокодилы мегаомметра к обмотке HH и корпусу. После нажмите <Да>");
+
+        if (isExperimentRunning) {
+            isHHStarted = true;
+        }
 
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
@@ -318,10 +334,15 @@ public class Experiment0ControllerPhase3 extends AbstractExperiment {
             appendMessageToLog("Испытание обмотки HH завершено успешно");
         }
         appendMessageToLog("------------------------------------------------\n");
+        isHHStarted = false;
     }
 
     private void startBHHHExperiment() {
         showRequestDialog("Подключите крокодилы мегаомметра к обмоткам BH и HH. После нажмите <Да>");
+
+        if (isExperimentRunning) {
+            isBHHHStarted = true;
+        }
 
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
@@ -392,9 +413,12 @@ public class Experiment0ControllerPhase3 extends AbstractExperiment {
             appendMessageToLog("Испытание обмоток BH и HH завершено успешно");
         }
         appendMessageToLog("------------------------------------------------\n");
+        isBHHHStarted = false;
     }
 
     protected void finalizeExperiment() {
+        communicationModel.deinitPR();
+        communicationModel.finalizeAllDevices();
         communicationModel.setCS02021ExperimentRun(false);
         communicationModel.finalizeMegaCS();
         Platform.runLater(() -> {

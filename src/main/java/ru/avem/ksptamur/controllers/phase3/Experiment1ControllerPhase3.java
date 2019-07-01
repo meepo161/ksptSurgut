@@ -39,7 +39,9 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     private Experiment1ModelPhase3 Experiment1ModelPhase3HH = experimentsValuesModel.getExperiment1ModelPhase3HH();
 
     private boolean isBHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b1) > 0;
+    private boolean isBHStarted;
     private boolean isHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b10) > 0;
+    private boolean isHHStarted;
 
     private volatile float ikasReadyParam;
     private volatile float measuringR;
@@ -159,6 +161,10 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     private void startBHExperiment() {
         showRequestDialog("Подключите крокодилы ИКАС к обмотке BH. После нажмите <Да>");
 
+        if (isExperimentRunning) {
+            isBHStarted = true;
+        }
+
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
         }
@@ -253,11 +259,15 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                 Experiment1ModelPhase3BH.setResult("Обрыв");
             }
         }
-        appendOneMessageToLog("После завершения опыта не забудьте отсоединить провода от ИКАС");
+        isBHStarted = false;
     }
 
     private void startHHExperiment() {
         showRequestDialog("Подключите крокодилы ИКАС к обмотке HH. После нажмите <Да>");
+
+        if (isExperimentRunning) {
+            isHHStarted = true;
+        }
 
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding() && isStartButtonOn) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
@@ -330,7 +340,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         appendOneMessageToLog("Конец испытания обмотки HH\n_______________________________________________________");
-        appendOneMessageToLog("После завершения опыта не забудьте отсоединить провода от ИКАС");
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
             try {
@@ -354,10 +363,12 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                 Experiment1ModelPhase3HH.setResult("Обрыв");
             }
         }
+        isHHStarted = false;
     }
 
     @Override
     protected void finalizeExperiment() {
+        appendOneMessageToLog("После завершения опыта не забудьте отсоединить провода от ИКАС");
         communicationModel.offAllKms();
         communicationModel.deinitPR();
         communicationModel.finalizeAllDevices();
@@ -366,7 +377,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             isExperimentRunning = false;
             isExperimentEnded = true;
             buttonCancelAll.setDisable(false);
-            buttonStartStop.setText("Запустить");
+            buttonStartStop.setText("Запустить повторно");
             buttonStartStop.setDisable(false);
             buttonNext.setDisable(false);
         });
@@ -442,16 +453,20 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                         setDeviceState(deviceStateCircleIKAS, (isTrmResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
                     case TRMModel.T_AMBIENT_PARAM:
-                        temperature = (float) value;
-                        if (isBHSelected) {
-                            Experiment1ModelPhase3BH.setTemperature(String.valueOf(temperature));
-                        }
-                        if (isHHSelected) {
-                            Experiment1ModelPhase3HH.setTemperature(String.valueOf(temperature));
-                        }
+                        setTemperatureInTableView((float) value);
                         break;
                 }
                 break;
+        }
+    }
+
+    private void setTemperatureInTableView(float value) {
+        temperature = value;
+        if (isBHStarted) {
+            Experiment1ModelPhase3BH.setTemperature(String.valueOf(temperature));
+        }
+        if (isHHStarted) {
+            Experiment1ModelPhase3HH.setTemperature(String.valueOf(temperature));
         }
     }
 }

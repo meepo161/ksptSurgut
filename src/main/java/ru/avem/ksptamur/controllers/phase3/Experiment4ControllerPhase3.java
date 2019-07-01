@@ -249,7 +249,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             isExperimentRunning = false;
             isExperimentEnded = true;
             buttonCancelAll.setDisable(false);
-            buttonStartStop.setText("Запустить");
+            buttonStartStop.setText("Запустить повторно");
             buttonStartStop.setDisable(false);
             buttonNext.setDisable(false);
         });
