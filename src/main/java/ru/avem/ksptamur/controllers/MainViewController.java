@@ -231,7 +231,8 @@ public class MainViewController implements Statable {
                     resultData.add(new ResultModel("Результат", currentProtocol.getE2ResultHH()));
                     break;
                 case Constants.Experiments.EXPERIMENT3_NAME:
-                    resultData.clear();resultData.add(new ResultModel("Uвых AB, В", currentProtocol.getE3UOutputAB()));
+                    resultData.clear();
+                    resultData.add(new ResultModel("Uвых AB, В", currentProtocol.getE3UOutputAB()));
                     resultData.add(new ResultModel("Uвых BC, В", currentProtocol.getE3UOutputBC()));
                     resultData.add(new ResultModel("Uвых CA, В", currentProtocol.getE3UOutputCA()));
                     resultData.add(new ResultModel("Uвых среднее, В", currentProtocol.getE3UOutputAvr()));
@@ -262,7 +263,14 @@ public class MainViewController implements Statable {
                     resultData.add(new ResultModel("I A, A", currentProtocol.getE5IA()));
                     resultData.add(new ResultModel("I B, A", currentProtocol.getE5IB()));
                     resultData.add(new ResultModel("I C, A", currentProtocol.getE5IC()));
+                    resultData.add(new ResultModel("Iхх A, %", currentProtocol.getE5IAPercent()));
+                    resultData.add(new ResultModel("Iхх B, %", currentProtocol.getE5IBPercent()));
+                    resultData.add(new ResultModel("Iхх C, %", currentProtocol.getE5ICPercent()));
+                    resultData.add(new ResultModel("ΔIхх A, %", currentProtocol.getE5IADiff()));
+                    resultData.add(new ResultModel("ΔIхх B, %", currentProtocol.getE5IBDiff()));
+                    resultData.add(new ResultModel("ΔIхх C, %", currentProtocol.getE5ICDiff()));
                     resultData.add(new ResultModel("Pп, Вт", currentProtocol.getE5Pp()));
+                    resultData.add(new ResultModel("cos", currentProtocol.getE5Cos()));
                     resultData.add(new ResultModel("f, Гц", currentProtocol.getE5F()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE5Result()));
                     break;

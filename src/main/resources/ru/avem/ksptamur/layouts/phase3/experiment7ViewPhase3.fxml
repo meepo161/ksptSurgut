@@ -48,8 +48,8 @@
                                 </placeholder>
                                 <columns>
                               <TableColumn fx:id="tableColumnType" prefWidth="75.0" text="Тип" />
-                                    <TableColumn fx:id="tableColumnU" prefWidth="75.0" text="U, В" />
                               <TableColumn fx:id="tableColumnUAVEM" prefWidth="75.0" text="U, В" />
+                              <TableColumn fx:id="tableColumnUGiven" prefWidth="75.0" text="U заданное, В" />
                                     <TableColumn fx:id="tableColumnI" prefWidth="75.0" text="I, мА" />
                                     <TableColumn fx:id="tableColumnTime" prefWidth="75.0" text="t, сек" />
                               <TableColumn fx:id="tableColumnResult" prefWidth="75.0" text="Результат" />

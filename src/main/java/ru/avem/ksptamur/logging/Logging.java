@@ -301,7 +301,7 @@ public class Logging {
                                     cell.setCellValue(protocol.getE7TypeBHandCorps());
                                     break;
                                 case "$55$":
-                                    cell.setCellValue(protocol.getE7UBHandCorps());
+                                    cell.setCellValue(protocol.getE7UBHAvem());
                                     break;
                                 case "$56$":
                                     cell.setCellValue(protocol.getE7IBHandCorps());
@@ -316,7 +316,7 @@ public class Logging {
                                     cell.setCellValue(protocol.getE7TypeHHandCorps());
                                     break;
                                 case "$60$":
-                                    cell.setCellValue(protocol.getE7UHHandCorps());
+                                    cell.setCellValue(protocol.getE7UHHAvem());
                                     break;
                                 case "$61$":
                                     cell.setCellValue(protocol.getE7IHHandCorps());

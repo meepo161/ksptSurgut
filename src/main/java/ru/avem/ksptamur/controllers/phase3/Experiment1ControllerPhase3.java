@@ -42,11 +42,11 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
     private int uMgr = (int) currentProtocol.getUmeger();
 
-    private boolean isBHSelected = (experimentsValuesModel.getExperiment2Choice() & 0b1) > 0;
+    private boolean isBHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b1) > 0;
     private boolean isBHStarted;
-    private boolean isHHSelected = (experimentsValuesModel.getExperiment2Choice() & 0b10) > 0;
+    private boolean isHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b10) > 0;
     private boolean isHHStarted;
-    private boolean isBHHHSelected = (experimentsValuesModel.getExperiment2Choice() & 0b100) > 0;
+    private boolean isBHHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b100) > 0;
     private boolean isBHHHStarted;
 
     @FXML
@@ -101,6 +101,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment1Devices();
+                sleep(2000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
@@ -120,60 +121,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             if (isBHHHSelected && isExperimentRunning && isDevicesResponding()) {
                 startBHHHExperiment();
             }
-
-            if (!cause.isEmpty()) {
-                if (isBHSelected) {
-                    if (experiment1ModelPhase3BH.getResult().isEmpty()) {
-                        experiment1ModelPhase3BH.setResult("Прервано");
-                    }
-                }
-                if (isHHSelected) {
-                    if (experiment1ModelPhase3HH.getResult().isEmpty()) {
-                        experiment1ModelPhase3HH.setResult("Прервано");
-                    }
-                }
-                if (isBHHHSelected) {
-                    if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
-                        experiment1ModelPhase3BHHH.setResult("Прервано");
-                    }
-                }
-                appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-            } else if (!isDevicesResponding()) {
-                if (isBHSelected) {
-                    if (experiment1ModelPhase3BH.getResult().isEmpty()) {
-                        experiment1ModelPhase3BH.setResult("Прервано");
-                    }
-                }
-                if (isHHSelected) {
-                    if (experiment1ModelPhase3HH.getResult().isEmpty()) {
-                        experiment1ModelPhase3HH.setResult("Прервано");
-                    }
-                }
-                if (isBHHHSelected) {
-                    if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
-                        experiment1ModelPhase3BHHH.setResult("Прервано");
-                    }
-                }
-                appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
-            } else if (!isStartButtonOn) {
-                if (isBHSelected) {
-                    if (experiment1ModelPhase3BH.getResult().isEmpty()) {
-                        experiment1ModelPhase3BH.setResult("Прервано");
-                    }
-                }
-                if (isHHSelected) {
-                    if (experiment1ModelPhase3HH.getResult().isEmpty()) {
-                        experiment1ModelPhase3HH.setResult("Прервано");
-                    }
-                }
-                if (isBHHHSelected) {
-                    if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
-                        experiment1ModelPhase3BHHH.setResult("Прервано");
-                    }
-                }
-                appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
-            }
-            appendMessageToLog("------------------------------------------------\n");
 
             finalizeExperiment();
         }).start();
@@ -417,17 +364,71 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     }
 
     protected void finalizeExperiment() {
+        communicationModel.setCS02021ExperimentRun(false);
         communicationModel.deinitPR();
         communicationModel.finalizeAllDevices();
-        communicationModel.setCS02021ExperimentRun(false);
-        communicationModel.finalizeMegaCS();
         Platform.runLater(() -> {
             isExperimentRunning = false;
             isExperimentEnded = true;
             buttonCancelAll.setDisable(false);
+            buttonStartStop.setText("Запустить повторно");
             buttonStartStop.setDisable(false);
             buttonNext.setDisable(false);
         });
+
+        if (!cause.isEmpty()) {
+            if (isBHSelected) {
+                if (experiment1ModelPhase3BH.getResult().isEmpty()) {
+                    experiment1ModelPhase3BH.setResult("Прервано");
+                }
+            }
+            if (isHHSelected) {
+                if (experiment1ModelPhase3HH.getResult().isEmpty()) {
+                    experiment1ModelPhase3HH.setResult("Прервано");
+                }
+            }
+            if (isBHHHSelected) {
+                if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
+                    experiment1ModelPhase3BHHH.setResult("Прервано");
+                }
+            }
+            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
+        } else if (!isStartButtonOn) {
+            if (isBHSelected) {
+                if (experiment1ModelPhase3BH.getResult().isEmpty()) {
+                    experiment1ModelPhase3BH.setResult("Прервано");
+                }
+            }
+            if (isHHSelected) {
+                if (experiment1ModelPhase3HH.getResult().isEmpty()) {
+                    experiment1ModelPhase3HH.setResult("Прервано");
+                }
+            }
+            if (isBHHHSelected) {
+                if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
+                    experiment1ModelPhase3BHHH.setResult("Прервано");
+                }
+            }
+            appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
+        } else if (!isDevicesResponding()) {
+            if (isBHSelected) {
+                if (experiment1ModelPhase3BH.getResult().isEmpty()) {
+                    experiment1ModelPhase3BH.setResult("Прервано");
+                }
+            }
+            if (isHHSelected) {
+                if (experiment1ModelPhase3HH.getResult().isEmpty()) {
+                    experiment1ModelPhase3HH.setResult("Прервано");
+                }
+            }
+            if (isBHHHSelected) {
+                if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
+                    experiment1ModelPhase3BHHH.setResult("Прервано");
+                }
+            }
+            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+        }
+        appendMessageToLog("------------------------------------------------\n");
     }
 
     @Override

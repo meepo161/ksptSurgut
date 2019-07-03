@@ -143,12 +143,15 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Подключите ОИ для определения ГС. После нажмите <Да>", true);
+            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
+                    "Подключите кабели ОИ ВН, а сторону НН закоротите.\n" +
+                    "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment4Devices();
+                sleep(2000);
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -234,9 +237,9 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void finalizeExperiment() {
-        sleep(1000);
-        isNeedToRefresh = false;
         sleep(100);
+        isNeedToRefresh = false;
+        sleep(3000);
 
         appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
         communicationModel.stopObject();
@@ -359,10 +362,10 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             if (iA > 0.001) {
                                 experiment4ModelPhase3.setIA(String.format("%.3f", iA));
                             }
-                        }
-                        if (iA > Ikz) {
-                            appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
-                            isExperimentRunning = false;
+                            if (iA > Ikz) {
+                                appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
+                                isExperimentRunning = false;
+                            }
                         }
                         break;
                     case PM130Model.I2_PARAM:
@@ -378,10 +381,10 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             if (iB > 0.001) {
                                 experiment4ModelPhase3.setIB(String.format("%.3f", iB));
                             }
-                        }
-                        if (iB > Ikz) {
-                            appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
-                            isExperimentRunning = false;
+                            if (iB > Ikz) {
+                                appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
+                                isExperimentRunning = false;
+                            }
                         }
                         break;
                     case PM130Model.I3_PARAM:
@@ -397,10 +400,10 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             if (iC > 0.001) {
                                 experiment4ModelPhase3.setIC(String.format("%.3f", iC));
                             }
-                        }
-                        if (iC > Ikz) {
-                            appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
-                            isExperimentRunning = false;
+                            if (iC > Ikz) {
+                                appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
+                                isExperimentRunning = false;
+                            }
                         }
                         break;
                     case PM130Model.V1_PARAM:

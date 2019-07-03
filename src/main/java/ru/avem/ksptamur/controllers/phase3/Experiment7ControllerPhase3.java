@@ -14,7 +14,6 @@ import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.controllers.AbstractExperiment;
 import ru.avem.ksptamur.db.model.Protocol;
-import ru.avem.ksptamur.model.ExperimentValuesModel;
 import ru.avem.ksptamur.model.phase3.Experiment7ModelPhase3;
 import ru.avem.ksptamur.utils.View;
 
@@ -36,7 +35,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableColumn<Experiment7ModelPhase3, String> tableColumnType;
     @FXML
-    private TableColumn<Experiment7ModelPhase3, String> tableColumnU;
+    private TableColumn<Experiment7ModelPhase3, String> tableColumnUGiven;
     @FXML
     private TableColumn<Experiment7ModelPhase3, String> tableColumnUAVEM;
     @FXML
@@ -49,16 +48,16 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     private Experiment7ModelPhase3 experiment7ModelPhase3BH = experimentsValuesModel.getExperiment7ModelPhase3BH();
     private Experiment7ModelPhase3 experiment7ModelPhase3HH = experimentsValuesModel.getExperiment7ModelPhase3HH();
 
-    private boolean isBHSelected = (experimentsValuesModel.getExperiment2Choice() & 0b1) > 0;
+    private boolean isBHSelected = (experimentsValuesModel.getExperiment7Choice() & 0b1) > 0;
     private boolean isBHStarted;
-    private boolean isHHSelected = (experimentsValuesModel.getExperiment2Choice() & 0b10) > 0;
+    private boolean isHHSelected = (experimentsValuesModel.getExperiment7Choice() & 0b10) > 0;
     private boolean isHHStarted;
 
     private ObservableList<Experiment7ModelPhase3> experiment7Data = FXCollections.observableArrayList();
 
     private double UInsulation = currentProtocol.getUinsulation();
 
-    private double coefAvem = 500;
+    private double coefAvem = 488;
     private double coef = 250;
 
     private volatile double iA;
@@ -80,7 +79,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
 
         tableColumnType.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
-        tableColumnU.setCellValueFactory(cellData -> cellData.getValue().UINProperty());
+        tableColumnUGiven.setCellValueFactory(cellData -> cellData.getValue().UGivenProperty());
         tableColumnUAVEM.setCellValueFactory(cellData -> cellData.getValue().UAVEMProperty());
         tableColumnI.setCellValueFactory(cellData -> cellData.getValue().IBHProperty());
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
@@ -91,14 +90,14 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     protected void fillFieldsOfExperimentProtocol() {
         Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
         currentProtocol.setE7TypeBHandCorps(experiment7ModelPhase3BH.getType());
-        currentProtocol.setE7UBHandCorps(experiment7ModelPhase3BH.getUIN());
+        currentProtocol.setE7UGiven(experiment7ModelPhase3BH.getUGiven());
         currentProtocol.setE7UBHAvem(experiment7ModelPhase3BH.getUAVEM());
         currentProtocol.setE7IBHandCorps(experiment7ModelPhase3BH.getIBH());
         currentProtocol.setE7TimeBHandCorps(experiment7ModelPhase3BH.getTime());
         currentProtocol.setE7ResultBHandCorps(experiment7ModelPhase3BH.getResult());
 
         currentProtocol.setE7TypeHHandCorps(experiment7ModelPhase3HH.getType());
-        currentProtocol.setE7UHHandCorps(experiment7ModelPhase3HH.getUIN());
+        currentProtocol.setE7UGiven(experiment7ModelPhase3HH.getUGiven());
         currentProtocol.setE7UHHAvem(experiment7ModelPhase3BH.getUAVEM());
         currentProtocol.setE7IHHandCorps(experiment7ModelPhase3HH.getIBH());
         currentProtocol.setE7TimeHHandCorps(experiment7ModelPhase3HH.getTime());
@@ -143,13 +142,10 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            if (experimentsValuesModel.getExperiment7Choice() == ExperimentValuesModel.EXPERIMENT7_BOTH) {
+            if (isBHSelected) {
                 startBH();
-                sleep(2000);
-                startHH();
-            } else if (experimentsValuesModel.getExperiment7Choice() == ExperimentValuesModel.EXPERIMENT7_BH) {
-                startBH();
-            } else {
+            }
+            if (isHHSelected) {
                 startHH();
             }
             finalizeExperiment();
@@ -158,9 +154,12 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
     private void startBH() {
 
-        showRequestDialog("Подключите крокодилы к ВН и корпусу. После нажмите <Да>", true);
+        showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
+                "Подключите провод ИОМ к ВН.\n" +
+                "После нажмите <Да>", true);
 
         if (isExperimentRunning) {
+            experiment7ModelPhase3BH.setUGiven(String.valueOf(currentProtocol.getUinsulation()));
             isBHStarted = true;
         }
 
@@ -168,6 +167,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             appendOneMessageToLog("Начало испытания");
             communicationModel.initOwenPrController();
             communicationModel.initExperiment7Devices();
+            sleep(2000);
         }
 
         if (isExperimentRunning && !isOwenPRResponding) {
@@ -227,7 +227,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             sleep(500);
             communicationModel.setObjectUMax(25 * VOLT);
             sleep(1000);
-            if (coefTransformationRatio > 0.7 && coefTransformationRatio < 1.7) {
+            if (coefTransformationRatio < 0.7 && coefTransformationRatio > 1.7) {
                 setCause("Коэффициент трансформации выходит за пределы");
             }
         }
@@ -243,7 +243,9 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             experiment7ModelPhase3BH.setTime(String.valueOf(experimentTime));
         }
         experimentTime = 60;
-        experiment7ModelPhase3BH.setTime(String.valueOf(experimentTime));
+        if (isExperimentRunning) {
+            experiment7ModelPhase3BH.setTime(String.valueOf(experimentTime));
+        }
         isNeedToRefresh = false;
         communicationModel.stopObject();
 
@@ -266,14 +268,20 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
     private void startHH() {
 
-        showRequestDialog("Подключите крокодилы к HН и корпусу. После нажмите <Да>", true);
+        showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
+                "Подключите провод ИОМ к НН.\n" +
+                "После нажмите <Да>", true);
+
         if (isExperimentRunning) {
+            experiment7ModelPhase3HH.setUGiven(String.valueOf(currentProtocol.getUinsulation()));
             isHHStarted = true;
         }
+
         if (isExperimentRunning) {
             appendOneMessageToLog("Начало испытания");
             communicationModel.initOwenPrController();
             communicationModel.initExperiment7Devices();
+            sleep(2000);
         }
 
         if (isExperimentRunning && !isOwenPRResponding) {
@@ -287,8 +295,6 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = false;
-            sleep(1000);
         }
 
         while (isExperimentRunning && !isStartButtonOn) {
@@ -306,6 +312,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         while (isExperimentRunning && !isDevicesResponding()) {
             appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
             sleep(100);
+            communicationModel.initExperiment7Devices();
         }
 
 
@@ -320,7 +327,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-            communicationModel.setObjectParams(50 * HZ, 5 * VOLT, 50 * HZ);
+            communicationModel.setObjectParams(50 * HZ, 1 * VOLT, 50 * HZ);
             appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
             communicationModel.startObject();
             sleep(1000);
@@ -334,7 +341,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             sleep(500);
             communicationModel.setObjectUMax(25 * VOLT);
             sleep(1000);
-            if (coefTransformationRatio > 0.7 && coefTransformationRatio < 1.7) {
+            if (coefTransformationRatio < 0.7 && coefTransformationRatio > 1.7) {
                 setCause("Коэффициент трансформации выходит за пределы");
             }
         }
@@ -350,7 +357,9 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             experiment7ModelPhase3HH.setTime(String.valueOf(experimentTime));
         }
         experimentTime = 60;
-        experiment7ModelPhase3HH.setTime(String.valueOf(experimentTime));
+        if (isExperimentRunning) {
+            experiment7ModelPhase3HH.setTime(String.valueOf(experimentTime));
+        }
         isNeedToRefresh = false;
         communicationModel.stopObject();
 
@@ -379,11 +388,15 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         communicationModel.stopObject();
 
         int time = 300;
-        while (isExperimentRunning && (time-- > 0)) {
+        while ((time-- > 0)) {
             sleep(10);
         }
 
         communicationModel.offPR3M1();
+        time = 300;
+        while (isExperimentRunning && (time-- > 0)) {
+            sleep(10);
+        }
         communicationModel.offAllKms();
         communicationModel.deinitPR();
         communicationModel.finalizeAllDevices();
@@ -493,7 +506,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
                         setI((float) value);
                         break;
                     case PM130Model.V1_PARAM:
-                        setU((float) value);
+                        measuringUIn = ((float) value);
                         break;
                 }
                 break;
@@ -544,19 +557,6 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             }
         }
     }
-
-    private void setU(float value) {
-        if (isNeedToRefresh) {
-            measuringUIn = value * coef;
-            if (isBHStarted) {
-                experiment7ModelPhase3BH.setUIN(formatRealNumber(measuringUIn));
-            }
-            if (isHHStarted) {
-                experiment7ModelPhase3HH.setUIN(formatRealNumber(measuringUIn));
-            }
-        }
-    }
-
 
     private void setI(float value) {
         if (isNeedToRefresh) {

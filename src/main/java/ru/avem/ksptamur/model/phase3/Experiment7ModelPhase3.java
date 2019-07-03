@@ -10,7 +10,7 @@ import java.util.List;
 public class Experiment7ModelPhase3 {
 
     private final StringProperty type;
-    private final StringProperty UIN;
+    private final StringProperty UGiven;
     private final StringProperty UAVEM;
     private final StringProperty IBH;
     private final StringProperty time;
@@ -19,12 +19,12 @@ public class Experiment7ModelPhase3 {
 
     public Experiment7ModelPhase3(String type) {
         this.type = new SimpleStringProperty(type);
-        this.UIN = new SimpleStringProperty("");
+        this.UGiven = new SimpleStringProperty("");
         this.UAVEM = new SimpleStringProperty("");
         this.IBH = new SimpleStringProperty("");
         this.time = new SimpleStringProperty("");
         this.result = new SimpleStringProperty("");
-        properties.addAll(Arrays.asList(UIN, UAVEM, IBH, time, result));
+        properties.addAll(Arrays.asList(UGiven, UAVEM, IBH, time, result));
     }
 
     public String getType() {
@@ -51,16 +51,16 @@ public class Experiment7ModelPhase3 {
         this.time.set(time);
     }
 
-    public String getUIN() {
-        return UIN.get();
+    public String getUGiven() {
+        return UGiven.get();
     }
 
-    public StringProperty UINProperty() {
-        return UIN;
+    public StringProperty UGivenProperty() {
+        return UGiven;
     }
 
-    public void setUIN(String UIN) {
-        this.UIN.set(UIN);
+    public void setUGiven(String UGiven) {
+        this.UGiven.set(UGiven);
     }
 
     public String getUAVEM() {

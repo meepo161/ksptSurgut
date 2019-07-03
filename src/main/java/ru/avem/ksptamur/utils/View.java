@@ -26,7 +26,7 @@ public class View {
     }
 
     public static void showConfirmDialog(String text, Actionable actionYes, Actionable actionNo) {
-        showConfirmDialog("", text, actionYes, actionNo);
+        showConfirmDialog("ВНИМАНИЕ", text, actionYes, actionNo);
     }
 
     public static void showConfirmDialog(String title, String text, Actionable actionYes, Actionable actionNo) {

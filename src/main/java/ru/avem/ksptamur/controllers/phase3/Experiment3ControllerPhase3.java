@@ -154,12 +154,15 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Подключите ОИ для определения КТР. После нажмите <Да>", true);
+            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
+                    "Подключите кабели ОИ и крокодилы <A-B-C> к ВН, а <a-b-c> к НН.\n" +
+                    "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment3Devices();
+                sleep(2000);
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -339,33 +342,22 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
                             measuringUInAB = (float) value;
-                            String UInAB = formatRealNumber(measuringUInAB);
-                            if (measuringUInAB > 0.001) {
-                                experiment3ModelPhase3.setuInputAB(UInAB);
-                            }
+                            experiment3ModelPhase3.setuInputAB(formatRealNumber(measuringUInAB));
                         }
                         break;
                     case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
                             measuringUInBC = (float) value;
-                            String UInBC = formatRealNumber(measuringUInBC);
-                            if (measuringUInBC > 0.001) {
-                                experiment3ModelPhase3.setuInputBC(UInBC);
-                            }
+                            experiment3ModelPhase3.setuInputBC(formatRealNumber(measuringUInBC));
+
                         }
                         break;
                     case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
                             measuringUInCA = (float) value;
-                            String UInCA = formatRealNumber(measuringUInCA);
-                            if (measuringUInCA > 0.001) {
-                                experiment3ModelPhase3.setuInputCA(UInCA);
-                            }
+                            experiment3ModelPhase3.setuInputCA(formatRealNumber(measuringUInCA));
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3.0;
-                            String UInAvr = formatRealNumber(measuringUInAvr);
-                            if (measuringUInAvr > 0.001) {
-                                experiment3ModelPhase3.setuInputAvr(UInAvr);
-                            }
+                            experiment3ModelPhase3.setuInputAvr(formatRealNumber(measuringUInAvr));
                         }
                         break;
                 }

@@ -171,11 +171,15 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Подключите ОИ для определения XX. После нажмите <Да>", true);
+            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
+                    "Подключите кабели ОИ к НН.\n" +
+                    "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
+                communicationModel.initExperiment5Devices();
+                sleep(2000);
                 experiment5ModelPhase3.setTime(String.valueOf(XXTime));
             }
 

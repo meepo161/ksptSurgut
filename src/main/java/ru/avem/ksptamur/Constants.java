@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat;
 
 public final class Constants {
     public static final class Display {
-        public static final int WIDTH = BuildConfig.DEBUG ? 1366 : 1920;
-        public static final int HEIGHT = BuildConfig.DEBUG ? 768 : 1080;
+        public static final int WIDTH = BuildConfig.DEBUG ? 1366 : 1366;
+        public static final int HEIGHT = BuildConfig.DEBUG ? 768 : 768;
     }
 
     public static final class Communication {
@@ -40,8 +40,8 @@ public final class Constants {
 
     public static final class Info {
         public static final String TITLE = "КСПТ (ООО \"РН-Комсомольский НПЗ\")";
-        public static final String VERSION = "Версия: 0.0.1";
-        public static final String DATE = "Дата: xx.06.2019";
+        public static final String VERSION = "Версия: 1.0.0";
+        public static final String DATE = "Дата: 03.07.2019";
     }
 
     public static final class Formatting {

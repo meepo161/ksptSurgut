@@ -135,12 +135,15 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Подключите ОИ для определения МВЗ. После нажмите <Да>", true);
+            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
+                    "Подключите кабели ОИ к НН.\n" +
+                    "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment6Devices();
+                sleep(2000);
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -220,12 +223,16 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void finalizeExperiment() {
+        experiment6ModelPhase3.setTime("30");
         isNeedToRefresh = false;
         sleep(100);
 
         appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
         communicationModel.stopObject();
-        sleep(6000);
+        int time = 1000;
+        while (isExperimentRunning && (time-- > 0)) {
+            sleep(10);
+        }
 
         communicationModel.offAllKms();
         communicationModel.deinitPR();
@@ -442,7 +449,9 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                         break;
                     case DeltaCP2000Model.CURRENT_FREQUENCY_PARAM:
                         measuringF = (short) value / HZ;
-                        experiment6ModelPhase3.setF(formatRealNumber(measuringF));
+                        if (isNeedToRefresh) {
+                            experiment6ModelPhase3.setF(formatRealNumber(measuringF));
+                        }
                         break;
                 }
                 break;

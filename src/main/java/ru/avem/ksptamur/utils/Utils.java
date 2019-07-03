@@ -64,16 +64,16 @@ public class Utils {
         String units;
         if (measuringR > 1_000_000_000_000f) {
             measuringR = measuringR / 1_000_000_000_000f;
-            units = "*10^12";
+            units = "*10¹²";
         } else if (measuringR > 1_000_000_000f) {
             measuringR = measuringR / 1_000_000_000f;
-            units = "*10^9";
+            units = "*10⁹";
         } else if (measuringR > 1_000_000f) {
             measuringR = measuringR / 1_000_000f;
-            units = "*10^6";
+            units = "*10⁶";
         }  else if (measuringR > 1_000f) {
             measuringR = measuringR / 1_000f;
-            units = "*10^3";
+            units = "*10³";
         } else {
             units = "";
         }

@@ -453,7 +453,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                 switch (param) {
                     case TRMModel.RESPONDING_PARAM:
                         isTrmResponding = (boolean) value;
-                        setDeviceState(deviceStateCircleIKAS, (isTrmResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
+                        setDeviceState(deviceStateCircleTrm, (isTrmResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
                     case TRMModel.T_AMBIENT_PARAM:
                         setTemperatureInTableView((float) value);
