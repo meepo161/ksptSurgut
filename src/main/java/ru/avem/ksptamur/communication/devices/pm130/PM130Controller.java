@@ -103,10 +103,11 @@ public class PM130Controller implements DeviceController {
                     break;
             }
         } else {
-            readAttemptOfAttempt--;
-            resetReadAttempts();
+           readAttemptOfAttempt--;
             if (readAttemptOfAttempt <= 0) {
                 model.setReadResponding(false);
+            } else {
+                resetReadAttempts();
             }
         }
     }

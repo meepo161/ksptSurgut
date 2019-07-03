@@ -94,10 +94,11 @@ public class ParmaT400Controller implements DeviceController {
                     break;
             }
         } else {
-            readAttemptOfAttempt--;
-            resetReadAttempts();
+           readAttemptOfAttempt--;
             if (readAttemptOfAttempt <= 0) {
                 model.setReadResponding(false);
+            } else {
+                resetReadAttempts();
             }
         }
     }
@@ -193,9 +194,10 @@ public class ParmaT400Controller implements DeviceController {
             }
         } else {
             writeAttemptOfAttempt--;
-            resetWriteAttempts();
             if (writeAttemptOfAttempt <= 0) {
                 model.setWriteResponding(false);
+            } else {
+                resetWriteAttempts();
             }
         }
     }

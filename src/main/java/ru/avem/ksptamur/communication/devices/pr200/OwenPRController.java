@@ -76,10 +76,11 @@ public class OwenPRController implements DeviceController {
                 read(args);
             }
         } else {
-            readAttemptOfAttempt--;
-            resetReadAttempts();
+           readAttemptOfAttempt--;
             if (readAttemptOfAttempt <= 0) {
                 model.setReadResponding(false);
+            } else {
+                resetReadAttempts();
             }
         }
     }
@@ -111,9 +112,10 @@ public class OwenPRController implements DeviceController {
             }
         } else {
             writeAttemptOfAttempt--;
-            resetWriteAttempts();
             if (writeAttemptOfAttempt <= 0) {
                 model.setWriteResponding(false);
+            } else {
+                resetWriteAttempts();
             }
         }
     }
