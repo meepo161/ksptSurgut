@@ -1,34 +1,32 @@
 package ru.avem.ksptamur.model.phase3;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+        import javafx.beans.property.SimpleStringProperty;
+        import javafx.beans.property.StringProperty;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static ru.avem.ksptamur.utils.Utils.formatRealNumber;
+        import java.util.ArrayList;
+        import java.util.Arrays;
+        import java.util.List;
 
 public class Experiment1ModelPhase3 {
 
-    private static final double BREAK_IKAS = 1.0E9;
-
     private final StringProperty winding;
-    private final StringProperty AB;
-    private final StringProperty BC;
-    private final StringProperty AC;
-    private final StringProperty temperature;
+    private final StringProperty R15;
+    private final StringProperty R60;
+    private final StringProperty coef;
+    private final StringProperty ur;
+    private final StringProperty time;
     private final StringProperty result;
     private List<StringProperty> properties = new ArrayList<>();
 
     public Experiment1ModelPhase3(String winding) {
         this.winding = new SimpleStringProperty(winding);
-        AB = new SimpleStringProperty("");
-        BC = new SimpleStringProperty("");
-        AC = new SimpleStringProperty("");
-        temperature = new SimpleStringProperty("");
+        R15 = new SimpleStringProperty("");
+        R60 = new SimpleStringProperty("");
+        coef = new SimpleStringProperty("");
+        ur = new SimpleStringProperty("");
+        time = new SimpleStringProperty("");
         result = new SimpleStringProperty("");
-        properties.addAll(Arrays.asList(AB, BC, AC, temperature, result));
+        properties.addAll(Arrays.asList(R15, R60, coef, ur, time, result));
     }
 
     public String getWinding() {
@@ -43,64 +41,64 @@ public class Experiment1ModelPhase3 {
         this.winding.set(winding);
     }
 
-    public String getAB() {
-        return AB.get();
+    public String getR15() {
+        return R15.get();
     }
 
-    public StringProperty ABProperty() {
-        return AB;
+    public StringProperty r15Property() {
+        return R15;
     }
 
-    public void setAB(double AB) {
-        if (AB == BREAK_IKAS) {
-            this.AB.set("Обрыв");
-        } else {
-            this.AB.set(formatRealNumber(AB));
-        }
+    public void setR15(String r15) {
+        this.R15.set(r15);
     }
 
-    public String getBC() {
-        return BC.get();
+    public String getR60() {
+        return R60.get();
     }
 
-    public StringProperty BCProperty() {
-        return BC;
+    public StringProperty r60Property() {
+        return R60;
     }
 
-    public void setBC(double BC) {
-        if (BC == BREAK_IKAS) {
-            this.BC.set("Обрыв");
-        } else {
-            this.BC.set(formatRealNumber(BC));
-        }
+    public void setR60(String r60) {
+        this.R60.set(r60);
     }
 
-    public String getAC() {
-        return AC.get();
+    public String getCoef() {
+        return coef.get();
     }
 
-    public StringProperty ACProperty() {
-        return AC;
+    public StringProperty coefProperty() {
+        return coef;
     }
 
-    public void setAC(double AC) {
-        if (AC == BREAK_IKAS) {
-            this.AC.set("Обрыв");
-        } else {
-            this.AC.set(formatRealNumber(AC));
-        }
+    public void setCoef(String coef) {
+        this.coef.set(coef);
     }
 
-    public String getTemperature() {
-        return temperature.get();
+    public String getUr() {
+        return ur.get();
     }
 
-    public StringProperty temperatureProperty() {
-        return temperature;
+    public StringProperty urProperty() {
+        return ur;
     }
 
-    public void setTemperature(String temperature) {
-        this.temperature.set(temperature);
+    public void setUr(String ur) {
+        this.ur.set(ur);
+    }
+
+    public String getTime() {
+        return time.get();
+    }
+
+    public StringProperty timeProperty() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time.set(time);
     }
 
     public String getResult() {

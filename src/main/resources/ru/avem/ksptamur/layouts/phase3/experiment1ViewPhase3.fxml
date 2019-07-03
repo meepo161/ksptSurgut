@@ -31,7 +31,7 @@
                <children>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <Label style="-fx-font-weight: bold; -fx-font-size: 20;" text="Измерение сопротивления обмоток постоянному току(3ф)" />
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 20;" text="Определение сопротивления изоляции обмоток относительно корпуса машины и между обмотками" />
                      </children>
                      <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -39,16 +39,17 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <TableView fx:id="tableViewExperimentValues" prefHeight="78.0" prefWidth="800.0">
+                        <TableView fx:id="tableViewExperimentValues" prefHeight="104.0" prefWidth="800.0">
                            <placeholder>
                               <Label text="Нет данных" />
                            </placeholder>
                            <columns>
                               <TableColumn fx:id="tableColumnWinding" prefWidth="75.0" text="Обмотка" />
-                              <TableColumn fx:id="tableColumnResistanceAB" prefWidth="75.0" text="AB, Ом" />
-                              <TableColumn fx:id="tableColumnResistanceBC" prefWidth="75.0" text="BC, Ом" />
-                              <TableColumn fx:id="tableColumnResistanceAC" prefWidth="75.0" text="AC, Ом" />
-                              <TableColumn fx:id="tableColumnTemperature" prefWidth="75.0" text="t, ℃" />
+                              <TableColumn fx:id="tableColumnUr" prefWidth="75.0" text="U, В" />
+                              <TableColumn fx:id="tableColumnR15" prefWidth="75.0" text="R15, Ом" />
+                              <TableColumn fx:id="tableColumnR60" prefWidth="75.0" text="R60, Ом" />
+                              <TableColumn fx:id="tableColumnCoef" prefWidth="75.0" text="R60/R15" />
+                              <TableColumn fx:id="tableColumnTime" prefWidth="75.0" text="Время, с" />
                               <TableColumn fx:id="tableColumnResultExperiment" prefWidth="75.0" text="Результат" />
                            </columns>
                            <columnResizePolicy>
@@ -92,15 +93,6 @@
                               <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="241.0" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCircleIKAS" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="ИКАС" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="341.0" spacing="8.0">
                            <children>
                               <Circle fx:id="deviceStateCirclePR200" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
@@ -110,10 +102,10 @@
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="196.0" spacing="8.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="194.0" spacing="8.0">
                            <children>
-                              <Circle fx:id="deviceStateCircleTrm" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="TRM" />
+                              <Circle fx:id="deviceStateCircleCS0202" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="Мегаомметр ЦС02" />
                            </children>
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

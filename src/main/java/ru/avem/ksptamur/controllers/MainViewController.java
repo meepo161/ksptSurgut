@@ -118,8 +118,6 @@ public class MainViewController implements Statable {
     @FXML
     private JFXCheckBox checkBoxSelectAllItems;
     @FXML
-    private JFXCheckBox checkBoxExperiment0;
-    @FXML
     private JFXCheckBox checkBoxExperiment1;
     @FXML
     private JFXCheckBox checkBoxExperiment2;
@@ -192,70 +190,75 @@ public class MainViewController implements Statable {
         comboBoxResult.setOnAction(event -> {
             Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
             switch (comboBoxResult.getSelectionModel().getSelectedItem()) {
-                case Constants.Experiments.EXPERIMENT0_NAME:
-                    resultData.clear();
-                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE0WindingBH()));
-                    resultData.add(new ResultModel("R15", currentProtocol.getE0R15BH()));
-                    resultData.add(new ResultModel("R60", currentProtocol.getE0R60BH()));
-                    resultData.add(new ResultModel("Коэф", currentProtocol.getE0CoefBH()));
-                    resultData.add(new ResultModel("t, °С", currentProtocol.getE0TBH()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE0ResultBH()));
-
-                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE0WindingHH()));
-                    resultData.add(new ResultModel("R15", currentProtocol.getE0R15HH()));
-                    resultData.add(new ResultModel("R60", currentProtocol.getE0R60HH()));
-                    resultData.add(new ResultModel("Коэф", currentProtocol.getE0CoefHH()));
-                    resultData.add(new ResultModel("t, °С", currentProtocol.getE0THH()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE0ResultHH()));
-
-                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE0WindingBHHH()));
-                    resultData.add(new ResultModel("R15", currentProtocol.getE0R15BHHH()));
-                    resultData.add(new ResultModel("R60", currentProtocol.getE0R60BHHH()));
-                    resultData.add(new ResultModel("Коэф", currentProtocol.getE0CoefBHHH()));
-                    resultData.add(new ResultModel("t, °С", currentProtocol.getE0TBHHH()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE0ResultBHHH()));
-
-                    break;
                 case Constants.Experiments.EXPERIMENT1_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("Обмотка", currentProtocol.getE1WindingBH()));
-                    resultData.add(new ResultModel("AB, Ом", currentProtocol.getE1ABBH()));
-                    resultData.add(new ResultModel("BC, Ом", currentProtocol.getE1BCBH()));
-                    resultData.add(new ResultModel("CA, Ом", currentProtocol.getE1CABH()));
+                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE1WindingBH()));
+                    resultData.add(new ResultModel("R15", currentProtocol.getE1R15BH()));
+                    resultData.add(new ResultModel("R60", currentProtocol.getE1R60BH()));
+                    resultData.add(new ResultModel("Коэф", currentProtocol.getE1CoefBH()));
                     resultData.add(new ResultModel("t, °С", currentProtocol.getE1TBH()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE1ResultBH()));
 
-                    resultData.add(new ResultModel("Обмотка", currentProtocol.getE1WindingHH()));
-                    resultData.add(new ResultModel("AB, Ом", currentProtocol.getE1ABHH()));
-                    resultData.add(new ResultModel("BC, Ом", currentProtocol.getE1BCHH()));
-                    resultData.add(new ResultModel("CA, Ом", currentProtocol.getE1CAHH()));
+                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE1WindingHH()));
+                    resultData.add(new ResultModel("R15", currentProtocol.getE1R15HH()));
+                    resultData.add(new ResultModel("R60", currentProtocol.getE1R60HH()));
+                    resultData.add(new ResultModel("Коэф", currentProtocol.getE1CoefHH()));
                     resultData.add(new ResultModel("t, °С", currentProtocol.getE1THH()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE1ResultHH()));
+
+                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE1WindingBHHH()));
+                    resultData.add(new ResultModel("R15", currentProtocol.getE1R15BHHH()));
+                    resultData.add(new ResultModel("R60", currentProtocol.getE1R60BHHH()));
+                    resultData.add(new ResultModel("Коэф", currentProtocol.getE1CoefBHHH()));
+                    resultData.add(new ResultModel("t, °С", currentProtocol.getE1TBHHH()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE1ResultBHHH()));
+
                     break;
                 case Constants.Experiments.EXPERIMENT2_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("Uвых AB, В", currentProtocol.getE2UOutputAB()));
-                    resultData.add(new ResultModel("Uвых BC, В", currentProtocol.getE2UOutputBC()));
-                    resultData.add(new ResultModel("Uвых CA, В", currentProtocol.getE2UOutputCA()));
-                    resultData.add(new ResultModel("Uвых среднее, В", currentProtocol.getE2UOutputAvr()));
-                    resultData.add(new ResultModel("Uвх AB, В", currentProtocol.getE2UInputAB()));
-                    resultData.add(new ResultModel("Uвх BC, В", currentProtocol.getE2UInputBC()));
-                    resultData.add(new ResultModel("Uвх CA, В", currentProtocol.getE2UInputCA()));
-                    resultData.add(new ResultModel("Uвх среднее, В", currentProtocol.getE2UInputAvr()));
-                    resultData.add(new ResultModel("Uвых/Uвх, В", currentProtocol.getE2DiffU()));
-                    resultData.add(new ResultModel("f, Гц", currentProtocol.getE2F()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE2Result()));
+                    resultData.add(new ResultModel("Обмотка", currentProtocol.getE2WindingBH()));
+                    resultData.add(new ResultModel("AB, Ом", currentProtocol.getE2ABBH()));
+                    resultData.add(new ResultModel("BC, Ом", currentProtocol.getE2BCBH()));
+                    resultData.add(new ResultModel("CA, Ом", currentProtocol.getE2CABH()));
+                    resultData.add(new ResultModel("t, °С", currentProtocol.getE2TBH()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE2ResultBH()));
+
+                    resultData.add(new ResultModel("Обмотка", currentProtocol.getE2WindingHH()));
+                    resultData.add(new ResultModel("AB, Ом", currentProtocol.getE2ABHH()));
+                    resultData.add(new ResultModel("BC, Ом", currentProtocol.getE2BCHH()));
+                    resultData.add(new ResultModel("CA, Ом", currentProtocol.getE2CAHH()));
+                    resultData.add(new ResultModel("t, °С", currentProtocol.getE2THH()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE2ResultHH()));
                     break;
                 case Constants.Experiments.EXPERIMENT3_NAME:
-                    resultData.clear();
-                    resultData.add(new ResultModel("Группа соединений BH", currentProtocol.getE4WindingBH()));
-                    resultData.add(new ResultModel("Группа соединений HH", currentProtocol.getE4WindingHH()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE4Result()));
+                    resultData.clear();resultData.add(new ResultModel("Uвых AB, В", currentProtocol.getE3UOutputAB()));
+                    resultData.add(new ResultModel("Uвых BC, В", currentProtocol.getE3UOutputBC()));
+                    resultData.add(new ResultModel("Uвых CA, В", currentProtocol.getE3UOutputCA()));
+                    resultData.add(new ResultModel("Uвых среднее, В", currentProtocol.getE3UOutputAvr()));
+                    resultData.add(new ResultModel("Uвх AB, В", currentProtocol.getE3UInputAB()));
+                    resultData.add(new ResultModel("Uвх BC, В", currentProtocol.getE3UInputBC()));
+                    resultData.add(new ResultModel("Uвх CA, В", currentProtocol.getE3UInputCA()));
+                    resultData.add(new ResultModel("Uвх среднее, В", currentProtocol.getE3UInputAvr()));
+                    resultData.add(new ResultModel("Uвых/Uвх, В", currentProtocol.getE3DiffU()));
+                    resultData.add(new ResultModel("Группа соединений BH", currentProtocol.getE3WindingBH()));
+                    resultData.add(new ResultModel("Группа соединений HH", currentProtocol.getE3WindingHH()));
+                    resultData.add(new ResultModel("f, Гц", currentProtocol.getE3F()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE3Result()));
                     break;
                 case Constants.Experiments.EXPERIMENT4_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("U КЗ, В", currentProtocol.getE5UKZV()));
-                    resultData.add(new ResultModel("U КЗ, %", currentProtocol.getE5UKZPercent()));
+                    resultData.add(new ResultModel("U КЗ, В", currentProtocol.getE4UKZV()));
+                    resultData.add(new ResultModel("U КЗ, %", currentProtocol.getE4UKZPercent()));
+                    resultData.add(new ResultModel("I A, A", currentProtocol.getE4IA()));
+                    resultData.add(new ResultModel("I B, A", currentProtocol.getE4IB()));
+                    resultData.add(new ResultModel("I C, A", currentProtocol.getE4IC()));
+                    resultData.add(new ResultModel("Pп, Вт", currentProtocol.getE4Pp()));
+                    resultData.add(new ResultModel("f, Гц", currentProtocol.getE4F()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE4Result()));
+                    break;
+                case Constants.Experiments.EXPERIMENT5_NAME:
+                    resultData.clear();
+                    resultData.add(new ResultModel("UВН, В", currentProtocol.getE5UBH()));
                     resultData.add(new ResultModel("I A, A", currentProtocol.getE5IA()));
                     resultData.add(new ResultModel("I B, A", currentProtocol.getE5IB()));
                     resultData.add(new ResultModel("I C, A", currentProtocol.getE5IC()));
@@ -263,36 +266,26 @@ public class MainViewController implements Statable {
                     resultData.add(new ResultModel("f, Гц", currentProtocol.getE5F()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE5Result()));
                     break;
-                case Constants.Experiments.EXPERIMENT5_NAME:
-                    resultData.clear();
-                    resultData.add(new ResultModel("UВН, В", currentProtocol.getE6UBH()));
-                    resultData.add(new ResultModel("I A, A", currentProtocol.getE6IA()));
-                    resultData.add(new ResultModel("I B, A", currentProtocol.getE6IB()));
-                    resultData.add(new ResultModel("I C, A", currentProtocol.getE6IC()));
-                    resultData.add(new ResultModel("Pп, Вт", currentProtocol.getE6Pp()));
-                    resultData.add(new ResultModel("f, Гц", currentProtocol.getE6F()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE6Result()));
-                    break;
                 case Constants.Experiments.EXPERIMENT6_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("UВх, В", currentProtocol.getE7UInput()));
-                    resultData.add(new ResultModel("IВН, A", currentProtocol.getE7IBH()));
-                    resultData.add(new ResultModel("f, Гц", currentProtocol.getE7F()));
-                    resultData.add(new ResultModel("t, сек", currentProtocol.getE7Time()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE7Result()));
+                    resultData.add(new ResultModel("UВх, В", currentProtocol.getE6UInput()));
+                    resultData.add(new ResultModel("IВН, A", currentProtocol.getE6IBH()));
+                    resultData.add(new ResultModel("f, Гц", currentProtocol.getE6F()));
+                    resultData.add(new ResultModel("t, сек", currentProtocol.getE6Time()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE6Result()));
                     break;
                 case Constants.Experiments.EXPERIMENT7_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("Тип", currentProtocol.getE8TypeBHandCorps()));
-                    resultData.add(new ResultModel("I, A", currentProtocol.getE8IBHandCorps()));
-                    resultData.add(new ResultModel("U, В", currentProtocol.getE8UBHandCorps()));
-                    resultData.add(new ResultModel("t,сек", currentProtocol.getE8TimeBHandCorps()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE8ResultBHandCorps()));
-                    resultData.add(new ResultModel("Тип", currentProtocol.getE8TypeHHandCorps()));
-                    resultData.add(new ResultModel("I, A", currentProtocol.getE8IHHandCorps()));
-                    resultData.add(new ResultModel("U, В", currentProtocol.getE8UHHandCorps()));
-                    resultData.add(new ResultModel("t,сек", currentProtocol.getE8TimeHHandCorps()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE8ResultHHandCorps()));
+                    resultData.add(new ResultModel("Тип", currentProtocol.getE7TypeBHandCorps()));
+                    resultData.add(new ResultModel("I, A", currentProtocol.getE7IBHandCorps()));
+                    resultData.add(new ResultModel("U, В", currentProtocol.getE7UBHandCorps()));
+                    resultData.add(new ResultModel("t,сек", currentProtocol.getE7TimeBHandCorps()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE7ResultBHandCorps()));
+                    resultData.add(new ResultModel("Тип", currentProtocol.getE7TypeHHandCorps()));
+                    resultData.add(new ResultModel("I, A", currentProtocol.getE7IHHandCorps()));
+                    resultData.add(new ResultModel("U, В", currentProtocol.getE7UHHandCorps()));
+                    resultData.add(new ResultModel("t,сек", currentProtocol.getE7TimeHHandCorps()));
+                    resultData.add(new ResultModel("Результат", currentProtocol.getE7ResultHHandCorps()));
                     break;
             }
         });
@@ -630,8 +623,7 @@ public class MainViewController implements Statable {
     @FXML
     private void handleSelectAllTests() {
         if (checkBoxSelectAllItems.isSelected()) {
-            checkBoxExperiment0.setIndeterminate(false);
-            checkBoxExperiment0.setSelected(true);
+            checkBoxExperiment1.setIndeterminate(false);
             checkBoxExperiment1.setSelected(true);
             checkBoxExperiment2.setSelected(true);
             checkBoxExperiment3.setSelected(true);
@@ -647,10 +639,9 @@ public class MainViewController implements Statable {
             rCheckBoxIKASBH.setSelected(true);
             rCheckBoxIKASHH.setSelected(true);
         } else {
-            checkBoxExperiment0.setIndeterminate(false);
-            checkBoxExperiment0.setSelected(false);
             checkBoxExperiment1.setIndeterminate(false);
             checkBoxExperiment1.setSelected(false);
+            checkBoxExperiment2.setIndeterminate(false);
             checkBoxExperiment2.setSelected(false);
             checkBoxExperiment3.setSelected(false);
             checkBoxExperiment4.setSelected(false);
@@ -670,7 +661,7 @@ public class MainViewController implements Statable {
 
 
     @FXML
-    private void handleCheckBox0(ActionEvent e) {
+    private void handleCheckBox1(ActionEvent e) {
         CheckBox checkBox0 = (CheckBox) e.getSource();
         if (checkBox0.isSelected()) {
             checkBoxSelectAllItems.setSelected(isAllSelected());
@@ -685,34 +676,34 @@ public class MainViewController implements Statable {
     }
 
     @FXML
-    private void handleRCheckBoxExperiment0BH() {
-        setStateCheckBox0();
+    private void handleRCheckBoxExperiment1BH() {
+        setStateCheckBox1();
     }
 
     @FXML
-    private void handleRCheckBoxExperiment0HH() {
-        setStateCheckBox0();
+    private void handleRCheckBoxExperiment1HH() {
+        setStateCheckBox1();
     }
 
     @FXML
-    private void handleRCheckBoxExperiment0BHHH() {
-        setStateCheckBox0();
+    private void handleRCheckBoxExperiment1BHHH() {
+        setStateCheckBox1();
     }
 
-    private void setStateCheckBox0() {
-        checkBoxExperiment0.setIndeterminate(true);
+    private void setStateCheckBox1() {
+        checkBoxExperiment1.setIndeterminate(true);
         if (!rCheckBoxMegerBH.isSelected() && !rCheckBoxMegerHH.isSelected() && !rCheckBoxMegerBHHH.isSelected()) {
-            checkBoxExperiment0.setSelected(false);
-            checkBoxExperiment0.setIndeterminate(false);
+            checkBoxExperiment1.setSelected(false);
+            checkBoxExperiment1.setIndeterminate(false);
         } else if (rCheckBoxMegerBH.isSelected() && rCheckBoxMegerHH.isSelected() && rCheckBoxMegerBHHH.isSelected()) {
-            checkBoxExperiment0.setIndeterminate(false);
-            checkBoxExperiment0.setSelected(true);
+            checkBoxExperiment1.setIndeterminate(false);
+            checkBoxExperiment1.setSelected(true);
         }
         checkBoxSelectAllItems.setSelected(isAllSelected());
     }
 
     @FXML
-    private void handleCheckBox1(ActionEvent e) {
+    private void handleCheckBox2(ActionEvent e) {
         CheckBox checkBox1 = (CheckBox) e.getSource();
         if (checkBox1.isSelected()) {
             checkBoxSelectAllItems.setSelected(isAllSelected());
@@ -726,42 +717,23 @@ public class MainViewController implements Statable {
 
     @FXML
     private void handleRCheckBoxIkasBH() {
-        setStateCheckBox1();
+        setStateCheckBox2();
     }
 
     @FXML
     private void handleRCheckBoxIkasHH() {
-        setStateCheckBox1();
+        setStateCheckBox2();
     }
 
-    private void setStateCheckBox1() {
-        checkBoxExperiment1.setIndeterminate(true);
+    private void setStateCheckBox2() {
+        checkBoxExperiment2.setIndeterminate(true);
         if (!rCheckBoxIKASBH.isSelected() && !rCheckBoxIKASHH.isSelected()) {
-            checkBoxExperiment1.setSelected(false);
-            checkBoxExperiment1.setIndeterminate(false);
+            checkBoxExperiment2.setSelected(false);
+            checkBoxExperiment2.setIndeterminate(false);
         } else if (rCheckBoxIKASBH.isSelected() && rCheckBoxIKASHH.isSelected()) {
-            checkBoxExperiment1.setIndeterminate(false);
-            checkBoxExperiment1.setSelected(true);
+            checkBoxExperiment2.setIndeterminate(false);
+            checkBoxExperiment2.setSelected(true);
         }
-        checkBoxSelectAllItems.setSelected(isAllSelected());
-    }
-
-
-    @FXML
-    private void handleRadioExperiment1BH() {
-        checkBoxExperiment1.setIndeterminate(true);
-        experimentsValuesModel.setExperiment1Choice(ExperimentValuesModel.EXPERIMENT1_BH);
-    }
-
-    @FXML
-    private void handleRadioExperiment1HH() {
-        checkBoxExperiment1.setIndeterminate(true);
-        experimentsValuesModel.setExperiment1Choice(ExperimentValuesModel.EXPERIMENT1_HH);
-    }
-
-
-    @FXML
-    private void handleCheckBox2() {
         checkBoxSelectAllItems.setSelected(isAllSelected());
     }
 
@@ -833,9 +805,8 @@ public class MainViewController implements Statable {
     }
 
     private boolean isAllSelected() {
-        return checkBoxExperiment0.isSelected() &&
-                !checkBoxExperiment0.isIndeterminate() &&
-                checkBoxExperiment1.isSelected() &&
+        return checkBoxExperiment1.isSelected() &&
+                !checkBoxExperiment1.isIndeterminate() &&
                 checkBoxExperiment2.isSelected() &&
                 checkBoxExperiment3.isSelected() &&
                 checkBoxExperiment4.isSelected() &&
@@ -861,25 +832,22 @@ public class MainViewController implements Statable {
             }
 
             boolean isCanceled = false;
-            if ((checkBoxExperiment0.isSelected() || checkBoxExperiment0.isIndeterminate()) && !isCanceled) {
+            if ((checkBoxExperiment1.isSelected() || checkBoxExperiment1.isIndeterminate()) && !isCanceled) {
 
                 int mask = 0;
                 mask |= rCheckBoxMegerBH.isSelected() ? 0b1 : 0;
                 mask |= rCheckBoxMegerHH.isSelected() ? 0b10 : 0;
                 mask |= rCheckBoxMegerBHHH.isSelected() ? 0b100 : 0;
-                experimentsValuesModel.setExperiment0Choice(mask);
-
-                isCanceled = start0Experiment();
-            }
-            if ((checkBoxExperiment1.isSelected() || checkBoxExperiment1.isIndeterminate()) && !isCanceled) {
-                int experiment1ChoiceMask = 0;
-                experiment1ChoiceMask |= rCheckBoxIKASBH.isSelected() ? 0b1 : 0;
-                experiment1ChoiceMask |= rCheckBoxIKASHH.isSelected() ? 0b10 : 0;
-                experimentsValuesModel.setExperiment1Choice(experiment1ChoiceMask);
+                experimentsValuesModel.setExperiment1Choice(mask);
 
                 isCanceled = start1Experiment();
             }
-            if (checkBoxExperiment2.isSelected() && !isCanceled) {
+            if ((checkBoxExperiment2.isSelected() || checkBoxExperiment2.isIndeterminate()) && !isCanceled) {
+                int experiment2ChoiceMask = 0;
+                experiment2ChoiceMask |= rCheckBoxIKASBH.isSelected() ? 0b1 : 0;
+                experiment2ChoiceMask |= rCheckBoxIKASHH.isSelected() ? 0b10 : 0;
+                experimentsValuesModel.setExperiment2Choice(experiment2ChoiceMask);
+
                 isCanceled = start2Experiment();
             }
             if (checkBoxExperiment3.isSelected() && !isCanceled) {
@@ -911,14 +879,13 @@ public class MainViewController implements Statable {
     }
 
     private boolean isAtLeastOneIsSelected() {
-        return checkBoxExperiment0.isSelected() ||
+        return checkBoxExperiment1.isSelected() ||
                 rCheckBoxMegerBH.isSelected() ||
                 rCheckBoxMegerHH.isSelected() ||
                 rCheckBoxMegerBHHH.isSelected() ||
-                checkBoxExperiment1.isSelected() ||
+                checkBoxExperiment2.isSelected() ||
                 rCheckBoxIKASBH.isSelected() ||
                 rCheckBoxIKASHH.isSelected() ||
-                checkBoxExperiment2.isSelected() ||
                 checkBoxExperiment3.isSelected() ||
                 checkBoxExperiment4.isSelected() ||
                 checkBoxExperiment5.isSelected() ||
@@ -928,9 +895,6 @@ public class MainViewController implements Statable {
                 rCheckBoxExp7HH.isSelected();
     }
 
-    private boolean start0Experiment() {
-        return startExperiment(String.format("layouts/phase3/experiment0ViewPhase3.fxml"));
-    }
 
     private boolean start1Experiment() {
         return startExperiment(String.format("layouts/phase3/experiment1ViewPhase3.fxml"));

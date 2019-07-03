@@ -9,33 +9,145 @@ import java.util.List;
 
 public class Experiment3ModelPhase3 {
 
-    private final StringProperty groupHH;
+    private final StringProperty uOutputAB;
+    private final StringProperty uOutputBC;
+    private final StringProperty uOutputCA;
+    private final StringProperty uOutputAvr;
+    private final StringProperty uInputAB;
+    private final StringProperty uInputBC;
+    private final StringProperty uInputCA;
+    private final StringProperty uInputAvr;
+    private final StringProperty uDiff;
     private final StringProperty groupBH;
+    private final StringProperty groupHH;
+    private final StringProperty f;
     private final StringProperty result;
-    private final StringProperty UBH;
-    private final StringProperty UHH;
     private List<StringProperty> properties = new ArrayList<>();
 
 
     public Experiment3ModelPhase3() {
+        uOutputAB = new SimpleStringProperty();
+        uOutputBC = new SimpleStringProperty();
+        uOutputCA = new SimpleStringProperty();
+        uOutputAvr = new SimpleStringProperty();
+        uInputAB = new SimpleStringProperty();
+        uInputBC = new SimpleStringProperty();
+        uInputCA = new SimpleStringProperty();
+        uInputAvr = new SimpleStringProperty();
+        uDiff = new SimpleStringProperty();
         groupBH = new SimpleStringProperty();
         groupHH = new SimpleStringProperty();
+        f = new SimpleStringProperty();
         result = new SimpleStringProperty();
-        UBH = new SimpleStringProperty();
-        UHH = new SimpleStringProperty();
-        properties.addAll(Arrays.asList(groupBH, groupHH, UBH, UHH, result));
+        properties.addAll(Arrays.asList(uOutputAB, uOutputBC, uOutputCA, uOutputAvr, uInputAB, uInputBC, uInputCA, uInputAvr, uDiff, f, result));
     }
 
-    public String getGroupHH() {
-        return groupHH.get();
+    public String getuOutputAB() {
+        return uOutputAB.get();
     }
 
-    public StringProperty groupHHProperty() {
-        return groupHH;
+    public StringProperty uOutputABProperty() {
+        return uOutputAB;
     }
 
-    public void setGroupHH(String groupHH) {
-        this.groupHH.set(groupHH);
+    public void setuOutputAB(String uOutputAB) {
+        this.uOutputAB.set(uOutputAB);
+    }
+
+    public String getuOutputBC() {
+        return uOutputBC.get();
+    }
+
+    public StringProperty uOutputBCProperty() {
+        return uOutputBC;
+    }
+
+    public void setuOutputBC(String uOutputBC) {
+        this.uOutputBC.set(uOutputBC);
+    }
+
+    public String getuOutputCA() {
+        return uOutputCA.get();
+    }
+
+    public StringProperty uOutputCAProperty() {
+        return uOutputCA;
+    }
+
+    public void setuOutputCA(String uOutputCA) {
+        this.uOutputCA.set(uOutputCA);
+    }
+
+    public String getuOutputAvr() {
+        return uOutputAvr.get();
+    }
+
+    public StringProperty uOutputAvrProperty() {
+        return uOutputAvr;
+    }
+
+    public void setuOutputAvr(String uOutputAvr) {
+        this.uOutputAvr.set(uOutputAvr);
+    }
+
+    public String getuInputAB() {
+        return uInputAB.get();
+    }
+
+    public StringProperty uInputABProperty() {
+        return uInputAB;
+    }
+
+    public void setuInputAB(String uInputAB) {
+        this.uInputAB.set(uInputAB);
+    }
+
+    public String getuInputBC() {
+        return uInputBC.get();
+    }
+
+    public StringProperty uInputBCProperty() {
+        return uInputBC;
+    }
+
+    public void setuInputBC(String uInputBC) {
+        this.uInputBC.set(uInputBC);
+    }
+
+    public String getuInputCA() {
+        return uInputCA.get();
+    }
+
+    public StringProperty uInputCAProperty() {
+        return uInputCA;
+    }
+
+    public void setuInputCA(String uInputCA) {
+        this.uInputCA.set(uInputCA);
+    }
+
+    public String getuInputAvr() {
+        return uInputAvr.get();
+    }
+
+    public StringProperty uInputAvrProperty() {
+        return uInputAvr;
+    }
+
+    public void setuInputAvr(String uInputAvr) {
+        this.uInputAvr.set(uInputAvr);
+    }
+
+    public String getuDiff() {
+        return uDiff.get();
+    }
+
+    public StringProperty uDiffProperty() {
+        return uDiff;
+    }
+
+    public void setuDiff(String uDiff) {
+        this.uDiff.set(uDiff);
     }
 
     public String getGroupBH() {
@@ -50,6 +162,30 @@ public class Experiment3ModelPhase3 {
         this.groupBH.set(groupBH);
     }
 
+    public String getGroupHH() {
+        return groupHH.get();
+    }
+
+    public StringProperty groupHHProperty() {
+        return groupHH;
+    }
+
+    public void setGroupHH(String groupHH) {
+        this.groupHH.set(groupHH);
+    }
+
+    public String getF() {
+        return f.get();
+    }
+
+    public StringProperty fProperty() {
+        return f;
+    }
+
+    public void setF(String f) {
+        this.f.set(f);
+    }
+
     public String getResult() {
         return result.get();
     }
@@ -62,31 +198,8 @@ public class Experiment3ModelPhase3 {
         this.result.set(result);
     }
 
-    public String getUBH() {
-        return UBH.get();
-    }
-
-    public StringProperty UBHProperty() {
-        return UBH;
-    }
-
-    public void setUBH(String UBH) {
-        this.UBH.set(UBH);
-    }
-
-    public String getUHH() {
-        return UHH.get();
-    }
-
-    public StringProperty UHHProperty() {
-        return UHH;
-    }
-
-    public void setUHH(String UHH) {
-        this.UHH.set(UHH);
-    }
-
     public void clearProperties() {
         properties.forEach(stringProperty -> stringProperty.set(""));
     }
+
 }

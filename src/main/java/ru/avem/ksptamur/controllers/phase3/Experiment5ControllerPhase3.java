@@ -94,7 +94,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     private volatile double iCPercentD;
     private volatile double cosParma;
     private volatile double IAvr;
-    private volatile double coef = 2.16;
 
     @FXML
     public void initialize() {
@@ -125,20 +124,20 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void fillFieldsOfExperimentProtocol() {
         Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
-        currentProtocol.setE6UBH(experiment5ModelPhase3.getUBH());
-        currentProtocol.setE6IA(experiment5ModelPhase3.getIA());
-        currentProtocol.setE6IB(experiment5ModelPhase3.getIB());
-        currentProtocol.setE6IC(experiment5ModelPhase3.getIC());
-        currentProtocol.setE6IAPercent(experiment5ModelPhase3.getIAPercent());
-        currentProtocol.setE6IBPercent(experiment5ModelPhase3.getIBPercent());
-        currentProtocol.setE6ICPercent(experiment5ModelPhase3.getICPercent());
-        currentProtocol.setE6IADiff(experiment5ModelPhase3.getIADiff());
-        currentProtocol.setE6IBDiff(experiment5ModelPhase3.getIBDiff());
-        currentProtocol.setE6ICDiff(experiment5ModelPhase3.getICDiff());
-        currentProtocol.setE6Pp(experiment5ModelPhase3.getPP());
-        currentProtocol.setE6F(experiment5ModelPhase3.getF());
-        currentProtocol.setE6Cos(experiment5ModelPhase3.getCOS());
-        currentProtocol.setE6Result(experiment5ModelPhase3.getResult());
+        currentProtocol.setE5UBH(experiment5ModelPhase3.getUBH());
+        currentProtocol.setE5IA(experiment5ModelPhase3.getIA());
+        currentProtocol.setE5IB(experiment5ModelPhase3.getIB());
+        currentProtocol.setE5IC(experiment5ModelPhase3.getIC());
+        currentProtocol.setE5IAPercent(experiment5ModelPhase3.getIAPercent());
+        currentProtocol.setE5IBPercent(experiment5ModelPhase3.getIBPercent());
+        currentProtocol.setE5ICPercent(experiment5ModelPhase3.getICPercent());
+        currentProtocol.setE5IADiff(experiment5ModelPhase3.getIADiff());
+        currentProtocol.setE5IBDiff(experiment5ModelPhase3.getIBDiff());
+        currentProtocol.setE5ICDiff(experiment5ModelPhase3.getICDiff());
+        currentProtocol.setE5Pp(experiment5ModelPhase3.getPP());
+        currentProtocol.setE5F(experiment5ModelPhase3.getF());
+        currentProtocol.setE5Cos(experiment5ModelPhase3.getCOS());
+        currentProtocol.setE5Result(experiment5ModelPhase3.getResult());
     }
 
     @Override
@@ -529,17 +528,17 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (float) value * coef;
+                            measuringUInAB = (float) value;
                         }
                         break;
                     case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInBC = (float) value * coef;
+                            measuringUInBC = (float) value;
                         }
                         break;
                     case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInCA = (float) value * coef;
+                            measuringUInCA = (float) value;
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3.0;
                             String UInAvr = formatRealNumber(measuringUInAvr);
                             if (measuringUInAvr > 0.001) {

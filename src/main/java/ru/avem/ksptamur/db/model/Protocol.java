@@ -14,58 +14,15 @@ public class Protocol {
     private long id;
 
     @DatabaseField
-    private String e0WindingBH = "";
-    @DatabaseField
-    private String e0UBH = "";
-    @DatabaseField
-    private String e0R15BH = "";
-    @DatabaseField
-    private String e0R60BH = "";
-    @DatabaseField
-    private String e0CoefBH = "";
-    @DatabaseField
-    private String e0TBH = "";
-    @DatabaseField
-    private String e0ResultBH = "";
-
-    @DatabaseField
-    private String e0WindingHH = "";
-    @DatabaseField
-    private String e0UHH = "";
-    @DatabaseField
-    private String e0R15HH = "";
-    @DatabaseField
-    private String e0R60HH = "";
-    @DatabaseField
-    private String e0CoefHH = "";
-    @DatabaseField
-    private String e0THH = "";
-    @DatabaseField
-    private String e0ResultHH = "";
-
-    @DatabaseField
-    private String e0WindingBHHH = "";
-    @DatabaseField
-    private String e0UBHHH = "";
-    @DatabaseField
-    private String e0R15BHHH = "";
-    @DatabaseField
-    private String e0R60BHHH = "";
-    @DatabaseField
-    private String e0CoefBHHH = "";
-    @DatabaseField
-    private String e0TBHHH = "";
-    @DatabaseField
-    private String e0ResultBHHH = "";
-
-    @DatabaseField
     private String e1WindingBH = "";
     @DatabaseField
-    private String e1ABBH = "";
+    private String e1UBH = "";
     @DatabaseField
-    private String e1BCBH = "";
+    private String e1R15BH = "";
     @DatabaseField
-    private String e1CABH = "";
+    private String e1R60BH = "";
+    @DatabaseField
+    private String e1CoefBH = "";
     @DatabaseField
     private String e1TBH = "";
     @DatabaseField
@@ -74,65 +31,107 @@ public class Protocol {
     @DatabaseField
     private String e1WindingHH = "";
     @DatabaseField
-    private String e1ABHH = "";
+    private String e1UHH = "";
     @DatabaseField
-    private String e1BCHH = "";
+    private String e1R15HH = "";
     @DatabaseField
-    private String e1CAHH = "";
+    private String e1R60HH = "";
+    @DatabaseField
+    private String e1CoefHH = "";
     @DatabaseField
     private String e1THH = "";
     @DatabaseField
     private String e1ResultHH = "";
 
     @DatabaseField
-    private String e2UInputAB = "";
+    private String e1WindingBHHH = "";
     @DatabaseField
-    private String e2UInputBC = "";
+    private String e1UBHHH = "";
     @DatabaseField
-    private String e2UInputCA = "";
+    private String e1R15BHHH = "";
     @DatabaseField
-    private String e2UInputAvr = "";
+    private String e1R60BHHH = "";
     @DatabaseField
-    private String e2UOutputAB = "";
+    private String e1CoefBHHH = "";
     @DatabaseField
-    private String e2UOutputBC = "";
+    private String e1TBHHH = "";
     @DatabaseField
-    private String e2UOutputCA = "";
-    @DatabaseField
-    private String e2UOutputAvr = "";
-    @DatabaseField
-    private String e2DiffU = "";
-    @DatabaseField
-    private String e2F = "";
-    @DatabaseField
-    private String e2Result = "";
+    private String e1ResultBHHH = "";
 
     @DatabaseField
-    private String e3UBH = "";
+    private String e2WindingBH = "";
     @DatabaseField
-    private String e3UHH = "";
+    private String e2ABBH = "";
+    @DatabaseField
+    private String e2BCBH = "";
+    @DatabaseField
+    private String e2CABH = "";
+    @DatabaseField
+    private String e2TBH = "";
+    @DatabaseField
+    private String e2ResultBH = "";
+
+    @DatabaseField
+    private String e2WindingHH = "";
+    @DatabaseField
+    private String e2ABHH = "";
+    @DatabaseField
+    private String e2BCHH = "";
+    @DatabaseField
+    private String e2CAHH = "";
+    @DatabaseField
+    private String e2THH = "";
+    @DatabaseField
+    private String e2ResultHH = "";
+
+    @DatabaseField
+    private String e3UInputAB = "";
+    @DatabaseField
+    private String e3UInputBC = "";
+    @DatabaseField
+    private String e3UInputCA = "";
+    @DatabaseField
+    private String e3UInputAvr = "";
+    @DatabaseField
+    private String e3UOutputAB = "";
+    @DatabaseField
+    private String e3UOutputBC = "";
+    @DatabaseField
+    private String e3UOutputCA = "";
+    @DatabaseField
+    private String e3UOutputAvr = "";
+    @DatabaseField
+    private String e3DiffU = "";
+    @DatabaseField
+    private String e3WindingBH = "";
+    @DatabaseField
+    private String e3WindingHH = "";
     @DatabaseField
     private String e3F = "";
     @DatabaseField
     private String e3Result = "";
 
     @DatabaseField
-    private String e4WindingBH = "";
+    private String e4UKZV = "";
     @DatabaseField
-    private String e4WindingHH = "";
+    private String e4UKZPercent = "";
     @DatabaseField
-    private String e4UBH = "";
+    private String e4UKZDiff = "";
     @DatabaseField
-    private String e4UHH = "";
+    private String e4IA = "";
+    @DatabaseField
+    private String e4IB = "";
+    @DatabaseField
+    private String e4IC = "";
+    @DatabaseField
+    private String e4Pp = "";
+    @DatabaseField
+    private String e4F = "";
     @DatabaseField
     private String e4Result = "";
 
     @DatabaseField
-    private String e5UKZV = "";
-    @DatabaseField
-    private String e5UKZPercent = "";
-    @DatabaseField
-    private String e5UKZDiff = "";
+    private String e5UBH = "";
     @DatabaseField
     private String e5IA = "";
     @DatabaseField
@@ -140,77 +139,62 @@ public class Protocol {
     @DatabaseField
     private String e5IC = "";
     @DatabaseField
+    private String e5IAPercent = "";
+    @DatabaseField
+    private String e5IBPercent = "";
+    @DatabaseField
+    private String e5ICPercent = "";
+    @DatabaseField
+    private String e5IADiff = "";
+    @DatabaseField
+    private String e5IBDiff = "";
+    @DatabaseField
+    private String e5ICDiff = "";
+    @DatabaseField
     private String e5Pp = "";
+    @DatabaseField
+    private String e5Cos = "";
     @DatabaseField
     private String e5F = "";
     @DatabaseField
     private String e5Result = "";
 
     @DatabaseField
-    private String e6UBH = "";
+    private String e6UInput = "";
     @DatabaseField
-    private String e6IA = "";
-    @DatabaseField
-    private String e6IB = "";
-    @DatabaseField
-    private String e6IC = "";
-    @DatabaseField
-    private String e6IAPercent = "";
-    @DatabaseField
-    private String e6IBPercent = "";
-    @DatabaseField
-    private String e6ICPercent = "";
-    @DatabaseField
-    private String e6IADiff = "";
-    @DatabaseField
-    private String e6IBDiff = "";
-    @DatabaseField
-    private String e6ICDiff = "";
-    @DatabaseField
-    private String e6Pp = "";
-    @DatabaseField
-    private String e6Cos = "";
+    private String e6IBH = "";
     @DatabaseField
     private String e6F = "";
     @DatabaseField
+    private String e6Time = "";
+    @DatabaseField
     private String e6Result = "";
 
-    @DatabaseField
-    private String e7UInput = "";
-    @DatabaseField
-    private String e7IBH = "";
-    @DatabaseField
-    private String e7F = "";
-    @DatabaseField
-    private String e7Time = "";
-    @DatabaseField
-    private String e7Result = "";
-
 
     @DatabaseField
-    private String e8TypeBHandCorps = "";
+    private String e7TypeBHandCorps = "";
     @DatabaseField
-    private String e8IBHandCorps = "";
+    private String e7IBHandCorps = "";
     @DatabaseField
-    private String e8UBHandCorps = "";
+    private String e7UBHandCorps = "";
     @DatabaseField
-    private String e8UBHAvem = "";
+    private String e7UBHAvem = "";
     @DatabaseField
-    private String e8TimeBHandCorps = "";
+    private String e7TimeBHandCorps = "";
     @DatabaseField
-    private String e8ResultBHandCorps = "";
+    private String e7ResultBHandCorps = "";
     @DatabaseField
-    private String e8TypeHHandCorps = "";
+    private String e7TypeHHandCorps = "";
     @DatabaseField
-    private String e8IHHandCorps = "";
+    private String e7IHHandCorps = "";
     @DatabaseField
-    private String e8UHHandCorps = "";
+    private String e7UHHandCorps = "";
     @DatabaseField
-    private String e8UHHAvem = "";
+    private String e7UHHAvem = "";
     @DatabaseField
-    private String e8TimeHHandCorps = "";
+    private String e7TimeHHandCorps = "";
     @DatabaseField
-    private String e8ResultHHandCorps = "";
+    private String e7ResultHHandCorps = "";
 
 
 
@@ -315,174 +299,6 @@ public class Protocol {
         this.date = new SimpleDateFormat("dd.MM.yy").format(millis);
     }
 
-    public String getE0UBH() {
-        return e0UBH;
-    }
-
-    public void setE0UBH(String e0UBH) {
-        this.e0UBH = e0UBH;
-    }
-
-    public String getE0UHH() {
-        return e0UHH;
-    }
-
-    public void setE0UHH(String e0UHH) {
-        this.e0UHH = e0UHH;
-    }
-
-    public String getE0UBHHH() {
-        return e0UBHHH;
-    }
-
-    public void setE0UBHHH(String e0UBHHH) {
-        this.e0UBHHH = e0UBHHH;
-    }
-
-    public String getE0WindingBH() {
-        return e0WindingBH;
-    }
-
-    public void setE0WindingBH(String e0WindingBH) {
-        this.e0WindingBH = e0WindingBH;
-    }
-
-    public String getE0R15BH() {
-        return e0R15BH;
-    }
-
-    public void setE0R15BH(String e0R15BH) {
-        this.e0R15BH = e0R15BH;
-    }
-
-    public String getE0R60BH() {
-        return e0R60BH;
-    }
-
-    public void setE0R60BH(String e0R60BH) {
-        this.e0R60BH = e0R60BH;
-    }
-
-    public String getE0CoefBH() {
-        return e0CoefBH;
-    }
-
-    public void setE0CoefBH(String e0CoefBH) {
-        this.e0CoefBH = e0CoefBH;
-    }
-
-    public String getE0TBH() {
-        return e0TBH;
-    }
-
-    public void setE0TBH(String e0TBH) {
-        this.e0TBH = e0TBH;
-    }
-
-    public String getE0ResultBH() {
-        return e0ResultBH;
-    }
-
-    public void setE0ResultBH(String e0ResultBH) {
-        this.e0ResultBH = e0ResultBH;
-    }
-
-    public String getE0WindingHH() {
-        return e0WindingHH;
-    }
-
-    public void setE0WindingHH(String e0WindingHH) {
-        this.e0WindingHH = e0WindingHH;
-    }
-
-    public String getE0R15HH() {
-        return e0R15HH;
-    }
-
-    public void setE0R15HH(String e0R15HH) {
-        this.e0R15HH = e0R15HH;
-    }
-
-    public String getE0R60HH() {
-        return e0R60HH;
-    }
-
-    public void setE0R60HH(String e0R60HH) {
-        this.e0R60HH = e0R60HH;
-    }
-
-    public String getE0CoefHH() {
-        return e0CoefHH;
-    }
-
-    public void setE0CoefHH(String e0CoefHH) {
-        this.e0CoefHH = e0CoefHH;
-    }
-
-    public String getE0THH() {
-        return e0THH;
-    }
-
-    public void setE0THH(String e0THH) {
-        this.e0THH = e0THH;
-    }
-
-    public String getE0ResultHH() {
-        return e0ResultHH;
-    }
-
-    public void setE0ResultHH(String e0ResultHH) {
-        this.e0ResultHH = e0ResultHH;
-    }
-
-    public String getE0WindingBHHH() {
-        return e0WindingBHHH;
-    }
-
-    public void setE0WindingBHHH(String e0WindingBHHH) {
-        this.e0WindingBHHH = e0WindingBHHH;
-    }
-
-    public String getE0R15BHHH() {
-        return e0R15BHHH;
-    }
-
-    public void setE0R15BHHH(String e0R15BHHH) {
-        this.e0R15BHHH = e0R15BHHH;
-    }
-
-    public String getE0R60BHHH() {
-        return e0R60BHHH;
-    }
-
-    public void setE0R60BHHH(String e0R60BHHH) {
-        this.e0R60BHHH = e0R60BHHH;
-    }
-
-    public String getE0CoefBHHH() {
-        return e0CoefBHHH;
-    }
-
-    public void setE0CoefBHHH(String e0CoefBHHH) {
-        this.e0CoefBHHH = e0CoefBHHH;
-    }
-
-    public String getE0TBHHH() {
-        return e0TBHHH;
-    }
-
-    public void setE0TBHHH(String e0TBHHH) {
-        this.e0TBHHH = e0TBHHH;
-    }
-
-    public String getE0ResultBHHH() {
-        return e0ResultBHHH;
-    }
-
-    public void setE0ResultBHHH(String e0ResultBHHH) {
-        this.e0ResultBHHH = e0ResultBHHH;
-    }
-
     public String getE1WindingBH() {
         return e1WindingBH;
     }
@@ -491,28 +307,36 @@ public class Protocol {
         this.e1WindingBH = e1WindingBH;
     }
 
-    public String getE1ABBH() {
-        return e1ABBH;
+    public String getE1UBH() {
+        return e1UBH;
     }
 
-    public void setE1ABBH(String e1ABBH) {
-        this.e1ABBH = e1ABBH;
+    public void setE1UBH(String e1UBH) {
+        this.e1UBH = e1UBH;
     }
 
-    public String getE1BCBH() {
-        return e1BCBH;
+    public String getE1R15BH() {
+        return e1R15BH;
     }
 
-    public void setE1BCBH(String e1BCBH) {
-        this.e1BCBH = e1BCBH;
+    public void setE1R15BH(String e1R15BH) {
+        this.e1R15BH = e1R15BH;
     }
 
-    public String getE1CABH() {
-        return e1CABH;
+    public String getE1R60BH() {
+        return e1R60BH;
     }
 
-    public void setE1CABH(String e1CABH) {
-        this.e1CABH = e1CABH;
+    public void setE1R60BH(String e1R60BH) {
+        this.e1R60BH = e1R60BH;
+    }
+
+    public String getE1CoefBH() {
+        return e1CoefBH;
+    }
+
+    public void setE1CoefBH(String e1CoefBH) {
+        this.e1CoefBH = e1CoefBH;
     }
 
     public String getE1TBH() {
@@ -539,28 +363,36 @@ public class Protocol {
         this.e1WindingHH = e1WindingHH;
     }
 
-    public String getE1ABHH() {
-        return e1ABHH;
+    public String getE1UHH() {
+        return e1UHH;
     }
 
-    public void setE1ABHH(String e1ABHH) {
-        this.e1ABHH = e1ABHH;
+    public void setE1UHH(String e1UHH) {
+        this.e1UHH = e1UHH;
     }
 
-    public String getE1BCHH() {
-        return e1BCHH;
+    public String getE1R15HH() {
+        return e1R15HH;
     }
 
-    public void setE1BCHH(String e1BCHH) {
-        this.e1BCHH = e1BCHH;
+    public void setE1R15HH(String e1R15HH) {
+        this.e1R15HH = e1R15HH;
     }
 
-    public String getE1CAHH() {
-        return e1CAHH;
+    public String getE1R60HH() {
+        return e1R60HH;
     }
 
-    public void setE1CAHH(String e1CAHH) {
-        this.e1CAHH = e1CAHH;
+    public void setE1R60HH(String e1R60HH) {
+        this.e1R60HH = e1R60HH;
+    }
+
+    public String getE1CoefHH() {
+        return e1CoefHH;
+    }
+
+    public void setE1CoefHH(String e1CoefHH) {
+        this.e1CoefHH = e1CoefHH;
     }
 
     public String getE1THH() {
@@ -579,108 +411,244 @@ public class Protocol {
         this.e1ResultHH = e1ResultHH;
     }
 
-    public String getE2UInputAB() {
-        return e2UInputAB;
+    public String getE1WindingBHHH() {
+        return e1WindingBHHH;
     }
 
-    public void setE2UInputAB(String e2UInputAB) {
-        this.e2UInputAB = e2UInputAB;
+    public void setE1WindingBHHH(String e1WindingBHHH) {
+        this.e1WindingBHHH = e1WindingBHHH;
     }
 
-    public String getE2UInputBC() {
-        return e2UInputBC;
+    public String getE1UBHHH() {
+        return e1UBHHH;
     }
 
-    public void setE2UInputBC(String e2UInputBC) {
-        this.e2UInputBC = e2UInputBC;
+    public void setE1UBHHH(String e1UBHHH) {
+        this.e1UBHHH = e1UBHHH;
     }
 
-    public String getE2UInputCA() {
-        return e2UInputCA;
+    public String getE1R15BHHH() {
+        return e1R15BHHH;
     }
 
-    public void setE2UInputCA(String e2UInputCA) {
-        this.e2UInputCA = e2UInputCA;
+    public void setE1R15BHHH(String e1R15BHHH) {
+        this.e1R15BHHH = e1R15BHHH;
     }
 
-    public String getE2UInputAvr() {
-        return e2UInputAvr;
+    public String getE1R60BHHH() {
+        return e1R60BHHH;
     }
 
-    public void setE2UInputAvr(String e2UInputAvr) {
-        this.e2UInputAvr = e2UInputAvr;
+    public void setE1R60BHHH(String e1R60BHHH) {
+        this.e1R60BHHH = e1R60BHHH;
     }
 
-    public String getE2UOutputAB() {
-        return e2UOutputAB;
+    public String getE1CoefBHHH() {
+        return e1CoefBHHH;
     }
 
-    public void setE2UOutputAB(String e2UOutputAB) {
-        this.e2UOutputAB = e2UOutputAB;
+    public void setE1CoefBHHH(String e1CoefBHHH) {
+        this.e1CoefBHHH = e1CoefBHHH;
     }
 
-    public String getE2UOutputBC() {
-        return e2UOutputBC;
+    public String getE1TBHHH() {
+        return e1TBHHH;
     }
 
-    public void setE2UOutputBC(String e2UOutputBC) {
-        this.e2UOutputBC = e2UOutputBC;
+    public void setE1TBHHH(String e1TBHHH) {
+        this.e1TBHHH = e1TBHHH;
     }
 
-    public String getE2UOutputCA() {
-        return e2UOutputCA;
+    public String getE1ResultBHHH() {
+        return e1ResultBHHH;
     }
 
-    public void setE2UOutputCA(String e2UOutputCA) {
-        this.e2UOutputCA = e2UOutputCA;
+    public void setE1ResultBHHH(String e1ResultBHHH) {
+        this.e1ResultBHHH = e1ResultBHHH;
     }
 
-    public String getE2UOutputAvr() {
-        return e2UOutputAvr;
+    public String getE2WindingBH() {
+        return e2WindingBH;
     }
 
-    public void setE2UOutputAvr(String e2UOutputAvr) {
-        this.e2UOutputAvr = e2UOutputAvr;
+    public void setE2WindingBH(String e2WindingBH) {
+        this.e2WindingBH = e2WindingBH;
     }
 
-    public String getE2DiffU() {
-        return e2DiffU;
+    public String getE2ABBH() {
+        return e2ABBH;
     }
 
-    public void setE2DiffU(String e2DiffU) {
-        this.e2DiffU = e2DiffU;
+    public void setE2ABBH(String e2ABBH) {
+        this.e2ABBH = e2ABBH;
     }
 
-    public String getE2F() {
-        return e2F;
+    public String getE2BCBH() {
+        return e2BCBH;
     }
 
-    public void setE2F(String e2F) {
-        this.e2F = e2F;
+    public void setE2BCBH(String e2BCBH) {
+        this.e2BCBH = e2BCBH;
     }
 
-    public String getE2Result() {
-        return e2Result;
+    public String getE2CABH() {
+        return e2CABH;
     }
 
-    public void setE2Result(String e2Result) {
-        this.e2Result = e2Result;
+    public void setE2CABH(String e2CABH) {
+        this.e2CABH = e2CABH;
     }
 
-    public String getE3UBH() {
-        return e3UBH;
+    public String getE2TBH() {
+        return e2TBH;
     }
 
-    public void setE3UBH(String e3UBH) {
-        this.e3UBH = e3UBH;
+    public void setE2TBH(String e2TBH) {
+        this.e2TBH = e2TBH;
     }
 
-    public String getE3UHH() {
-        return e3UHH;
+    public String getE2ResultBH() {
+        return e2ResultBH;
     }
 
-    public void setE3UHH(String e3UHH) {
-        this.e3UHH = e3UHH;
+    public void setE2ResultBH(String e2ResultBH) {
+        this.e2ResultBH = e2ResultBH;
+    }
+
+    public String getE2WindingHH() {
+        return e2WindingHH;
+    }
+
+    public void setE2WindingHH(String e2WindingHH) {
+        this.e2WindingHH = e2WindingHH;
+    }
+
+    public String getE2ABHH() {
+        return e2ABHH;
+    }
+
+    public void setE2ABHH(String e2ABHH) {
+        this.e2ABHH = e2ABHH;
+    }
+
+    public String getE2BCHH() {
+        return e2BCHH;
+    }
+
+    public void setE2BCHH(String e2BCHH) {
+        this.e2BCHH = e2BCHH;
+    }
+
+    public String getE2CAHH() {
+        return e2CAHH;
+    }
+
+    public void setE2CAHH(String e2CAHH) {
+        this.e2CAHH = e2CAHH;
+    }
+
+    public String getE2THH() {
+        return e2THH;
+    }
+
+    public void setE2THH(String e2THH) {
+        this.e2THH = e2THH;
+    }
+
+    public String getE2ResultHH() {
+        return e2ResultHH;
+    }
+
+    public void setE2ResultHH(String e2ResultHH) {
+        this.e2ResultHH = e2ResultHH;
+    }
+
+    public String getE3UInputAB() {
+        return e3UInputAB;
+    }
+
+    public void setE3UInputAB(String e3UInputAB) {
+        this.e3UInputAB = e3UInputAB;
+    }
+
+    public String getE3UInputBC() {
+        return e3UInputBC;
+    }
+
+    public void setE3UInputBC(String e3UInputBC) {
+        this.e3UInputBC = e3UInputBC;
+    }
+
+    public String getE3UInputCA() {
+        return e3UInputCA;
+    }
+
+    public void setE3UInputCA(String e3UInputCA) {
+        this.e3UInputCA = e3UInputCA;
+    }
+
+    public String getE3UInputAvr() {
+        return e3UInputAvr;
+    }
+
+    public void setE3UInputAvr(String e3UInputAvr) {
+        this.e3UInputAvr = e3UInputAvr;
+    }
+
+    public String getE3UOutputAB() {
+        return e3UOutputAB;
+    }
+
+    public void setE3UOutputAB(String e3UOutputAB) {
+        this.e3UOutputAB = e3UOutputAB;
+    }
+
+    public String getE3UOutputBC() {
+        return e3UOutputBC;
+    }
+
+    public void setE3UOutputBC(String e3UOutputBC) {
+        this.e3UOutputBC = e3UOutputBC;
+    }
+
+    public String getE3UOutputCA() {
+        return e3UOutputCA;
+    }
+
+    public void setE3UOutputCA(String e3UOutputCA) {
+        this.e3UOutputCA = e3UOutputCA;
+    }
+
+    public String getE3UOutputAvr() {
+        return e3UOutputAvr;
+    }
+
+    public void setE3UOutputAvr(String e3UOutputAvr) {
+        this.e3UOutputAvr = e3UOutputAvr;
+    }
+
+    public String getE3DiffU() {
+        return e3DiffU;
+    }
+
+    public void setE3DiffU(String e3DiffU) {
+        this.e3DiffU = e3DiffU;
+    }
+
+    public String getE3WindingBH() {
+        return e3WindingBH;
+    }
+
+    public void setE3WindingBH(String e3WindingBH) {
+        this.e3WindingBH = e3WindingBH;
+    }
+
+    public String getE3WindingHH() {
+        return e3WindingHH;
+    }
+
+    public void setE3WindingHH(String e3WindingHH) {
+        this.e3WindingHH = e3WindingHH;
     }
 
     public String getE3F() {
@@ -699,36 +667,68 @@ public class Protocol {
         this.e3Result = e3Result;
     }
 
-    public String getE4WindingBH() {
-        return e4WindingBH;
+    public String getE4UKZV() {
+        return e4UKZV;
     }
 
-    public void setE4WindingBH(String e4WindingBH) {
-        this.e4WindingBH = e4WindingBH;
+    public void setE4UKZV(String e4UKZV) {
+        this.e4UKZV = e4UKZV;
     }
 
-    public String getE4WindingHH() {
-        return e4WindingHH;
+    public String getE4UKZPercent() {
+        return e4UKZPercent;
     }
 
-    public void setE4WindingHH(String e4WindingHH) {
-        this.e4WindingHH = e4WindingHH;
+    public void setE4UKZPercent(String e4UKZPercent) {
+        this.e4UKZPercent = e4UKZPercent;
     }
 
-    public String getE4UBH() {
-        return e4UBH;
+    public String getE4UKZDiff() {
+        return e4UKZDiff;
     }
 
-    public void setE4UBH(String e4UBH) {
-        this.e4UBH = e4UBH;
+    public void setE4UKZDiff(String e4UKZDiff) {
+        this.e4UKZDiff = e4UKZDiff;
     }
 
-    public String getE4UHH() {
-        return e4UHH;
+    public String getE4IA() {
+        return e4IA;
     }
 
-    public void setE4UHH(String e4UHH) {
-        this.e4UHH = e4UHH;
+    public void setE4IA(String e4IA) {
+        this.e4IA = e4IA;
+    }
+
+    public String getE4IB() {
+        return e4IB;
+    }
+
+    public void setE4IB(String e4IB) {
+        this.e4IB = e4IB;
+    }
+
+    public String getE4IC() {
+        return e4IC;
+    }
+
+    public void setE4IC(String e4IC) {
+        this.e4IC = e4IC;
+    }
+
+    public String getE4Pp() {
+        return e4Pp;
+    }
+
+    public void setE4Pp(String e4Pp) {
+        this.e4Pp = e4Pp;
+    }
+
+    public String getE4F() {
+        return e4F;
+    }
+
+    public void setE4F(String e4F) {
+        this.e4F = e4F;
     }
 
     public String getE4Result() {
@@ -739,28 +739,12 @@ public class Protocol {
         this.e4Result = e4Result;
     }
 
-    public String getE5UKZV() {
-        return e5UKZV;
+    public String getE5UBH() {
+        return e5UBH;
     }
 
-    public void setE5UKZV(String e5UKZV) {
-        this.e5UKZV = e5UKZV;
-    }
-
-    public String getE5UKZPercent() {
-        return e5UKZPercent;
-    }
-
-    public void setE5UKZPercent(String e5UKZPercent) {
-        this.e5UKZPercent = e5UKZPercent;
-    }
-
-    public String getE5UKZDiff() {
-        return e5UKZDiff;
-    }
-
-    public void setE5UKZDiff(String e5UKZDiff) {
-        this.e5UKZDiff = e5UKZDiff;
+    public void setE5UBH(String e5UBH) {
+        this.e5UBH = e5UBH;
     }
 
     public String getE5IA() {
@@ -787,12 +771,68 @@ public class Protocol {
         this.e5IC = e5IC;
     }
 
+    public String getE5IAPercent() {
+        return e5IAPercent;
+    }
+
+    public void setE5IAPercent(String e5IAPercent) {
+        this.e5IAPercent = e5IAPercent;
+    }
+
+    public String getE5IBPercent() {
+        return e5IBPercent;
+    }
+
+    public void setE5IBPercent(String e5IBPercent) {
+        this.e5IBPercent = e5IBPercent;
+    }
+
+    public String getE5ICPercent() {
+        return e5ICPercent;
+    }
+
+    public void setE5ICPercent(String e5ICPercent) {
+        this.e5ICPercent = e5ICPercent;
+    }
+
+    public String getE5IADiff() {
+        return e5IADiff;
+    }
+
+    public void setE5IADiff(String e5IADiff) {
+        this.e5IADiff = e5IADiff;
+    }
+
+    public String getE5IBDiff() {
+        return e5IBDiff;
+    }
+
+    public void setE5IBDiff(String e5IBDiff) {
+        this.e5IBDiff = e5IBDiff;
+    }
+
+    public String getE5ICDiff() {
+        return e5ICDiff;
+    }
+
+    public void setE5ICDiff(String e5ICDiff) {
+        this.e5ICDiff = e5ICDiff;
+    }
+
     public String getE5Pp() {
         return e5Pp;
     }
 
     public void setE5Pp(String e5Pp) {
         this.e5Pp = e5Pp;
+    }
+
+    public String getE5Cos() {
+        return e5Cos;
+    }
+
+    public void setE5Cos(String e5Cos) {
+        this.e5Cos = e5Cos;
     }
 
     public String getE5F() {
@@ -811,100 +851,20 @@ public class Protocol {
         this.e5Result = e5Result;
     }
 
-    public String getE6UBH() {
-        return e6UBH;
+    public String getE6UInput() {
+        return e6UInput;
     }
 
-    public void setE6UBH(String e6UBH) {
-        this.e6UBH = e6UBH;
+    public void setE6UInput(String e6UInput) {
+        this.e6UInput = e6UInput;
     }
 
-    public String getE6IA() {
-        return e6IA;
+    public String getE6IBH() {
+        return e6IBH;
     }
 
-    public void setE6IA(String e6IA) {
-        this.e6IA = e6IA;
-    }
-
-    public String getE6IB() {
-        return e6IB;
-    }
-
-    public void setE6IB(String e6IB) {
-        this.e6IB = e6IB;
-    }
-
-    public String getE6IC() {
-        return e6IC;
-    }
-
-    public void setE6IC(String e6IC) {
-        this.e6IC = e6IC;
-    }
-
-    public String getE6IAPercent() {
-        return e6IAPercent;
-    }
-
-    public void setE6IAPercent(String e6IAPercent) {
-        this.e6IAPercent = e6IAPercent;
-    }
-
-    public String getE6IBPercent() {
-        return e6IBPercent;
-    }
-
-    public void setE6IBPercent(String e6IBPercent) {
-        this.e6IBPercent = e6IBPercent;
-    }
-
-    public String getE6ICPercent() {
-        return e6ICPercent;
-    }
-
-    public void setE6ICPercent(String e6ICPercent) {
-        this.e6ICPercent = e6ICPercent;
-    }
-
-    public String getE6IADiff() {
-        return e6IADiff;
-    }
-
-    public void setE6IADiff(String e6IADiff) {
-        this.e6IADiff = e6IADiff;
-    }
-
-    public String getE6IBDiff() {
-        return e6IBDiff;
-    }
-
-    public void setE6IBDiff(String e6IBDiff) {
-        this.e6IBDiff = e6IBDiff;
-    }
-
-    public String getE6ICDiff() {
-        return e6ICDiff;
-    }
-
-    public void setE6ICDiff(String e6ICDiff) {
-        this.e6ICDiff = e6ICDiff;
-    }
-
-    public String getE6Pp() {
-        return e6Pp;
-    }
-
-    public void setE6Pp(String e6Pp) {
-        this.e6Pp = e6Pp;
-    }
-
-    public String getE6Cos() {
-        return e6Cos;
-    }
-
-    public void setE6Cos(String e6Cos) {
-        this.e6Cos = e6Cos;
+    public void setE6IBH(String e6IBH) {
+        this.e6IBH = e6IBH;
     }
 
     public String getE6F() {
@@ -915,6 +875,14 @@ public class Protocol {
         this.e6F = e6F;
     }
 
+    public String getE6Time() {
+        return e6Time;
+    }
+
+    public void setE6Time(String e6Time) {
+        this.e6Time = e6Time;
+    }
+
     public String getE6Result() {
         return e6Result;
     }
@@ -923,140 +891,100 @@ public class Protocol {
         this.e6Result = e6Result;
     }
 
-    public String getE7UInput() {
-        return e7UInput;
+    public String getE7TypeBHandCorps() {
+        return e7TypeBHandCorps;
     }
 
-    public void setE7UInput(String e7UInput) {
-        this.e7UInput = e7UInput;
+    public void setE7TypeBHandCorps(String e7TypeBHandCorps) {
+        this.e7TypeBHandCorps = e7TypeBHandCorps;
     }
 
-    public String getE7IBH() {
-        return e7IBH;
+    public String getE7IBHandCorps() {
+        return e7IBHandCorps;
     }
 
-    public void setE7IBH(String e7IBH) {
-        this.e7IBH = e7IBH;
+    public void setE7IBHandCorps(String e7IBHandCorps) {
+        this.e7IBHandCorps = e7IBHandCorps;
     }
 
-    public String getE7F() {
-        return e7F;
+    public String getE7UBHandCorps() {
+        return e7UBHandCorps;
     }
 
-    public void setE7F(String e7F) {
-        this.e7F = e7F;
+    public void setE7UBHandCorps(String e7UBHandCorps) {
+        this.e7UBHandCorps = e7UBHandCorps;
     }
 
-    public String getE7Time() {
-        return e7Time;
+    public String getE7UBHAvem() {
+        return e7UBHAvem;
     }
 
-    public void setE7Time(String e7Time) {
-        this.e7Time = e7Time;
+    public void setE7UBHAvem(String e7UBHAvem) {
+        this.e7UBHAvem = e7UBHAvem;
     }
 
-    public String getE7Result() {
-        return e7Result;
+    public String getE7TimeBHandCorps() {
+        return e7TimeBHandCorps;
     }
 
-    public void setE7Result(String e7Result) {
-        this.e7Result = e7Result;
+    public void setE7TimeBHandCorps(String e7TimeBHandCorps) {
+        this.e7TimeBHandCorps = e7TimeBHandCorps;
     }
 
-    public String getE8TypeBHandCorps() {
-        return e8TypeBHandCorps;
+    public String getE7ResultBHandCorps() {
+        return e7ResultBHandCorps;
     }
 
-    public void setE8TypeBHandCorps(String e8TypeBHandCorps) {
-        this.e8TypeBHandCorps = e8TypeBHandCorps;
+    public void setE7ResultBHandCorps(String e7ResultBHandCorps) {
+        this.e7ResultBHandCorps = e7ResultBHandCorps;
     }
 
-    public String getE8IBHandCorps() {
-        return e8IBHandCorps;
+    public String getE7TypeHHandCorps() {
+        return e7TypeHHandCorps;
     }
 
-    public void setE8IBHandCorps(String e8IBHandCorps) {
-        this.e8IBHandCorps = e8IBHandCorps;
+    public void setE7TypeHHandCorps(String e7TypeHHandCorps) {
+        this.e7TypeHHandCorps = e7TypeHHandCorps;
     }
 
-    public String getE8UBHandCorps() {
-        return e8UBHandCorps;
+    public String getE7IHHandCorps() {
+        return e7IHHandCorps;
     }
 
-    public void setE8UBHandCorps(String e8UBHandCorps) {
-        this.e8UBHandCorps = e8UBHandCorps;
+    public void setE7IHHandCorps(String e7IHHandCorps) {
+        this.e7IHHandCorps = e7IHHandCorps;
     }
 
-    public String getE8TimeBHandCorps() {
-        return e8TimeBHandCorps;
+    public String getE7UHHandCorps() {
+        return e7UHHandCorps;
     }
 
-    public void setE8TimeBHandCorps(String e8TimeBHandCorps) {
-        this.e8TimeBHandCorps = e8TimeBHandCorps;
+    public void setE7UHHandCorps(String e7UHHandCorps) {
+        this.e7UHHandCorps = e7UHHandCorps;
     }
 
-    public String getE8ResultBHandCorps() {
-        return e8ResultBHandCorps;
+    public String getE7UHHAvem() {
+        return e7UHHAvem;
     }
 
-    public void setE8ResultBHandCorps(String e8ResultBHandCorps) {
-        this.e8ResultBHandCorps = e8ResultBHandCorps;
+    public void setE7UHHAvem(String e7UHHAvem) {
+        this.e7UHHAvem = e7UHHAvem;
     }
 
-    public String getE8TypeHHandCorps() {
-        return e8TypeHHandCorps;
+    public String getE7TimeHHandCorps() {
+        return e7TimeHHandCorps;
     }
 
-    public void setE8TypeHHandCorps(String e8TypeHHandCorps) {
-        this.e8TypeHHandCorps = e8TypeHHandCorps;
+    public void setE7TimeHHandCorps(String e7TimeHHandCorps) {
+        this.e7TimeHHandCorps = e7TimeHHandCorps;
     }
 
-    public String getE8IHHandCorps() {
-        return e8IHHandCorps;
+    public String getE7ResultHHandCorps() {
+        return e7ResultHHandCorps;
     }
 
-    public void setE8IHHandCorps(String e8IHHandCorps) {
-        this.e8IHHandCorps = e8IHHandCorps;
-    }
-
-    public String getE8UHHandCorps() {
-        return e8UHHandCorps;
-    }
-
-    public void setE8UHHandCorps(String e8UHHandCorps) {
-        this.e8UHHandCorps = e8UHHandCorps;
-    }
-
-    public String getE8TimeHHandCorps() {
-        return e8TimeHHandCorps;
-    }
-
-    public void setE8TimeHHandCorps(String e8TimeHHandCorps) {
-        this.e8TimeHHandCorps = e8TimeHHandCorps;
-    }
-
-    public String getE8ResultHHandCorps() {
-        return e8ResultHHandCorps;
-    }
-
-    public void setE8ResultHHandCorps(String e8ResultHHandCorps) {
-        this.e8ResultHHandCorps = e8ResultHHandCorps;
-    }
-
-    public String getE8UBHAvem() {
-        return e8UBHAvem;
-    }
-
-    public void setE8UBHAvem(String e8UBHAvem) {
-        this.e8UBHAvem = e8UBHAvem;
-    }
-
-    public String getE8UHHAvem() {
-        return e8UHHAvem;
-    }
-
-    public void setE8UHHAvem(String e8UHHAvem) {
-        this.e8UHHAvem = e8UHHAvem;
+    public void setE7ResultHHandCorps(String e7ResultHHandCorps) {
+        this.e7ResultHHandCorps = e7ResultHHandCorps;
     }
 
     public String getType() {
@@ -1216,99 +1144,92 @@ public class Protocol {
                 Double.compare(protocol.uinsulation, uinsulation) == 0 &&
                 Double.compare(protocol.umeger, umeger) == 0 &&
                 millis == protocol.millis &&
-                Objects.equals(e0WindingBH, protocol.e0WindingBH) &&
-                Objects.equals(e0UBH, protocol.e0UBH) &&
-                Objects.equals(e0R15BH, protocol.e0R15BH) &&
-                Objects.equals(e0R60BH, protocol.e0R60BH) &&
-                Objects.equals(e0CoefBH, protocol.e0CoefBH) &&
-                Objects.equals(e0TBH, protocol.e0TBH) &&
-                Objects.equals(e0ResultBH, protocol.e0ResultBH) &&
-                Objects.equals(e0WindingHH, protocol.e0WindingHH) &&
-                Objects.equals(e0UHH, protocol.e0UHH) &&
-                Objects.equals(e0R15HH, protocol.e0R15HH) &&
-                Objects.equals(e0R60HH, protocol.e0R60HH) &&
-                Objects.equals(e0CoefHH, protocol.e0CoefHH) &&
-                Objects.equals(e0THH, protocol.e0THH) &&
-                Objects.equals(e0ResultHH, protocol.e0ResultHH) &&
-                Objects.equals(e0WindingBHHH, protocol.e0WindingBHHH) &&
-                Objects.equals(e0UBHHH, protocol.e0UBHHH) &&
-                Objects.equals(e0R15BHHH, protocol.e0R15BHHH) &&
-                Objects.equals(e0R60BHHH, protocol.e0R60BHHH) &&
-                Objects.equals(e0CoefBHHH, protocol.e0CoefBHHH) &&
-                Objects.equals(e0TBHHH, protocol.e0TBHHH) &&
-                Objects.equals(e0ResultBHHH, protocol.e0ResultBHHH) &&
                 Objects.equals(e1WindingBH, protocol.e1WindingBH) &&
-                Objects.equals(e1ABBH, protocol.e1ABBH) &&
-                Objects.equals(e1BCBH, protocol.e1BCBH) &&
-                Objects.equals(e1CABH, protocol.e1CABH) &&
+                Objects.equals(e1UBH, protocol.e1UBH) &&
+                Objects.equals(e1R15BH, protocol.e1R15BH) &&
+                Objects.equals(e1R60BH, protocol.e1R60BH) &&
+                Objects.equals(e1CoefBH, protocol.e1CoefBH) &&
                 Objects.equals(e1TBH, protocol.e1TBH) &&
                 Objects.equals(e1ResultBH, protocol.e1ResultBH) &&
                 Objects.equals(e1WindingHH, protocol.e1WindingHH) &&
-                Objects.equals(e1ABHH, protocol.e1ABHH) &&
-                Objects.equals(e1BCHH, protocol.e1BCHH) &&
-                Objects.equals(e1CAHH, protocol.e1CAHH) &&
+                Objects.equals(e1UHH, protocol.e1UHH) &&
+                Objects.equals(e1R15HH, protocol.e1R15HH) &&
+                Objects.equals(e1R60HH, protocol.e1R60HH) &&
+                Objects.equals(e1CoefHH, protocol.e1CoefHH) &&
                 Objects.equals(e1THH, protocol.e1THH) &&
                 Objects.equals(e1ResultHH, protocol.e1ResultHH) &&
-                Objects.equals(e2UInputAB, protocol.e2UInputAB) &&
-                Objects.equals(e2UInputBC, protocol.e2UInputBC) &&
-                Objects.equals(e2UInputCA, protocol.e2UInputCA) &&
-                Objects.equals(e2UInputAvr, protocol.e2UInputAvr) &&
-                Objects.equals(e2UOutputAB, protocol.e2UOutputAB) &&
-                Objects.equals(e2UOutputBC, protocol.e2UOutputBC) &&
-                Objects.equals(e2UOutputCA, protocol.e2UOutputCA) &&
-                Objects.equals(e2UOutputAvr, protocol.e2UOutputAvr) &&
-                Objects.equals(e2DiffU, protocol.e2DiffU) &&
-                Objects.equals(e2F, protocol.e2F) &&
-                Objects.equals(e2Result, protocol.e2Result) &&
-                Objects.equals(e3UBH, protocol.e3UBH) &&
-                Objects.equals(e3UHH, protocol.e3UHH) &&
+                Objects.equals(e1WindingBHHH, protocol.e1WindingBHHH) &&
+                Objects.equals(e1UBHHH, protocol.e1UBHHH) &&
+                Objects.equals(e1R15BHHH, protocol.e1R15BHHH) &&
+                Objects.equals(e1R60BHHH, protocol.e1R60BHHH) &&
+                Objects.equals(e1CoefBHHH, protocol.e1CoefBHHH) &&
+                Objects.equals(e1TBHHH, protocol.e1TBHHH) &&
+                Objects.equals(e1ResultBHHH, protocol.e1ResultBHHH) &&
+                Objects.equals(e2WindingBH, protocol.e2WindingBH) &&
+                Objects.equals(e2ABBH, protocol.e2ABBH) &&
+                Objects.equals(e2BCBH, protocol.e2BCBH) &&
+                Objects.equals(e2CABH, protocol.e2CABH) &&
+                Objects.equals(e2TBH, protocol.e2TBH) &&
+                Objects.equals(e2ResultBH, protocol.e2ResultBH) &&
+                Objects.equals(e2WindingHH, protocol.e2WindingHH) &&
+                Objects.equals(e2ABHH, protocol.e2ABHH) &&
+                Objects.equals(e2BCHH, protocol.e2BCHH) &&
+                Objects.equals(e2CAHH, protocol.e2CAHH) &&
+                Objects.equals(e2THH, protocol.e2THH) &&
+                Objects.equals(e2ResultHH, protocol.e2ResultHH) &&
+                Objects.equals(e3UInputAB, protocol.e3UInputAB) &&
+                Objects.equals(e3UInputBC, protocol.e3UInputBC) &&
+                Objects.equals(e3UInputCA, protocol.e3UInputCA) &&
+                Objects.equals(e3UInputAvr, protocol.e3UInputAvr) &&
+                Objects.equals(e3UOutputAB, protocol.e3UOutputAB) &&
+                Objects.equals(e3UOutputBC, protocol.e3UOutputBC) &&
+                Objects.equals(e3UOutputCA, protocol.e3UOutputCA) &&
+                Objects.equals(e3UOutputAvr, protocol.e3UOutputAvr) &&
+                Objects.equals(e3DiffU, protocol.e3DiffU) &&
+                Objects.equals(e3WindingBH, protocol.e3WindingBH) &&
+                Objects.equals(e3WindingHH, protocol.e3WindingHH) &&
                 Objects.equals(e3F, protocol.e3F) &&
                 Objects.equals(e3Result, protocol.e3Result) &&
-                Objects.equals(e4WindingBH, protocol.e4WindingBH) &&
-                Objects.equals(e4WindingHH, protocol.e4WindingHH) &&
-                Objects.equals(e4UBH, protocol.e4UBH) &&
-                Objects.equals(e4UHH, protocol.e4UHH) &&
+                Objects.equals(e4UKZV, protocol.e4UKZV) &&
+                Objects.equals(e4UKZPercent, protocol.e4UKZPercent) &&
+                Objects.equals(e4UKZDiff, protocol.e4UKZDiff) &&
+                Objects.equals(e4IA, protocol.e4IA) &&
+                Objects.equals(e4IB, protocol.e4IB) &&
+                Objects.equals(e4IC, protocol.e4IC) &&
+                Objects.equals(e4Pp, protocol.e4Pp) &&
+                Objects.equals(e4F, protocol.e4F) &&
                 Objects.equals(e4Result, protocol.e4Result) &&
-                Objects.equals(e5UKZV, protocol.e5UKZV) &&
-                Objects.equals(e5UKZPercent, protocol.e5UKZPercent) &&
-                Objects.equals(e5UKZDiff, protocol.e5UKZDiff) &&
+                Objects.equals(e5UBH, protocol.e5UBH) &&
                 Objects.equals(e5IA, protocol.e5IA) &&
                 Objects.equals(e5IB, protocol.e5IB) &&
                 Objects.equals(e5IC, protocol.e5IC) &&
+                Objects.equals(e5IAPercent, protocol.e5IAPercent) &&
+                Objects.equals(e5IBPercent, protocol.e5IBPercent) &&
+                Objects.equals(e5ICPercent, protocol.e5ICPercent) &&
+                Objects.equals(e5IADiff, protocol.e5IADiff) &&
+                Objects.equals(e5IBDiff, protocol.e5IBDiff) &&
+                Objects.equals(e5ICDiff, protocol.e5ICDiff) &&
                 Objects.equals(e5Pp, protocol.e5Pp) &&
+                Objects.equals(e5Cos, protocol.e5Cos) &&
                 Objects.equals(e5F, protocol.e5F) &&
                 Objects.equals(e5Result, protocol.e5Result) &&
-                Objects.equals(e6UBH, protocol.e6UBH) &&
-                Objects.equals(e6IA, protocol.e6IA) &&
-                Objects.equals(e6IB, protocol.e6IB) &&
-                Objects.equals(e6IC, protocol.e6IC) &&
-                Objects.equals(e6IAPercent, protocol.e6IAPercent) &&
-                Objects.equals(e6IBPercent, protocol.e6IBPercent) &&
-                Objects.equals(e6ICPercent, protocol.e6ICPercent) &&
-                Objects.equals(e6IADiff, protocol.e6IADiff) &&
-                Objects.equals(e6IBDiff, protocol.e6IBDiff) &&
-                Objects.equals(e6ICDiff, protocol.e6ICDiff) &&
-                Objects.equals(e6Pp, protocol.e6Pp) &&
-                Objects.equals(e6Cos, protocol.e6Cos) &&
+                Objects.equals(e6UInput, protocol.e6UInput) &&
+                Objects.equals(e6IBH, protocol.e6IBH) &&
                 Objects.equals(e6F, protocol.e6F) &&
+                Objects.equals(e6Time, protocol.e6Time) &&
                 Objects.equals(e6Result, protocol.e6Result) &&
-                Objects.equals(e7UInput, protocol.e7UInput) &&
-                Objects.equals(e7IBH, protocol.e7IBH) &&
-                Objects.equals(e7F, protocol.e7F) &&
-                Objects.equals(e7Time, protocol.e7Time) &&
-                Objects.equals(e7Result, protocol.e7Result) &&
-                Objects.equals(e8TypeBHandCorps, protocol.e8TypeBHandCorps) &&
-                Objects.equals(e8IBHandCorps, protocol.e8IBHandCorps) &&
-                Objects.equals(e8UBHandCorps, protocol.e8UBHandCorps) &&
-                Objects.equals(e8UBHAvem, protocol.e8UBHAvem) &&
-                Objects.equals(e8TimeBHandCorps, protocol.e8TimeBHandCorps) &&
-                Objects.equals(e8ResultBHandCorps, protocol.e8ResultBHandCorps) &&
-                Objects.equals(e8TypeHHandCorps, protocol.e8TypeHHandCorps) &&
-                Objects.equals(e8IHHandCorps, protocol.e8IHHandCorps) &&
-                Objects.equals(e8UHHandCorps, protocol.e8UHHandCorps) &&
-                Objects.equals(e8UHHAvem, protocol.e8UHHAvem) &&
-                Objects.equals(e8TimeHHandCorps, protocol.e8TimeHHandCorps) &&
-                Objects.equals(e8ResultHHandCorps, protocol.e8ResultHHandCorps) &&
+                Objects.equals(e7TypeBHandCorps, protocol.e7TypeBHandCorps) &&
+                Objects.equals(e7IBHandCorps, protocol.e7IBHandCorps) &&
+                Objects.equals(e7UBHandCorps, protocol.e7UBHandCorps) &&
+                Objects.equals(e7UBHAvem, protocol.e7UBHAvem) &&
+                Objects.equals(e7TimeBHandCorps, protocol.e7TimeBHandCorps) &&
+                Objects.equals(e7ResultBHandCorps, protocol.e7ResultBHandCorps) &&
+                Objects.equals(e7TypeHHandCorps, protocol.e7TypeHHandCorps) &&
+                Objects.equals(e7IHHandCorps, protocol.e7IHHandCorps) &&
+                Objects.equals(e7UHHandCorps, protocol.e7UHHandCorps) &&
+                Objects.equals(e7UHHAvem, protocol.e7UHHAvem) &&
+                Objects.equals(e7TimeHHandCorps, protocol.e7TimeHHandCorps) &&
+                Objects.equals(e7ResultHHandCorps, protocol.e7ResultHHandCorps) &&
                 Objects.equals(serialNumber, protocol.serialNumber) &&
                 Objects.equals(type, protocol.type) &&
                 Objects.equals(position1, protocol.position1) &&
@@ -1323,6 +1244,6 @@ public class Protocol {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, e0WindingBH, e0UBH, e0R15BH, e0R60BH, e0CoefBH, e0TBH, e0ResultBH, e0WindingHH, e0UHH, e0R15HH, e0R60HH, e0CoefHH, e0THH, e0ResultHH, e0WindingBHHH, e0UBHHH, e0R15BHHH, e0R60BHHH, e0CoefBHHH, e0TBHHH, e0ResultBHHH, e1WindingBH, e1ABBH, e1BCBH, e1CABH, e1TBH, e1ResultBH, e1WindingHH, e1ABHH, e1BCHH, e1CAHH, e1THH, e1ResultHH, e2UInputAB, e2UInputBC, e2UInputCA, e2UInputAvr, e2UOutputAB, e2UOutputBC, e2UOutputCA, e2UOutputAvr, e2DiffU, e2F, e2Result, e3UBH, e3UHH, e3F, e3Result, e4WindingBH, e4WindingHH, e4UBH, e4UHH, e4Result, e5UKZV, e5UKZPercent, e5UKZDiff, e5IA, e5IB, e5IC, e5Pp, e5F, e5Result, e6UBH, e6IA, e6IB, e6IC, e6IAPercent, e6IBPercent, e6ICPercent, e6IADiff, e6IBDiff, e6ICDiff, e6Pp, e6Cos, e6F, e6Result, e7UInput, e7IBH, e7F, e7Time, e7Result, e8TypeBHandCorps, e8IBHandCorps, e8UBHandCorps, e8UBHAvem, e8TimeBHandCorps, e8ResultBHandCorps, e8TypeHHandCorps, e8IHHandCorps, e8UHHandCorps, e8UHHAvem, e8TimeHHandCorps, e8ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
+        return Objects.hash(id, e1WindingBH, e1UBH, e1R15BH, e1R60BH, e1CoefBH, e1TBH, e1ResultBH, e1WindingHH, e1UHH, e1R15HH, e1R60HH, e1CoefHH, e1THH, e1ResultHH, e1WindingBHHH, e1UBHHH, e1R15BHHH, e1R60BHHH, e1CoefBHHH, e1TBHHH, e1ResultBHHH, e2WindingBH, e2ABBH, e2BCBH, e2CABH, e2TBH, e2ResultBH, e2WindingHH, e2ABHH, e2BCHH, e2CAHH, e2THH, e2ResultHH, e3UInputAB, e3UInputBC, e3UInputCA, e3UInputAvr, e3UOutputAB, e3UOutputBC, e3UOutputCA, e3UOutputAvr, e3DiffU, e3WindingBH, e3WindingHH, e3F, e3Result, e4UKZV, e4UKZPercent, e4UKZDiff, e4IA, e4IB, e4IC, e4Pp, e4F, e4Result, e5UBH, e5IA, e5IB, e5IC, e5IAPercent, e5IBPercent, e5ICPercent, e5IADiff, e5IBDiff, e5ICDiff, e5Pp, e5Cos, e5F, e5Result, e6UInput, e6IBH, e6F, e6Time, e6Result, e7TypeBHandCorps, e7IBHandCorps, e7UBHandCorps, e7UBHAvem, e7TimeBHandCorps, e7ResultBHandCorps, e7TypeHHandCorps, e7IHHandCorps, e7UHHandCorps, e7UHHAvem, e7TimeHHandCorps, e7ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
     }
 }

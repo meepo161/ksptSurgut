@@ -7,12 +7,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
+import ru.avem.ksptamur.communication.CommunicationModel;
 import ru.avem.ksptamur.communication.devices.parmaT400.ParmaT400Model;
 import ru.avem.ksptamur.communication.devices.phasemeter.PhaseMeterModel;
 import ru.avem.ksptamur.communication.devices.pm130.PM130Model;
 import ru.avem.ksptamur.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptamur.controllers.AbstractExperiment;
-import ru.avem.ksptamur.db.model.Protocol;
 import ru.avem.ksptamur.model.phase3.Experiment3ModelPhase3;
 import ru.avem.ksptamur.utils.View;
 
@@ -30,24 +30,40 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableView<Experiment3ModelPhase3> tableViewExperimentValues;
     @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUInputAB;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUInputBC;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUInputCA;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUInputAvr;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUOutputAB;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUOutputBC;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUOutputCA;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUOutputAvr;
+    @FXML
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnUDiff;
+    @FXML
     private TableColumn<Experiment3ModelPhase3, String> tableColumnGroupBH;
     @FXML
     private TableColumn<Experiment3ModelPhase3, String> tableColumnGroupHH;
     @FXML
-    private TableColumn<Experiment3ModelPhase3, String> tableColumnResultExperiment3;
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnF;
     @FXML
-    private TableColumn<Experiment3ModelPhase3, String> tableColumnUBH;
-    @FXML
-    private TableColumn<Experiment3ModelPhase3, String> tableColumnUHH;
+    private TableColumn<Experiment3ModelPhase3, String> tableColumnResultExperiment;
 
     private double UHHTestItem = currentProtocol.getUhh();
 
+    private CommunicationModel communicationModel = CommunicationModel.getInstance();
     private Experiment3ModelPhase3 experiment3ModelPhase3;
     private ObservableList<Experiment3ModelPhase3> experiment3Data = FXCollections.observableArrayList();
 
     private volatile boolean isNeedToWaitDelta;
-    private volatile int windingGroup0;
-    private volatile int windingGroup1;
+
     private volatile double measuringUOutAB;
     private volatile double measuringUOutBC;
     private volatile double measuringUOutCA;
@@ -56,32 +72,51 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     private volatile double measuringUInBC;
     private volatile double measuringUInCA;
     private volatile double measuringUInAvr;
+    private volatile double windingGroup0;
+    private volatile double windingGroup1;
+    private volatile double measuringF;
 
     @FXML
     public void initialize() {
         setTheme(root);
         experiment3ModelPhase3 = experimentsValuesModel.getExperiment3ModelPhase3();
         experiment3Data.add(experiment3ModelPhase3);
-        experiment3ModelPhase3 = experimentsValuesModel.getExperiment3ModelPhase3();
         tableViewExperimentValues.setItems(experiment3Data);
         tableViewExperimentValues.setSelectionModel(null);
         communicationModel.addObserver(this);
 
+        tableColumnUOutputAB.setCellValueFactory(cellData -> cellData.getValue().uOutputABProperty());
+        tableColumnUOutputBC.setCellValueFactory(cellData -> cellData.getValue().uOutputBCProperty());
+        tableColumnUOutputCA.setCellValueFactory(cellData -> cellData.getValue().uOutputCAProperty());
+        tableColumnUOutputAvr.setCellValueFactory(cellData -> cellData.getValue().uOutputAvrProperty());
+        tableColumnUInputAB.setCellValueFactory(cellData -> cellData.getValue().uInputABProperty());
+        tableColumnUInputBC.setCellValueFactory(cellData -> cellData.getValue().uInputBCProperty());
+        tableColumnUInputCA.setCellValueFactory(cellData -> cellData.getValue().uInputCAProperty());
+        tableColumnUInputAvr.setCellValueFactory(cellData -> cellData.getValue().uInputAvrProperty());
+        tableColumnUDiff.setCellValueFactory(cellData -> cellData.getValue().uDiffProperty());
         tableColumnGroupBH.setCellValueFactory(cellData -> cellData.getValue().groupBHProperty());
         tableColumnGroupHH.setCellValueFactory(cellData -> cellData.getValue().groupHHProperty());
-        tableColumnUBH.setCellValueFactory(cellData -> cellData.getValue().UBHProperty());
-        tableColumnUHH.setCellValueFactory(cellData -> cellData.getValue().UHHProperty());
-        tableColumnResultExperiment3.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
+        tableColumnF.setCellValueFactory(cellData -> cellData.getValue().fProperty());
+        tableColumnResultExperiment.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
     }
 
     @Override
     protected void fillFieldsOfExperimentProtocol() {
-        Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
-        currentProtocol.setE4WindingBH(experiment3ModelPhase3.getGroupBH());
-        currentProtocol.setE4WindingHH(experiment3ModelPhase3.getGroupHH());
-        currentProtocol.setE4UBH(experiment3ModelPhase3.getUBH());
-        currentProtocol.setE4UHH(experiment3ModelPhase3.getUHH());
-        currentProtocol.setE4Result(experiment3ModelPhase3.getResult());
+        currentProtocol.setE3UInputAB(experiment3ModelPhase3.getuInputAB());
+        currentProtocol.setE3UInputBC(experiment3ModelPhase3.getuInputBC());
+        currentProtocol.setE3UInputCA(experiment3ModelPhase3.getuInputCA());
+        currentProtocol.setE3UInputAvr(experiment3ModelPhase3.getuInputAvr());
+
+        currentProtocol.setE3UOutputAB(experiment3ModelPhase3.getuOutputAB());
+        currentProtocol.setE3UOutputBC(experiment3ModelPhase3.getuOutputBC());
+        currentProtocol.setE3UOutputCA(experiment3ModelPhase3.getuOutputCA());
+        currentProtocol.setE3UOutputAvr(experiment3ModelPhase3.getuOutputAvr());
+
+        currentProtocol.setE3DiffU(experiment3ModelPhase3.getuDiff());
+        currentProtocol.setE3WindingBH(experiment3ModelPhase3.getGroupBH());
+        currentProtocol.setE3WindingHH(experiment3ModelPhase3.getGroupHH());
+        currentProtocol.setE3F(experiment3ModelPhase3.getF());
+        currentProtocol.setE3Result(experiment3ModelPhase3.getResult());
     }
 
     @Override
@@ -108,7 +143,6 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
         isPhaseMeterResponding = false;
         setDeviceState(deviceStateCirclePhaseMeter, View.DeviceState.UNDEFINED);
 
-        isNeedToWaitDelta = false;
 
         isNeedToRefresh = true;
 
@@ -120,7 +154,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Подключите ОИ для определения ГС. После нажмите <Да>", true);
+            showRequestDialog("Подключите ОИ для определения КТР. После нажмите <Да>", true);
 
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
@@ -179,6 +213,8 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 communicationModel.startPhaseMeter();
                 appendOneMessageToLog("Началось измерение");
                 sleep(2000);
+                isNeedToRefresh = false;
+                experiment3ModelPhase3.setuDiff(formatRealNumber(measuringUInAvr / measuringUOutAvr));
                 experiment3ModelPhase3.setGroupBH(String.valueOf(windingGroup0));
                 experiment3ModelPhase3.setGroupHH(String.valueOf(windingGroup1));
                 appendOneMessageToLog("Измерение завершено");
@@ -230,9 +266,9 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
         return String.format("%s %s%s%s%s",
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
+                isPhaseMeterResponding ? "" : "Фазометр ",
                 isParmaResponding ? "" : "Парма ",
-                isPM130Responding ? "" : "ПМ130 ",
-                isPhaseMeterResponding ? "" : "Фазометр ");
+                isPM130Responding ? "" : "ПМ130 ");
     }
 
     @Override
@@ -249,10 +285,25 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                         Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
                     case OwenPRModel.PRI1:
+//                        isDoorZone = (boolean) value;
+//                        if (isDoorZone) {
+//                            cause = "открыта дверь зоны";
+//                            isExperimentRunning = false;
+//                        }
                         break;
                     case OwenPRModel.PRI2:
+//                        isCurrentVIU = (boolean) value;
+//                        if (isCurrentVIU) {
+//                            cause = "открыта дверь шкафа";
+//                            isExperimentRunning = false;
+//                        }
                         break;
                     case OwenPRModel.PRI3:
+//                        isCurrent = (boolean) value;
+//                        if (isCurrent) {
+//                            cause = "сработала токовая защита";
+//                            isExperimentRunning = false;
+//                        }
                         break;
                     case OwenPRModel.PRI4:
                         break;
@@ -264,6 +315,11 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                     case OwenPRModel.PRI6_FIXED:
                         break;
                     case OwenPRModel.PRI7:
+//                        isCurrentVIU = (boolean) value;
+//                        if (isCurrentVIU) {
+//                            cause = "сработала токовая защита ВИУ";
+//                            isExperimentRunning = false;
+//                        }
                         break;
                 }
                 break;
@@ -273,23 +329,43 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                         isPM130Responding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePM130.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
+                    case PM130Model.F_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringF = (float) value;
+                            String freq = formatRealNumber(measuringF);
+                            experiment3ModelPhase3.setF(freq);
+                        }
+                        break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUOutAB = (float) value;
+                            measuringUInAB = (float) value;
+                            String UInAB = formatRealNumber(measuringUInAB);
+                            if (measuringUInAB > 0.001) {
+                                experiment3ModelPhase3.setuInputAB(UInAB);
+                            }
                         }
                         break;
                     case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUOutBC = (float) value;
+                            measuringUInBC = (float) value;
+                            String UInBC = formatRealNumber(measuringUInBC);
+                            if (measuringUInBC > 0.001) {
+                                experiment3ModelPhase3.setuInputBC(UInBC);
+                            }
                         }
                         break;
                     case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUOutCA = (float) value;
-                            measuringUOutAvr = (measuringUOutAB + measuringUOutBC + measuringUOutCA) / 3.0;
-                            String UOutAvr = formatRealNumber(measuringUOutAvr);
-                            experiment3ModelPhase3.setUBH(UOutAvr);
-                            sleep(100);
+                            measuringUInCA = (float) value;
+                            String UInCA = formatRealNumber(measuringUInCA);
+                            if (measuringUInCA > 0.001) {
+                                experiment3ModelPhase3.setuInputCA(UInCA);
+                            }
+                            measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3.0;
+                            String UInAvr = formatRealNumber(measuringUInAvr);
+                            if (measuringUInAvr > 0.001) {
+                                experiment3ModelPhase3.setuInputAvr(UInAvr);
+                            }
                         }
                         break;
                 }
@@ -302,23 +378,25 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                         break;
                     case ParmaT400Model.UAB_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (double) value;
+                            measuringUOutAB = (double) value;
+                            String UOutAB = formatRealNumber(measuringUOutAB);
+                            experiment3ModelPhase3.setuOutputAB(UOutAB);
                         }
                         break;
                     case ParmaT400Model.UBC_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInBC = (double) value;
+                            measuringUOutBC = (double) value;
+                            String UOutBC = formatRealNumber(measuringUOutBC);
+                            experiment3ModelPhase3.setuOutputBC(UOutBC);
                         }
                         break;
                     case ParmaT400Model.UCA_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInCA = (double) value;
-                            measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3.0;
-                            String UInAvr = formatRealNumber(measuringUInAvr);
-                            if (measuringUInAvr > 0.001) {
-                                experiment3ModelPhase3.setUHH(UInAvr);
-                                sleep(100);
-                            }
+                            measuringUOutCA = (double) value;
+                            String UOutCA = formatRealNumber(measuringUOutCA);
+                            experiment3ModelPhase3.setuOutputCA(UOutCA);
+                            measuringUOutAvr = (measuringUOutAB + measuringUOutBC + measuringUOutCA) / 3.0;
+                            experiment3ModelPhase3.setuOutputAvr(formatRealNumber(measuringUOutAvr));
                         }
                         break;
                 }

@@ -99,15 +99,15 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void fillFieldsOfExperimentProtocol() {
-        currentProtocol.setE5UKZV(experiment4ModelPhase3.getUBH());
-        currentProtocol.setE5UKZPercent(experiment4ModelPhase3.getUKZPercent());
-        currentProtocol.setE5UKZDiff(experiment4ModelPhase3.getUKZDiff());
-        currentProtocol.setE5IA(experiment4ModelPhase3.getIA());
-        currentProtocol.setE5IB(experiment4ModelPhase3.getIB());
-        currentProtocol.setE5IC(experiment4ModelPhase3.getIC());
-        currentProtocol.setE5Pp(experiment4ModelPhase3.getPP());
-        currentProtocol.setE5F(experiment4ModelPhase3.getF());
-        currentProtocol.setE5Result(experiment4ModelPhase3.getResult());
+        currentProtocol.setE4UKZV(experiment4ModelPhase3.getUBH());
+        currentProtocol.setE4UKZPercent(experiment4ModelPhase3.getUKZPercent());
+        currentProtocol.setE4UKZDiff(experiment4ModelPhase3.getUKZDiff());
+        currentProtocol.setE4IA(experiment4ModelPhase3.getIA());
+        currentProtocol.setE4IB(experiment4ModelPhase3.getIB());
+        currentProtocol.setE4IC(experiment4ModelPhase3.getIC());
+        currentProtocol.setE4Pp(experiment4ModelPhase3.getPP());
+        currentProtocol.setE4F(experiment4ModelPhase3.getF());
+        currentProtocol.setE4Result(experiment4ModelPhase3.getResult());
     }
 
     @Override
@@ -217,7 +217,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.setObjectParams(50 * HZ, 5 * VOLT, 50 * HZ);
+                communicationModel.setObjectParams(50 * HZ, 1 * VOLT, 50 * HZ);
                 appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
                 communicationModel.startObject();
                 appendOneMessageToLog("Запускаем ЧП");
@@ -225,7 +225,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
                 appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                regulation(5 * VOLT, 30, 5, UHHTestItem, 0.1, 2, 100, 200);
+                regulation(1 * VOLT, 10, 2, UHHTestItem, 0.1, 2, 100, 200);
             }
 
             finalizeExperiment();
@@ -234,6 +234,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void finalizeExperiment() {
+        sleep(1000);
         isNeedToRefresh = false;
         sleep(100);
 

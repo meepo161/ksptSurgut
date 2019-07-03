@@ -7,155 +7,100 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.avem.ksptamur.utils.Utils.formatRealNumber;
+
 public class Experiment2ModelPhase3 {
 
-    private final StringProperty UOutputAB;
-    private final StringProperty UOutputBC;
-    private final StringProperty UOutputCA;
-    private final StringProperty UOutputAvr;
-    private final StringProperty UInputAB;
-    private final StringProperty UInputBC;
-    private final StringProperty UInputCA;
-    private final StringProperty UInputAvr;
-    private final StringProperty UDiff;
-    private final StringProperty F;
+    private static final double BREAK_IKAS = 1.0E9;
+
+    private final StringProperty winding;
+    private final StringProperty AB;
+    private final StringProperty BC;
+    private final StringProperty AC;
+    private final StringProperty temperature;
     private final StringProperty result;
     private List<StringProperty> properties = new ArrayList<>();
 
-
-    public Experiment2ModelPhase3() {
-        UOutputAB = new SimpleStringProperty();
-        UOutputBC = new SimpleStringProperty();
-        UOutputCA = new SimpleStringProperty();
-        UOutputAvr = new SimpleStringProperty();
-        UInputAB = new SimpleStringProperty();
-        UInputBC = new SimpleStringProperty();
-        UInputCA = new SimpleStringProperty();
-        UInputAvr = new SimpleStringProperty();
-        UDiff = new SimpleStringProperty();
-        F = new SimpleStringProperty();
-        result = new SimpleStringProperty();
-        properties.addAll(Arrays.asList(UOutputAB, UOutputBC, UOutputCA, UOutputAvr, UInputAB, UInputBC, UInputCA,UInputAvr, UDiff, F, result));
+    public Experiment2ModelPhase3(String winding) {
+        this.winding = new SimpleStringProperty(winding);
+        AB = new SimpleStringProperty("");
+        BC = new SimpleStringProperty("");
+        AC = new SimpleStringProperty("");
+        temperature = new SimpleStringProperty("");
+        result = new SimpleStringProperty("");
+        properties.addAll(Arrays.asList(AB, BC, AC, temperature, result));
     }
 
-    public String getUOutputAB() {
-        return UOutputAB.get();
+    public String getWinding() {
+        return winding.get();
     }
 
-    public StringProperty UOutputABProperty() {
-        return UOutputAB;
+    public StringProperty windingProperty() {
+        return winding;
     }
 
-    public void setUOutputAB(String UOutputAB) {
-        this.UOutputAB.set(UOutputAB);
+    public void setWinding(String winding) {
+        this.winding.set(winding);
     }
 
-    public String getUOutputBC() {
-        return UOutputBC.get();
+    public String getAB() {
+        return AB.get();
     }
 
-    public StringProperty UOutputBCProperty() {
-        return UOutputBC;
+    public StringProperty ABProperty() {
+        return AB;
     }
 
-    public void setUOutputBC(String UOutputBC) {
-        this.UOutputBC.set(UOutputBC);
+    public void setAB(double AB) {
+        if (AB == BREAK_IKAS) {
+            this.AB.set("Обрыв");
+        } else {
+            this.AB.set(formatRealNumber(AB));
+        }
     }
 
-    public String getUOutputCA() {
-        return UOutputCA.get();
+    public String getBC() {
+        return BC.get();
     }
 
-    public StringProperty UOutputCAProperty() {
-        return UOutputCA;
+    public StringProperty BCProperty() {
+        return BC;
     }
 
-    public void setUOutputCA(String UOutputCA) {
-        this.UOutputCA.set(UOutputCA);
+    public void setBC(double BC) {
+        if (BC == BREAK_IKAS) {
+            this.BC.set("Обрыв");
+        } else {
+            this.BC.set(formatRealNumber(BC));
+        }
     }
 
-    public String getUOutputAvr() {
-        return UOutputAvr.get();
+    public String getAC() {
+        return AC.get();
     }
 
-    public StringProperty UOutputAvrProperty() {
-        return UOutputAvr;
+    public StringProperty ACProperty() {
+        return AC;
     }
 
-    public void setUOutputAvr(String UOutputAvr) {
-        this.UOutputAvr.set(UOutputAvr);
+    public void setAC(double AC) {
+        if (AC == BREAK_IKAS) {
+            this.AC.set("Обрыв");
+        } else {
+            this.AC.set(formatRealNumber(AC));
+        }
     }
 
-    public String getUInputAB() {
-        return UInputAB.get();
+    public String getTemperature() {
+        return temperature.get();
     }
 
-    public StringProperty UInputABProperty() {
-        return UInputAB;
+    public StringProperty temperatureProperty() {
+        return temperature;
     }
 
-    public void setUInputAB(String UInputAB) {
-        this.UInputAB.set(UInputAB);
-    }
-
-    public String getUInputBC() {
-        return UInputBC.get();
-    }
-
-    public StringProperty UInputBCProperty() {
-        return UInputBC;
-    }
-
-    public void setUInputBC(String UInputBC) {
-        this.UInputBC.set(UInputBC);
-    }
-
-    public String getUInputCA() {
-        return UInputCA.get();
-    }
-
-    public StringProperty UInputCAProperty() {
-        return UInputCA;
-    }
-
-    public void setUInputCA(String UInputCA) {
-        this.UInputCA.set(UInputCA);
-    }
-
-    public String getUInputAvr() {
-        return UInputAvr.get();
-    }
-
-    public StringProperty UInputAvrProperty() {
-        return UInputAvr;
-    }
-
-    public void setUInputAvr(String UInputAvr) {
-        this.UInputAvr.set(UInputAvr);
-    }
-
-    public String getUDiff() {
-        return UDiff.get();
-    }
-
-    public StringProperty UDiffProperty() {
-        return UDiff;
-    }
-
-    public void setUDiff(String UDiff) {
-        this.UDiff.set(UDiff);
-    }
-
-    public String getF() {
-        return F.get();
-    }
-
-    public StringProperty fProperty() {
-        return F;
-    }
-
-    public void setF(String f) {
-        this.F.set(f);
+    public void setTemperature(String temperature) {
+        this.temperature.set(temperature);
     }
 
     public String getResult() {
@@ -173,5 +118,4 @@ public class Experiment2ModelPhase3 {
     public void clearProperties() {
         properties.forEach(stringProperty -> stringProperty.set(""));
     }
-
 }

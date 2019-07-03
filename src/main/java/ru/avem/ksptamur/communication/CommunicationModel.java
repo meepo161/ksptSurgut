@@ -307,7 +307,6 @@ public class CommunicationModel extends Observable implements Observer {
 
     public void stopObject() {
         deltaCP2000Controller.write(CONTROL_REGISTER, 1, 0b1);
-        sleep(3000);
     }
 
     public void setObjectParams(int fOut, int voltageP1, int fP1) {
@@ -343,23 +342,15 @@ public class CommunicationModel extends Observable implements Observer {
         megacsController.setExperimentRun(b);
     }
 
-    public void initExperiment0Devices() {
+    public void initExperiment1Devices() {
     }
 
-    public void initExperiment1Devices() {
+    public void initExperiment2Devices() {
         resetTimer();
         ikasController.setNeedToRead(true);
         ikasController.resetAllAttempts();
         trmController.setNeedToRead(true);
         trmController.resetAllAttempts();
-    }
-
-    public void initExperiment2Devices() {
-        resetTimer();
-        pm130Controller.setNeedToRead(true);
-        pm130Controller.resetAllAttempts();
-        parmaT400Controller.setNeedToRead(true);
-        parmaT400Controller.resetAllAttempts();
     }
 
     public void initExperiment3Devices() {

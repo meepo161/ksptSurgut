@@ -89,10 +89,10 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void fillFieldsOfExperimentProtocol() {
         Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
-        currentProtocol.setE7UInput(experiment6ModelPhase3.getUIN());
-        currentProtocol.setE7IBH(experiment6ModelPhase3.getIBH());
-        currentProtocol.setE7F(experiment6ModelPhase3.getF());
-        currentProtocol.setE7Result(experiment6ModelPhase3.getResult());
+        currentProtocol.setE6UInput(experiment6ModelPhase3.getUIN());
+        currentProtocol.setE6IBH(experiment6ModelPhase3.getIBH());
+        currentProtocol.setE6F(experiment6ModelPhase3.getF());
+        currentProtocol.setE6Result(experiment6ModelPhase3.getResult());
     }
 
     @Override
