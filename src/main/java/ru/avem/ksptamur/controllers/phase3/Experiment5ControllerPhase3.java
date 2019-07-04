@@ -33,6 +33,8 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableView<Experiment5ModelPhase3> tableViewExperimentValues;
     @FXML
+    private TableView<Experiment5ModelPhase3> tableViewExperimentValuesI;
+    @FXML
     private TableColumn<Experiment5ModelPhase3, String> tableColumnUBH;
     @FXML
     private TableColumn<Experiment5ModelPhase3, String> tableColumnIA;
@@ -101,7 +103,9 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         experiment5ModelPhase3 = experimentsValuesModel.getExperiment5ModelPhase3();
         experiment5Data.add(experiment5ModelPhase3);
         tableViewExperimentValues.setItems(experiment5Data);
+        tableViewExperimentValuesI.setItems(experiment5Data);
         tableViewExperimentValues.setSelectionModel(null);
+        tableViewExperimentValuesI.setSelectionModel(null);
         communicationModel.addObserver(this);
 
         tableColumnUBH.setCellValueFactory(cellData -> cellData.getValue().UBHProperty());

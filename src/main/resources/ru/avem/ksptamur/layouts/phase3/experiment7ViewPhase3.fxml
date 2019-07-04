@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -42,7 +43,7 @@
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                      </padding>
                      <children>
-                            <TableView fx:id="tableViewExperimentValues" prefHeight="78.0" prefWidth="965.0">
+                            <TableView fx:id="tableViewExperimentValues" prefHeight="126.0" prefWidth="965.0">
                                 <placeholder>
                                     <Label text="Нет данных" />
                                 </placeholder>
@@ -141,4 +142,8 @@
          </children>
       </GridPane>
     </children>
+   <stylesheets>
+      <URL value="@../../styles/main_css.css" />
+      <URL value="@../../styles/experiment_view.css" />
+   </stylesheets>
 </AnchorPane>
