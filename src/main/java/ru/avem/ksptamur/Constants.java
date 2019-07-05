@@ -40,8 +40,11 @@ public final class Constants {
 
     public static final class Info {
         public static final String TITLE = "КСПТ (ООО \"РН-Комсомольский НПЗ\")";
-        public static final String VERSION = "Версия: 1.0.0";
-        public static final String DATE = "Дата: 04.07.2019";
+        public static final String VERSION = "Версия: 1.0.0\n" +
+                "ООО НПП АВЭМ, Новочеркасск\n" +
+                "Разработчик: Сулейманов М.У.\n" +
+                "+79381110516";
+        public static final String DATE = "Дата: 05.07.2019";
     }
 
     public static final class Formatting {

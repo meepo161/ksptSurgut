@@ -588,26 +588,33 @@ public class MainViewController implements Statable {
     }
 
     public void handleDebug() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("layouts/debugWindow.fxml"));
-        Parent page = loader.load();
-        DebugWindowController controller = loader.getController();
+        Dialog dialog = new TextInputDialog("");
+        dialog.setTitle("Авторизация");
+        dialog.setHeaderText("Вход закрыт");
+        dialog.setContentText("Введите пароль: ");
+        dialog.showAndWait();
+        if (dialog.getResult().equals("4444")) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("layouts/debugWindow.fxml"));
+            Parent page = loader.load();
+            DebugWindowController controller = loader.getController();
 
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("Отладка");
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(PRIMARY_STAGE);
-        Scene scene = new Scene(page);
-        dialogStage.setResizable(false);
-        dialogStage.setScene(scene);
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Отладка");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(PRIMARY_STAGE);
+            Scene scene = new Scene(page);
+            dialogStage.setResizable(false);
+            dialogStage.setScene(scene);
 
-        dialogStage.setOnCloseRequest(event -> {
-            CommunicationModel communicationModel = CommunicationModel.getInstance();
-            communicationModel.finalizeAllDevices();
-            communicationModel.deleteObservers();
-            communicationModel.setDeviceStateOn(false);
-        });
-        dialogStage.showAndWait();
+            dialogStage.setOnCloseRequest(event -> {
+                CommunicationModel communicationModel = CommunicationModel.getInstance();
+                communicationModel.finalizeAllDevices();
+                communicationModel.deleteObservers();
+                communicationModel.setDeviceStateOn(false);
+            });
+            dialogStage.showAndWait();
+        }
     }
 
     @FXML
