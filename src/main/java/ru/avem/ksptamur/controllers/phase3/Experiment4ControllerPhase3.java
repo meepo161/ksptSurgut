@@ -59,6 +59,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     private double P = PInKVA * 1000;
     private double Iном = P / (Math.sqrt(3) * UBHTestItem);
     private double Ikz = Iном / 4.0;
+    private double coef = 1;
     private Experiment4ModelPhase3 experiment4ModelPhase3;
     private ObservableList<Experiment4ModelPhase3> experiment4Data = FXCollections.observableArrayList();
 
@@ -227,12 +228,22 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                regulation(1 * VOLT, 10, 2, UHHTestItem, 0.1, 2, 100, 200);
+                appendOneMessageToLog("Поднимаем напряжение");
+                if (Ukz < WIDDING400) {
+                    regulation(1 * VOLT, 10, 2, 380, 0.1, 2, 100, 200);
+                } else if (Ukz > WIDDING400) {
+                    regulation(1 * VOLT, 10, 2, 880, 0.1, 2, 100, 200);
+                    coef = 2.16;
+
+                }
+
             }
 
             finalizeExperiment();
-        }).start();
+        }).
+
+                start();
+
     }
 
     @Override
@@ -322,24 +333,40 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                 switch (param) {
                     case OwenPRModel.RESPONDING_PARAM:
                         isOwenPRResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
-                    case OwenPRModel.PRI1:
+                    case OwenPRModel.PRI1_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
                         break;
-                    case OwenPRModel.PRI2:
+                    case OwenPRModel.PRI2_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
                         break;
-                    case OwenPRModel.PRI3:
+                    case OwenPRModel.PRI3_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
                         break;
-                    case OwenPRModel.PRI4:
+                    case OwenPRModel.PRI4_FIXED:
+                        isCurrentVIU = (boolean) value;
+                        if (!isCurrentVIU) {
+                            setCause("токовая защита ВИУ");
+                        }
                         break;
-                    case OwenPRModel.PRI5:
+                    case OwenPRModel.PRI5_FIXED:
+                        isCurrentInput = (boolean) value;
+                        if (!isCurrentInput) {
+                            setCause("токовая защита по входу");
+                        }
                         break;
                     case OwenPRModel.PRI6:
                         isStartButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRI6_FIXED:
-                        break;
-                    case OwenPRModel.PRI7:
                         break;
                 }
                 break;
@@ -408,27 +435,22 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                         break;
                     case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInAB = (float) value;
+                            measuringUInAB = (float) value * coef;
                         }
                         break;
                     case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInBC = (float) value;
+                            measuringUInBC = (float) value * coef;
                         }
                         break;
                     case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUInCA = (float) value;
+                            measuringUInCA = (float) value * coef;
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3;
                             experiment4ModelPhase3.setUBH(formatRealNumber(measuringUInAvr));
                             measuringUkzPercent = (measuringUInAvr * 100.0) / UBHTestItem;
                             experiment4ModelPhase3.setUKZPercent(formatRealNumber(measuringUkzPercent));
                             experiment4ModelPhase3.setUKZDiff(formatRealNumber(measuringUkzPercent - UKZTestItem));
-                            if (measuringUInAvr > UHHTestItem) {
-                                appendOneMessageToLog("Напряжение достигло номинального, испытание прервано");
-                                isExperimentRunning = false;
-                                cause = "Неуспешно";
-                            }
                         }
                         break;
                     case PM130Model.P_PARAM:

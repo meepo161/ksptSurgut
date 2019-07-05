@@ -89,6 +89,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void fillFieldsOfExperimentProtocol() {
         Protocol currentProtocol = experimentsValuesModel.getCurrentProtocol();
+
         currentProtocol.setE7TypeBHandCorps(experiment7ModelPhase3BH.getType());
         currentProtocol.setE7UGiven(experiment7ModelPhase3BH.getUGiven());
         currentProtocol.setE7UBHAvem(experiment7ModelPhase3BH.getUAVEM());
@@ -98,7 +99,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         currentProtocol.setE7TypeHHandCorps(experiment7ModelPhase3HH.getType());
         currentProtocol.setE7UGiven(experiment7ModelPhase3HH.getUGiven());
-        currentProtocol.setE7UHHAvem(experiment7ModelPhase3BH.getUAVEM());
+        currentProtocol.setE7UHHAvem(experiment7ModelPhase3HH.getUAVEM());
         currentProtocol.setE7IHHandCorps(experiment7ModelPhase3HH.getIBH());
         currentProtocol.setE7TimeHHandCorps(experiment7ModelPhase3HH.getTime());
         currentProtocol.setE7ResultHHandCorps(experiment7ModelPhase3HH.getResult());
@@ -262,7 +263,24 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         appendMessageToLog("------------------------------------------------\n");
 
         isBHStarted = false;
-        finalizeExperiment();
+        isNeedToRefresh = false;
+
+        appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
+        communicationModel.stopObject();
+
+        int time = 300;
+        while ((time-- > 0)) {
+            sleep(10);
+        }
+
+        communicationModel.offPR3M1();
+        time = 300;
+        while (isExperimentRunning && (time-- > 0)) {
+            sleep(10);
+        }
+        communicationModel.offAllKms();
+        communicationModel.deinitPR();
+        communicationModel.finalizeAllDevices();
 
     }
 
@@ -271,6 +289,8 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
         showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
                 "Подключите провод ИОМ к НН.\n" +
                 "После нажмите <Да>", true);
+
+        isNeedToRefresh = true;
 
         if (isExperimentRunning) {
             experiment7ModelPhase3HH.setUGiven(String.valueOf(currentProtocol.getUinsulation()));
@@ -377,7 +397,6 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
 
         isHHStarted = false;
         finalizeExperiment();
-
     }
 
     @Override
@@ -528,7 +547,37 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
                 switch (param) {
                     case OwenPRModel.RESPONDING_PARAM:
                         isOwenPRResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
+                        break;
+                    case OwenPRModel.PRI1_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
+                        break;
+                    case OwenPRModel.PRI2_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
+                        break;
+                    case OwenPRModel.PRI3_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
+                        break;
+                    case OwenPRModel.PRI4_FIXED:
+                        isCurrentVIU = (boolean) value;
+                        if (!isCurrentVIU) {
+                            setCause("токовая защита ВИУ");
+                        }
+                        break;
+                    case OwenPRModel.PRI5_FIXED:
+                        isCurrentInput = (boolean) value;
+                        if (!isCurrentInput) {
+                            setCause("токовая защита по входу");
+                        }
                         break;
                     case OwenPRModel.PRI6:
                         isStartButtonOn = (boolean) value;

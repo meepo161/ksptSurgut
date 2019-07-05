@@ -127,7 +127,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     }
 
     private void startBHExperiment() {
-        showRequestDialog("Подключите крокодилы мегаомметра к обмотке BH и корпусу. После нажмите <Да>");
+        showRequestDialog("Подключите крокодилы мегаомметра к обмотке BH и корпусу. После нажмите <Да>", true);
 
         if (isExperimentRunning) {
             isBHStarted = true;
@@ -153,11 +153,16 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
-            if (!communicationModel.setUMgr(uMgr)) {
-                setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
-                setCause("Мегер не отвечает на запросы");
+            if (currentProtocol.getUmeger() < 2500) {
+                if (!communicationModel.setUMgr(uMgr)) {
+                    setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
+                    setCause("Мегер не отвечает на запросы");
+                } else {
+                    setDeviceState(deviceStateCircleCS0202, View.DeviceState.RESPONDING);
+                }
             } else {
-                setDeviceState(deviceStateCircleCS0202, View.DeviceState.RESPONDING);
+                appendOneMessageToLog("Напряжение Мегаомметра выше допустимого. Измените объект испытания");
+                isExperimentRunning = false;
             }
         }
 
@@ -206,7 +211,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     }
 
     private void startHHExperiment() {
-        showRequestDialog("Подключите крокодилы мегаомметра к обмотке HH и корпусу. После нажмите <Да>");
+        showRequestDialog("Подключите крокодилы мегаомметра к обмотке HH и корпусу. После нажмите <Да>", true);
 
         if (isExperimentRunning) {
             isHHStarted = true;
@@ -285,7 +290,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     }
 
     private void startBHHHExperiment() {
-        showRequestDialog("Подключите крокодилы мегаомметра к обмоткам BH и HH. После нажмите <Да>");
+        showRequestDialog("Подключите крокодилы мегаомметра к обмоткам BH и HH. После нажмите <Да>", true);
 
         if (isExperimentRunning) {
             isBHHHStarted = true;
@@ -479,6 +484,36 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                     case OwenPRModel.RESPONDING_PARAM:
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
+                        break;
+                    case OwenPRModel.PRI1_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
+                        break;
+                    case OwenPRModel.PRI2_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
+                        break;
+                    case OwenPRModel.PRI3_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
+                        break;
+                    case OwenPRModel.PRI4_FIXED:
+                        isCurrentVIU = (boolean) value;
+                        if (!isCurrentVIU) {
+                            setCause("токовая защита ВИУ");
+                        }
+                        break;
+                    case OwenPRModel.PRI5_FIXED:
+                        isCurrentInput = (boolean) value;
+                        if (!isCurrentInput) {
+                            setCause("токовая защита по входу");
+                        }
                         break;
                     case OwenPRModel.PRI6:
                         isStartButtonOn = (boolean) value;

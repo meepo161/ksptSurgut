@@ -430,6 +430,36 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
+                    case OwenPRModel.PRI1_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
+                        break;
+                    case OwenPRModel.PRI2_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
+                        break;
+                    case OwenPRModel.PRI3_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
+                        break;
+                    case OwenPRModel.PRI4_FIXED:
+                        isCurrentVIU = (boolean) value;
+                        if (!isCurrentVIU) {
+                            setCause("токовая защита ВИУ");
+                        }
+                        break;
+                    case OwenPRModel.PRI5_FIXED:
+                        isCurrentInput = (boolean) value;
+                        if (!isCurrentInput) {
+                            setCause("токовая защита по входу");
+                        }
+                        break;
                     case OwenPRModel.PRI6:
                         isStartButtonOn = (boolean) value;
                         break;

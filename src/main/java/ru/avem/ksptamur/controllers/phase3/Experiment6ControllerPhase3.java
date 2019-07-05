@@ -92,6 +92,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
         currentProtocol.setE6UInput(experiment6ModelPhase3.getUIN());
         currentProtocol.setE6IBH(experiment6ModelPhase3.getIBH());
         currentProtocol.setE6F(experiment6ModelPhase3.getF());
+        currentProtocol.setE6Time(experiment6ModelPhase3.getTime());
         currentProtocol.setE6Result(experiment6ModelPhase3.getResult());
     }
 
@@ -310,39 +311,40 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                 switch (param) {
                     case OwenPRModel.RESPONDING_PARAM:
                         isOwenPRResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
-                    case OwenPRModel.PRI1:
-//                        isDoorZone = (boolean) value;
-//                        if (isDoorZone) {
-//                            cause = "открыта дверь зоны";
-//                            isExperimentRunning = false;
-//                        }
+                    case OwenPRModel.PRI1_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
                         break;
-                    case OwenPRModel.PRI2:
-//                        isCurrentVIU = (boolean) value;
-//                        if (isCurrentVIU) {
-//                            cause = "открыта дверь шкафа";
-//                            isExperimentRunning = false;
-//                        }
+                    case OwenPRModel.PRI2_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
                         break;
-                    case OwenPRModel.PRI3:
-//                        isCurrent = (boolean) value;
-//                        if (isCurrent) {
-//                            cause = "сработала токовая защита";
-//                            isExperimentRunning = false;
-//                        }
+                    case OwenPRModel.PRI3_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
                         break;
-                    case OwenPRModel.PRI4:
+                    case OwenPRModel.PRI4_FIXED:
+                        isCurrentVIU = (boolean) value;
+                        if (!isCurrentVIU) {
+                            setCause("токовая защита ВИУ");
+                        }
                         break;
-                    case OwenPRModel.PRI5:
+                    case OwenPRModel.PRI5_FIXED:
+                        isCurrentInput = (boolean) value;
+                        if (!isCurrentInput) {
+                            setCause("токовая защита по входу");
+                        }
                         break;
                     case OwenPRModel.PRI6:
                         isStartButtonOn = (boolean) value;
-                        break;
-                    case OwenPRModel.PRI6_FIXED:
-                        break;
-                    case OwenPRModel.PRI7:
                         break;
                 }
                 break;

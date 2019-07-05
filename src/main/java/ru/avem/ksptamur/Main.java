@@ -50,9 +50,9 @@ public class Main extends Application implements ru.avem.ksptamur.Exitappable {
     public void start(Stage primaryStage) {
         PRIMARY_STAGE = primaryStage;
 //        if (BuildConfig.DEBUG) {
-        showMainView();
+//        showMainView();
 //        } else {
-//            showLoginView();
+            showLoginView();
 //        }
         PRIMARY_STAGE.initStyle(StageStyle.TRANSPARENT);
         PRIMARY_STAGE.show();

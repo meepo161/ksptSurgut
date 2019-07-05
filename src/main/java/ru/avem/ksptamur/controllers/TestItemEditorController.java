@@ -182,7 +182,6 @@ public class TestItemEditorController {
                     experimentsValuesModel.setNeedRefresh(true);
                 }
         );
-
         // заполняем таблицу данными
         tableTestItems.setItems(testItems);
     }
@@ -229,7 +228,6 @@ public class TestItemEditorController {
 
             alert.showAndWait();
         }
-
     }
 
     private boolean isInputValid() {
@@ -238,29 +236,29 @@ public class TestItemEditorController {
         if (textTestItemType.getText() == null || textTestItemType.getText().length() == 0) {
             errorMessage += "Неверный тип\n";
         }
-        if (textTestItemUBH.getText() == null || textTestItemUBH.getText().length() == 0) {
-            errorMessage += "Неверное значение U BH\n";
+        if (textTestItemUBH.getText() == null || textTestItemUBH.getText().length() == 0 || Integer.parseInt(textTestItemUBH.getText()) < 0) {
+            errorMessage += "Неверное значение U BH. Проверьте, чтоб U BH было больше, чем U HH.\n";
         }
-        if (textTestItemUHH.getText() == null || textTestItemUHH.getText().length() == 0) {
-            errorMessage += "Неверное значение U HH\n";
+        if (textTestItemUHH.getText() == null || textTestItemUHH.getText().length() == 0 || Integer.parseInt(textTestItemUHH.getText()) > Integer.parseInt(textTestItemUBH.getText()) || Integer.parseInt(textTestItemUHH.getText()) < 0) {
+            errorMessage += "Неверное значение U HH. Проверьте, чтоб U BH было больше, чем U HH.\n";
         }
-        if (textTestItemP.getText() == null || textTestItemP.getText().length() == 0) {
+        if (textTestItemP.getText() == null || textTestItemP.getText().length() == 0 || Integer.parseInt(textTestItemP.getText()) < 0) {
             errorMessage += "Неверное значение P\n";
         }
-        if (textTestItemIxx.getText() == null || textTestItemIxx.getText().length() == 0) {
+        if (textTestItemIxx.getText() == null || textTestItemIxx.getText().length() == 0 || Integer.parseInt(textTestItemIxx.getText()) < 0 || Integer.parseInt(textTestItemIxx.getText()) > 100) {
             errorMessage += "Неверное значение Ixx\n";
         }
-        if (textTestItemUkz.getText() == null || textTestItemUkz.getText().length() == 0) {
+        if (textTestItemUkz.getText() == null || textTestItemUkz.getText().length() == 0 || Integer.parseInt(textTestItemUkz.getText()) < 0 || Integer.parseInt(textTestItemUkz.getText()) > 100) {
             errorMessage += "Неверное значение Ukz\n";
         }
-        if (textTestItemXXTime.getText() == null || textTestItemXXTime.getText().length() == 0) {
+        if (textTestItemXXTime.getText() == null || textTestItemXXTime.getText().length() == 0 || Integer.parseInt(textTestItemXXTime.getText()) < 0) {
             errorMessage += "Неверное значение xxTime\n";
         }
-        if (textTestItemUInsulton.getText() == null || textTestItemUInsulton.getText().length() == 0) {
-            errorMessage += "Неверное значение Uinsulation\n";
+        if (textTestItemUInsulton.getText() == null || textTestItemUInsulton.getText().length() == 0 || Integer.parseInt(textTestItemUInsulton.getText()) < 0 || Integer.parseInt(textTestItemUInsulton.getText()) > 50000) {
+            errorMessage += "Неверное значение U пробоя. Допустимый диапозон 0-50000\n";
         }
-        if (textTestItemUMeger.getText() == null || textTestItemUMeger.getText().length() == 0) {
-            errorMessage += "Неверное значение UMeger\n";
+        if (textTestItemUMeger.getText() == null || textTestItemUMeger.getText().length() == 0 || Integer.parseInt(textTestItemUMeger.getText()) < 1000 || Integer.parseInt(textTestItemUMeger.getText()) > 2500) {
+            errorMessage += "Неверное значение U Мегаомметр. Допустимый диапозон 1000-2500\n";
         }
         if (errorMessage.length() == 0) {
             return true;
