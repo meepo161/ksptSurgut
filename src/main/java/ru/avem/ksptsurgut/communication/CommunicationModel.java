@@ -5,6 +5,7 @@ import ru.avem.ksptsurgut.communication.connections.Connection;
 import ru.avem.ksptsurgut.communication.connections.SerialConnection;
 import ru.avem.ksptsurgut.communication.devices.DeviceController;
 import ru.avem.ksptsurgut.communication.devices.avem_voltmeter.AvemVoltmeterController;
+import ru.avem.ksptsurgut.communication.devices.cs02021.CS02021Controller;
 import ru.avem.ksptsurgut.communication.devices.deltaC2000.DeltaCP2000Controller;
 import ru.avem.ksptsurgut.communication.devices.ikas.IKASController;
 import ru.avem.ksptsurgut.communication.devices.parmaT400.ParmaT400Controller;
@@ -42,14 +43,16 @@ public class CommunicationModel extends Observable implements Observer {
     public OwenPRController owenPRController;
     public PM130Controller pm130Controller;
     public PM130Controller pm130Controller2;
-    public AvemVoltmeterController avemVoltmeterController;
+    public AvemVoltmeterController avemVoltmeterControllerA;
+    public AvemVoltmeterController avemVoltmeterControllerB;
+    public AvemVoltmeterController avemVoltmeterControllerC;
     public IKASController ikasController;
     public ParmaT400Controller parmaT400Controller;
     public PhaseMeterController phaseMeterController;
     public DeltaCP2000Controller deltaCP2000Controller;
     //    public FRA800Controller fra800ObjectController;
     public TRMController trmController;
-//    public CS02021Controller megacsController;
+    public CS02021Controller megacsController;
 
     private int kms1;
     private int kms2;
@@ -73,8 +76,14 @@ public class CommunicationModel extends Observable implements Observer {
         pm130Controller2 = new PM130Controller(2, this, modbusController, PM130_2_ID);
         devicesControllers.add(pm130Controller2);
 
-        avemVoltmeterController = new AvemVoltmeterController(3, this, modbusController, AVEM_ID);
-        devicesControllers.add(avemVoltmeterController);
+        avemVoltmeterControllerA = new AvemVoltmeterController(13, this, modbusController, AVEM_ID);
+        devicesControllers.add(avemVoltmeterControllerA);
+
+        avemVoltmeterControllerB = new AvemVoltmeterController(14, this, modbusController, AVEM_ID);
+        devicesControllers.add(avemVoltmeterControllerB);
+
+        avemVoltmeterControllerC = new AvemVoltmeterController(15, this, modbusController, AVEM_ID);
+        devicesControllers.add(avemVoltmeterControllerC);
 
         phaseMeterController = new PhaseMeterController(4, this, modbusController, PHASEMETER_ID);
         devicesControllers.add(phaseMeterController);
@@ -88,14 +97,15 @@ public class CommunicationModel extends Observable implements Observer {
         trmController = new TRMController(7, this, modbusController, TRM_ID);
         devicesControllers.add(trmController);
 
-//        megacsController = new CS02021Controller(MEGACS_ID, this, RS485Connection);
-//        devicesControllers.add(megacsController);
+        megacsController = new CS02021Controller(MEGACS_ID, this, RS485Connection);
+        devicesControllers.add(megacsController);
 
         deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
         devicesControllers.add(deltaCP2000Controller);
 
         parmaT400Controller = new ParmaT400Controller(12, this, modbusController, PARMA400_ID);
         devicesControllers.add(parmaT400Controller);
+
 
         new Thread(() -> {
             while (!isFinished) {
@@ -202,7 +212,7 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void finalizeMegaCS() {
-//        megacsController.setNeedToRead(false);
+        megacsController.setNeedToRead(false);
     }
 
     private void resetDog() {
@@ -343,19 +353,16 @@ public class CommunicationModel extends Observable implements Observer {
 
 
     public boolean setUMgr(int u) {
-//        setCS02021ExperimentRun(true);
-//        return megacsController.setVoltage(u);
-        return true;
+        setCS02021ExperimentRun(true);
+        return megacsController.setVoltage(u);
     }
 
     public float[] readDataMgr() {
-//        return megacsController.readData();
-        float[] data = {0f, 0f};
-        return data;
+        return megacsController.readData();
     }
 
     public void setCS02021ExperimentRun(boolean b) {
-//        megacsController.setExperimentRun(b);
+        megacsController.setExperimentRun(b);
     }
 
     public void initExperiment1Devices() {
@@ -377,14 +384,24 @@ public class CommunicationModel extends Observable implements Observer {
         pm130Controller2.resetAllAttempts();
         phaseMeterController.setNeedToRead(true);
         phaseMeterController.resetAllAttempts();
+//        deltaCP2000Controller.setNeedToRead(true);
+//        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment4Devices() {
         resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
+        pm130Controller2.setNeedToRead(true);
+        pm130Controller2.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
         deltaCP2000Controller.resetAllAttempts();
+        avemVoltmeterControllerA.setNeedToRead(true);
+        avemVoltmeterControllerA.resetAllAttempts();
+        avemVoltmeterControllerB.setNeedToRead(true);
+        avemVoltmeterControllerB.resetAllAttempts();
+        avemVoltmeterControllerC.setNeedToRead(true);
+        avemVoltmeterControllerC.resetAllAttempts();
     }
 
     public void initExperiment5Devices() {
@@ -407,105 +424,104 @@ public class CommunicationModel extends Observable implements Observer {
         pm130Controller.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
         deltaCP2000Controller.resetAllAttempts();
-        avemVoltmeterController.setNeedToRead(true);
-        avemVoltmeterController.resetAllAttempts();
     }
 
-    public void onDO1() {
+    public void onKM1() {
         onRegisterInTheKms(1, 1);
     }
 
-    public void onDO2() {
+    public void onKM2() {
         onRegisterInTheKms(2, 1);
     }
 
-    public void onDO3() {
+    public void onKM3() {
         onRegisterInTheKms(3, 1);
     }
 
-    public void onDO4() {
+    public void onKM11() {
         onRegisterInTheKms(4, 1);
     }
 
-    public void onDO5() {
+    public void onKM10() {
         onRegisterInTheKms(5, 1);
     }
 
-    public void onDO6() {
+    public void onKM15() {
         onRegisterInTheKms(6, 1);
     }
 
-    public void onDO7() {
+    public void onKM14() {
         onRegisterInTheKms(7, 1);
     }
 
-    public void onDO8() {
+    public void onKM1213() {
         onRegisterInTheKms(8, 1);
     }
 
-    public void onDO9() {
+    public void onKM24() {
         onRegisterInTheKms(1, 2);
     }
 
-    public void onDO10() {
+    public void onKM69() {
         onRegisterInTheKms(2, 2);
     }
 
-    public void onDO11() {
+    public void onKM58() {
         onRegisterInTheKms(3, 2);
     }
 
-    public void onDO12() {
+    public void onKM47() {
         onRegisterInTheKms(4, 2);
     }
 
-    public void onDO13() {
+    public void onKM22() {
         onRegisterInTheKms(5, 2);
     }
 
-    public void onDO14() {
+    public void onKM21() {
         onRegisterInTheKms(6, 2);
     }
 
-    public void onDO15() {
+    public void onKM20() {
         onRegisterInTheKms(7, 2);
     }
 
-    public void onDO16() {
+    public void onKM19() {
         onRegisterInTheKms(8, 2);
     }
 
-    public void onDOM1() {
-        onRegisterInTheKms(1, 2);
+    public void onKM16() {
+        onRegisterInTheKms(1, 3);
     }
 
-    public void onDOM2() {
-        onRegisterInTheKms(2, 2);
+    public void onKM17() {
+        onRegisterInTheKms(2, 3);
     }
 
-    public void onDOM3() {
-        onRegisterInTheKms(3, 2);
+    public void onKM18() {
+        onRegisterInTheKms(3, 3);
     }
 
-    public void onDOM4() {
-        onRegisterInTheKms(4, 2);
+    public void onKM27() {
+        onRegisterInTheKms(4, 3);
     }
 
-    public void onDOM5() {
-        onRegisterInTheKms(5, 2);
+    public void onKM25() {
+        onRegisterInTheKms(5, 3);
     }
 
     public void onDOM6() {
-        onRegisterInTheKms(6, 2);
+        onRegisterInTheKms(6, 3);
     }
 
-    public void onDOM7() {
-        onRegisterInTheKms(7, 2);
+    public void onLight() {
+        onRegisterInTheKms(7, 3);
     }
 
-    public void onDOM8() {
-        onRegisterInTheKms(8, 2);
+    public void onSound() {
+        onRegisterInTheKms(8, 3);
     }
+
     public void offDO1() {
         offRegisterInTheKms(1, 1);
     }
@@ -571,35 +587,35 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void offDOM1() {
-        offRegisterInTheKms(1, 2);
+        offRegisterInTheKms(1, 3);
     }
 
     public void offDOM2() {
-        offRegisterInTheKms(2, 2);
+        offRegisterInTheKms(2, 3);
     }
 
     public void offDOM3() {
-        offRegisterInTheKms(3, 2);
+        offRegisterInTheKms(3, 3);
     }
 
     public void offDOM4() {
-        offRegisterInTheKms(4, 2);
+        offRegisterInTheKms(4, 3);
     }
 
     public void offDOM5() {
-        offRegisterInTheKms(5, 2);
+        offRegisterInTheKms(5, 3);
     }
 
     public void offDOM6() {
-        offRegisterInTheKms(6, 2);
+        offRegisterInTheKms(6, 3);
     }
 
     public void offDOM7() {
-        offRegisterInTheKms(7, 2);
+        offRegisterInTheKms(7, 3);
     }
 
     public void offDOM8() {
-        offRegisterInTheKms(8, 2);
+        offRegisterInTheKms(8, 3);
     }
 
 

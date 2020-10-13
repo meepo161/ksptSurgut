@@ -28,9 +28,9 @@ import static ru.avem.ksptsurgut.utils.View.setDeviceState;
 
 public class Experiment6ControllerPhase3 extends AbstractExperiment {
     private static final int WIDDING400 = 400;
-    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
-    private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
-    private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
+    private static final double STATE_1_TO_5_MULTIPLIER = 0.2;
+    private static final double STATE_10_TO_5_MULTIPLIER = 2.0;
+    private static final double STATE_50_TO_5_MULTIPLIER = 10.0;
 
     @FXML
     private TableView<Experiment6ModelPhase3> tableViewExperimentValues;
@@ -48,14 +48,14 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     private TableColumn<Experiment6ModelPhase3, String> tableColumnResult;
 
     private double UHHTestItem = currentProtocol.getUhh();
-    private double coef = 2.16;
+    private final double coef = 6.5;
 
     private Experiment6ModelPhase3 experiment6ModelPhase3;
     private ObservableList<Experiment6ModelPhase3> experiment6Data = FXCollections.observableArrayList();
 
-    private boolean is200to5State;
-    private boolean is40to5State;
-    private boolean is5to5State;
+    private boolean is50to5State;
+    private boolean is10to5State;
+    private boolean is1to5State;
 
     private volatile double iA;
     private volatile double iAOld;
@@ -160,41 +160,42 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
             }
 
-            while (isExperimentRunning && !isStartButtonOn) {
-                appendOneMessageToLog("Включите кнопочный пост");
-                sleep(1);
-                isNeedToWaitDelta = true;
-            }
+//            while (isExperimentRunning && !isStartButtonOn) {
+//                appendOneMessageToLog("Включите кнопочный пост");
+//                sleep(1);
+//                isNeedToWaitDelta = true;
+//            }
 
-            if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
+            if (isExperimentRunning && isStartButtonOn) {
                 appendOneMessageToLog("Идет загрузка ЧП");
+                communicationModel.onKM1();
                 sleep(6000);
                 communicationModel.initExperiment6Devices();
-                sleep(3000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
-                communicationModel.initExperiment2Devices();
+                communicationModel.initExperiment6Devices();
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING400) {
-                    communicationModel.onDO2();
-                    communicationModel.onDO4();
-                    communicationModel.onDO9();
-                    communicationModel.onDO10();
+                    communicationModel.onKM2();
+
+                    communicationModel.onKM11();
+                    communicationModel.onKM14();
+                    communicationModel.onKM47();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 418В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog("Схема разобрана. Введите корректный HH в объекте испытания.");
                     isExperimentRunning = false;
                 }
-                is5to5State = false;
-                is40to5State = false;
-                is200to5State = true;
+                is1to5State = false;
+                is10to5State = false;
+                is50to5State = true;
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
@@ -206,8 +207,8 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + (UHHTestItem / 6.6 * 2));
-                regulation(5 * VOLT, 40, 8, UHHTestItem / 6.6 * 2, 0.1, 2, 100, 200);
+                appendOneMessageToLog("Поднимаем напряжение до " + (UHHTestItem * 2));
+                regulation(5 * VOLT, 40, 8, UHHTestItem * 2, 0.1, 2, 100, 200);
             }
 
             int experimentTime = 30;
@@ -313,38 +314,32 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
-                    case OwenPRModel.PRI1_FIXED:
-                        isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
-                            setCause("открыты двери зоны");
-                        }
-                        break;
                     case OwenPRModel.PRI2_FIXED:
-                        isDoorSHSO = (boolean) value;
-                        if (!isDoorSHSO) {
-                            setCause("открыты двери ШСО");
-                        }
-                        break;
-                    case OwenPRModel.PRI3_FIXED:
                         isCurrentOI = (boolean) value;
                         if (!isCurrentOI) {
                             setCause("токовая защита ОИ");
                         }
                         break;
-                    case OwenPRModel.PRI4_FIXED:
-                        isCurrentVIU = (boolean) value;
-                        if (!isCurrentVIU) {
-                            setCause("токовая защита ВИУ");
+                    case OwenPRModel.PRI3_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
                         }
                         break;
                     case OwenPRModel.PRI5_FIXED:
-                        isCurrentInput = (boolean) value;
-                        if (!isCurrentInput) {
-                            setCause("токовая защита по входу");
+                        isStopButton = (boolean) value;
+                        if (isStopButton) {
+                            setCause("Нажата кнопка СТОП");
                         }
                         break;
                     case OwenPRModel.PRI6:
-                        isStartButtonOn = (boolean) value;
+                        isStartButtonOn = true;
+                        break;
+                    case OwenPRModel.PRI7_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
                         break;
                 }
                 break;
@@ -358,12 +353,12 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                     case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
                             iA = (float) value;
-                            if (is200to5State) {
-                                iA *= STATE_200_TO_5_MULTIPLIER;
-                            } else if (is40to5State) {
-                                iA *= STATE_40_TO_5_MULTIPLIER;
-                            } else if (is5to5State) {
-                                iA *= STATE_5_TO_5_MULTIPLIER;
+                            if (is50to5State) {
+                                iA *= STATE_50_TO_5_MULTIPLIER;
+                            } else if (is10to5State) {
+                                iA *= STATE_10_TO_5_MULTIPLIER;
+                            } else if (is1to5State) {
+                                iA *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iAOld != -1) {
                                 if (iA > iAOld * 4 && iA > 2) {
@@ -380,12 +375,12 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                     case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
                             iB = (float) value;
-                            if (is200to5State) {
-                                iB *= STATE_200_TO_5_MULTIPLIER;
-                            } else if (is40to5State) {
-                                iB *= STATE_40_TO_5_MULTIPLIER;
-                            } else if (is5to5State) {
-                                iB *= STATE_5_TO_5_MULTIPLIER;
+                            if (is50to5State) {
+                                iB *= STATE_50_TO_5_MULTIPLIER;
+                            } else if (is10to5State) {
+                                iB *= STATE_10_TO_5_MULTIPLIER;
+                            } else if (is1to5State) {
+                                iB *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iBOld != -1) {
                                 if (iB > iBOld * 4 && iB > 2) {
@@ -402,12 +397,12 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                     case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
                             iC = (float) value;
-                            if (is200to5State) {
-                                iC *= STATE_200_TO_5_MULTIPLIER;
-                            } else if (is40to5State) {
-                                iC *= STATE_40_TO_5_MULTIPLIER;
-                            } else if (is5to5State) {
-                                iC *= STATE_5_TO_5_MULTIPLIER;
+                            if (is50to5State) {
+                                iC *= STATE_50_TO_5_MULTIPLIER;
+                            } else if (is10to5State) {
+                                iC *= STATE_10_TO_5_MULTIPLIER;
+                            } else if (is1to5State) {
+                                iC *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iCOld != -1) {
                                 if (iC > iCOld * 4 && iC > 2) {

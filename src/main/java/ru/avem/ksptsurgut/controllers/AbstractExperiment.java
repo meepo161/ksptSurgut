@@ -47,6 +47,7 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     protected volatile boolean isDeltaResponding;
     protected volatile boolean isParmaResponding;
     protected volatile boolean isPM130Responding;
+    protected volatile boolean isPM130_2_Responding;
     protected volatile boolean isAvemResponding;
     protected volatile boolean isIkasResponding;
     protected volatile boolean isTrmResponding;
@@ -54,6 +55,7 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
 
     protected volatile boolean isDoorZone;
     protected volatile boolean isDoorSHSO;
+    protected volatile boolean isStopButton;
     protected volatile boolean isCurrentOI;
     protected volatile boolean isCurrentVIU;
     protected volatile boolean isCurrentInput;
@@ -113,17 +115,15 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     }
 
     protected boolean isThereAreAccidents() {
-        return !isDoorZone || !isDoorSHSO || !isCurrentOI || !isCurrentVIU || !isCurrentInput;
+        return !isDoorZone || !isDoorSHSO || !isCurrentOI;
     }
 
     protected String getAccidentsString(String mainText) {
-        return String.format("%s: %s%s%s%s%s",
+        return String.format("%s: %s%s%s",
                 mainText,
                 !isDoorZone ? "открыта дверь зоны, " : "",
                 !isDoorSHSO ? "открыты двери ШСО, " : "",
-                !isCurrentOI ? "сработала токовая защита объекта испытания, " : "",
-                !isCurrentVIU ? "сработала токовая защита ВИУ, " : "",
-                !isCurrentInput ? "сработала токовая защита по входу, " : "");
+                !isCurrentOI ? "сработала токовая защита объекта испытания, " : "");
     }
 
     protected void setCause(String cause) {

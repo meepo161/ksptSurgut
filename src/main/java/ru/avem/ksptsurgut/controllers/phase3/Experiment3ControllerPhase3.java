@@ -8,7 +8,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import ru.avem.ksptsurgut.communication.CommunicationModel;
-import ru.avem.ksptsurgut.communication.devices.parmaT400.ParmaT400Model;
 import ru.avem.ksptsurgut.communication.devices.phasemeter.PhaseMeterModel;
 import ru.avem.ksptsurgut.communication.devices.pm130.PM130Model;
 import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
@@ -18,8 +17,6 @@ import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
 
-import static ru.avem.ksptsurgut.Constants.Measuring.HZ;
-import static ru.avem.ksptsurgut.Constants.Measuring.VOLT;
 import static ru.avem.ksptsurgut.Main.setTheme;
 import static ru.avem.ksptsurgut.communication.devices.DeviceController.*;
 import static ru.avem.ksptsurgut.utils.Utils.formatRealNumber;
@@ -139,11 +136,10 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
         isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnded = false;
-        isStartButtonOn = false;
+        isStartButtonOn = true;
 
         isOwenPRResponding = false;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
-        isParmaResponding = false;
         setDeviceState(deviceStateCirclePM130, View.DeviceState.UNDEFINED);
         isPhaseMeterResponding = false;
         setDeviceState(deviceStateCirclePhaseMeter, View.DeviceState.UNDEFINED);
@@ -159,9 +155,9 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
-                    "Подключите кабели ОИ и крокодилы <A-B-C> к ВН, а <a-b-c> к НН.\n" +
-                    "После нажмите <Да>", true);
+//            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
+//                    "Подключите кабели ОИ и крокодилы <A-B-C> к ВН, а <a-b-c> к НН.\n" +
+//                    "После нажмите <Да>", true);
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
@@ -182,19 +178,18 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
             }
 
-            while (isExperimentRunning && !isStartButtonOn) {
-                appendOneMessageToLog("Включите кнопочный пост");
-                sleep(1);
-                isNeedToWaitDelta = true;
-            }
+//            while (isExperimentRunning && !isStartButtonOn) {
+//                appendOneMessageToLog("Включите кнопочный пост");
+//                sleep(1);
+//                isNeedToWaitDelta = true;
+//            }
 
-            if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
-                appendOneMessageToLog("Идет загрузка ЧП");
-                communicationModel.onDO1();
-                sleep(6000);
-                communicationModel.initExperiment3Devices();
-                sleep(3000);
-            }
+//            if (isExperimentRunning && isStartButtonOn) {
+//                appendOneMessageToLog("Идет загрузка ЧП");
+//                communicationModel.onDO1();
+//                sleep(6000);
+//                communicationModel.initExperiment3Devices();
+//            }
 
             while (isExperimentRunning && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
@@ -206,12 +201,13 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Инициализация испытания");
 
                 if (isExperimentRunning && UHHTestItem < WIDDING380) {
-                    communicationModel.onDO5();
-                    communicationModel.onDO12();
-                    communicationModel.onDO6();
-                    communicationModel.onDO8();
-                    communicationModel.onDOM5();
-                    sleep(5000);
+
+                    communicationModel.onKM1();
+                    communicationModel.onKM10();
+                    communicationModel.onKM15();
+                    communicationModel.onKM1213();
+                    communicationModel.onKM47();
+                    communicationModel.onKM3();
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 380В");
                 } else {
                     communicationModel.offAllKms();
@@ -220,24 +216,10 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 }
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.setObjectParams(50 * HZ, 5 * VOLT, 50 * HZ);
-                appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
-                communicationModel.startObject();
-                appendOneMessageToLog("Запускаем ЧП");
-                sleep(3000);
-            }
-
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение до " + UHHTestItem);
-                regulation(5 * VOLT, 40, 8, UHHTestItem, 0.1, 2, 100, 200);
-            }
-
-
             if (isExperimentRunning && isDevicesResponding()) {
                 communicationModel.startPhaseMeter();
                 appendOneMessageToLog("Началось измерение");
-                sleep(2000);
+                sleep(5000);
                 isNeedToRefresh = false;
                 experiment3ModelPhase3.setGroupBH(String.valueOf(windingGroup0));
                 experiment3ModelPhase3.setGroupHH(String.valueOf(windingGroup1));
@@ -311,7 +293,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected boolean isDevicesResponding() {
-        return isOwenPRResponding && isParmaResponding && isPM130Responding && isPhaseMeterResponding;
+        return isOwenPRResponding && isPM130_2_Responding && isPM130Responding && isPhaseMeterResponding;
     }
 
     @Override
@@ -320,7 +302,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 mainText,
                 isOwenPRResponding ? "" : "Овен ПР ",
                 isPhaseMeterResponding ? "" : "Фазометр ",
-                isParmaResponding ? "" : "Парма ",
+                isPM130_2_Responding ? "" : "ПМ130(2) ",
                 isPM130Responding ? "" : "ПМ130 ");
     }
 
@@ -337,38 +319,32 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
-                    case OwenPRModel.PRI1_FIXED:
-                        isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
-                            setCause("открыты двери зоны");
-                        }
-                        break;
                     case OwenPRModel.PRI2_FIXED:
-                        isDoorSHSO = (boolean) value;
-                        if (!isDoorSHSO) {
-                            setCause("открыты двери ШСО");
-                        }
-                        break;
-                    case OwenPRModel.PRI3_FIXED:
                         isCurrentOI = (boolean) value;
                         if (!isCurrentOI) {
                             setCause("токовая защита ОИ");
                         }
                         break;
-                    case OwenPRModel.PRI4_FIXED:
-                        isCurrentVIU = (boolean) value;
-                        if (!isCurrentVIU) {
-                            setCause("токовая защита ВИУ");
+                    case OwenPRModel.PRI3_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
                         }
                         break;
                     case OwenPRModel.PRI5_FIXED:
-                        isCurrentInput = (boolean) value;
-                        if (!isCurrentInput) {
-                            setCause("токовая защита по входу");
+                        isStopButton = (boolean) value;
+                        if (isStopButton) {
+                            setCause("Нажата кнопка СТОП");
                         }
                         break;
                     case OwenPRModel.PRI6:
-                        isStartButtonOn = (boolean) value;
+                        isStartButtonOn = true;
+                        break;
+                    case OwenPRModel.PRI7_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
                         break;
                 }
                 break;
@@ -408,31 +384,29 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                         break;
                 }
                 break;
-            case PARMA400_ID:
+            case PM130_2_ID:
                 switch (param) {
-                    case ParmaT400Model.RESPONDING_PARAM:
-                        isParmaResponding = (boolean) value;
-                        Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                    case PM130Model.RESPONDING_PARAM:
+                        isPM130_2_Responding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCirclePM130_2.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
-                    case ParmaT400Model.UAB_PARAM:
+                    case PM130Model.V1_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUOutAB = (double) value;
-                            String UOutAB = formatRealNumber(measuringUOutAB);
-                            experiment3ModelPhase3.setuOutputAB(UOutAB);
+                            measuringUOutAB = (float) value;
+                            experiment3ModelPhase3.setuOutputAB(formatRealNumber(measuringUOutAB));
                         }
                         break;
-                    case ParmaT400Model.UBC_PARAM:
+                    case PM130Model.V2_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUOutBC = (double) value;
-                            String UOutBC = formatRealNumber(measuringUOutBC);
-                            experiment3ModelPhase3.setuOutputBC(UOutBC);
+                            measuringUOutBC = (float) value;
+                            experiment3ModelPhase3.setuOutputBC(formatRealNumber(measuringUOutBC));
+
                         }
                         break;
-                    case ParmaT400Model.UCA_PARAM:
+                    case PM130Model.V3_PARAM:
                         if (isNeedToRefresh) {
-                            measuringUOutCA = (double) value;
-                            String UOutCA = formatRealNumber(measuringUOutCA);
-                            experiment3ModelPhase3.setuOutputCA(UOutCA);
+                            measuringUOutCA = (float) value;
+                            experiment3ModelPhase3.setuOutputCA(formatRealNumber(measuringUOutCA));
                             measuringUOutAvr = (measuringUOutAB + measuringUOutBC + measuringUOutCA) / 3.0;
                             experiment3ModelPhase3.setuOutputAvr(formatRealNumber(measuringUOutAvr));
                             if (measuringUOutAvr > 380) {

@@ -110,11 +110,11 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                 communicationModel.initExperiment2Devices();
             }
 
-            if (isExperimentRunning && isBHSelected && isDevicesResponding()) {
+            if (isBHSelected) {
                 startBHExperiment();
             }
 
-            if (isExperimentRunning && isHHSelected && isDevicesResponding()) {
+            if (isHHSelected) {
                 startHHExperiment();
             }
 
@@ -186,9 +186,9 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
             appendOneMessageToLog("Инициализация испытания обмотки BH...");
-            communicationModel.onDO5();
-            communicationModel.onDOM1();
-            communicationModel.onDOM2();
+            communicationModel.onKM10();
+            communicationModel.onKM16();
+            communicationModel.onKM17();
         }
 
         while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
@@ -295,9 +295,9 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
             appendOneMessageToLog("Инициализация испытания обмотки HH...");
-            communicationModel.onDO4();
-            communicationModel.onDOM1();
-            communicationModel.onDOM3();
+            communicationModel.onKM11();
+            communicationModel.onKM16();
+            communicationModel.onKM18();
         }
 
         while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
@@ -439,6 +439,34 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                     case OwenPRModel.RESPONDING_PARAM:
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
+                        break;
+                    case OwenPRModel.PRI2_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
+                        break;
+                    case OwenPRModel.PRI3_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
+                        break;
+                    case OwenPRModel.PRI5_FIXED:
+                        isStopButton = (boolean) value;
+                        if (isStopButton) {
+                            setCause("Нажата кнопка СТОП");
+                        }
+                        break;
+                    case OwenPRModel.PRI6:
+                        isStartButtonOn = true;
+//                        isStartButtonOn = (boolean) value;
+                        break;
+                    case OwenPRModel.PRI7_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
                         break;
                 }
                 break;

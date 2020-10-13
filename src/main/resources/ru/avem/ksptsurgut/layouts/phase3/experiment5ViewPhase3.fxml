@@ -56,7 +56,7 @@
                                                 <Label text="Нет данных"/>
                                             </placeholder>
                                             <columns>
-                                                <TableColumn fx:id="tableColumnUBH" prefWidth="75.0" text="UВН, В"/>
+                                                <TableColumn fx:id="tableColumnUBH" prefWidth="75.0" text="UHН, В"/>
                                                 <TableColumn fx:id="tableColumnPP" prefWidth="75.0" text="Pп, Вт"/>
                                                 <TableColumn fx:id="tableColumnCOS" prefWidth="75.0" text="cosФ"/>
                                                 <TableColumn fx:id="tableColumnF" prefWidth="75.0" text="f, Гц"/>

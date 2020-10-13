@@ -191,7 +191,7 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
     public void handleDO1() {
         new Thread(() -> {
             if (DO1.isSelected()) {
-                communicationModel.onDO1();
+                communicationModel.onKM1();
                 Platform.runLater(() -> DO1.setText("OFF"));
             } else {
                 communicationModel.offDO1();
@@ -203,7 +203,7 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
     public void handleDO2() {
         new Thread(() -> {
             if (DO2.isSelected()) {
-                communicationModel.onDO2();
+                communicationModel.onKM2();
                 DO2.setText("OFF");
             } else {
                 communicationModel.offDO2();
@@ -214,7 +214,7 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
 
     public void handleDO3() {
         if (DO3.isSelected()) {
-            communicationModel.onDO3();
+            communicationModel.onKM3();
             DO3.setText("OFF");
         } else {
             communicationModel.offDO3();
@@ -224,7 +224,7 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
 
     public void handleDO4() {
         if (DO4.isSelected()) {
-            communicationModel.onDO4();
+            communicationModel.onKM11();
             DO4.setText("OFF");
         } else {
             communicationModel.offDO4();
@@ -234,7 +234,7 @@ public class DebugWindowController extends DeviceState implements ExperimentCont
 
     public void handleDO5() {
         if (DO5.isSelected()) {
-            communicationModel.onDO5();
+            communicationModel.onKM10();
             DO4.setText("OFF");
         } else {
             communicationModel.offDO5();

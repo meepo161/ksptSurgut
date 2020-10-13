@@ -139,7 +139,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = false;
+            isStartButtonOn = true;
             sleep(1000);
         }
 
@@ -223,7 +223,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = false;
+            isStartButtonOn = true;
             sleep(1000);
         }
 
@@ -302,7 +302,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = false;
+            isStartButtonOn = true;
             sleep(1000);
         }
 
@@ -481,43 +481,37 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         switch (modelId) {
             case PR200_ID:
                 switch (param) {
-                    case OwenPRModel.RESPONDING_PARAM:
-                        isOwenPRResponding = (boolean) value;
-                        setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
-                        break;
-                    case OwenPRModel.PRI1_FIXED:
-                        isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
-                            setCause("открыты двери зоны");
-                        }
-                        break;
-                    case OwenPRModel.PRI2_FIXED:
-                        isDoorSHSO = (boolean) value;
-                        if (!isDoorSHSO) {
-                            setCause("открыты двери ШСО");
-                        }
-                        break;
-                    case OwenPRModel.PRI3_FIXED:
-                        isCurrentOI = (boolean) value;
-                        if (!isCurrentOI) {
-                            setCause("токовая защита ОИ");
-                        }
-                        break;
-                    case OwenPRModel.PRI4_FIXED:
-                        isCurrentVIU = (boolean) value;
-                        if (!isCurrentVIU) {
-                            setCause("токовая защита ВИУ");
-                        }
-                        break;
-                    case OwenPRModel.PRI5_FIXED:
-                        isCurrentInput = (boolean) value;
-                        if (!isCurrentInput) {
-                            setCause("токовая защита по входу");
-                        }
-                        break;
-                    case OwenPRModel.PRI6:
-                        isStartButtonOn = (boolean) value;
-                        break;
+//                    case OwenPRModel.RESPONDING_PARAM:
+//                        isOwenPRResponding = (boolean) value;
+//                        setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
+//                        break;
+//                    case OwenPRModel.PRI2_FIXED:
+//                        isCurrentOI = (boolean) value;
+//                        if (isCurrentOI) {
+//                            setCause("токовая защита ОИ");
+//                        }
+//                        break;
+//                    case OwenPRModel.PRI3_FIXED:
+//                        isDoorSHSO = (boolean) value;
+//                        if (isDoorSHSO) {
+//                            setCause("открыты двери ШСО");
+//                        }
+//                        break;
+//                    case OwenPRModel.PRI5_FIXED:
+//                        isStopButton = (boolean) value;
+//                        if (isStopButton) {
+//                            setCause("Нажата кнопка СТОП");
+//                        }
+//                        break;
+//                    case OwenPRModel.PRI6:
+//                        isStartButtonOn = (boolean) value;
+//                        break;
+//                    case OwenPRModel.PRI7_FIXED:
+//                        isDoorZone = (boolean) value;
+//                        if (isDoorZone) {
+//                            setCause("открыты двери зоны");
+//                        }
+//                        break;
                 }
                 break;
         }

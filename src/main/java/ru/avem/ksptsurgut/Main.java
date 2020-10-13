@@ -7,9 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.controlsfx.control.StatusBar;
 import ru.avem.ksptsurgut.communication.CommunicationModel;
 import ru.avem.ksptsurgut.controllers.LoginController;
@@ -54,7 +54,7 @@ public class Main extends Application implements ru.avem.ksptsurgut.Exitappable 
 //        } else {
 //            showLoginView();
 //        }
-        PRIMARY_STAGE.initStyle(StageStyle.TRANSPARENT);
+//        PRIMARY_STAGE.initStyle(StageStyle.TRANSPARENT);
         PRIMARY_STAGE.show();
     }
 

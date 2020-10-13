@@ -25,9 +25,9 @@ import static ru.avem.ksptsurgut.utils.View.setDeviceState;
 
 public class Experiment5ControllerPhase3 extends AbstractExperiment {
     private static final int WIDDING380 = 381;
-    private static final double STATE_5_TO_5_MULTIPLIER = 5.0 / 5.0;
-    private static final double STATE_40_TO_5_MULTIPLIER = 40.0 / 5.0;
-    private static final double STATE_200_TO_5_MULTIPLIER = 200.0 / 5.0;
+    private static final double STATE_1_TO_5_MULTIPLIER = 0.2;
+    private static final double STATE_10_TO_5_MULTIPLIER = 2.0;
+    private static final double STATE_50_TO_5_MULTIPLIER = 10.0;
     private static final int TIME_DELAY_CURRENT_STAGES = 1000;
 
     @FXML
@@ -68,9 +68,9 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     private double UBHTestItem = currentProtocol.getUbh();
     private double Pkva = currentProtocol.getP();
     private double UHHTestItem = currentProtocol.getUhh();
-    private double IxxPercent = currentProtocol.getIxx();
-    private double Inom = Pkva * 1000 / (UBHTestItem * Math.sqrt(3));
-    private double Ixx = Inom / 100 * IxxPercent;
+    private double IxxPercent = currentProtocol.getIxx(); // 32.0 %
+    private double Inom = Pkva * 1000 / (UBHTestItem * Math.sqrt(3)); // 1000 *1000 / (6000 * 1.73) = 96,3
+    private double Ixx = Inom / 100 * IxxPercent; //  96,3 / 100 * 32.0 = 30,8
     private double Time = currentProtocol.getXxtime();
     private int XXTime = (int) Time;
 
@@ -112,12 +112,12 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         tableColumnIA.setCellValueFactory(cellData -> cellData.getValue().IAProperty());
         tableColumnIB.setCellValueFactory(cellData -> cellData.getValue().IBProperty());
         tableColumnIC.setCellValueFactory(cellData -> cellData.getValue().ICProperty());
-        tableColumnIAPercent.setCellValueFactory(cellData -> cellData.getValue().IAPercentProperty());
-        tableColumnIBPercent.setCellValueFactory(cellData -> cellData.getValue().IBPercentProperty());
-        tableColumnICPercent.setCellValueFactory(cellData -> cellData.getValue().ICPercentProperty());
-        tableColumnIADiff.setCellValueFactory(cellData -> cellData.getValue().IADiffProperty());
-        tableColumnIBDiff.setCellValueFactory(cellData -> cellData.getValue().IBDiffProperty());
-        tableColumnICDiff.setCellValueFactory(cellData -> cellData.getValue().ICDiffProperty());
+        tableColumnIAPercent.setCellValueFactory(cellData -> cellData.getValue().IADiffProperty());
+        tableColumnIBPercent.setCellValueFactory(cellData -> cellData.getValue().IBDiffProperty());
+        tableColumnICPercent.setCellValueFactory(cellData -> cellData.getValue().ICDiffProperty());
+        tableColumnIADiff.setCellValueFactory(cellData -> cellData.getValue().IAPercentProperty());
+        tableColumnIBDiff.setCellValueFactory(cellData -> cellData.getValue().IBPercentProperty());
+        tableColumnICDiff.setCellValueFactory(cellData -> cellData.getValue().ICPercentProperty());
         tableColumnPP.setCellValueFactory(cellData -> cellData.getValue().PProperty());
         tableColumnF.setCellValueFactory(cellData -> cellData.getValue().FProperty());
         tableColumnCOS.setCellValueFactory(cellData -> cellData.getValue().COSProperty());
@@ -202,19 +202,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 sleep(1000);
             }
 
-            while (isExperimentRunning && !isStartButtonOn) {
-                appendOneMessageToLog("Включите кнопочный пост");
-                sleep(1);
-                isNeedToWaitDelta = true;
-            }
-
-            if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
-                appendOneMessageToLog("Идет загрузка ЧП");
-                communicationModel.onDO1();
-                sleep(8000);
-                communicationModel.initExperiment5Devices();
-            }
-
             if (isExperimentRunning && isStartButtonOn) {
                 communicationModel.initExperiment5Devices();
             }
@@ -227,9 +214,12 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
             if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING380) {
-                    communicationModel.onDO4();
-                    communicationModel.onDO6();
-                    communicationModel.onDO3();
+                    communicationModel.onKM1();
+                    communicationModel.onKM11();
+                    communicationModel.onKM15();
+                    communicationModel.onKM3();
+                    communicationModel.onKM47();
+//                    sleep(1000000000);
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 380В");
                 } else {
                     communicationModel.offAllKms();
@@ -317,7 +307,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         if (is50AState) {
             if (IAvr < 10.0 && IAvr > 1) {
                 appendOneMessageToLog("Выставляем токовую ступень 10A");
-                communicationModel.onDO11();
+                communicationModel.onKM58();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
                 is10AState = true;
@@ -327,7 +317,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 1) {
                 appendOneMessageToLog("Выставляем токовую ступень 1A");
-                communicationModel.onDO10();
+                communicationModel.onKM69();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
                 is10AState = false;
@@ -341,7 +331,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         } else if (is10AState) {
             if (IAvr > 10) {
                 appendOneMessageToLog("Выставляем токовую ступень 50A");
-                communicationModel.onDO12();
+                communicationModel.onKM47();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = true;
                 is10AState = false;
@@ -351,7 +341,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 1) {
                 appendOneMessageToLog("Выставляем токовую ступень 1A");
-                communicationModel.onDO10();
+                communicationModel.onKM69();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
                 is10AState = false;
@@ -363,7 +353,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         } else if (is1AState) {
             if (IAvr > 1) {
                 appendOneMessageToLog("Выставляем токовую ступень 10A");
-                communicationModel.onDO11();
+                communicationModel.onKM58();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
                 is10AState = true;
@@ -373,7 +363,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 1) {
                 appendOneMessageToLog("Выставляем токовую ступень 1A");
-                communicationModel.onDO10();
+                communicationModel.onKM69();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
                 is10AState = false;
@@ -398,6 +388,33 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
+                    case OwenPRModel.PRI2_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
+                        break;
+                    case OwenPRModel.PRI3_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
+                        break;
+                    case OwenPRModel.PRI5_FIXED:
+                        isStopButton = (boolean) value;
+                        if (isStopButton) {
+                            setCause("Нажата кнопка СТОП");
+                        }
+                        break;
+                    case OwenPRModel.PRI6:
+                        isStartButtonOn = (boolean) value;
+                        break;
+                    case OwenPRModel.PRI7_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
+                        break;
                 }
                 break;
             case PM130_ID:
@@ -411,11 +428,11 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         if (isNeedToRefresh) {
                             iA = (float) value;
                             if (is50AState) {
-                                iA *= STATE_200_TO_5_MULTIPLIER;
+                                iA *= STATE_50_TO_5_MULTIPLIER;
                             } else if (is10AState) {
-                                iA *= STATE_40_TO_5_MULTIPLIER;
+                                iA *= STATE_10_TO_5_MULTIPLIER;
                             } else if (is1AState) {
-                                iA *= STATE_5_TO_5_MULTIPLIER;
+                                iA *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iA > 0.001) {
                                 String iAString = formatRealNumber(iA);
@@ -432,11 +449,11 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         if (isNeedToRefresh) {
                             iB = (float) value;
                             if (is50AState) {
-                                iB *= STATE_200_TO_5_MULTIPLIER;
+                                iB *= STATE_50_TO_5_MULTIPLIER;
                             } else if (is10AState) {
-                                iB *= STATE_40_TO_5_MULTIPLIER;
+                                iB *= STATE_10_TO_5_MULTIPLIER;
                             } else if (is1AState) {
-                                iB *= STATE_5_TO_5_MULTIPLIER;
+                                iB *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iB > 0.001) {
                                 String iBString = formatRealNumber(iB);
@@ -453,11 +470,11 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         if (isNeedToRefresh) {
                             iC = (float) value;
                             if (is50AState) {
-                                iC *= STATE_200_TO_5_MULTIPLIER;
+                                iC *= STATE_50_TO_5_MULTIPLIER;
                             } else if (is10AState) {
-                                iC *= STATE_40_TO_5_MULTIPLIER;
+                                iC *= STATE_10_TO_5_MULTIPLIER;
                             } else if (is1AState) {
-                                iC *= STATE_5_TO_5_MULTIPLIER;
+                                iC *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iC > 0.001) {
                                 String iCString = formatRealNumber(iC);
@@ -475,11 +492,11 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         if (isNeedToRefresh) {
                             measuringP = (float) value;
                             if (is50AState) {
-                                measuringP *= STATE_200_TO_5_MULTIPLIER;
+                                measuringP *= STATE_50_TO_5_MULTIPLIER;
                             } else if (is10AState) {
-                                measuringP *= STATE_40_TO_5_MULTIPLIER;
+                                measuringP *= STATE_10_TO_5_MULTIPLIER;
                             } else if (is1AState) {
-                                measuringP *= STATE_5_TO_5_MULTIPLIER;
+                                measuringP *= STATE_1_TO_5_MULTIPLIER;
                             }
                             experiment5ModelPhase3.setPP(formatRealNumber(measuringP));
                         }

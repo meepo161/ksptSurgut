@@ -175,7 +175,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
-                communicationModel.onDO1();
+                communicationModel.onKM1();
                 appendOneMessageToLog("Идет загрузка ЧП");
                 sleep(6000);
                 communicationModel.initExperiment4Devices();
@@ -192,19 +192,19 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Инициализация испытания");
                 if (Ikz < 1) {
                     appendOneMessageToLog("1А токовая ступень");
-                    communicationModel.onDO10();
+                    communicationModel.onKM69();
                     is1AState = true;
                     is10AState = false;
                     is50AState = false;
                 } else if (Ikz > 1 && Ikz < 10) {
                     appendOneMessageToLog("10А токовая ступень");
-                    communicationModel.onDO11();
+                    communicationModel.onKM58();
                     is1AState = false;
                     is10AState = true;
                     is50AState = false;
                 } else {
                     appendOneMessageToLog("50А токовая ступень");
-                    communicationModel.onDO12();
+                    communicationModel.onKM47();
                     is1AState = false;
                     is10AState = false;
                     is50AState = true;
@@ -212,10 +212,10 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.onDO4();
-                communicationModel.onDO6();
-                communicationModel.onDO9();
-                communicationModel.onDO5();
+                communicationModel.onKM11();
+                communicationModel.onKM15();
+                communicationModel.onKM24();
+                communicationModel.onKM10();
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
@@ -326,38 +326,32 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
-                    case OwenPRModel.PRI1_FIXED:
-                        isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
-                            setCause("открыты двери зоны");
-                        }
-                        break;
                     case OwenPRModel.PRI2_FIXED:
-                        isDoorSHSO = (boolean) value;
-                        if (!isDoorSHSO) {
-                            setCause("открыты двери ШСО");
-                        }
-                        break;
-                    case OwenPRModel.PRI3_FIXED:
                         isCurrentOI = (boolean) value;
                         if (!isCurrentOI) {
                             setCause("токовая защита ОИ");
                         }
                         break;
-                    case OwenPRModel.PRI4_FIXED:
-                        isCurrentVIU = (boolean) value;
-                        if (!isCurrentVIU) {
-                            setCause("токовая защита ВИУ");
+                    case OwenPRModel.PRI3_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
                         }
                         break;
                     case OwenPRModel.PRI5_FIXED:
-                        isCurrentInput = (boolean) value;
-                        if (!isCurrentInput) {
-                            setCause("токовая защита по входу");
+                        isStopButton = (boolean) value;
+                        if (isStopButton) {
+                            setCause("Нажата кнопка СТОП");
                         }
                         break;
                     case OwenPRModel.PRI6:
                         isStartButtonOn = (boolean) value;
+                        break;
+                    case OwenPRModel.PRI7_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
                         break;
                 }
                 break;
