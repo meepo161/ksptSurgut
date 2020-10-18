@@ -277,7 +277,7 @@ public class Protocol {
 
     public ru.avem.ksptsurgut.db.model.TestItem getObject() {
         return new ru.avem.ksptsurgut.db.model.TestItem(type, ubh,
-                uhh, p, ixx, ukz, xxtime, uinsulation, umeger);
+                uhh, p, ixx, ukz, xxtime, umeger);
     }
 
     public void setObject(ru.avem.ksptsurgut.db.model.TestItem object) {
@@ -288,7 +288,6 @@ public class Protocol {
         ixx = object.getIxx();
         ukz = object.getUkz();
         xxtime = object.getXxtime();
-        uinsulation = object.getUinsulation();
         umeger = object.getUmeger();
     }
 

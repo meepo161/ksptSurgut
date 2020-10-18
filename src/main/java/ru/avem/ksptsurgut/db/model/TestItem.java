@@ -45,7 +45,7 @@ public class TestItem {
         // ORMLite needs a no-arg constructor
     }
 
-    public TestItem(String type, double ubh, double uhh, double p, double ixx, double ukz, double xxtime, double uinsulation, double umeger) {
+    public TestItem(String type, double ubh, double uhh, double p, double ixx, double ukz, double xxtime, double umeger) {
         this.type = type;
         this.ubh = ubh;
         this.uhh = uhh;
@@ -53,7 +53,6 @@ public class TestItem {
         this.ixx = ixx;
         this.ukz = ukz;
         this.xxtime = xxtime;
-        this.uinsulation = uinsulation;
         this.umeger = umeger;
     }
 
@@ -120,14 +119,6 @@ public class TestItem {
 
     public void setXxtime(double xxtime) {
         this.xxtime = xxtime;
-    }
-
-    public double getUinsulation() {
-        return uinsulation;
-    }
-
-    public void setUinsulation(double uinsulation) {
-        this.uinsulation = uinsulation;
     }
 
     public double getUmeger() {

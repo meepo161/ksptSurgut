@@ -56,9 +56,6 @@ public class TestItemEditorController {
     private TextField textTestItemXXTime;
 
     @FXML
-    private TextField textTestItemUInsulton;
-
-    @FXML
     private TextField textTestItemUMeger;
 
 
@@ -82,9 +79,6 @@ public class TestItemEditorController {
 
     @FXML
     private TableColumn<TestItem, Double> columnTestItemXXTime;
-
-    @FXML
-    private TableColumn<TestItem, Double> columnTestItemUinsulation;
 
     @FXML
     private TableColumn<TestItem, Double> columnTestItemUMeger;
@@ -163,16 +157,6 @@ public class TestItemEditorController {
                 }
         );
 
-        columnTestItemUinsulation.setCellValueFactory(new PropertyValueFactory<>("uinsulation"));
-        columnTestItemUinsulation.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        columnTestItemUinsulation.setOnEditCommit(t -> {
-                    TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    editingTestItem.setUinsulation(t.getNewValue());
-                    TestItemRepository.updateTestItem(editingTestItem);
-                    experimentsValuesModel.setNeedRefresh(true);
-                }
-        );
-
         columnTestItemUMeger.setCellValueFactory(new PropertyValueFactory<>("umeger"));
         columnTestItemUMeger.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         columnTestItemUMeger.setOnEditCommit(t -> {
@@ -201,7 +185,6 @@ public class TestItemEditorController {
                     Double.parseDouble(textTestItemIxx.getText()),
                     Double.parseDouble(textTestItemUkz.getText()),
                     Double.parseDouble(textTestItemXXTime.getText()),
-                    Double.parseDouble(textTestItemUInsulton.getText()),
                     Double.parseDouble(textTestItemUMeger.getText()));
             TestItemRepository.insertTestItem(testItem);
             testItems.add(testItem);
@@ -253,9 +236,6 @@ public class TestItemEditorController {
         }
         if (textTestItemXXTime.getText() == null || textTestItemXXTime.getText().length() == 0 || Integer.parseInt(textTestItemXXTime.getText()) < 0) {
             errorMessage += "Неверное значение xxTime\n";
-        }
-        if (textTestItemUInsulton.getText() == null || textTestItemUInsulton.getText().length() == 0 || Integer.parseInt(textTestItemUInsulton.getText()) < 0 || Integer.parseInt(textTestItemUInsulton.getText()) > 50000) {
-            errorMessage += "Неверное значение U пробоя. Допустимый диапозон 0-50000\n";
         }
         if (textTestItemUMeger.getText() == null || textTestItemUMeger.getText().length() == 0 || Integer.parseInt(textTestItemUMeger.getText()) < 1000 || Integer.parseInt(textTestItemUMeger.getText()) > 2500) {
             errorMessage += "Неверное значение U Мегаомметр. Допустимый диапозон 1000-2500\n";

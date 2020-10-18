@@ -13,6 +13,7 @@ import ru.avem.ksptsurgut.communication.devices.pm130.PM130Model;
 import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.model.phase3.Experiment3ModelPhase3;
+import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -176,20 +177,15 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
+                Platform.runLater(() -> {
+                    Toast.makeText("Нажмите пуск").show(Toast.ToastType.WARNING);
+                });
             }
 
-//            while (isExperimentRunning && !isStartButtonOn) {
-//                appendOneMessageToLog("Включите кнопочный пост");
-//                sleep(1);
-//                isNeedToWaitDelta = true;
-//            }
-
-//            if (isExperimentRunning && isStartButtonOn) {
-//                appendOneMessageToLog("Идет загрузка ЧП");
-//                communicationModel.onDO1();
-//                sleep(6000);
-//                communicationModel.initExperiment3Devices();
-//            }
+            while (isExperimentRunning && !isStartButtonOn) {
+                appendOneMessageToLog("Включите кнопочный пост");
+                sleep(1);
+            }
 
             while (isExperimentRunning && !isDevicesResponding()) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
@@ -201,7 +197,6 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Инициализация испытания");
 
                 if (isExperimentRunning && UHHTestItem < WIDDING380) {
-
                     communicationModel.onKM1();
                     communicationModel.onKM10();
                     communicationModel.onKM15();
@@ -239,7 +234,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     private int regulation(int start, int coarseStep, int fineStep, double end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
         double coarseMinLimit = 1 - coarseLimit;
         double coarseMaxLimit = 1 + coarseLimit;
-        while (isExperimentRunning && ((measuringUInAvr < end * coarseMinLimit) || (measuringUInAvr > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
+        while (isExperimentRunning && ((measuringUInAvr < end * coarseMinLimit) || (measuringUInAvr > end * coarseMaxLimit)) && isDevicesResponding()) {
             if (measuringUInAvr < end * coarseMinLimit) {
                 communicationModel.setObjectUMax(start += coarseStep);
             } else if (measuringUInAvr > end * coarseMaxLimit) {
@@ -248,7 +243,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
             sleep(coarseSleep);
             appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
         }
-        while (isExperimentRunning && ((measuringUInAvr < end - fineLimit) || (measuringUInAvr > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
+        while (isExperimentRunning && ((measuringUInAvr < end - fineLimit) || (measuringUInAvr > end + fineLimit)) && isDevicesResponding()) {
             if (measuringUInAvr < end - fineLimit) {
                 communicationModel.setObjectUMax(start += fineStep);
             } else if (measuringUInAvr > end + fineLimit) {
@@ -332,13 +327,12 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                         }
                         break;
                     case OwenPRModel.PRI5_FIXED:
-                        isStopButton = (boolean) value;
                         if (isStopButton) {
                             setCause("Нажата кнопка СТОП");
                         }
                         break;
-                    case OwenPRModel.PRI6:
-                        isStartButtonOn = true;
+                    case OwenPRModel.PRI6_FIXED:
+                        isStartButtonOn = (boolean) value;
                         break;
                     case OwenPRModel.PRI7_FIXED:
                         isDoorZone = (boolean) value;

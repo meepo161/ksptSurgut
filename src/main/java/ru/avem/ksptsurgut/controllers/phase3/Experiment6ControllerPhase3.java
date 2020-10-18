@@ -14,6 +14,7 @@ import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.db.model.Protocol;
 import ru.avem.ksptsurgut.model.phase3.Experiment6ModelPhase3;
+import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -108,7 +109,6 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
         experiment6ModelPhase3.clearProperties();
 
         isNeedToRefresh = true;
-        isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnded = false;
         isStartButtonOn = false;
@@ -120,7 +120,6 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
         isPM130Responding = false;
         setDeviceState(deviceStateCirclePM130, View.DeviceState.UNDEFINED);
 
-        isNeedToWaitDelta = false;
         cause = "";
         iAOld = -1;
         iBOld = -1;
@@ -158,13 +157,15 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
+                Platform.runLater(() -> {
+                    Toast.makeText("Нажмите пуск").show(Toast.ToastType.WARNING);
+                });
             }
 
-//            while (isExperimentRunning && !isStartButtonOn) {
-//                appendOneMessageToLog("Включите кнопочный пост");
-//                sleep(1);
-//                isNeedToWaitDelta = true;
-//            }
+            while (isExperimentRunning && !isStartButtonOn) {
+                appendOneMessageToLog("Включите кнопочный пост");
+                sleep(1);
+            }
 
             if (isExperimentRunning && isStartButtonOn) {
                 appendOneMessageToLog("Идет загрузка ЧП");
@@ -333,7 +334,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                         }
                         break;
                     case OwenPRModel.PRI6:
-                        isStartButtonOn = true;
+                        isStartButtonOn = (boolean) value;
                         break;
                     case OwenPRModel.PRI7_FIXED:
                         isDoorZone = (boolean) value;

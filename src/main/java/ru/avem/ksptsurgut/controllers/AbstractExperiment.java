@@ -41,14 +41,15 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     protected volatile boolean isExperimentRunning;
     protected volatile boolean isExperimentEnded = true;
     protected volatile boolean isNeedToRefresh = true;
-    protected volatile boolean isNeedToWaitDelta;
 
     protected volatile boolean isOwenPRResponding;
     protected volatile boolean isDeltaResponding;
     protected volatile boolean isParmaResponding;
     protected volatile boolean isPM130Responding;
     protected volatile boolean isPM130_2_Responding;
-    protected volatile boolean isAvemResponding;
+    protected volatile boolean isAvem1Responding;
+    protected volatile boolean isAvem2Responding;
+    protected volatile boolean isAvem3Responding;
     protected volatile boolean isIkasResponding;
     protected volatile boolean isTrmResponding;
     protected volatile boolean isPhaseMeterResponding;
@@ -97,6 +98,21 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
             });
 
             while (!isPressed.get()) {
+                sleep(100);
+            }
+        }
+    }
+
+    protected void showStartDialog(String request) {
+        if (isExperimentRunning) {
+            AtomicBoolean isPressed = new AtomicBoolean(false);
+            Platform.runLater(() -> {
+                View.showConfirmDialog(request,
+                        () -> isPressed.set(true),
+                        () -> setCause("Отменено оператором"));
+            });
+
+            while (!isStartButtonOn) {
                 sleep(100);
             }
         }

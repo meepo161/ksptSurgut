@@ -148,11 +148,11 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             sleep(1);
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания обмотки BH...");
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             if (currentProtocol.getUmeger() < 2500) {
                 if (!communicationModel.setUMgr(uMgr)) {
                     setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
@@ -166,19 +166,19 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             }
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Измерение началось");
             appendOneMessageToLog("Ожидайте 90 секунд");
             appendOneMessageToLog("Формирование напряжения");
         }
 
         int experimentTime = 90;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding() && isStartButtonOn) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment1ModelPhase3BH.setTime(String.valueOf(experimentTime));
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             float[] data = communicationModel.readDataMgr();
             experiment1ModelPhase3BH.setUr(formatRealNumber(data[1]));
             experiment1ModelPhase3BH.setR15(formatRMrg(data[3]));
@@ -188,12 +188,12 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         communicationModel.setCS02021ExperimentRun(false);
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendMessageToLog("Ожидание разряда.");
         }
 
         experimentTime = 15;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding() && isStartButtonOn) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment1ModelPhase3BH.setTime(String.valueOf(experimentTime));
         }
@@ -232,11 +232,11 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             sleep(1);
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания обмотки HH...");
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             if (!communicationModel.setUMgr(uMgr)) {
                 setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
                 setCause("Мегер не отвечает на запросы");
@@ -245,19 +245,19 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             }
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Измерение началось");
             appendOneMessageToLog("Ожидайте 90 секунд.");
             appendOneMessageToLog("Формирование напряжения");
         }
 
         int experimentTime = 90;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding() && isStartButtonOn) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment1ModelPhase3HH.setTime(String.valueOf(experimentTime));
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             float[] data = communicationModel.readDataMgr();
             experiment1ModelPhase3HH.setUr(formatRealNumber(data[1]));
             experiment1ModelPhase3HH.setR15(formatRMrg(data[3]));
@@ -267,12 +267,12 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         communicationModel.setCS02021ExperimentRun(false);
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendMessageToLog("Ожидание разряда.");
         }
 
         experimentTime = 15;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding() && isStartButtonOn) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment1ModelPhase3HH.setTime(String.valueOf(experimentTime));
         }
@@ -311,11 +311,11 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             sleep(1);
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания обмоток BH и HH...");
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             if (!communicationModel.setUMgr(uMgr)) {
                 setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
                 setCause("Мегер не отвечает на запросы");
@@ -324,19 +324,19 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             }
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Измерение началось");
             appendOneMessageToLog("Ожидайте 90 секунд.");
             appendOneMessageToLog("Формирование напряжения");
         }
 
         int experimentTime = 90;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding() && isStartButtonOn) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment1ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
         }
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             float[] data = communicationModel.readDataMgr();
             experiment1ModelPhase3BHHH.setUr(formatRealNumber(data[1]));
             experiment1ModelPhase3BHHH.setR15(formatRMrg(data[3]));
@@ -346,12 +346,12 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         communicationModel.setCS02021ExperimentRun(false);
 
-        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isDevicesResponding()) {
             appendMessageToLog("Ожидание разряда.");
         }
 
         experimentTime = 15;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding() && isStartButtonOn) {
+        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
             sleep(1000);
             experiment1ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
         }

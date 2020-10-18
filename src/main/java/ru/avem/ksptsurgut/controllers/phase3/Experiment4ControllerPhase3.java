@@ -7,11 +7,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
+import ru.avem.ksptsurgut.communication.devices.avem_voltmeter.AvemVoltmeterModel;
 import ru.avem.ksptsurgut.communication.devices.deltaC2000.DeltaCP2000Model;
+import ru.avem.ksptsurgut.communication.devices.parmaT400.ParmaT400Model;
 import ru.avem.ksptsurgut.communication.devices.pm130.PM130Model;
 import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.model.phase3.Experiment4ModelPhase3;
+import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -33,7 +36,11 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableView<Experiment4ModelPhase3> tableViewExperimentValues;
     @FXML
-    private TableColumn<Experiment4ModelPhase3, String> tableColumnUBHKZ;
+    private TableColumn<Experiment4ModelPhase3, String> tableColumnUBHKZ1;
+    @FXML
+    private TableColumn<Experiment4ModelPhase3, String> tableColumnUBHKZ2;
+    @FXML
+    private TableColumn<Experiment4ModelPhase3, String> tableColumnUBHKZ3;
     @FXML
     private TableColumn<Experiment4ModelPhase3, String> tableColumnUKZPercent;
     @FXML
@@ -67,16 +74,26 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     private boolean is10AState;
     private boolean is1AState;
 
-    private volatile double iA;
-    private volatile double iB;
-    private volatile double iC;
+    private volatile double measuringIAvemA;
+    private volatile double measuringIAvemB;
+    private volatile double measuringIAvemC;
 
+    private volatile double measuringIA;
+    private volatile double measuringIB;
+    private volatile double measuringIC;
+
+    private volatile double measuringPKZ;
     private volatile double measuringP;
+    private volatile double measuringF;
+    private volatile double measuringPParma;
     private volatile double measuringUInAB;
     private volatile double measuringUInBC;
     private volatile double measuringUInCA;
     private volatile double measuringUInAvr;
     private volatile double measuringUkzPercent;
+    private volatile double measuringUAvem1;
+    private volatile double measuringUAvem2;
+    private volatile double measuringUAvem3;
 
     @FXML
     public void initialize() {
@@ -87,7 +104,9 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
         tableViewExperimentValues.setSelectionModel(null);
         communicationModel.addObserver(this);
 
-        tableColumnUBHKZ.setCellValueFactory(cellData -> cellData.getValue().UBHProperty());
+        tableColumnUBHKZ1.setCellValueFactory(cellData -> cellData.getValue().UBH1Property());
+        tableColumnUBHKZ2.setCellValueFactory(cellData -> cellData.getValue().UBH2Property());
+        tableColumnUBHKZ3.setCellValueFactory(cellData -> cellData.getValue().UBH3Property());
         tableColumnUKZPercent.setCellValueFactory(cellData -> cellData.getValue().UKZPercentProperty());
         tableColumnUKZDiff.setCellValueFactory(cellData -> cellData.getValue().UKZDiffProperty());
         tableColumnIA.setCellValueFactory(cellData -> cellData.getValue().IAProperty());
@@ -100,7 +119,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void fillFieldsOfExperimentProtocol() {
-        currentProtocol.setE4UKZV(experiment4ModelPhase3.getUBH());
+        currentProtocol.setE4UKZV(experiment4ModelPhase3.getUBH1());
         currentProtocol.setE4UKZPercent(experiment4ModelPhase3.getUKZPercent());
         currentProtocol.setE4UKZDiff(experiment4ModelPhase3.getUKZDiff());
         currentProtocol.setE4IA(experiment4ModelPhase3.getIA());
@@ -123,7 +142,6 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
         experiment4ModelPhase3.clearProperties();
 
         isNeedToRefresh = true;
-        isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnded = false;
         isStartButtonOn = false;
@@ -166,20 +184,28 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
+                Platform.runLater(() -> {
+                    Toast.makeText("Нажмите пуск").show(Toast.ToastType.WARNING);
+                });
             }
 
             while (isExperimentRunning && !isStartButtonOn) {
                 appendOneMessageToLog("Включите кнопочный пост");
                 sleep(1);
-                isNeedToWaitDelta = true;
             }
 
-            if (isExperimentRunning && isNeedToWaitDelta && isStartButtonOn) {
+            if (isExperimentRunning) {
                 communicationModel.onKM1();
                 appendOneMessageToLog("Идет загрузка ЧП");
-                sleep(6000);
+            }
+
+            int timeToSleep = 600;
+            while (isExperimentRunning && (timeToSleep-- > 0)) {
+                sleep(10);
+            }
+
+            if (isExperimentRunning) {
                 communicationModel.initExperiment4Devices();
-                sleep(3000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
@@ -188,7 +214,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                 communicationModel.initExperiment4Devices();
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog("Инициализация испытания");
                 if (Ikz < 1) {
                     appendOneMessageToLog("1А токовая ступень");
@@ -211,37 +237,39 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                 }
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
-                communicationModel.onKM11();
-                communicationModel.onKM15();
+            if (isExperimentRunning && isDevicesResponding()) {
+                communicationModel.onKM27();
+            }
+            if (isExperimentRunning && isDevicesResponding()) {
                 communicationModel.onKM24();
+            }
+            if (isExperimentRunning && isDevicesResponding()) {
+                communicationModel.onKM15();
+            }
+            if (isExperimentRunning && isDevicesResponding()) {
                 communicationModel.onKM10();
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 communicationModel.setObjectParams(50 * HZ, 1 * VOLT, 50 * HZ);
                 appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
                 communicationModel.startObject();
                 appendOneMessageToLog("Запускаем ЧП");
             }
 
-            if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
+            if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog("Поднимаем напряжение");
-                regulation(1 * VOLT, 10, 2, 380, 0.1, 2, 100, 200);
+                regulation(1 * VOLT, 10, 4, UHHTestItem, 0.1, 2, 100, 200);
             }
 
             finalizeExperiment();
-        }).
 
-                start();
-
+        }).start();
     }
 
     @Override
     protected void finalizeExperiment() {
-        sleep(100);
         isNeedToRefresh = false;
-        sleep(3000);
 
         appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
         communicationModel.stopObject();
@@ -291,7 +319,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     private int regulation(int start, int coarseStep, int fineStep, double end, double coarseLimit, double fineLimit, int coarseSleep, int fineSleep) {
         double coarseMinLimit = 1 - coarseLimit;
         double coarseMaxLimit = 1 + coarseLimit;
-        while (isExperimentRunning && ((measuringUInAvr < end * coarseMinLimit) || (measuringUInAvr > end * coarseMaxLimit)) && isStartButtonOn && isDevicesResponding()) {
+        while (isExperimentRunning && ((measuringUInAvr < end * coarseMinLimit) || (measuringUInAvr > end * coarseMaxLimit)) && isDevicesResponding()) {
             if (measuringUInAvr < end * coarseMinLimit) {
                 communicationModel.setObjectUMax(start += coarseStep);
             } else if (measuringUInAvr > end * coarseMaxLimit) {
@@ -300,7 +328,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             sleep(coarseSleep);
             appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
         }
-        while (isExperimentRunning && ((measuringUInAvr < end - fineLimit) || (measuringUInAvr > end + fineLimit)) && isStartButtonOn && isDevicesResponding()) {
+        while (isExperimentRunning && ((measuringUInAvr < end - fineLimit) || (measuringUInAvr > end + fineLimit)) && isDevicesResponding()) {
             if (measuringUInAvr < end - fineLimit) {
                 communicationModel.setObjectUMax(start += fineStep);
             } else if (measuringUInAvr > end + fineLimit) {
@@ -344,7 +372,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             setCause("Нажата кнопка СТОП");
                         }
                         break;
-                    case OwenPRModel.PRI6:
+                    case OwenPRModel.PRI6_FIXED:
                         isStartButtonOn = (boolean) value;
                         break;
                     case OwenPRModel.PRI7_FIXED:
@@ -355,26 +383,110 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                         break;
                 }
                 break;
+            case AVEM_A_ID:
+                switch (param) {
+                    case AvemVoltmeterModel.RESPONDING_PARAM:
+                        isAvem1Responding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleAVEM1.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        break;
+                    case AvemVoltmeterModel.U_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUAvem1 = (float) value;
+                        }
+                        break;
+                }
+                break;
+            case AVEM_B_ID:
+                switch (param) {
+                    case AvemVoltmeterModel.RESPONDING_PARAM:
+                        isAvem2Responding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleAVEM2.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        break;
+                    case AvemVoltmeterModel.U_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUAvem2 = (float) value;
+                        }
+                        break;
+                }
+                break;
+            case AVEM_C_ID:
+                switch (param) {
+                    case AvemVoltmeterModel.RESPONDING_PARAM:
+                        isAvem3Responding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleAVEM3.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        break;
+                    case AvemVoltmeterModel.U_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUAvem3 = (float) value;
+                        }
+                        break;
+                }
+                break;
+            case PARMA400_ID:
+                switch (param) {
+                    case ParmaT400Model.RESPONDING_PARAM:
+                        isParmaResponding = (boolean) value;
+                        Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                        break;
+                    case ParmaT400Model.IA_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringIAvemA = (double) value;
+                        }
+                        break;
+                    case ParmaT400Model.IB_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringIAvemB = (double) value;
+                        }
+                        break;
+                    case ParmaT400Model.IC_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringIAvemC = (double) value;
+                        }
+                        break;
+                }
+                break;
             case PM130_ID:
                 switch (param) {
                     case PM130Model.RESPONDING_PARAM:
                         isPM130Responding = (boolean) value;
                         Platform.runLater(() -> deviceStateCirclePM130.setFill(((boolean) value) ? Color.LIME : Color.RED));
                         break;
+                    case PM130Model.V1_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUInAB = (float) value;
+                            experiment4ModelPhase3.setUBH1(formatRealNumber(measuringUInAB));
+                        }
+                        break;
+                    case PM130Model.V2_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUInBC = (float) value;
+                            experiment4ModelPhase3.setUBH2(formatRealNumber(measuringUInBC));
+                        }
+                        break;
+                    case PM130Model.V3_PARAM:
+                        if (isNeedToRefresh) {
+                            measuringUInCA = (float) value;
+                            experiment4ModelPhase3.setUBH3(formatRealNumber(measuringUInCA));
+                            measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3;
+                            measuringUkzPercent = ((measuringUInAvr * 100.0) / UBHTestItem) * 4;
+                            experiment4ModelPhase3.setUKZPercent(formatRealNumber(measuringUkzPercent));
+                            experiment4ModelPhase3.setUKZDiff(formatRealNumber(measuringUkzPercent - UKZTestItem));
+                        }
+                        break;
                     case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
-                            iA = (float) value;
+                            measuringIA = (float) value;
                             if (is50AState) {
-                                iA *= STATE_200_TO_5_MULTIPLIER;
+                                measuringIA *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is10AState) {
-                                iA *= STATE_40_TO_5_MULTIPLIER;
+                                measuringIA *= STATE_40_TO_5_MULTIPLIER;
                             } else if (is1AState) {
-                                iA *= STATE_5_TO_5_MULTIPLIER;
+                                measuringIA *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            if (iA > 0.001) {
-                                experiment4ModelPhase3.setIA(String.format("%.3f", iA));
+                            if (measuringIA > 0.001) {
+                                experiment4ModelPhase3.setIA(String.format("%.3f", measuringIA));
                             }
-                            if (iA > Ikz) {
+                            if (measuringIA > Ikz) {
                                 appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
                                 isExperimentRunning = false;
                             }
@@ -382,18 +494,18 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                         break;
                     case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
-                            iB = (float) value;
+                            measuringIB = (float) value;
                             if (is50AState) {
-                                iB *= STATE_200_TO_5_MULTIPLIER;
+                                measuringIB *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is10AState) {
-                                iB *= STATE_40_TO_5_MULTIPLIER;
+                                measuringIB *= STATE_40_TO_5_MULTIPLIER;
                             } else if (is1AState) {
-                                iB *= STATE_5_TO_5_MULTIPLIER;
+                                measuringIB *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            if (iB > 0.001) {
-                                experiment4ModelPhase3.setIB(String.format("%.3f", iB));
+                            if (measuringIB > 0.001) {
+                                experiment4ModelPhase3.setIB(String.format("%.3f", measuringIB));
                             }
-                            if (iB > Ikz) {
+                            if (measuringIB > Ikz) {
                                 appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
                                 isExperimentRunning = false;
                             }
@@ -401,46 +513,26 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                         break;
                     case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
-                            iC = (float) value;
+                            measuringIC = (float) value;
                             if (is50AState) {
-                                iC *= STATE_200_TO_5_MULTIPLIER;
+                                measuringIC *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is10AState) {
-                                iC *= STATE_40_TO_5_MULTIPLIER;
+                                measuringIC *= STATE_40_TO_5_MULTIPLIER;
                             } else if (is1AState) {
-                                iC *= STATE_5_TO_5_MULTIPLIER;
+                                measuringIC *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            if (iC > 0.001) {
-                                experiment4ModelPhase3.setIC(String.format("%.3f", iC));
+                            if (measuringIC > 0.001) {
+                                experiment4ModelPhase3.setIC(String.format("%.3f", measuringIC));
                             }
-                            if (iC > Ikz) {
+                            if (measuringIC > Ikz) {
                                 appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
                                 isExperimentRunning = false;
                             }
                         }
                         break;
-                    case PM130Model.V1_PARAM:
-                        if (isNeedToRefresh) {
-                            measuringUInAB = (float) value * coef;
-                        }
-                        break;
-                    case PM130Model.V2_PARAM:
-                        if (isNeedToRefresh) {
-                            measuringUInBC = (float) value * coef;
-                        }
-                        break;
-                    case PM130Model.V3_PARAM:
-                        if (isNeedToRefresh) {
-                            measuringUInCA = (float) value * coef;
-                            measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3;
-                            experiment4ModelPhase3.setUBH(formatRealNumber(measuringUInAvr));
-                            measuringUkzPercent = (measuringUInAvr * 100.0) / UBHTestItem;
-                            experiment4ModelPhase3.setUKZPercent(formatRealNumber(measuringUkzPercent));
-                            experiment4ModelPhase3.setUKZDiff(formatRealNumber(measuringUkzPercent - UKZTestItem));
-                        }
-                        break;
                     case PM130Model.P_PARAM:
                         if (isNeedToRefresh) {
-                            measuringP = (float) value;
+                            measuringP = (float) value * 16;
                             if (is50AState) {
                                 measuringP *= STATE_200_TO_5_MULTIPLIER;
                             } else if (is10AState) {
@@ -448,14 +540,15 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             } else if (is1AState) {
                                 measuringP *= STATE_5_TO_5_MULTIPLIER;
                             }
-                            String PP = formatRealNumber(measuringP * 16);
-                            experiment4ModelPhase3.setPP(PP);
+                            measuringPKZ = (measuringUAvem1 * measuringIAvemA + measuringUAvem2 * measuringIAvemB + measuringUAvem3 * measuringIAvemC) / 3;
+                            measuringP -= measuringPKZ;
+                            experiment4ModelPhase3.setPP(formatRealNumber(measuringP));
                         }
                         break;
                     case PM130Model.F_PARAM:
                         if (isNeedToRefresh) {
-                            String freq = formatRealNumber((float) value);
-                            experiment4ModelPhase3.setF(freq);
+                            measuringF = (float) value;
+                            experiment4ModelPhase3.setF(formatRealNumber(measuringF));
                         }
                         break;
                 }
@@ -465,7 +558,6 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                     case DeltaCP2000Model.RESPONDING_PARAM:
                         isDeltaResponding = (boolean) value;
                         Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
-
                         break;
                 }
                 break;

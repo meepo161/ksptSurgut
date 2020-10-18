@@ -51,7 +51,7 @@ public class Toast {
     }
 
     public static Toast makeText(String text) {
-        return new Toast(Notifications.create().text(text).position(Pos.BOTTOM_CENTER));
+        return new Toast(Notifications.create().text(text).position(Pos.CENTER));
 
     }
     public static void showJFXDialog(Pane pane, String headingText, String bodyText, double dialogWidth, double dialogHeight) {

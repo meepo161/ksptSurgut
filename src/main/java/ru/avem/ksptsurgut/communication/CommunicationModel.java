@@ -39,6 +39,7 @@ public class CommunicationModel extends Observable implements Observer {
     private static CommunicationModel instance = new CommunicationModel();
 
     private Connection RS485Connection;
+    private Connection CP2000Connection;
 
     public OwenPRController owenPRController;
     public PM130Controller pm130Controller;
@@ -70,19 +71,22 @@ public class CommunicationModel extends Observable implements Observer {
         connectMainBus();
         ModbusController modbusController = new RTUController(RS485Connection);
 
+//        connectCP2000Bus();
+//        ModbusController modbusCP2000 = new RTUController(CP2000Connection);
+
         pm130Controller = new PM130Controller(1, this, modbusController, PM130_ID);
         devicesControllers.add(pm130Controller);
 
         pm130Controller2 = new PM130Controller(2, this, modbusController, PM130_2_ID);
         devicesControllers.add(pm130Controller2);
 
-        avemVoltmeterControllerA = new AvemVoltmeterController(13, this, modbusController, AVEM_ID);
+        avemVoltmeterControllerA = new AvemVoltmeterController(13, this, modbusController, AVEM_A_ID);
         devicesControllers.add(avemVoltmeterControllerA);
 
-        avemVoltmeterControllerB = new AvemVoltmeterController(14, this, modbusController, AVEM_ID);
+        avemVoltmeterControllerB = new AvemVoltmeterController(14, this, modbusController, AVEM_B_ID);
         devicesControllers.add(avemVoltmeterControllerB);
 
-        avemVoltmeterControllerC = new AvemVoltmeterController(15, this, modbusController, AVEM_ID);
+        avemVoltmeterControllerC = new AvemVoltmeterController(15, this, modbusController, AVEM_C_ID);
         devicesControllers.add(avemVoltmeterControllerC);
 
         phaseMeterController = new PhaseMeterController(4, this, modbusController, PHASEMETER_ID);
@@ -158,14 +162,17 @@ public class CommunicationModel extends Observable implements Observer {
 
     public void setNeedToReadAllDevices(boolean isNeed) {
         owenPRController.setNeedToRead(isNeed);
-//        megacsController.setNeedToRead(isNeed);
-//        deltaCP2000Controller.setNeedToRead(isNeed);
+        megacsController.setNeedToRead(isNeed);
+        deltaCP2000Controller.setNeedToRead(isNeed);
         ikasController.setNeedToRead(isNeed);
-//        parmaT400Controller.setNeedToRead(isNeed);
+        parmaT400Controller.setNeedToRead(isNeed);
         phaseMeterController.setNeedToRead(isNeed);
         pm130Controller.setNeedToRead(isNeed);
         pm130Controller2.setNeedToRead(isNeed);
         trmController.setNeedToRead(isNeed);
+        avemVoltmeterControllerA.setNeedToRead(isNeed);
+        avemVoltmeterControllerB.setNeedToRead(isNeed);
+        avemVoltmeterControllerC.setNeedToRead(isNeed);
     }
 
     public void setNeedToReadForDebug(boolean isNeed) {
@@ -198,6 +205,23 @@ public class CommunicationModel extends Observable implements Observer {
             Logger.withTag("DEBUG_TAG").log("!isInitiatedMainBus");
             RS485Connection.closeConnection();
             RS485Connection.initConnection();
+        }
+    }
+
+    private void connectCP2000Bus() {
+        CP2000Connection = new SerialConnection(
+                Constants.Communication.CP2000_DEVICE_NAME,
+                Constants.Communication.BAUDRATE_MAIN,
+                Constants.Communication.DATABITS,
+                Constants.Communication.STOPBITS,
+                Constants.Communication.PARITY,
+                Constants.Communication.WRITE_TIMEOUT,
+                Constants.Communication.READ_TIMEOUT);
+        Logger.withTag("DEBUG_TAG").log("connectMainBus");
+        if (!CP2000Connection.isInitiatedConnection()) {
+            Logger.withTag("DEBUG_TAG").log("!isInitiatedMainBus");
+            CP2000Connection.closeConnection();
+            CP2000Connection.initConnection();
         }
     }
 
@@ -392,8 +416,6 @@ public class CommunicationModel extends Observable implements Observer {
         resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
-        pm130Controller2.setNeedToRead(true);
-        pm130Controller2.resetAllAttempts();
         deltaCP2000Controller.setNeedToRead(true);
         deltaCP2000Controller.resetAllAttempts();
         avemVoltmeterControllerA.setNeedToRead(true);
@@ -402,6 +424,8 @@ public class CommunicationModel extends Observable implements Observer {
         avemVoltmeterControllerB.resetAllAttempts();
         avemVoltmeterControllerC.setNeedToRead(true);
         avemVoltmeterControllerC.resetAllAttempts();
+        parmaT400Controller.setNeedToRead(true);
+        parmaT400Controller.resetAllAttempts();
     }
 
     public void initExperiment5Devices() {

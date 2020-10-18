@@ -48,7 +48,9 @@
                                     <Label text="Нет данных" />
                                 </placeholder>
                                 <columns>
-                                    <TableColumn fx:id="tableColumnUBHKZ" prefWidth="129.0" text="U КЗ, В" />
+                                    <TableColumn fx:id="tableColumnUBHKZ1" prefWidth="129.0" text="U A КЗ, В" />
+                              <TableColumn fx:id="tableColumnUBHKZ2" prefWidth="129.0" text="U B КЗ, В" />
+                              <TableColumn fx:id="tableColumnUBHKZ3" prefWidth="129.0" text="U C КЗ, В" />
                               <TableColumn fx:id="tableColumnUKZPercent" prefWidth="125.00003051757812" text="U КЗ, %" />
                               <TableColumn fx:id="tableColumnUKZDiff" prefWidth="255.0" text="ΔU КЗ, %" />
                               <TableColumn fx:id="tableColumnIA" minWidth="0.0" prefWidth="76.0" text="IA, А" />
@@ -97,6 +99,15 @@
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
                         </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="102.0" spacing="8.0">
+                           <children>
+                              <Circle fx:id="deviceStateCircleParma400" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="ПАРМА  Т400" />
+                           </children>
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="341.0" spacing="8.0">
                            <children>
                               <Circle fx:id="deviceStateCirclePR200" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
@@ -110,6 +121,33 @@
                            <children>
                               <Circle fx:id="deviceStateCircleDELTACP2000" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
                               <Label text="DELTA CP2000" />
+                           </children>
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="103.0" spacing="8.0">
+                           <children>
+                              <Circle fx:id="deviceStateCircleAVEM1" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="AVEM A" />
+                           </children>
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="235.0" spacing="8.0">
+                           <children>
+                              <Circle fx:id="deviceStateCircleAVEM2" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="AVEM B" />
+                           </children>
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="279.0" spacing="8.0">
+                           <children>
+                              <Circle fx:id="deviceStateCircleAVEM3" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="AVEM C" />
                            </children>
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

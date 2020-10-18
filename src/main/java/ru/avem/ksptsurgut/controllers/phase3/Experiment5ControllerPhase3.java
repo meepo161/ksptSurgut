@@ -12,6 +12,7 @@ import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.db.model.Protocol;
 import ru.avem.ksptsurgut.model.phase3.Experiment5ModelPhase3;
+import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -156,7 +157,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         experiment5ModelPhase3.clearProperties();
 
         isNeedToRefresh = true;
-        isNeedToWaitDelta = false;
         isExperimentRunning = true;
         isExperimentEnded = false;
 
@@ -198,8 +198,14 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
-                isStartButtonOn = false;
-                sleep(1000);
+                Platform.runLater(() -> {
+                    Toast.makeText("Нажмите пуск").show(Toast.ToastType.WARNING);
+                });
+            }
+
+            while (isExperimentRunning && !isStartButtonOn) {
+                appendOneMessageToLog("Включите кнопочный пост");
+                sleep(1);
             }
 
             if (isExperimentRunning && isStartButtonOn) {

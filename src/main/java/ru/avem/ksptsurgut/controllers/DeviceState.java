@@ -4,7 +4,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import ru.avem.ksptsurgut.communication.devices.avem_voltmeter.AvemVoltmeterModel;
+import ru.avem.ksptsurgut.communication.devices.cs02021.CS020201Model;
+import ru.avem.ksptsurgut.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptsurgut.communication.devices.ikas.IKASModel;
+import ru.avem.ksptsurgut.communication.devices.parmaT400.ParmaT400Model;
 import ru.avem.ksptsurgut.communication.devices.phasemeter.PhaseMeterModel;
 import ru.avem.ksptsurgut.communication.devices.pm130.PM130Model;
 import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
@@ -52,21 +56,31 @@ public class DeviceState implements Observer {
 
 
         switch (modelId) {
-//            case MEGACS_ID:
-//                if (param == CS020201Model.RESPONDING_PARAM) {
-//                    Platform.runLater(() -> deviceStateCircleCS0202.setFill(((boolean) value) ? Color.LIME : Color.RED));
-//                }
-//                break;
+            case MEGACS_ID:
+                if (param == CS020201Model.RESPONDING_PARAM) {
+                    Platform.runLater(() -> deviceStateCircleCS0202.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                }
+                break;
             case PR200_ID:
                 if (param == OwenPRModel.RESPONDING_PARAM) {
                     Platform.runLater(() -> deviceStateCirclePR200.setFill(((boolean) value) ? Color.LIME : Color.RED));
                 }
                 break;
-//            case AVEM_ID:
-//                if (param == AvemVoltmeterModel.RESPONDING_PARAM) {
-//                    Platform.runLater(() -> deviceStateCircleAVEM.setFill(((boolean) value) ? Color.LIME : Color.RED));
-//                }
-//                break;
+            case AVEM_A_ID:
+                if (param == AvemVoltmeterModel.RESPONDING_PARAM) {
+                    Platform.runLater(() -> deviceStateCircleAVEM1.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                }
+                break;
+            case AVEM_B_ID:
+                if (param == AvemVoltmeterModel.RESPONDING_PARAM) {
+                    Platform.runLater(() -> deviceStateCircleAVEM2.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                }
+                break;
+            case AVEM_C_ID:
+                if (param == AvemVoltmeterModel.RESPONDING_PARAM) {
+                    Platform.runLater(() -> deviceStateCircleAVEM3.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                }
+                break;
             case PM130_ID:
                 if (param == PM130Model.RESPONDING_PARAM) {
                     Platform.runLater(() -> deviceStateCirclePM130.setFill(((boolean) value) ? Color.LIME : Color.RED));
@@ -82,21 +96,21 @@ public class DeviceState implements Observer {
                     Platform.runLater(() -> deviceStateCircleIKAS.setFill(((boolean) value) ? Color.LIME : Color.RED));
                 }
                 break;
-//            case PARMA400_ID:
-//                if (param == ParmaT400Model.RESPONDING_PARAM) {
-//                    Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
-//                }
-//                break;
+            case PARMA400_ID:
+                if (param == ParmaT400Model.RESPONDING_PARAM) {
+                    Platform.runLater(() -> deviceStateCircleParma400.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                }
+                break;
             case PHASEMETER_ID:
                 if (param == PhaseMeterModel.RESPONDING_PARAM) {
                     Platform.runLater(() -> deviceStateCirclePhaseMeter.setFill(((boolean) value) ? Color.LIME : Color.RED));
                 }
                 break;
-//            case DELTACP2000_ID:
-//                if (param == DeltaCP2000Model.RESPONDING_PARAM) {
-//                    Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
-//                }
-//                break;
+            case DELTACP2000_ID:
+                if (param == DeltaCP2000Model.RESPONDING_PARAM) {
+                    Platform.runLater(() -> deviceStateCircleDELTACP2000.setFill(((boolean) value) ? Color.LIME : Color.RED));
+                }
+                break;
             case TRM_ID:
                 if (param == TRMModel.RESPONDING_PARAM) {
                     Platform.runLater(() -> deviceStateCircleTrm.setFill(((boolean) value) ? Color.LIME : Color.RED));

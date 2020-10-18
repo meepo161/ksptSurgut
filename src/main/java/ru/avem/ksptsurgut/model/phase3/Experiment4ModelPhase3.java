@@ -9,7 +9,9 @@ import java.util.List;
 
 public class Experiment4ModelPhase3 {
 
-    private final StringProperty UBH;
+    private final StringProperty UBH1;
+    private final StringProperty UBH2;
+    private final StringProperty UBH3;
     private final StringProperty UKZPercent;
     private final StringProperty UKZDiff;
     private final StringProperty IA;
@@ -22,7 +24,9 @@ public class Experiment4ModelPhase3 {
 
 
     public Experiment4ModelPhase3() {
-        UBH = new SimpleStringProperty();
+        UBH1 = new SimpleStringProperty();
+        UBH2 = new SimpleStringProperty();
+        UBH3 = new SimpleStringProperty();
         UKZPercent = new SimpleStringProperty();
         UKZDiff = new SimpleStringProperty();
         IA = new SimpleStringProperty();
@@ -31,19 +35,43 @@ public class Experiment4ModelPhase3 {
         PP = new SimpleStringProperty();
         F = new SimpleStringProperty();
         result = new SimpleStringProperty();
-        properties.addAll(Arrays.asList(UBH, UKZPercent, UKZDiff, IA, IB, IC, PP, F, result));
+        properties.addAll(Arrays.asList(UBH1, UBH2, UBH3, UKZPercent, UKZDiff, IA, IB, IC, PP, F, result));
     }
 
-    public String getUBH() {
-        return UBH.get();
+    public String getUBH1() {
+        return UBH1.get();
     }
 
-    public StringProperty UBHProperty() {
-        return UBH;
+    public StringProperty UBH1Property() {
+        return UBH1;
     }
 
-    public void setUBH(String UBH) {
-        this.UBH.set(UBH);
+    public void setUBH1(String UBH1) {
+        this.UBH1.set(UBH1);
+    }
+
+    public String getUBH2() {
+        return UBH2.get();
+    }
+
+    public StringProperty UBH2Property() {
+        return UBH2;
+    }
+
+    public void setUBH2(String UBH2) {
+        this.UBH2.set(UBH2);
+    }
+
+    public String getUBH3() {
+        return UBH3.get();
+    }
+
+    public StringProperty UBH3Property() {
+        return UBH3;
+    }
+
+    public void setUBH3(String UBH3) {
+        this.UBH3.set(UBH3);
     }
 
     public String getUKZPercent() {
