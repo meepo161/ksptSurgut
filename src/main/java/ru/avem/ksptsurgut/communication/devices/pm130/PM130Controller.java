@@ -12,6 +12,7 @@ public class PM130Controller implements DeviceController {
 //    private static final short VL1_REGISTER = 13372;
 //    private static final short P_REGISTER = 13696;
 
+    private static final short PT_RATIO_REGISTER = 2305; // за 1 секунду
     private static final short I1_REGISTER = 13958; // за 1 секунду
     private static final short VL1_REGISTER = 14012;
     private static final short P_REGISTER = 14336;
@@ -101,9 +102,17 @@ public class PM130Controller implements DeviceController {
                         resetReadAttemptsOfAttempts();
                     }
                     break;
+                case 5:
+                    if (!getPTRatio().equals(ModbusController.RequestStatus.FRAME_RECEIVED)) {
+                        read(args);
+                    } else {
+                        resetReadAttempts();
+                        resetReadAttemptsOfAttempts();
+                    }
+                    break;
             }
         } else {
-           readAttemptOfAttempt--;
+            readAttemptOfAttempt--;
             if (readAttemptOfAttempt <= 0) {
                 model.setReadResponding(false);
             } else {
@@ -174,6 +183,20 @@ public class PM130Controller implements DeviceController {
             }
         }
         return statusF;
+    }
+
+    private ModbusController.RequestStatus getPTRatio() {
+        ByteBuffer inputBuffer = ByteBuffer.allocate(INPUT_BUFFER_SIZE);
+        ModbusController.RequestStatus statusPT = modbusController.readInputRegisters(
+                address, PT_RATIO_REGISTER, (short) 1, inputBuffer);
+        if (statusPT.equals(ModbusController.RequestStatus.FRAME_RECEIVED)) {
+            model.setReadResponding(true);
+            try {
+                model.setPT((inputBuffer.getShort() & 0xFFFF) * 0.1f);
+            } catch (Exception ignored) {
+            }
+        }
+        return statusPT;
     }
 
     @Override

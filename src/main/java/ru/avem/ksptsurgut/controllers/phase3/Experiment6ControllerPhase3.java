@@ -28,7 +28,7 @@ import static ru.avem.ksptsurgut.utils.Utils.sleep;
 import static ru.avem.ksptsurgut.utils.View.setDeviceState;
 
 public class Experiment6ControllerPhase3 extends AbstractExperiment {
-    private static final int WIDDING400 = 400;
+    private static final int WIDDING400 = 401;
     private static final double STATE_1_TO_5_MULTIPLIER = 0.2;
     private static final double STATE_10_TO_5_MULTIPLIER = 2.0;
     private static final double STATE_50_TO_5_MULTIPLIER = 10.0;
@@ -49,7 +49,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     private TableColumn<Experiment6ModelPhase3, String> tableColumnResult;
 
     private double UHHTestItem = currentProtocol.getUhh();
-    private final double coef = 6.5;
+    private final double coef = 6.66;
 
     private Experiment6ModelPhase3 experiment6ModelPhase3;
     private ObservableList<Experiment6ModelPhase3> experiment6Data = FXCollections.observableArrayList();
@@ -135,8 +135,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
-                    "Подключите кабели ОИ к НН.\n" +
+            showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
                     "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
@@ -158,7 +157,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
                 Platform.runLater(() -> {
-                    Toast.makeText("Нажмите пуск").show(Toast.ToastType.WARNING);
+                    Toast.makeText("Нажмите <ПУСК> кнопочного поста").show(Toast.ToastType.WARNING);
                 });
             }
 
@@ -333,7 +332,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                             setCause("Нажата кнопка СТОП");
                         }
                         break;
-                    case OwenPRModel.PRI6:
+                    case OwenPRModel.PRI6_FIXED:
                         isStartButtonOn = (boolean) value;
                         break;
                     case OwenPRModel.PRI7_FIXED:

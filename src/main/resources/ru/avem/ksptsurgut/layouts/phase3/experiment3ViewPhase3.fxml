@@ -62,8 +62,8 @@
                                  </columns>
                               </TableColumn>
                               <TableColumn fx:id="tableColumnUDiff" minWidth="-1.0" prefWidth="173.0" text="Коэф.тр" />
-                              <TableColumn fx:id="tableColumnGroupBH" prefWidth="75.0" text="Г.С. ВН" />
-                              <TableColumn fx:id="tableColumnGroupHH" prefWidth="75.0" text="Г.С. НН" />
+                              <TableColumn fx:id="tableColumnGroupBH" prefWidth="75.0" text="Г.С. AB" />
+                              <TableColumn fx:id="tableColumnGroupHH" prefWidth="75.0" text="Г.С. BC" />
                               <TableColumn fx:id="tableColumnF" minWidth="0.0" prefWidth="111.0" text="f, Гц" />
                               <TableColumn fx:id="tableColumnResultExperiment" minWidth="-1.0" prefWidth="0.0" text="Результат" />
                            </columns>
@@ -131,15 +131,6 @@
                            <children>
                               <Circle fx:id="deviceStateCirclePhaseMeter" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
                               <Label text="Фазометр" />
-                           </children>
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="147.0" spacing="8.0">
-                           <children>
-                              <Circle fx:id="deviceStateCircleDELTACP2000" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="Дельта" />
                            </children>
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

@@ -52,7 +52,6 @@
                               <TableColumn fx:id="tableColumnUBHKZ2" prefWidth="129.0" text="U B КЗ, В" />
                               <TableColumn fx:id="tableColumnUBHKZ3" prefWidth="129.0" text="U C КЗ, В" />
                               <TableColumn fx:id="tableColumnUKZPercent" prefWidth="125.00003051757812" text="U КЗ, %" />
-                              <TableColumn fx:id="tableColumnUKZDiff" prefWidth="255.0" text="ΔU КЗ, %" />
                               <TableColumn fx:id="tableColumnIA" minWidth="0.0" prefWidth="76.0" text="IA, А" />
                               <TableColumn fx:id="tableColumnIB" prefWidth="58.0" text="IB, А" />
                               <TableColumn fx:id="tableColumnIC" prefWidth="75.0" text="IC, А" />

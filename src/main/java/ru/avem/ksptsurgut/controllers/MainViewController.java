@@ -100,8 +100,6 @@ public class MainViewController implements Statable {
     @FXML
     private JFXCheckBox rCheckBoxMegerHH;
     @FXML
-    private JFXCheckBox rCheckBoxMegerBHHH;
-    @FXML
     private JFXCheckBox rCheckBoxIKASBH;
     @FXML
     private JFXCheckBox rCheckBoxIKASHH;
@@ -199,13 +197,6 @@ public class MainViewController implements Statable {
                     resultData.add(new ResultModel("Коэф", currentProtocol.getE1CoefHH()));
                     resultData.add(new ResultModel("t, °С", currentProtocol.getE1THH()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE1ResultHH()));
-
-                    resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE1WindingBHHH()));
-                    resultData.add(new ResultModel("R15", currentProtocol.getE1R15BHHH()));
-                    resultData.add(new ResultModel("R60", currentProtocol.getE1R60BHHH()));
-                    resultData.add(new ResultModel("Коэф", currentProtocol.getE1CoefBHHH()));
-                    resultData.add(new ResultModel("t, °С", currentProtocol.getE1TBHHH()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE1ResultBHHH()));
 
                     break;
                 case Constants.Experiments.EXPERIMENT2_NAME:
@@ -639,7 +630,6 @@ public class MainViewController implements Statable {
             checkBoxExperiment6.setSelected(true);
             rCheckBoxMegerBH.setSelected(true);
             rCheckBoxMegerHH.setSelected(true);
-            rCheckBoxMegerBHHH.setSelected(true);
             rCheckBoxIKASBH.setSelected(true);
             rCheckBoxIKASHH.setSelected(true);
         } else {
@@ -653,7 +643,6 @@ public class MainViewController implements Statable {
             checkBoxExperiment6.setSelected(false);
             rCheckBoxMegerBH.setSelected(false);
             rCheckBoxMegerHH.setSelected(false);
-            rCheckBoxMegerBHHH.setSelected(false);
             rCheckBoxIKASBH.setSelected(false);
             rCheckBoxIKASHH.setSelected(false);
         }
@@ -667,11 +656,9 @@ public class MainViewController implements Statable {
             checkBoxSelectAllItems.setSelected(isAllSelected());
             rCheckBoxMegerBH.setSelected(true);
             rCheckBoxMegerHH.setSelected(true);
-            rCheckBoxMegerBHHH.setSelected(true);
         } else {
             rCheckBoxMegerBH.setSelected(false);
             rCheckBoxMegerHH.setSelected(false);
-            rCheckBoxMegerBHHH.setSelected(false);
         }
     }
 
@@ -692,10 +679,10 @@ public class MainViewController implements Statable {
 
     private void setStateCheckBox1() {
         checkBoxExperiment1.setIndeterminate(true);
-        if (!rCheckBoxMegerBH.isSelected() && !rCheckBoxMegerHH.isSelected() && !rCheckBoxMegerBHHH.isSelected()) {
+        if (!rCheckBoxMegerBH.isSelected() && !rCheckBoxMegerHH.isSelected()) {
             checkBoxExperiment1.setSelected(false);
             checkBoxExperiment1.setIndeterminate(false);
-        } else if (rCheckBoxMegerBH.isSelected() && rCheckBoxMegerHH.isSelected() && rCheckBoxMegerBHHH.isSelected()) {
+        } else if (rCheckBoxMegerBH.isSelected() && rCheckBoxMegerHH.isSelected()) {
             checkBoxExperiment1.setIndeterminate(false);
             checkBoxExperiment1.setSelected(true);
         }
@@ -789,7 +776,6 @@ public class MainViewController implements Statable {
                 int mask = 0;
                 mask |= rCheckBoxMegerBH.isSelected() ? 0b1 : 0;
                 mask |= rCheckBoxMegerHH.isSelected() ? 0b10 : 0;
-                mask |= rCheckBoxMegerBHHH.isSelected() ? 0b100 : 0;
                 experimentsValuesModel.setExperiment1Choice(mask);
 
                 isCanceled = start1Experiment();
@@ -826,7 +812,6 @@ public class MainViewController implements Statable {
         return checkBoxExperiment1.isSelected() ||
                 rCheckBoxMegerBH.isSelected() ||
                 rCheckBoxMegerHH.isSelected() ||
-                rCheckBoxMegerBHHH.isSelected() ||
                 checkBoxExperiment2.isSelected() ||
                 rCheckBoxIKASBH.isSelected() ||
                 rCheckBoxIKASHH.isSelected() ||

@@ -156,9 +156,6 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-//            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
-//                    "Подключите кабели ОИ и крокодилы <A-B-C> к ВН, а <a-b-c> к НН.\n" +
-//                    "После нажмите <Да>", true);
             if (isExperimentRunning) {
                 appendOneMessageToLog("Начало испытания");
                 communicationModel.initOwenPrController();
@@ -177,8 +174,11 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
+            }
+
+            if (isExperimentRunning && isOwenPRResponding && !isStartButtonOn) {
                 Platform.runLater(() -> {
-                    Toast.makeText("Нажмите пуск").show(Toast.ToastType.WARNING);
+                    Toast.makeText("Нажмите <ПУСК> кнопочного поста").show(Toast.ToastType.WARNING);
                 });
             }
 

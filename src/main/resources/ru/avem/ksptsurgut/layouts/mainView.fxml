@@ -266,7 +266,6 @@
                                                             <children>
                                                                 <JFXCheckBox fx:id="rCheckBoxMegerBH" mnemonicParsing="false" onAction="#handleRCheckBoxExperiment1BH" text="1.1 ВН и корпус" />
                                                                 <JFXCheckBox fx:id="rCheckBoxMegerHH" layoutX="610.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRCheckBoxExperiment1HH" text="1.2 НН и корпус" />
-                                                                <JFXCheckBox fx:id="rCheckBoxMegerBHHH" layoutX="961.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleRCheckBoxExperiment1BHHH" text="1.3 ВН и НН" />
                                                             </children>
                                                             <padding>
                                                                 <Insets bottom="8.0" left="64.0" right="8.0" top="8.0" />

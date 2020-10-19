@@ -131,15 +131,15 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     }
 
     protected boolean isThereAreAccidents() {
-        return !isDoorZone || !isDoorSHSO || !isCurrentOI;
+        return isDoorZone || isDoorSHSO || isCurrentOI;
     }
 
     protected String getAccidentsString(String mainText) {
         return String.format("%s: %s%s%s",
                 mainText,
-                !isDoorZone ? "открыта дверь зоны, " : "",
-                !isDoorSHSO ? "открыты двери ШСО, " : "",
-                !isCurrentOI ? "сработала токовая защита объекта испытания, " : "");
+                isDoorZone ? "открыта дверь зоны, " : "",
+                isDoorSHSO ? "открыты двери ШСО, " : "",
+                isCurrentOI ? "сработала токовая защита объекта испытания, " : "");
     }
 
     protected void setCause(String cause) {

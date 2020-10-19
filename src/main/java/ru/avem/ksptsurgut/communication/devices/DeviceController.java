@@ -2,11 +2,11 @@ package ru.avem.ksptsurgut.communication.devices;
 
 public interface DeviceController {
     int INPUT_BUFFER_SIZE = 256;
-    byte NUMBER_OF_READ_ATTEMPTS = 10;
-    byte NUMBER_OF_WRITE_ATTEMPTS = 10;
+    byte NUMBER_OF_READ_ATTEMPTS = 5;
+    byte NUMBER_OF_WRITE_ATTEMPTS = 5;
 
-    byte NUMBER_OF_READ_ATTEMPTS_OF_ATTEMPTS = 10;
-    byte NUMBER_OF_WRITE_ATTEMPTS_OF_ATTEMPTS = 10;
+    byte NUMBER_OF_READ_ATTEMPTS_OF_ATTEMPTS = 5;
+    byte NUMBER_OF_WRITE_ATTEMPTS_OF_ATTEMPTS = 5;
 
     int PM130_ID = 1;
     int PM130_2_ID = 2;

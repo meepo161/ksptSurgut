@@ -129,21 +129,6 @@ public class Logging {
                                 case "$210$":
                                     cell.setCellValue(protocol.getE1ResultHH());
                                     break;
-                                case "$211$":
-                                    cell.setCellValue(protocol.getE1UBHHH());
-                                    break;
-                                case "$212$":
-                                    cell.setCellValue(protocol.getE1R15BHHH());
-                                    break;
-                                case "$213$":
-                                    cell.setCellValue(protocol.getE1R60BHHH());
-                                    break;
-                                case "$214$":
-                                    cell.setCellValue(protocol.getE1CoefBHHH());
-                                    break;
-                                case "$215$":
-                                    cell.setCellValue(protocol.getE1ResultBHHH());
-                                    break;
                                 case "$1$":
                                     cell.setCellValue(protocol.getE2WindingBH());
                                     break;

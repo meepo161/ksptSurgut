@@ -25,7 +25,7 @@ import static ru.avem.ksptsurgut.utils.Utils.sleep;
 import static ru.avem.ksptsurgut.utils.View.setDeviceState;
 
 public class Experiment5ControllerPhase3 extends AbstractExperiment {
-    private static final int WIDDING380 = 381;
+    private static final int WIDDING380 = 401;
     private static final double STATE_1_TO_5_MULTIPLIER = 0.2;
     private static final double STATE_10_TO_5_MULTIPLIER = 2.0;
     private static final double STATE_50_TO_5_MULTIPLIER = 10.0;
@@ -49,12 +49,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     private TableColumn<Experiment5ModelPhase3, String> tableColumnIBPercent;
     @FXML
     private TableColumn<Experiment5ModelPhase3, String> tableColumnICPercent;
-    @FXML
-    private TableColumn<Experiment5ModelPhase3, String> tableColumnIADiff;
-    @FXML
-    private TableColumn<Experiment5ModelPhase3, String> tableColumnIBDiff;
-    @FXML
-    private TableColumn<Experiment5ModelPhase3, String> tableColumnICDiff;
     @FXML
     private TableColumn<Experiment5ModelPhase3, String> tableColumnPP;
     @FXML
@@ -116,9 +110,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         tableColumnIAPercent.setCellValueFactory(cellData -> cellData.getValue().IADiffProperty());
         tableColumnIBPercent.setCellValueFactory(cellData -> cellData.getValue().IBDiffProperty());
         tableColumnICPercent.setCellValueFactory(cellData -> cellData.getValue().ICDiffProperty());
-        tableColumnIADiff.setCellValueFactory(cellData -> cellData.getValue().IAPercentProperty());
-        tableColumnIBDiff.setCellValueFactory(cellData -> cellData.getValue().IBPercentProperty());
-        tableColumnICDiff.setCellValueFactory(cellData -> cellData.getValue().ICPercentProperty());
         tableColumnPP.setCellValueFactory(cellData -> cellData.getValue().PProperty());
         tableColumnF.setCellValueFactory(cellData -> cellData.getValue().FProperty());
         tableColumnCOS.setCellValueFactory(cellData -> cellData.getValue().COSProperty());
@@ -175,8 +166,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
-                    "Подключите кабели ОИ к НН.\n" +
+            showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
                     "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
@@ -198,8 +188,11 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isOwenPRResponding) {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
+            }
+
+            if (isExperimentRunning && isOwenPRResponding && !isStartButtonOn) {
                 Platform.runLater(() -> {
-                    Toast.makeText("Нажмите пуск").show(Toast.ToastType.WARNING);
+                    Toast.makeText("Нажмите <ПУСК> кнопочного поста").show(Toast.ToastType.WARNING);
                 });
             }
 
@@ -225,7 +218,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                     communicationModel.onKM15();
                     communicationModel.onKM3();
                     communicationModel.onKM47();
-//                    sleep(1000000000);
                     appendOneMessageToLog("Собрана схема для испытания трансформатора с HH до 380В");
                 } else {
                     communicationModel.offAllKms();
@@ -270,7 +262,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         sleep(100);
 
         communicationModel.offAllKms();
-        communicationModel.offDO3();
         communicationModel.deinitPR();
         communicationModel.finalizeAllDevices();
 
@@ -396,13 +387,13 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         break;
                     case OwenPRModel.PRI2_FIXED:
                         isCurrentOI = (boolean) value;
-                        if (!isCurrentOI) {
+                        if (isCurrentOI) {
                             setCause("токовая защита ОИ");
                         }
                         break;
                     case OwenPRModel.PRI3_FIXED:
                         isDoorSHSO = (boolean) value;
-                        if (!isDoorSHSO) {
+                        if (isDoorSHSO) {
                             setCause("открыты двери ШСО");
                         }
                         break;
@@ -417,7 +408,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                         break;
                     case OwenPRModel.PRI7_FIXED:
                         isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
+                        if (isDoorZone) {
                             setCause("открыты двери зоны");
                         }
                         break;
@@ -445,9 +436,9 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                                 experiment5ModelPhase3.setIA(iAString);
                                 iAPercentD = Ixx / iA;
                                 String iAPercent = formatRealNumber(iAPercentD);
-                                experiment5ModelPhase3.setIAPercent(iAPercent);
                                 String iADiff = formatRealNumber(IxxPercent - iAPercentD);
-                                experiment5ModelPhase3.setIADiff(iADiff);
+                                experiment5ModelPhase3.setIAPercent(iADiff);
+                                experiment5ModelPhase3.setIADiff(iAPercent);
                             }
                         }
                         break;
@@ -466,9 +457,9 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                                 experiment5ModelPhase3.setIB(iBString);
                                 iBPercentD = Ixx / iB;
                                 String iBPercent = formatRealNumber(iBPercentD);
-                                experiment5ModelPhase3.setIBPercent(iBPercent);
                                 String iBDiff = formatRealNumber(IxxPercent - iBPercentD);
-                                experiment5ModelPhase3.setIBDiff(iBDiff);
+                                experiment5ModelPhase3.setIBPercent(iBDiff);
+                                experiment5ModelPhase3.setIBDiff(iBPercent);
                             }
                         }
                         break;
@@ -488,15 +479,15 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                                 IAvr = (iA + iB + iC) / 3;
                                 iCPercentD = Ixx / iC;
                                 String iCPercent = formatRealNumber(iCPercentD);
-                                experiment5ModelPhase3.setICPercent(iCPercent);
                                 String iCDiff = formatRealNumber(IxxPercent - iCPercentD);
-                                experiment5ModelPhase3.setICDiff(iCDiff);
+                                experiment5ModelPhase3.setICPercent(iCDiff);
+                                experiment5ModelPhase3.setICDiff(iCPercent);
                             }
                         }
                         break;
                     case PM130Model.P_PARAM:
                         if (isNeedToRefresh) {
-                            measuringP = (float) value;
+                            measuringP = (float) value * 1000;
                             if (is50AState) {
                                 measuringP *= STATE_50_TO_5_MULTIPLIER;
                             } else if (is10AState) {

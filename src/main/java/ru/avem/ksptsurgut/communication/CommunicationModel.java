@@ -39,7 +39,7 @@ public class CommunicationModel extends Observable implements Observer {
     private static CommunicationModel instance = new CommunicationModel();
 
     private Connection RS485Connection;
-    private Connection CP2000Connection;
+    private Connection MeggerConnection;
 
     public OwenPRController owenPRController;
     public PM130Controller pm130Controller;
@@ -71,8 +71,8 @@ public class CommunicationModel extends Observable implements Observer {
         connectMainBus();
         ModbusController modbusController = new RTUController(RS485Connection);
 
-//        connectCP2000Bus();
-//        ModbusController modbusCP2000 = new RTUController(CP2000Connection);
+        connectMeggerBus();
+//        ModbusController megerController = new RTUController(MeggerConnection);
 
         pm130Controller = new PM130Controller(1, this, modbusController, PM130_ID);
         devicesControllers.add(pm130Controller);
@@ -101,7 +101,7 @@ public class CommunicationModel extends Observable implements Observer {
         trmController = new TRMController(7, this, modbusController, TRM_ID);
         devicesControllers.add(trmController);
 
-        megacsController = new CS02021Controller(MEGACS_ID, this, RS485Connection);
+        megacsController = new CS02021Controller(MEGACS_ID, this, MeggerConnection);
         devicesControllers.add(megacsController);
 
         deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
@@ -116,7 +116,7 @@ public class CommunicationModel extends Observable implements Observer {
                 for (DeviceController deviceController : devicesControllers) {
                     if (deviceController.isNeedToRead()) {
                         if (deviceController instanceof PM130Controller) {
-                            for (int i = 1; i <= 4; i++) {
+                            for (int i = 1; i <= 5; i++) {
                                 deviceController.read(i);
                             }
                         } else if (deviceController instanceof ParmaT400Controller) {
@@ -208,20 +208,20 @@ public class CommunicationModel extends Observable implements Observer {
         }
     }
 
-    private void connectCP2000Bus() {
-        CP2000Connection = new SerialConnection(
-                Constants.Communication.CP2000_DEVICE_NAME,
-                Constants.Communication.BAUDRATE_MAIN,
+    private void connectMeggerBus() {
+        MeggerConnection = new SerialConnection(
+                Constants.Communication.MEGGER_RS485,
+                Constants.Communication.BAUDRATE_MEGACS,
                 Constants.Communication.DATABITS,
                 Constants.Communication.STOPBITS,
                 Constants.Communication.PARITY,
                 Constants.Communication.WRITE_TIMEOUT,
                 Constants.Communication.READ_TIMEOUT);
         Logger.withTag("DEBUG_TAG").log("connectMainBus");
-        if (!CP2000Connection.isInitiatedConnection()) {
+        if (!MeggerConnection.isInitiatedConnection()) {
             Logger.withTag("DEBUG_TAG").log("!isInitiatedMainBus");
-            CP2000Connection.closeConnection();
-            CP2000Connection.initConnection();
+            MeggerConnection.closeConnection();
+            MeggerConnection.initConnection();
         }
     }
 
@@ -390,6 +390,7 @@ public class CommunicationModel extends Observable implements Observer {
     }
 
     public void initExperiment1Devices() {
+        resetTimer();
     }
 
     public void initExperiment2Devices() {

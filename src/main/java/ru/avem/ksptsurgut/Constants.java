@@ -14,7 +14,7 @@ public final class Constants {
 
     public static final class Communication {
         public static final String RS485_DEVICE_NAME = "CP2103 USB to RS-485";
-        public static final String CP2000_DEVICE_NAME = "CP2103 USB to CP2000";
+        public static final String MEGGER_RS485 = "CP2103 USB to Megger";
         public static final int BAUDRATE_MAIN = 38400;
         public static final int BAUDRATE_MEGACS = 9600;
         public static final int DATABITS = UsbSerialPort.DATABITS_8;
@@ -40,12 +40,12 @@ public final class Constants {
     }
 
     public static final class Info {
-        public static final String TITLE = "КСПТ (ООО \"РН-Комсомольский НПЗ\")";
+        public static final String TITLE = "КСПТ (ООО \"СургутНефтеГаз\")";
         public static final String VERSION = "Версия: 1.0.0\n" +
                 "ООО НПП АВЭМ, Новочеркасск\n" +
                 "Разработчик: Сулейманов М.У.\n" +
-                "+79381110516";
-        public static final String DATE = "Дата: 05.07.2019";
+                "+79664444098";
+        public static final String DATE = "Дата: 19.10.2020";
     }
 
     public static final class Formatting {

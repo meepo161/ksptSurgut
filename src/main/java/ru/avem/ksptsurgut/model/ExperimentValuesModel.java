@@ -124,14 +124,6 @@ public class ExperimentValuesModel {
         this.experiment1ModelPhase3HH = experiment1ModelPhase3HH;
     }
 
-    public Experiment1ModelPhase3 getExperiment1ModelPhase3BHHH() {
-        return experiment1ModelPhase3BHHH;
-    }
-
-    public void setExperiment1ModelPhase3BHHH(Experiment1ModelPhase3 experiment1ModelPhase3BHHH) {
-        this.experiment1ModelPhase3BHHH = experiment1ModelPhase3BHHH;
-    }
-
     public Experiment2ModelPhase3 getExperiment2ModelPhase3BH() {
         return experiment2ModelPhase3BH;
     }

@@ -8,6 +8,7 @@ import javafx.scene.control.TableView;
 import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.model.phase3.Experiment1ModelPhase3;
+import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -38,7 +39,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
     private Experiment1ModelPhase3 experiment1ModelPhase3BH = experimentsValuesModel.getExperiment1ModelPhase3BH();
     private Experiment1ModelPhase3 experiment1ModelPhase3HH = experimentsValuesModel.getExperiment1ModelPhase3HH();
-    private Experiment1ModelPhase3 experiment1ModelPhase3BHHH = experimentsValuesModel.getExperiment1ModelPhase3BHHH();
 
     private int uMgr = (int) currentProtocol.getUmeger();
 
@@ -46,8 +46,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     private boolean isBHStarted;
     private boolean isHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b10) > 0;
     private boolean isHHStarted;
-    private boolean isBHHHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b100) > 0;
-    private boolean isBHHHStarted;
 
     @FXML
     public void initialize() {
@@ -61,7 +59,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         tableColumnResultExperiment.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
 
-        tableViewExperimentValues.setItems(FXCollections.observableArrayList(experiment1ModelPhase3BH, experiment1ModelPhase3HH, experiment1ModelPhase3BHHH));
+        tableViewExperimentValues.setItems(FXCollections.observableArrayList(experiment1ModelPhase3BH, experiment1ModelPhase3HH));
         tableViewExperimentValues.setSelectionModel(null);
 
         communicationModel.addObserver(this);
@@ -78,11 +76,9 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         isBHStarted = false;
         isHHStarted = false;
-        isBHHHStarted = false;
 
         experiment1ModelPhase3BH.clearProperties();
         experiment1ModelPhase3HH.clearProperties();
-        experiment1ModelPhase3BHHH.clearProperties();
 
         isOwenPRResponding = true;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
@@ -118,16 +114,11 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                 startHHExperiment();
             }
 
-            if (isBHHHSelected && isExperimentRunning && isDevicesResponding()) {
-                startBHHHExperiment();
-            }
-
             finalizeExperiment();
         }).start();
     }
 
     private void startBHExperiment() {
-        showRequestDialog("Подключите крокодилы мегаомметра к обмотке BH и корпусу. После нажмите <Да>", true);
 
         if (isExperimentRunning) {
             isBHStarted = true;
@@ -137,10 +128,11 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             appendOneMessageToLog(getAccidentsString("Аварии"));
         }
 
-        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
+        if (isExperimentRunning && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = true;
-            sleep(1000);
+            Platform.runLater(() -> {
+                Toast.makeText("Нажмите <ПУСК> кнопочного поста").show(Toast.ToastType.WARNING);
+            });
         }
 
         while (isExperimentRunning && !isStartButtonOn && isDevicesResponding()) {
@@ -149,6 +141,8 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
+            communicationModel.onKM20();
+            communicationModel.onKM21();
             appendOneMessageToLog("Инициализация испытания обмотки BH...");
         }
 
@@ -189,7 +183,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         communicationModel.setCS02021ExperimentRun(false);
 
         if (isExperimentRunning && isDevicesResponding()) {
-            appendMessageToLog("Ожидание разряда.");
+            appendMessageToLog("Ожидание разряда");
         }
 
         experimentTime = 15;
@@ -211,7 +205,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     }
 
     private void startHHExperiment() {
-        showRequestDialog("Подключите крокодилы мегаомметра к обмотке HH и корпусу. После нажмите <Да>", true);
 
         if (isExperimentRunning) {
             isHHStarted = true;
@@ -221,10 +214,11 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             appendOneMessageToLog(getAccidentsString("Аварии"));
         }
 
-        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
+        if (isExperimentRunning && isOwenPRResponding) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = true;
-            sleep(1000);
+            Platform.runLater(() -> {
+                Toast.makeText("Нажмите <ПУСК> кнопочного поста").show(Toast.ToastType.WARNING);
+            });
         }
 
         while (isExperimentRunning && !isStartButtonOn && isDevicesResponding()) {
@@ -234,6 +228,8 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация испытания обмотки HH...");
+            communicationModel.onKM19();
+            communicationModel.onKM22();
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
@@ -268,7 +264,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         communicationModel.setCS02021ExperimentRun(false);
 
         if (isExperimentRunning && isDevicesResponding()) {
-            appendMessageToLog("Ожидание разряда.");
+            appendMessageToLog("Ожидание разряда");
         }
 
         experimentTime = 15;
@@ -287,85 +283,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
         appendMessageToLog("------------------------------------------------\n");
         isHHStarted = false;
-    }
-
-    private void startBHHHExperiment() {
-        showRequestDialog("Подключите крокодилы мегаомметра к обмоткам BH и HH. После нажмите <Да>", true);
-
-        if (isExperimentRunning) {
-            isBHHHStarted = true;
-        }
-
-        if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
-            appendOneMessageToLog(getAccidentsString("Аварии"));
-        }
-
-        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация кнопочного поста...");
-            isStartButtonOn = true;
-            sleep(1000);
-        }
-
-        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding()) {
-            appendOneMessageToLog("Включите кнопочный пост");
-            sleep(1);
-        }
-
-        if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация испытания обмоток BH и HH...");
-        }
-
-        if (isExperimentRunning && isDevicesResponding()) {
-            if (!communicationModel.setUMgr(uMgr)) {
-                setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
-                setCause("Мегер не отвечает на запросы");
-            } else {
-                setDeviceState(deviceStateCircleCS0202, View.DeviceState.RESPONDING);
-            }
-        }
-
-        if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Измерение началось");
-            appendOneMessageToLog("Ожидайте 90 секунд.");
-            appendOneMessageToLog("Формирование напряжения");
-        }
-
-        int experimentTime = 90;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
-            sleep(1000);
-            experiment1ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
-        }
-
-        if (isExperimentRunning && isDevicesResponding()) {
-            float[] data = communicationModel.readDataMgr();
-            experiment1ModelPhase3BHHH.setUr(formatRealNumber(data[1]));
-            experiment1ModelPhase3BHHH.setR15(formatRMrg(data[3]));
-            experiment1ModelPhase3BHHH.setR60(formatRMrg(data[0]));
-            experiment1ModelPhase3BHHH.setCoef(formatRealNumber(data[2]));
-        }
-
-        communicationModel.setCS02021ExperimentRun(false);
-
-        if (isExperimentRunning && isDevicesResponding()) {
-            appendMessageToLog("Ожидание разряда.");
-        }
-
-        experimentTime = 15;
-        while (isExperimentRunning && (experimentTime-- > 0) && isDevicesResponding()) {
-            sleep(1000);
-            experiment1ModelPhase3BHHH.setTime(String.valueOf(experimentTime));
-        }
-
-        if (cause.equals("Мегер не отвечает на запросы")) {
-            appendMessageToLog("Испытание обмоток BH и HH прервано по причине: Мегер не отвечает на запросы");
-            experiment1ModelPhase3BHHH.setResult("Прервано");
-            setCause("");
-        } else if (cause.isEmpty()) {
-            experiment1ModelPhase3BHHH.setResult("Успешно");
-            appendMessageToLog("Испытание обмоток BH и HH завершено успешно");
-        }
-        appendMessageToLog("------------------------------------------------\n");
-        isBHHHStarted = false;
     }
 
     protected void finalizeExperiment() {
@@ -392,13 +309,8 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                     experiment1ModelPhase3HH.setResult("Прервано");
                 }
             }
-            if (isBHHHSelected) {
-                if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
-                    experiment1ModelPhase3BHHH.setResult("Прервано");
-                }
-            }
             appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-        } else if (!isStartButtonOn) {
+        } else if (isStopButton) {
             if (isBHSelected) {
                 if (experiment1ModelPhase3BH.getResult().isEmpty()) {
                     experiment1ModelPhase3BH.setResult("Прервано");
@@ -407,11 +319,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             if (isHHSelected) {
                 if (experiment1ModelPhase3HH.getResult().isEmpty()) {
                     experiment1ModelPhase3HH.setResult("Прервано");
-                }
-            }
-            if (isBHHHSelected) {
-                if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
-                    experiment1ModelPhase3BHHH.setResult("Прервано");
                 }
             }
             appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
@@ -424,11 +331,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             if (isHHSelected) {
                 if (experiment1ModelPhase3HH.getResult().isEmpty()) {
                     experiment1ModelPhase3HH.setResult("Прервано");
-                }
-            }
-            if (isBHHHSelected) {
-                if (experiment1ModelPhase3BHHH.getResult().isEmpty()) {
-                    experiment1ModelPhase3BHHH.setResult("Прервано");
                 }
             }
             appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
@@ -464,12 +366,6 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         currentProtocol.setE1CoefHH(experiment1ModelPhase3HH.getCoef());
         currentProtocol.setE1ResultHH(experiment1ModelPhase3HH.getResult());
 
-        currentProtocol.setE1WindingBHHH(experiment1ModelPhase3BHHH.getWinding());
-        currentProtocol.setE1UBHHH(experiment1ModelPhase3BHHH.getUr());
-        currentProtocol.setE1R15BHHH(experiment1ModelPhase3BHHH.getR15());
-        currentProtocol.setE1R60BHHH(experiment1ModelPhase3BHHH.getR60());
-        currentProtocol.setE1CoefBHHH(experiment1ModelPhase3BHHH.getCoef());
-        currentProtocol.setE1ResultBHHH(experiment1ModelPhase3BHHH.getResult());
     }
 
     @Override
@@ -481,37 +377,37 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         switch (modelId) {
             case PR200_ID:
                 switch (param) {
-//                    case OwenPRModel.RESPONDING_PARAM:
-//                        isOwenPRResponding = (boolean) value;
-//                        setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
-//                        break;
-//                    case OwenPRModel.PRI2_FIXED:
-//                        isCurrentOI = (boolean) value;
-//                        if (isCurrentOI) {
-//                            setCause("токовая защита ОИ");
-//                        }
-//                        break;
-//                    case OwenPRModel.PRI3_FIXED:
-//                        isDoorSHSO = (boolean) value;
-//                        if (isDoorSHSO) {
-//                            setCause("открыты двери ШСО");
-//                        }
-//                        break;
-//                    case OwenPRModel.PRI5_FIXED:
-//                        isStopButton = (boolean) value;
-//                        if (isStopButton) {
-//                            setCause("Нажата кнопка СТОП");
-//                        }
-//                        break;
-//                    case OwenPRModel.PRI6:
-//                        isStartButtonOn = (boolean) value;
-//                        break;
-//                    case OwenPRModel.PRI7_FIXED:
-//                        isDoorZone = (boolean) value;
-//                        if (isDoorZone) {
-//                            setCause("открыты двери зоны");
-//                        }
-//                        break;
+                    case OwenPRModel.RESPONDING_PARAM:
+                        isOwenPRResponding = (boolean) value;
+                        setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
+                        break;
+                    case OwenPRModel.PRI2_FIXED:
+                        isCurrentOI = (boolean) value;
+                        if (!isCurrentOI) {
+                            setCause("токовая защита ОИ");
+                        }
+                        break;
+                    case OwenPRModel.PRI3_FIXED:
+                        isDoorSHSO = (boolean) value;
+                        if (!isDoorSHSO) {
+                            setCause("открыты двери ШСО");
+                        }
+                        break;
+                    case OwenPRModel.PRI5_FIXED:
+                        isStopButton = (boolean) value;
+                        if (isStopButton) {
+                            setCause("Нажата кнопка СТОП");
+                        }
+                        break;
+                    case OwenPRModel.PRI6:
+                        isStartButtonOn = (boolean) value;
+                        break;
+                    case OwenPRModel.PRI7_FIXED:
+                        isDoorZone = (boolean) value;
+                        if (!isDoorZone) {
+                            setCause("открыты двери зоны");
+                        }
+                        break;
                 }
                 break;
         }

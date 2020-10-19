@@ -16,6 +16,7 @@ public class PM130Model extends Observable {
     public static final int S_PARAM = 8;
     public static final int COS_PARAM = 9;
     public static final int F_PARAM = 10;
+    public static final int PT_PARAM = 11;
 
     private int deviceID;
     private boolean readResponding;
@@ -89,6 +90,10 @@ public class PM130Model extends Observable {
 
     void setF(float f) {
         notice(F_PARAM, f);
+    }
+
+    void setPT(float pt) {
+        notice(PT_PARAM, pt);
     }
 
     private void notice(int param, Object value) {

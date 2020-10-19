@@ -30,7 +30,7 @@ public class CS02021Controller implements DeviceController {
 
     public boolean setVoltage(int u) {
         synchronized (LOCK) {
-            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
+//            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
             byte byteU = (byte) (u / 10);
             ByteBuffer outputBuffer = ByteBuffer.allocate(5)
                     .put(address)
@@ -47,14 +47,14 @@ public class CS02021Controller implements DeviceController {
                 frameSize = mConnection.read(inputArray);
                 inputBuffer.put(inputArray, 0, frameSize);
             } while (inputBuffer.position() < 5 && (++attempt < 10));
-            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
+//            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
             return frameSize > 0;
         }
     }
 
     public float[] readData() {
         synchronized (LOCK) {
-            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
+//            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
             float[] data = new float[4];
             ByteBuffer outputBuffer = ByteBuffer.allocate(5)
                     .put(address)
@@ -105,14 +105,14 @@ public class CS02021Controller implements DeviceController {
                 data[2] = finalBuffer.getFloat();
                 data[3] = finalBuffer.getFloat();
             }
-            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
+//            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
             return data;
         }
     }
 
     private boolean isResponding() {
         synchronized (LOCK) {
-            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
+//            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MEGACS);
             ByteBuffer outputBuffer = ByteBuffer.allocate(5)
                     .put(address)
                     .put((byte) 0x07)
@@ -132,7 +132,7 @@ public class CS02021Controller implements DeviceController {
                 int frameSize = mConnection.read(inputArray);
                 inputBuffer.put(inputArray, 0, frameSize);
             } while (inputBuffer.position() < 16 && (++attempt < 15));
-            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
+//            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
             return inputBuffer.position() >= 16;
         }
     }

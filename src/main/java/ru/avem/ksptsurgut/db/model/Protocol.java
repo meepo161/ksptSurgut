@@ -44,21 +44,6 @@ public class Protocol {
     private String e1ResultHH = "";
 
     @DatabaseField
-    private String e1WindingBHHH = "";
-    @DatabaseField
-    private String e1UBHHH = "";
-    @DatabaseField
-    private String e1R15BHHH = "";
-    @DatabaseField
-    private String e1R60BHHH = "";
-    @DatabaseField
-    private String e1CoefBHHH = "";
-    @DatabaseField
-    private String e1TBHHH = "";
-    @DatabaseField
-    private String e1ResultBHHH = "";
-
-    @DatabaseField
     private String e2WindingBH = "";
     @DatabaseField
     private String e2ABBH = "";
@@ -410,62 +395,6 @@ public class Protocol {
 
     public void setE1ResultHH(String e1ResultHH) {
         this.e1ResultHH = e1ResultHH;
-    }
-
-    public String getE1WindingBHHH() {
-        return e1WindingBHHH;
-    }
-
-    public void setE1WindingBHHH(String e1WindingBHHH) {
-        this.e1WindingBHHH = e1WindingBHHH;
-    }
-
-    public String getE1UBHHH() {
-        return e1UBHHH;
-    }
-
-    public void setE1UBHHH(String e1UBHHH) {
-        this.e1UBHHH = e1UBHHH;
-    }
-
-    public String getE1R15BHHH() {
-        return e1R15BHHH;
-    }
-
-    public void setE1R15BHHH(String e1R15BHHH) {
-        this.e1R15BHHH = e1R15BHHH;
-    }
-
-    public String getE1R60BHHH() {
-        return e1R60BHHH;
-    }
-
-    public void setE1R60BHHH(String e1R60BHHH) {
-        this.e1R60BHHH = e1R60BHHH;
-    }
-
-    public String getE1CoefBHHH() {
-        return e1CoefBHHH;
-    }
-
-    public void setE1CoefBHHH(String e1CoefBHHH) {
-        this.e1CoefBHHH = e1CoefBHHH;
-    }
-
-    public String getE1TBHHH() {
-        return e1TBHHH;
-    }
-
-    public void setE1TBHHH(String e1TBHHH) {
-        this.e1TBHHH = e1TBHHH;
-    }
-
-    public String getE1ResultBHHH() {
-        return e1ResultBHHH;
-    }
-
-    public void setE1ResultBHHH(String e1ResultBHHH) {
-        this.e1ResultBHHH = e1ResultBHHH;
     }
 
     public String getE2WindingBH() {
@@ -1167,13 +1096,6 @@ public class Protocol {
                 Objects.equals(e1CoefHH, protocol.e1CoefHH) &&
                 Objects.equals(e1THH, protocol.e1THH) &&
                 Objects.equals(e1ResultHH, protocol.e1ResultHH) &&
-                Objects.equals(e1WindingBHHH, protocol.e1WindingBHHH) &&
-                Objects.equals(e1UBHHH, protocol.e1UBHHH) &&
-                Objects.equals(e1R15BHHH, protocol.e1R15BHHH) &&
-                Objects.equals(e1R60BHHH, protocol.e1R60BHHH) &&
-                Objects.equals(e1CoefBHHH, protocol.e1CoefBHHH) &&
-                Objects.equals(e1TBHHH, protocol.e1TBHHH) &&
-                Objects.equals(e1ResultBHHH, protocol.e1ResultBHHH) &&
                 Objects.equals(e2WindingBH, protocol.e2WindingBH) &&
                 Objects.equals(e2ABBH, protocol.e2ABBH) &&
                 Objects.equals(e2BCBH, protocol.e2BCBH) &&
@@ -1254,6 +1176,6 @@ public class Protocol {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, e1WindingBH, e1UBH, e1R15BH, e1R60BH, e1CoefBH, e1TBH, e1ResultBH, e1WindingHH, e1UHH, e1R15HH, e1R60HH, e1CoefHH, e1THH, e1ResultHH, e1WindingBHHH, e1UBHHH, e1R15BHHH, e1R60BHHH, e1CoefBHHH, e1TBHHH, e1ResultBHHH, e2WindingBH, e2ABBH, e2BCBH, e2CABH, e2TBH, e2ResultBH, e2WindingHH, e2ABHH, e2BCHH, e2CAHH, e2THH, e2ResultHH, e3UInputAB, e3UInputBC, e3UInputCA, e3UInputAvr, e3UOutputAB, e3UOutputBC, e3UOutputCA, e3UOutputAvr, e3DiffU, e3WindingBH, e3WindingHH, e3F, e3Result, e4UKZV, e4UKZPercent, e4UKZDiff, e4IA, e4IB, e4IC, e4Pp, e4F, e4Result, e5UBH, e5IA, e5IB, e5IC, e5IAPercent, e5IBPercent, e5ICPercent, e5IADiff, e5IBDiff, e5ICDiff, e5Pp, e5Cos, e5F, e5Result, e6UInput, e6IBH, e6F, e6Time, e6Result, e7TypeBHandCorps, e7UBHandCorps, e7IBHandCorps, e7UGiven, e7UBHAvem, e7TimeBHandCorps, e7ResultBHandCorps, e7TypeHHandCorps, e7IHHandCorps, e7UHHandCorps, e7UHHAvem, e7TimeHHandCorps, e7ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
+        return Objects.hash(id, e1WindingBH, e1UBH, e1R15BH, e1R60BH, e1CoefBH, e1TBH, e1ResultBH, e1WindingHH, e1UHH, e1R15HH, e1R60HH, e1CoefHH, e1THH, e1ResultHH, e2WindingBH, e2ABBH, e2BCBH, e2CABH, e2TBH, e2ResultBH, e2WindingHH, e2ABHH, e2BCHH, e2CAHH, e2THH, e2ResultHH, e3UInputAB, e3UInputBC, e3UInputCA, e3UInputAvr, e3UOutputAB, e3UOutputBC, e3UOutputCA, e3UOutputAvr, e3DiffU, e3WindingBH, e3WindingHH, e3F, e3Result, e4UKZV, e4UKZPercent, e4UKZDiff, e4IA, e4IB, e4IC, e4Pp, e4F, e4Result, e5UBH, e5IA, e5IB, e5IC, e5IAPercent, e5IBPercent, e5ICPercent, e5IADiff, e5IBDiff, e5ICDiff, e5Pp, e5Cos, e5F, e5Result, e6UInput, e6IBH, e6F, e6Time, e6Result, e7TypeBHandCorps, e7UBHandCorps, e7IBHandCorps, e7UGiven, e7UBHAvem, e7TimeBHandCorps, e7ResultBHandCorps, e7TypeHHandCorps, e7IHHandCorps, e7UHHandCorps, e7UHHAvem, e7TimeHHandCorps, e7ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
     }
 }
