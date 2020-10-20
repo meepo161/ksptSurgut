@@ -24,10 +24,8 @@ import static ru.avem.ksptsurgut.utils.Utils.openFile;
 public class ProtocolEditorController {
     @FXML
     private AnchorPane root;
-
     @FXML
     private TextField filterField;
-
     @FXML
     private TableView<Protocol> tableProtocols;
     @FXML

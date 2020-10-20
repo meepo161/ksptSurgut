@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
+import ru.avem.ksptsurgut.Constants;
 import ru.avem.ksptsurgut.communication.devices.ikas.IKASModel;
 import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.communication.devices.trm.TRMModel;
@@ -34,6 +36,8 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
     private TableColumn<Experiment2ModelPhase3, String> tableColumnTemperature;
     @FXML
     private TableColumn<Experiment2ModelPhase3, String> tableColumnResultExperiment;
+    @FXML
+    private VBox vBoxLog;
 
     private Experiment2ModelPhase3 Experiment2ModelPhase3BH = experimentsValuesModel.getExperiment2ModelPhase3BH();
     private Experiment2ModelPhase3 Experiment2ModelPhase3HH = experimentsValuesModel.getExperiment2ModelPhase3HH();
@@ -61,8 +65,8 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
 
         tableViewExperimentValues.setItems(FXCollections.observableArrayList(Experiment2ModelPhase3BH, Experiment2ModelPhase3HH));
         tableViewExperimentValues.setSelectionModel(null);
-
         communicationModel.addObserver(this);
+        scrollPaneLog.vvalueProperty().bind(vBoxLog.heightProperty());
     }
 
     @Override
@@ -98,14 +102,14 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
     protected void runExperiment() {
         new Thread(() -> {
             if (isExperimentRunning) {
-                appendOneMessageToLog("Начало испытания");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment2Devices();
                 sleep(2000);
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
+                appendOneMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
                 communicationModel.initExperiment2Devices();
             }
@@ -129,7 +133,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                         Experiment2ModelPhase3HH.setResult("Прервано");
                     }
                 }
-                appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
+                appendMessageToLog(Constants.LogTag.RED, String.format("Испытание прервано по причине: %s", cause));
             } else if (!isStartButtonOn) {
                 if (isBHSelected) {
                     if (Experiment2ModelPhase3BH.getResult().isEmpty()) {
@@ -141,7 +145,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                         Experiment2ModelPhase3HH.setResult("Прервано");
                     }
                 }
-                appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
+                appendMessageToLog(Constants.LogTag.RED, "Испытание прервано по причине: нажали кнопку <Стоп>");
             } else if (!isDevicesResponding()) {
                 if (isBHSelected) {
                     if (Experiment2ModelPhase3BH.getResult().isEmpty()) {
@@ -153,95 +157,92 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                         Experiment2ModelPhase3HH.setResult("Прервано");
                     }
                 }
-                appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+                appendMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
             }
-            appendMessageToLog("------------------------------------------------\n");
 
             finalizeExperiment();
         }).start();
     }
 
     private void startBHExperiment() {
-        showRequestDialog("Подключите крокодилы ИКАС к обмотке BH. После нажмите <Да>");
-
         if (isExperimentRunning) {
             isBHStarted = true;
         }
 
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
-            appendOneMessageToLog(getAccidentsString("Аварии"));
+            appendOneMessageToLog(Constants.LogTag.RED, getAccidentsString("Аварии"));
         }
 
         if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация кнопочного поста...");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация кнопочного поста...");
             isStartButtonOn = false;
             sleep(1000);
         }
 
-        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding()) {
-            appendOneMessageToLog("Включите кнопочный пост");
-            sleep(1);
+        if (isExperimentRunning) {
+            appendOneMessageToLog(Constants.LogTag.ORANGE, "Включите кнопочный пост");
+            showInformDialogForButtonPost("Нажмите <ПУСК> кнопочного поста");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация испытания обмотки BH...");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация испытания обмотки BH...");
             communicationModel.onKM10();
             communicationModel.onKM16();
             communicationModel.onKM17();
         }
 
-        while (isExperimentRunning && isDevicesResponding()&& (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока ИКАС подготовится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Начало измерения обмотки AB");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Начало измерения обмотки AB");
             communicationModel.startMeasuringAB();
             sleep(2000);
         }
 
         while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока 1 измерение закончится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
-            appendOneMessageToLog("Измерение обмотки AB завершено");
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Измерение обмотки AB завершено");
             Experiment2ModelPhase3BH.setAB(measuringR);
 
-            appendOneMessageToLog("Начало измерения обмотки BC");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Начало измерения обмотки BC");
             communicationModel.startMeasuringBC();
             sleep(2000);
         }
-        while (isExperimentRunning && isDevicesResponding()&& (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока 2 измерение закончится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
-            appendOneMessageToLog("Измерение обмотки BC завершено");
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Измерение обмотки BC завершено");
             Experiment2ModelPhase3BH.setBC(measuringR);
 
-            appendOneMessageToLog("Начало измерения обмотки AC");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Начало измерения обмотки AC");
             communicationModel.startMeasuringAC();
             sleep(2000);
         }
 
-        while (isExperimentRunning && isDevicesResponding()&& (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+        while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока 3 измерение закончится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
-            appendOneMessageToLog("Измерение обмотки AC завершено");
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Измерение обмотки AC завершено");
             Experiment2ModelPhase3BH.setAC(measuringR);
         }
 
-        appendOneMessageToLog("Конец испытания обмотки BH\n_______________________________________________________");
+        appendOneMessageToLog(Constants.LogTag.GREEN, "Конец испытания обмотки BH");
         communicationModel.offAllKms();
 
         if (isExperimentRunning && isDevicesResponding()) {
@@ -259,8 +260,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                     Experiment2ModelPhase3BH.setResult("Успешно");
                 } else {
                     Experiment2ModelPhase3BH.setResult("Расхождение");
-                    appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
-                            "_______________________________________________________");
+                    appendOneMessageToLog(Constants.LogTag.RED, "Измеренные сопротивления отличаются между собой более чем на 2%");
                 }
             } catch (NumberFormatException e) {
                 Experiment2ModelPhase3BH.setResult("Обрыв");
@@ -270,30 +270,28 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
     }
 
     private void startHHExperiment() {
-        showRequestDialog("Подключите крокодилы ИКАС к обмотке HH. После нажмите <Да>");
-
         if (isExperimentRunning) {
             isHHStarted = true;
         }
 
         if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
-            appendOneMessageToLog(getAccidentsString("Аварии"));
+            appendOneMessageToLog(Constants.LogTag.RED, getAccidentsString("Аварии"));
         }
 
         if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация кнопочного поста...");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация кнопочного поста...");
 //            isStartButtonOn = false;
             isStartButtonOn = true;
             sleep(1000);
         }
 
-        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding()) {
-            appendOneMessageToLog("Включите кнопочный пост");
-            sleep(1);
+        if (isExperimentRunning) {
+            appendOneMessageToLog(Constants.LogTag.ORANGE, "Включите кнопочный пост");
+            showInformDialogForButtonPost("Нажмите <ПУСК> кнопочного поста");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Инициализация испытания обмотки HH...");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация испытания обмотки HH...");
             communicationModel.onKM11();
             communicationModel.onKM16();
             communicationModel.onKM18();
@@ -301,56 +299,56 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
 
         while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока ИКАС подготовится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
-            appendOneMessageToLog("Начало измерения обмотки AB");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Начало измерения обмотки AB");
             communicationModel.startMeasuringAB();
             sleep(2000);
         }
 
         while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока 1 измерение закончится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
-            appendOneMessageToLog("Измерение обмотки AB завершено");
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Измерение обмотки AB завершено");
             Experiment2ModelPhase3HH.setAB(measuringR);
 
-            appendOneMessageToLog("Начало измерения обмотки BC");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Начало измерения обмотки BC");
             communicationModel.startMeasuringBC();
             sleep(2000);
         }
         while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока 2 измерение закончится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
-            appendOneMessageToLog("Измерение обмотки BC завершено");
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Измерение обмотки BC завершено");
             Experiment2ModelPhase3HH.setBC(measuringR);
 
-            appendOneMessageToLog("Начало измерения обмотки AC");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Начало измерения обмотки AC");
             communicationModel.startMeasuringAC();
             sleep(2000);
         }
 
         while (isExperimentRunning && isDevicesResponding() && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
             sleep(100);
-            appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Ожидаем, пока 3 измерение закончится");
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
             sleep(500);
-            appendOneMessageToLog("Измерение обмотки AC завершено");
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Измерение обмотки AC завершено");
             Experiment2ModelPhase3HH.setAC(measuringR);
         }
 
-        appendOneMessageToLog("Конец испытания обмотки HH\n_______________________________________________________");
+        appendOneMessageToLog(Constants.LogTag.GREEN, "Конец испытания обмотки HH");
         communicationModel.offAllKms();
 
         if (isExperimentRunning && isDevicesResponding()) {
@@ -368,8 +366,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                     Experiment2ModelPhase3HH.setResult("Успешно");
                 } else {
                     Experiment2ModelPhase3HH.setResult("Расхождение");
-                    appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
-                            "_______________________________________________________");
+                    appendOneMessageToLog(Constants.LogTag.RED, "Измеренные сопротивления отличаются между собой более чем на 2%");
                 }
             } catch (NumberFormatException e) {
                 Experiment2ModelPhase3HH.setResult("Обрыв");
@@ -380,7 +377,6 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void finalizeExperiment() {
-        appendOneMessageToLog("После завершения опыта не забудьте отсоединить провода от ИКАС");
         communicationModel.offAllKms();
         communicationModel.deinitPR();
         communicationModel.finalizeAllDevices();
@@ -424,6 +420,20 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
         currentProtocol.setE2CAHH(Experiment2ModelPhase3HH.getAC());
         currentProtocol.setE2THH(Experiment2ModelPhase3HH.getTemperature());
         currentProtocol.setE2ResultHH(Experiment2ModelPhase3HH.getResult());
+//
+//        currentProtocol.setE2WindingBH("1");
+//        currentProtocol.setE2ABBH("2");
+//        currentProtocol.setE2BCBH("3");
+//        currentProtocol.setE2CABH("4");
+//        currentProtocol.setE2TBH("5");
+//        currentProtocol.setE2ResultBH("6");
+//
+//        currentProtocol.setE2WindingHH("7");
+//        currentProtocol.setE2ABHH("8");
+//        currentProtocol.setE2BCHH("9");
+//        currentProtocol.setE2CAHH("10");
+//        currentProtocol.setE2THH("11");
+//        currentProtocol.setE2ResultHH("12");
     }
 
     @Override
@@ -441,13 +451,13 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                         break;
                     case OwenPRModel.PRI2_FIXED:
                         isCurrentOI = (boolean) value;
-                        if (!isCurrentOI) {
-                            setCause("токовая защита ОИ");
+                        if (isCurrentOI) {
+                            setCause("токовая защита ОИ\nВозможная причина: неисправность объекта испытания");
                         }
                         break;
                     case OwenPRModel.PRI3_FIXED:
                         isDoorSHSO = (boolean) value;
-                        if (!isDoorSHSO) {
+                        if (isDoorSHSO) {
                             setCause("открыты двери ШСО");
                         }
                         break;
@@ -462,7 +472,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                         break;
                     case OwenPRModel.PRI7_FIXED:
                         isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
+                        if (isDoorZone) {
                             setCause("открыты двери зоны");
                         }
                         break;

@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<AnchorPane fx:id="root" prefHeight="429.0" prefWidth="617.0" stylesheets="@../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptsurgut.controllers.RegisterWindowController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="root" stylesheets="@../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptsurgut.controllers.RegisterWindowController">
     <children>
       <VBox alignment="TOP_CENTER" layoutX="295.0" layoutY="14.0" spacing="16.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -18,13 +25,13 @@
                   <VBox>
                      <children>
                   
-                          <TableView fx:id="tableProfiles" prefHeight="526.0" prefWidth="248.0">
+                          <TableView fx:id="tableProfiles" prefHeight="526.0" prefWidth="500.0">
                               <placeholder>
                                   <Label text="${'ОСТОРОЖНО!!! \nДобавьте хотя бы 1 профиль!'}" />
                               </placeholder>
                               <columns>
-                                  <TableColumn fx:id="columnProfilesLogin" prefWidth="75.0" text="Логин" />
-                                  <TableColumn fx:id="columnProfilesFullName" prefWidth="75.0" text="ФИО" />
+                                  <TableColumn fx:id="columnProfilesLogin" prefWidth="150.0" text="Логин" />
+                                  <TableColumn fx:id="columnProfilesFullName" prefWidth="150.0" text="ФИО" />
                               </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -1,14 +1,23 @@
 package ru.avem.ksptsurgut.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextArea;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import ru.avem.ksptsurgut.Main;
 import ru.avem.ksptsurgut.communication.CommunicationModel;
 import ru.avem.ksptsurgut.db.model.Protocol;
 import ru.avem.ksptsurgut.model.ExperimentValuesModel;
+import ru.avem.ksptsurgut.utils.AlertController;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,7 +36,9 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     @FXML
     protected JFXButton buttonNext;
     @FXML
-    protected JFXTextArea textAreaExperimentProcessLog;
+    protected VBox vBoxLog;
+    @FXML
+    protected ScrollPane scrollPaneLog;
 
     protected CommunicationModel communicationModel = CommunicationModel.getInstance();
     protected ExperimentValuesModel experimentsValuesModel = ExperimentValuesModel.getInstance();
@@ -103,31 +114,48 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
         }
     }
 
-    protected void showStartDialog(String request) {
+    protected void showInformDialogForButtonPost(String informMessage) {
         if (isExperimentRunning) {
+            AtomicBoolean isReallyCanceled = new AtomicBoolean(false);
             AtomicBoolean isPressed = new AtomicBoolean(false);
-            Platform.runLater(() -> {
-                View.showConfirmDialog(request,
-                        () -> isPressed.set(true),
-                        () -> setCause("Отменено оператором"));
-            });
+            Platform.runLater(() -> AlertController.showConfirmDialog(
+                    "ВНИМАНИЕ",
+                    informMessage,
+                    "",
+                    null,
+                    "Отмена",
+                    () -> {
+                        if (!isReallyCanceled.get()) {
+                            setCause("Испытание остановлено оператором");
+                            isPressed.set(true);
+                        }
+                    }));
 
-            while (!isStartButtonOn) {
-                sleep(100);
+            while (!isPressed.get() && !isStartButtonOn) {
+                sleep(10);
             }
+            isReallyCanceled.set(true);
+            Platform.runLater(() -> AlertController.getAlert().close());
         }
     }
 
-    protected void appendOneMessageToLog(String message) {
+    protected void clearLog() {
+        Platform.runLater(() -> vBoxLog.getChildren().clear());
+    }
+
+    protected void appendMessageToLog(String tag, String message) {
+        Text msg = new Text(EXPERIMENT_FORMAT.format(System.currentTimeMillis()) + " | " + message);
+        msg.setStyle("-fx-fill:" + tag + ";" + "; -fx-font-size: 24;");/* + tag + ";");*/
+//        msg.setStyle("-fx-font-size: 24;");
+        Platform.runLater(() ->
+                vBoxLog.getChildren().add(msg));
+    }
+
+    protected void appendOneMessageToLog(String tag, String message) {
         if (logBuffer == null || !logBuffer.equals(message)) {
             logBuffer = message;
-            appendMessageToLog(message);
+            appendMessageToLog(tag, message);
         }
-    }
-
-    protected void appendMessageToLog(String message) {
-        Platform.runLater(() -> textAreaExperimentProcessLog.appendText(String.format("%s | %s\n",
-                EXPERIMENT_FORMAT.format(System.currentTimeMillis()), message)));
     }
 
     protected boolean isThereAreAccidents() {

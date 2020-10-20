@@ -46,10 +46,6 @@ public class LoginController {
                 foundAccount = account;
                 if (password.equals((account.getPassword()))) {
                     Account secondTesterAccount = secondTester.getSelectionModel().getSelectedItem();
-                    if (secondTesterAccount == null) {
-                        Toast.makeText("Выберите второго испытателя").show(Toast.ToastType.WARNING);
-                        return;
-                    }
                     if (account.equals(secondTesterAccount) && allAccounts.size() > 1) {
                         Toast.makeText("Первый и второй испытатель не могут быть одним и тем же лицом").show(Toast.ToastType.WARNING);
                         return;

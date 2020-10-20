@@ -45,13 +45,6 @@ public class TestItemEditorController {
 
     @FXML
     private TextField textTestItemP;
-
-    @FXML
-    private TextField textTestItemIxx;
-
-    @FXML
-    private TextField textTestItemUkz;
-
     @FXML
     private TextField textTestItemXXTime;
 
@@ -70,12 +63,6 @@ public class TestItemEditorController {
 
     @FXML
     private TableColumn<TestItem, Double> columnTestItemP;
-
-    @FXML
-    private TableColumn<TestItem, Double> columnTestItemIxx;
-
-    @FXML
-    private TableColumn<TestItem, Double> columnTestItemUkz;
 
     @FXML
     private TableColumn<TestItem, Double> columnTestItemXXTime;
@@ -127,25 +114,6 @@ public class TestItemEditorController {
                     experimentsValuesModel.setNeedRefresh(true);
                 }
         );
-        columnTestItemIxx.setCellValueFactory(new PropertyValueFactory<>("ixx"));
-        columnTestItemIxx.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        columnTestItemIxx.setOnEditCommit(t -> {
-                    TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    editingTestItem.setIxx(t.getNewValue());
-                    TestItemRepository.updateTestItem(editingTestItem);
-                    experimentsValuesModel.setNeedRefresh(true);
-                }
-        );
-
-        columnTestItemUkz.setCellValueFactory(new PropertyValueFactory<>("ukz"));
-        columnTestItemUkz.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        columnTestItemUkz.setOnEditCommit(t -> {
-                    TestItem editingTestItem = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    editingTestItem.setUkz(t.getNewValue());
-                    TestItemRepository.updateTestItem(editingTestItem);
-                    experimentsValuesModel.setNeedRefresh(true);
-                }
-        );
 
         columnTestItemXXTime.setCellValueFactory(new PropertyValueFactory<>("xxtime"));
         columnTestItemXXTime.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
@@ -182,8 +150,6 @@ public class TestItemEditorController {
                     Double.parseDouble(textTestItemUBH.getText()),
                     Double.parseDouble(textTestItemUHH.getText()),
                     Double.parseDouble(textTestItemP.getText()),
-                    Double.parseDouble(textTestItemIxx.getText()),
-                    Double.parseDouble(textTestItemUkz.getText()),
                     Double.parseDouble(textTestItemXXTime.getText()),
                     Double.parseDouble(textTestItemUMeger.getText()));
             TestItemRepository.insertTestItem(testItem);
@@ -227,12 +193,6 @@ public class TestItemEditorController {
         }
         if (textTestItemP.getText() == null || textTestItemP.getText().length() == 0 || Integer.parseInt(textTestItemP.getText()) < 0) {
             errorMessage += "Неверное значение P\n";
-        }
-        if (textTestItemIxx.getText() == null || textTestItemIxx.getText().length() == 0 || Integer.parseInt(textTestItemIxx.getText()) < 0 || Integer.parseInt(textTestItemIxx.getText()) > 100) {
-            errorMessage += "Неверное значение Ixx\n";
-        }
-        if (textTestItemUkz.getText() == null || textTestItemUkz.getText().length() == 0 || Integer.parseInt(textTestItemUkz.getText()) < 0 || Integer.parseInt(textTestItemUkz.getText()) > 100) {
-            errorMessage += "Неверное значение Ukz\n";
         }
         if (textTestItemXXTime.getText() == null || textTestItemXXTime.getText().length() == 0 || Integer.parseInt(textTestItemXXTime.getText()) < 0) {
             errorMessage += "Неверное значение xxTime\n";

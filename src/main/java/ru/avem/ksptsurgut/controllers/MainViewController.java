@@ -188,14 +188,12 @@ public class MainViewController implements Statable {
                     resultData.add(new ResultModel("R15", currentProtocol.getE1R15BH()));
                     resultData.add(new ResultModel("R60", currentProtocol.getE1R60BH()));
                     resultData.add(new ResultModel("Коэф", currentProtocol.getE1CoefBH()));
-                    resultData.add(new ResultModel("t, °С", currentProtocol.getE1TBH()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE1ResultBH()));
 
                     resultData.add(new ResultModel("ВН и корпус", currentProtocol.getE1WindingHH()));
                     resultData.add(new ResultModel("R15", currentProtocol.getE1R15HH()));
                     resultData.add(new ResultModel("R60", currentProtocol.getE1R60HH()));
                     resultData.add(new ResultModel("Коэф", currentProtocol.getE1CoefHH()));
-                    resultData.add(new ResultModel("t, °С", currentProtocol.getE1THH()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE1ResultHH()));
 
                     break;
@@ -217,14 +215,14 @@ public class MainViewController implements Statable {
                     break;
                 case Constants.Experiments.EXPERIMENT3_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("Uвых AB, В", currentProtocol.getE3UOutputAB()));
-                    resultData.add(new ResultModel("Uвых BC, В", currentProtocol.getE3UOutputBC()));
-                    resultData.add(new ResultModel("Uвых CA, В", currentProtocol.getE3UOutputCA()));
-                    resultData.add(new ResultModel("Uвых среднее, В", currentProtocol.getE3UOutputAvr()));
                     resultData.add(new ResultModel("Uвх AB, В", currentProtocol.getE3UInputAB()));
                     resultData.add(new ResultModel("Uвх BC, В", currentProtocol.getE3UInputBC()));
                     resultData.add(new ResultModel("Uвх CA, В", currentProtocol.getE3UInputCA()));
                     resultData.add(new ResultModel("Uвх среднее, В", currentProtocol.getE3UInputAvr()));
+                    resultData.add(new ResultModel("Uвых AB, В", currentProtocol.getE3UOutputAB()));
+                    resultData.add(new ResultModel("Uвых BC, В", currentProtocol.getE3UOutputBC()));
+                    resultData.add(new ResultModel("Uвых CA, В", currentProtocol.getE3UOutputCA()));
+                    resultData.add(new ResultModel("Uвых среднее, В", currentProtocol.getE3UOutputAvr()));
                     resultData.add(new ResultModel("Uвых/Uвх, В", currentProtocol.getE3DiffU()));
                     resultData.add(new ResultModel("Группа соединений BH", currentProtocol.getE3WindingBH()));
                     resultData.add(new ResultModel("Группа соединений HH", currentProtocol.getE3WindingHH()));
@@ -233,7 +231,9 @@ public class MainViewController implements Statable {
                     break;
                 case Constants.Experiments.EXPERIMENT4_NAME:
                     resultData.clear();
-                    resultData.add(new ResultModel("U КЗ, В", currentProtocol.getE4UKZV()));
+                    resultData.add(new ResultModel("U A КЗ, В", currentProtocol.getE4UKZVA()));
+                    resultData.add(new ResultModel("U B КЗ, В", currentProtocol.getE4UKZVB()));
+                    resultData.add(new ResultModel("U C КЗ, В", currentProtocol.getE4UKZVC()));
                     resultData.add(new ResultModel("U КЗ, %", currentProtocol.getE4UKZPercent()));
                     resultData.add(new ResultModel("I A, A", currentProtocol.getE4IA()));
                     resultData.add(new ResultModel("I B, A", currentProtocol.getE4IB()));
@@ -251,11 +251,7 @@ public class MainViewController implements Statable {
                     resultData.add(new ResultModel("Iхх A, %", currentProtocol.getE5IAPercent()));
                     resultData.add(new ResultModel("Iхх B, %", currentProtocol.getE5IBPercent()));
                     resultData.add(new ResultModel("Iхх C, %", currentProtocol.getE5ICPercent()));
-                    resultData.add(new ResultModel("ΔIхх A, %", currentProtocol.getE5IADiff()));
-                    resultData.add(new ResultModel("ΔIхх B, %", currentProtocol.getE5IBDiff()));
-                    resultData.add(new ResultModel("ΔIхх C, %", currentProtocol.getE5ICDiff()));
                     resultData.add(new ResultModel("Pп, Вт", currentProtocol.getE5Pp()));
-                    resultData.add(new ResultModel("cos", currentProtocol.getE5Cos()));
                     resultData.add(new ResultModel("f, Гц", currentProtocol.getE5F()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE5Result()));
                     break;
@@ -266,19 +262,6 @@ public class MainViewController implements Statable {
                     resultData.add(new ResultModel("f, Гц", currentProtocol.getE6F()));
                     resultData.add(new ResultModel("t, сек", currentProtocol.getE6Time()));
                     resultData.add(new ResultModel("Результат", currentProtocol.getE6Result()));
-                    break;
-                case Constants.Experiments.EXPERIMENT7_NAME:
-                    resultData.clear();
-                    resultData.add(new ResultModel("Тип", currentProtocol.getE7TypeBHandCorps()));
-                    resultData.add(new ResultModel("I, A", currentProtocol.getE7IBHandCorps()));
-                    resultData.add(new ResultModel("U, В", currentProtocol.getE7UBHandCorps()));
-                    resultData.add(new ResultModel("t,сек", currentProtocol.getE7TimeBHandCorps()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE7ResultBHandCorps()));
-                    resultData.add(new ResultModel("Тип", currentProtocol.getE7TypeHHandCorps()));
-                    resultData.add(new ResultModel("I, A", currentProtocol.getE7IHHandCorps()));
-                    resultData.add(new ResultModel("U, В", currentProtocol.getE7UHHandCorps()));
-                    resultData.add(new ResultModel("t,сек", currentProtocol.getE7TimeHHandCorps()));
-                    resultData.add(new ResultModel("Результат", currentProtocol.getE7ResultHHandCorps()));
                     break;
             }
         });

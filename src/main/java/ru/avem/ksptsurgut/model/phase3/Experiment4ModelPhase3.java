@@ -13,7 +13,6 @@ public class Experiment4ModelPhase3 {
     private final StringProperty UBH2;
     private final StringProperty UBH3;
     private final StringProperty UKZPercent;
-    private final StringProperty UKZDiff;
     private final StringProperty IA;
     private final StringProperty IB;
     private final StringProperty IC;
@@ -28,14 +27,13 @@ public class Experiment4ModelPhase3 {
         UBH2 = new SimpleStringProperty();
         UBH3 = new SimpleStringProperty();
         UKZPercent = new SimpleStringProperty();
-        UKZDiff = new SimpleStringProperty();
         IA = new SimpleStringProperty();
         IB = new SimpleStringProperty();
         IC = new SimpleStringProperty();
         PP = new SimpleStringProperty();
         F = new SimpleStringProperty();
         result = new SimpleStringProperty();
-        properties.addAll(Arrays.asList(UBH1, UBH2, UBH3, UKZPercent, UKZDiff, IA, IB, IC, PP, F, result));
+        properties.addAll(Arrays.asList(UBH1, UBH2, UBH3, UKZPercent, IA, IB, IC, PP, F, result));
     }
 
     public String getUBH1() {
@@ -84,18 +82,6 @@ public class Experiment4ModelPhase3 {
 
     public void setUKZPercent(String UKZPercent) {
         this.UKZPercent.set(UKZPercent);
-    }
-
-    public String getUKZDiff() {
-        return UKZDiff.get();
-    }
-
-    public StringProperty UKZDiffProperty() {
-        return UKZDiff;
-    }
-
-    public void setUKZDiff(String UKZDiff) {
-        this.UKZDiff.set(UKZDiff);
     }
 
     public String getIA() {

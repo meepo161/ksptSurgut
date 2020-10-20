@@ -16,9 +16,6 @@ public class ExperimentsHolder {
         experiments.add(new ru.avem.ksptsurgut.model.Experiment("layouts/phase3/experiment2ViewPhase3.fxml",
                 Constants.Experiments.EXPERIMENT2_NAME));
 
-        experiments.add(new ru.avem.ksptsurgut.model.Experiment("layouts/phase3/experiment2ViewPhase3.fxml",
-                Constants.Experiments.EXPERIMENT2_NAME));
-
         experiments.add(new ru.avem.ksptsurgut.model.Experiment("layouts/phase3/experiment3ViewPhase3.fxml",
                 Constants.Experiments.EXPERIMENT3_NAME));
 

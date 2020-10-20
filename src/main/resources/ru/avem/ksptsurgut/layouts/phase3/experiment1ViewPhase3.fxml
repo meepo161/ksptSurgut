@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextArea?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptsurgut.controllers.phase3.Experiment1ControllerPhase3">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptsurgut.controllers.phase3.Experiment1ControllerPhase3">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -32,7 +32,7 @@
                <children>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <Label style="-fx-font-weight: bold; -fx-font-size: 20;" text="Определение сопротивления изоляции обмоток относительно корпуса машины и между обмотками" />
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 54;" text="Определение сопротивления изоляции обмоток относительно корпуса машины и между обмотками" textAlignment="CENTER" wrapText="true" />
                      </children>
                      <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -40,7 +40,7 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <TableView fx:id="tableViewExperimentValues" prefHeight="126.0" prefWidth="800.0">
+                        <TableView fx:id="tableViewExperimentValues" prefHeight="202.0" prefWidth="1648.0">
                            <placeholder>
                               <Label text="Нет данных" />
                            </placeholder>
@@ -64,9 +64,9 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <JFXButton fx:id="buttonCancelAll" buttonType="RAISED" mnemonicParsing="false" onAction="#handleExperimentCancel" text="Отменить все" />
-                        <JFXButton fx:id="buttonStartStop" buttonType="RAISED" mnemonicParsing="false" onAction="#handleRunStopExperiment" text="Запустить" />
-                        <JFXButton fx:id="buttonNext" buttonType="RAISED" mnemonicParsing="false" onAction="#handleNextExperiment" text="Далее" />
+                        <JFXButton fx:id="buttonCancelAll" buttonType="RAISED" mnemonicParsing="false" onAction="#handleExperimentCancel" style="-fx-background-color: #FFBDB2;" text="Отменить все" />
+                        <JFXButton fx:id="buttonStartStop" buttonType="RAISED" mnemonicParsing="false" onAction="#handleRunStopExperiment" style="-fx-background-color: #b2ffbd;" text="Запустить" />
+                        <JFXButton fx:id="buttonNext" buttonType="RAISED" mnemonicParsing="false" onAction="#handleNextExperiment" style="-fx-background-color: #b2f4ff;" text="Далее" />
                      </children>
                      <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -79,16 +79,20 @@
                   <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                </GridPane.margin>
                <children>
-                  <JFXTextArea fx:id="textAreaExperimentProcessLog" editable="false" prefHeight="449.0" prefWidth="1155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ScrollPane fx:id="scrollPaneLog" prefHeight="292.0" prefWidth="1600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <VBox fx:id="vBoxLog" />
+                     </content>
+                  </ScrollPane>
                </children>
             </AnchorPane>
             <AnchorPane GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <children>
-                  <VBox alignment="BOTTOM_LEFT" prefHeight="433.0" prefWidth="172.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox prefHeight="433.0" prefWidth="172.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <HBox spacing="16.0">
                            <children>
-                              <Label style="-fx-font-weight: bold;" text="Состояние устройств" />
+                              <Label style="-fx-font-weight: bold; -fx-font-size: 20;" text="Состояние устройств" />
                            </children>
                            <padding>
                               <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -106,7 +110,7 @@
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="194.0" spacing="8.0">
                            <children>
                               <Circle fx:id="deviceStateCircleCS0202" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Label text="Мегаомметр ЦС02" />
+                              <Label text="ЦС0202" />
                            </children>
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

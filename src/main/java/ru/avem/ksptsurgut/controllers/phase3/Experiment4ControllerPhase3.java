@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
+import ru.avem.ksptsurgut.Constants;
 import ru.avem.ksptsurgut.communication.devices.avem_voltmeter.AvemVoltmeterModel;
 import ru.avem.ksptsurgut.communication.devices.deltaC2000.DeltaCP2000Model;
 import ru.avem.ksptsurgut.communication.devices.parmaT400.ParmaT400Model;
@@ -104,12 +105,12 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
         tableViewExperimentValues.setItems(experiment4Data);
         tableViewExperimentValues.setSelectionModel(null);
         communicationModel.addObserver(this);
+        scrollPaneLog.vvalueProperty().bind(vBoxLog.heightProperty());
 
         tableColumnUBHKZ1.setCellValueFactory(cellData -> cellData.getValue().UBH1Property());
         tableColumnUBHKZ2.setCellValueFactory(cellData -> cellData.getValue().UBH2Property());
         tableColumnUBHKZ3.setCellValueFactory(cellData -> cellData.getValue().UBH3Property());
         tableColumnUKZPercent.setCellValueFactory(cellData -> cellData.getValue().UKZPercentProperty());
-        tableColumnUKZDiff.setCellValueFactory(cellData -> cellData.getValue().UKZDiffProperty());
         tableColumnIA.setCellValueFactory(cellData -> cellData.getValue().IAProperty());
         tableColumnIB.setCellValueFactory(cellData -> cellData.getValue().IBProperty());
         tableColumnIC.setCellValueFactory(cellData -> cellData.getValue().ICProperty());
@@ -120,15 +121,27 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void fillFieldsOfExperimentProtocol() {
-        currentProtocol.setE4UKZV(experiment4ModelPhase3.getUBH1());
+        currentProtocol.setE4UKZVA(experiment4ModelPhase3.getUBH1());
+        currentProtocol.setE4UKZVB(experiment4ModelPhase3.getUBH2());
+        currentProtocol.setE4UKZVC(experiment4ModelPhase3.getUBH3());
         currentProtocol.setE4UKZPercent(experiment4ModelPhase3.getUKZPercent());
-        currentProtocol.setE4UKZDiff(experiment4ModelPhase3.getUKZDiff());
         currentProtocol.setE4IA(experiment4ModelPhase3.getIA());
         currentProtocol.setE4IB(experiment4ModelPhase3.getIB());
         currentProtocol.setE4IC(experiment4ModelPhase3.getIC());
         currentProtocol.setE4Pp(experiment4ModelPhase3.getPP());
         currentProtocol.setE4F(experiment4ModelPhase3.getF());
         currentProtocol.setE4Result(experiment4ModelPhase3.getResult());
+
+//        currentProtocol.setE4UKZVA("1");
+//        currentProtocol.setE4UKZVB("2");
+//        currentProtocol.setE4UKZVC("3");
+//        currentProtocol.setE4UKZPercent("4");
+//        currentProtocol.setE4IA("5");
+//        currentProtocol.setE4IB("6");
+//        currentProtocol.setE4IC("7");
+//        currentProtocol.setE4Pp("8");
+//        currentProtocol.setE4F("9");
+//        currentProtocol.setE4Result("10");
     }
 
     @Override
@@ -163,44 +176,35 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Отсоедините все провода и кабели от ОИ.\n" +
-                    "Подключите кабели ОИ ВН, а сторону НН закоротите.\n" +
-                    "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
-                appendOneMessageToLog("Начало испытания");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment4Devices();
                 sleep(2000);
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
-                appendOneMessageToLog("Нет связи с ПР");
+                setCause("Нет связи с ПР");
                 sleep(100);
             }
 
             if (isExperimentRunning && isThereAreAccidents()) {
-                appendOneMessageToLog(getAccidentsString("Аварии"));
+                appendOneMessageToLog(Constants.LogTag.RED, getAccidentsString("Аварии"));
             }
 
             if (isExperimentRunning && isOwenPRResponding) {
-                appendOneMessageToLog("Инициализация кнопочного поста...");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация кнопочного поста...");
             }
 
-            if (isExperimentRunning && isOwenPRResponding && !isStartButtonOn) {
-                Platform.runLater(() -> {
-                    Toast.makeText("Нажмите <ПУСК> кнопочного поста").show(Toast.ToastType.WARNING);
-                });
-            }
-
-            while (isExperimentRunning && !isStartButtonOn) {
-                appendOneMessageToLog("Включите кнопочный пост");
-                sleep(1);
+            if (isExperimentRunning) {
+                appendOneMessageToLog(Constants.LogTag.ORANGE,"Включите кнопочный пост");
+                showInformDialogForButtonPost("Нажмите <ПУСК> кнопочного поста");
             }
 
             if (isExperimentRunning) {
                 communicationModel.onKM1();
-                appendOneMessageToLog("Идет загрузка ЧП");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Идет загрузка ЧП");
             }
 
             int timeToSleep = 600;
@@ -213,27 +217,27 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             }
 
             while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
+                appendOneMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
                 communicationModel.initExperiment4Devices();
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
-                appendOneMessageToLog("Инициализация испытания");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация испытания");
                 if (Ikz < 1) {
-                    appendOneMessageToLog("1А токовая ступень");
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "1А токовая ступень");
                     communicationModel.onKM69();
                     is1AState = true;
                     is10AState = false;
                     is50AState = false;
                 } else if (Ikz > 1 && Ikz < 10) {
-                    appendOneMessageToLog("10А токовая ступень");
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "10А токовая ступень");
                     communicationModel.onKM58();
                     is1AState = false;
                     is10AState = true;
                     is50AState = false;
                 } else if (Ikz >= 10) {
-                    appendOneMessageToLog("50А токовая ступень");
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "50А токовая ступень");
                     communicationModel.onKM47();
                     is1AState = false;
                     is10AState = false;
@@ -258,13 +262,13 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isDevicesResponding()) {
                 communicationModel.setObjectParams(50 * HZ, 1 * VOLT, 50 * HZ);
-                appendOneMessageToLog("Устанавливаем начальные точки для ЧП");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Устанавливаем начальные точки для ЧП");
                 communicationModel.startObject();
-                appendOneMessageToLog("Запускаем ЧП");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Запускаем ЧП");
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
-                appendOneMessageToLog("Поднимаем напряжение");
+                appendOneMessageToLog(Constants.LogTag.ORANGE, "Поднимаем напряжение");
                 regulation(1 * VOLT, 10, 4, UHHTestItem, 0.1, 2, 50, 100);
             }
 
@@ -275,25 +279,23 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void finalizeExperiment() {
-
         if (measuringIA > Ikz) {
-            appendOneMessageToLog("Достигли I короткого замыкания на фазе A. Испытание остановлено");
-            isExperimentRunning = false;
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Достигли I короткого замыкания на фазе A.");
         }
         if (measuringIB > Ikz) {
-            appendOneMessageToLog("Достигли I короткого замыкания на фазе B. Испытание остановлено");
-            isExperimentRunning = false;
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Достигли I короткого замыкания на фазе B.");
         }
         if (measuringIC > Ikz) {
-            appendOneMessageToLog("Достигли I короткого замыкания на фазе C. Испытание остановлено");
-            isExperimentRunning = false;
+            appendOneMessageToLog(Constants.LogTag.GREEN, "Достигли I короткого замыкания на фазе C.");
         }
 
-        sleep(3000);
+        int timeToWait = 500;
+        while ((timeToWait-- > 0) && isDevicesResponding() && !isStopButton) {
+            sleep(10);
+        }
+
         isNeedToRefresh = false;
 
-
-        appendOneMessageToLog("Ожидаем, пока частотный преобразователь остановится");
         communicationModel.stopObject();
         sleep(3000);
 
@@ -311,16 +313,15 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
         });
 
         if (!cause.equals("")) {
-            appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
+            appendMessageToLog(Constants.LogTag.RED, String.format("Испытание прервано по причине: %s", cause));
             experiment4ModelPhase3.setResult("Неуспешно");
         } else if (!isDevicesResponding()) {
-            appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+            appendMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
             experiment4ModelPhase3.setResult("Неуспешно");
         } else {
             experiment4ModelPhase3.setResult("Успешно");
-            appendMessageToLog("Испытание завершено успешно");
+            appendMessageToLog(Constants.LogTag.GREEN, "Испытание завершено успешно");
         }
-        appendMessageToLog("------------------------------------------------\n");
     }
 
     @Override
@@ -348,7 +349,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                 communicationModel.setObjectUMax(start -= coarseStep);
             }
             sleep(coarseSleep);
-            appendOneMessageToLog("Выводим напряжение для получения заданного значения грубо");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Выводим напряжение для получения заданного значения грубо");
         }
         while (isExperimentRunning && ((measuringUInAvr < end - fineLimit) || (measuringUInAvr > end + fineLimit)) && isDevicesResponding()) {
             if (measuringUInAvr < end - fineLimit) {
@@ -357,7 +358,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                 communicationModel.setObjectUMax(start -= fineStep);
             }
             sleep(fineSleep);
-            appendOneMessageToLog("Выводим напряжение для получения заданного значения точно");
+            appendOneMessageToLog(Constants.LogTag.BLUE, "Выводим напряжение для получения заданного значения точно");
         }
         return start;
     }
@@ -378,13 +379,13 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                         break;
                     case OwenPRModel.PRI2_FIXED:
                         isCurrentOI = (boolean) value;
-                        if (!isCurrentOI) {
-                            setCause("токовая защита ОИ");
+                        if (isCurrentOI) {
+                            setCause("токовая защита ОИ\nВозможная причина: неисправность объекта испытания");
                         }
                         break;
                     case OwenPRModel.PRI3_FIXED:
                         isDoorSHSO = (boolean) value;
-                        if (!isDoorSHSO) {
+                        if (isDoorSHSO) {
                             setCause("открыты двери ШСО");
                         }
                         break;
@@ -399,7 +400,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                         break;
                     case OwenPRModel.PRI7_FIXED:
                         isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
+                        if (isDoorZone) {
                             setCause("открыты двери зоны");
                         }
                         break;
@@ -490,9 +491,8 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             measuringUInCA = (float) value;
                             experiment4ModelPhase3.setUBH3(formatRealNumber(measuringUInCA));
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3;
-                            measuringUkzPercent = ((measuringUInAvr * 100.0) / UBHTestItem) * 4;
+                            measuringUkzPercent = (((measuringUInAvr * 100.0) / UBHTestItem) * (Iном / ((measuringIA + measuringIB + measuringIC) / 3)));
                             experiment4ModelPhase3.setUKZPercent(formatRealNumber(measuringUkzPercent));
-                            experiment4ModelPhase3.setUKZDiff(formatRealNumber(measuringUkzPercent - UKZTestItem));
                         }
                         break;
                     case PM130Model.I1_PARAM:
@@ -507,6 +507,9 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             }
                             if (measuringIA > 0.001) {
                                 experiment4ModelPhase3.setIA(String.format("%.3f", measuringIA));
+                            }
+                            if (measuringIA > Ikz) {
+                                isExperimentRunning = false;
                             }
                         }
                         break;
@@ -523,6 +526,9 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             if (measuringIB > 0.001) {
                                 experiment4ModelPhase3.setIB(String.format("%.3f", measuringIB));
                             }
+                            if (measuringIB > Ikz) {
+                                isExperimentRunning = false;
+                            }
                         }
                         break;
                     case PM130Model.I3_PARAM:
@@ -538,11 +544,14 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             if (measuringIC > 0.001) {
                                 experiment4ModelPhase3.setIC(String.format("%.3f", measuringIC));
                             }
+                            if (measuringIC > Ikz) {
+                                isExperimentRunning = false;
+                            }
                         }
                         break;
                     case PM130Model.P_PARAM:
                         if (isNeedToRefresh) {
-                            measuringP = (float) value * 16 * 1000;
+                            measuringP = (float) value * Math.pow(Iном / ((measuringIA + measuringIB + measuringIC) / 3), 2) * 1000;
                             if (is50AState) {
                                 measuringP *= STATE_50_TO_5_MULTIPLIER;
                             } else if (is10AState) {
@@ -551,17 +560,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                                 measuringP *= STATE_1_TO_5_MULTIPLIER;
                             }
                             measuringPKZ = (measuringUAvem1 * measuringIAvemA + measuringUAvem2 * measuringIAvemB + measuringUAvem3 * measuringIAvemC) / 3;
-
-                            System.out.println("measuringUAvem1 = " + measuringUAvem1);
-                            System.out.println("measuringUAvem2 = " + measuringUAvem2);
-                            System.out.println("measuringUAvem3 = " + measuringUAvem3);
-                            System.out.println("measuringIAvemA = " + measuringIAvemA);
-                            System.out.println("measuringIAvemB = " + measuringIAvemB);
-                            System.out.println("measuringIAvemC = " + measuringIAvemC);
-                            System.out.println("measuringPKZ = " + measuringPKZ);
-                            System.out.println("measuringP = " + measuringP);
-
-                            if ((measuringIA + measuringIB + measuringIC) / 3 > 50) {
+                            if ((measuringIAvemA + measuringIAvemB + measuringIAvemC) / 3 > 50) {
                                 measuringP -= measuringPKZ;
                             }
                             experiment4ModelPhase3.setPP(formatRealNumber(measuringP));

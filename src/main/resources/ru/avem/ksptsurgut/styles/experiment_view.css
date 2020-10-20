@@ -2,16 +2,27 @@
     -fx-text-alignment: CENTER;
 }
 
+.table-view .column-header {
+    -fx-font-weight: bold;
+    -fx-font-size: 36;
+}
+
 .table-row-cell {
     -fx-cell-size: 50px;
 }
 
 .table-column > .text {
     -fx-font-weight: bold;
-    -fx-font-size: 14;
+    -fx-font-size: 36;
 }
 
 .jfx-text-area {
     -fx-font-weight: bold;
-    -fx-font-size: 14;
+    -fx-font-size: 24;
  }
+
+.jfx-button {
+    -fx-font-weight: bold;
+    -fx-font-size: 48;
+}
+

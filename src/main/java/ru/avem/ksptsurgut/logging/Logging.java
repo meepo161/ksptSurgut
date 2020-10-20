@@ -207,14 +207,17 @@ public class Logging {
                                 case "$27$":
                                     cell.setCellValue(protocol.getE3Result());
                                     break;
-                                case "$33$":
-                                    cell.setCellValue(protocol.getE4UKZV());
+                                case "$133$":
+                                    cell.setCellValue(protocol.getE4UKZVA());
+                                    break;
+                                case "$134$":
+                                    cell.setCellValue(protocol.getE4UKZVB());
+                                    break;
+                                case "$135$":
+                                    cell.setCellValue(protocol.getE4UKZVC());
                                     break;
                                 case "$34$":
                                     cell.setCellValue(protocol.getE4UKZPercent());
-                                    break;
-                                case "$134$":
-                                    cell.setCellValue(protocol.getE4UKZDiff());
                                     break;
                                 case "$35$":
                                     cell.setCellValue(protocol.getE4IA());
@@ -247,19 +250,16 @@ public class Logging {
                                     cell.setCellValue(protocol.getE5IC());
                                     break;
                                 case "$142$":
-                                    cell.setCellValue(protocol.getE5IADiff());
+                                    cell.setCellValue(protocol.getE5IAPercent());
                                     break;
                                 case "$143$":
-                                    cell.setCellValue(protocol.getE5IBDiff());
+                                    cell.setCellValue(protocol.getE5IBPercent());
                                     break;
                                 case "$144$":
-                                    cell.setCellValue(protocol.getE5ICDiff());
+                                    cell.setCellValue(protocol.getE5ICPercent());
                                     break;
                                 case "$45$":
                                     cell.setCellValue(protocol.getE5Pp());
-                                    break;
-                                case "$46$":
-                                    cell.setCellValue(protocol.getE5Cos());
                                     break;
                                 case "$47$":
                                     cell.setCellValue(protocol.getE5F());
@@ -282,36 +282,6 @@ public class Logging {
                                 case "$53$":
                                     cell.setCellValue(protocol.getE6Result());
                                     break;
-                                case "$54$":
-                                    cell.setCellValue(protocol.getE7TypeBHandCorps());
-                                    break;
-                                case "$55$":
-                                    cell.setCellValue(protocol.getE7UBHAvem());
-                                    break;
-                                case "$56$":
-                                    cell.setCellValue(protocol.getE7IBHandCorps());
-                                    break;
-                                case "$57$":
-                                    cell.setCellValue(protocol.getE7TimeBHandCorps());
-                                    break;
-                                case "$58$":
-                                    cell.setCellValue(protocol.getE7ResultBHandCorps());
-                                    break;
-                                case "$59$":
-                                    cell.setCellValue(protocol.getE7TypeHHandCorps());
-                                    break;
-                                case "$60$":
-                                    cell.setCellValue(protocol.getE7UHHAvem());
-                                    break;
-                                case "$61$":
-                                    cell.setCellValue(protocol.getE7IHHandCorps());
-                                    break;
-                                case "$62$":
-                                    cell.setCellValue(protocol.getE7TimeHHandCorps());
-                                    break;
-                                case "$63$":
-                                    cell.setCellValue(protocol.getE7ResultHHandCorps());
-                                    break;
                                 case "$101$":
                                     cell.setCellValue(protocol.getType());
                                     break;
@@ -332,9 +302,6 @@ public class Logging {
                                     break;
                                 case "$108$":
                                     cell.setCellValue(protocol.getXxtime());
-                                    break;
-                                case "$109$":
-                                    cell.setCellValue(protocol.getUinsulation());
                                     break;
                                 case "$110$":
                                     cell.setCellValue(protocol.getUmeger());

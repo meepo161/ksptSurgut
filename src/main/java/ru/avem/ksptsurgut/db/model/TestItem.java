@@ -24,16 +24,7 @@ public class TestItem {
     private double p;
 
     @DatabaseField
-    private double ixx;
-
-    @DatabaseField
-    private double ukz;
-
-    @DatabaseField
     private double xxtime;
-
-    @DatabaseField
-    private double uinsulation;
 
     @DatabaseField
     private double umeger;
@@ -45,13 +36,11 @@ public class TestItem {
         // ORMLite needs a no-arg constructor
     }
 
-    public TestItem(String type, double ubh, double uhh, double p, double ixx, double ukz, double xxtime, double umeger) {
+    public TestItem(String type, double ubh, double uhh, double p, double xxtime, double umeger) {
         this.type = type;
         this.ubh = ubh;
         this.uhh = uhh;
         this.p = p;
-        this.ixx = ixx;
-        this.ukz = ukz;
         this.xxtime = xxtime;
         this.umeger = umeger;
     }
@@ -97,22 +86,6 @@ public class TestItem {
         this.p = p;
     }
 
-    public double getIxx() {
-        return ixx;
-    }
-
-    public void setIxx(double ixx) {
-        this.ixx = ixx;
-    }
-
-    public double getUkz() {
-        return ukz;
-    }
-
-    public void setUkz(double ukz) {
-        this.ukz = ukz;
-    }
-
     public double getXxtime() {
         return xxtime;
     }
@@ -143,16 +116,13 @@ public class TestItem {
                 Double.compare(testItem.ubh, ubh) == 0 &&
                 Double.compare(testItem.uhh, uhh) == 0 &&
                 Double.compare(testItem.p, p) == 0 &&
-                Double.compare(testItem.ixx, ixx) == 0 &&
-                Double.compare(testItem.ukz, ukz) == 0 &&
                 Double.compare(testItem.xxtime, xxtime) == 0 &&
-                Double.compare(testItem.uinsulation, uinsulation) == 0 &&
                 Double.compare(testItem.withMeger, withMeger) == 0 &&
                 Objects.equals(type, testItem.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, withMeger);
+        return Objects.hash(id, type, ubh, uhh, p, xxtime, withMeger);
     }
 }

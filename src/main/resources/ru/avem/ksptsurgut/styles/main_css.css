@@ -1,6 +1,7 @@
 .root {
     -fx-focus-color: #0096C9;
     -fx-selection-bar: #0096C9;
+    -fx-font-size: 24;
 }
 
 .table-column {
@@ -52,12 +53,18 @@
     -jfx-unselected-color: #5A5A5A;
 }
 
-
 .jfx-button {
     -fx-background-color: #F4F4F4;
+    -fx-font-size: 36;
 }
 
 .jfx-text-area {
     -fx-background-color: #EFEFEF;
-
 }
+
+.myDialog {
+    -fx-font-size: 24;
+}
+ .dialog-pane{
+    -fx-font-size: 24;
+ }

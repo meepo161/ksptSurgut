@@ -15,11 +15,11 @@
 
 <AnchorPane stylesheets="@../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptsurgut.controllers.LoginController">
    <children>
-      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="217.0" prefWidth="365.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="16.0">
                <children>
-                  <Label alignment="CENTER" text="Авторизуйтесь для продолжения">
+                  <Label alignment="CENTER" style="-fx-font-size: 36;" text="Авторизуйтесь для продолжения">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -37,7 +37,7 @@
                      </image>
                   </ImageView>
                   <Label alignment="CENTER" text="Логин:" />
-                  <JFXTextField fx:id="textLogin" maxWidth="-Infinity" minWidth="0.0" prefColumnCount="13" />
+                  <JFXTextField fx:id="textLogin" prefColumnCount="13" prefWidth="400.0" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -51,7 +51,7 @@
                      </image>
                   </ImageView>
                   <Label alignment="CENTER" text="Пароль:" />
-                  <JFXPasswordField fx:id="textPassword" maxWidth="-Infinity" minWidth="0.0" prefColumnCount="13" />
+                  <JFXPasswordField fx:id="textPassword" prefColumnCount="13" prefWidth="400.0" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -65,7 +65,7 @@
                      </image>
                   </ImageView>
                   <Label alignment="CENTER" text="Испытатель 2:" />
-                  <JFXComboBox fx:id="secondTester" maxWidth="300.0" prefHeight="25.0" prefWidth="126.0" />
+                  <JFXComboBox fx:id="secondTester" prefWidth="400.0" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat;
 
 public final class Constants {
     public static final class Display {
-        public static final int WIDTH = BuildConfig.DEBUG ? 1366 : 1366;
-        public static final int HEIGHT = BuildConfig.DEBUG ? 768 : 768;
+        public static final int WIDTH = BuildConfig.DEBUG ? 1920 : 1920;
+        public static final int HEIGHT = BuildConfig.DEBUG ? 1080 : 1080;
     }
 
     public static final class Communication {
@@ -22,6 +22,13 @@ public final class Constants {
         public static final int PARITY = UsbSerialPort.PARITY_NONE;
         public static final int WRITE_TIMEOUT = 100;
         public static final int READ_TIMEOUT = 100;
+    }
+
+    public static final class LogTag {
+        public static final String RED = "#ff3935";
+        public static final String GREEN = "#48901d";
+        public static final String BLUE = "#1177c6";
+        public static final String ORANGE = "#ffa500";
     }
 
     public static final class Experiments {

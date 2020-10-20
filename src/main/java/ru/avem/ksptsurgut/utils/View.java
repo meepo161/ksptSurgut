@@ -35,6 +35,11 @@ public class View {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setTitle(title);
         alert.setHeaderText(text);
+
+        alert.getDialogPane().getStylesheets().add(
+                Main.class.getResource("styles/main_css.css").toExternalForm());
+        alert.getDialogPane().getStyleClass().add("myDialog");
+
         Image image = new Image(Main.class.getResourceAsStream("icon/alert.gif"));
         ImageView imageView = new ImageView(image);
         alert.setGraphic(imageView);

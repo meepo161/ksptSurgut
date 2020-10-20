@@ -3,6 +3,7 @@
     -fx-focus-color: #FF6F61;
     -fx-selection-bar: #FF6F61;
     -fx-accent: rgb(255, 111, 97);
+    -fx-font-size: 24;
 }
 
 .table-column {
@@ -80,6 +81,7 @@
 .jfx-button {
     -fx-text-fill: #FFF;
     -fx-background-color: #464646;
+    -fx-font-size: 36;
 }
 
 .jfx-text-area {
