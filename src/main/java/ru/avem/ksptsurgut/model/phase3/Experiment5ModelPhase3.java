@@ -17,9 +17,6 @@ public class Experiment5ModelPhase3 {
     private final StringProperty IAPercent;
     private final StringProperty IBPercent;
     private final StringProperty ICPercent;
-    private final StringProperty IADiff;
-    private final StringProperty IBDiff;
-    private final StringProperty ICDiff;
     private final StringProperty PP;
     private final StringProperty COS;
     private final StringProperty F;
@@ -36,16 +33,13 @@ public class Experiment5ModelPhase3 {
         IAPercent = new SimpleStringProperty();
         IBPercent = new SimpleStringProperty();
         ICPercent = new SimpleStringProperty();
-        IADiff = new SimpleStringProperty();
-        IBDiff = new SimpleStringProperty();
-        ICDiff = new SimpleStringProperty();
         PP = new SimpleStringProperty();
         COS = new SimpleStringProperty();
         F = new SimpleStringProperty();
         Time = new SimpleStringProperty();
 
         result = new SimpleStringProperty();
-        properties.addAll(Arrays.asList(UBH, IA, IB, IC, IAPercent, IBPercent, ICPercent, IADiff, IBDiff, ICDiff, PP, COS, F, result));
+        properties.addAll(Arrays.asList(UBH, IA, IB, IC, IAPercent, IBPercent, ICPercent, PP, COS, F, result));
     }
 
     public String getUBH() {
@@ -130,42 +124,6 @@ public class Experiment5ModelPhase3 {
 
     public void setICPercent(String ICPercent) {
         this.ICPercent.set(ICPercent);
-    }
-
-    public String getIADiff() {
-        return IADiff.get();
-    }
-
-    public StringProperty IADiffProperty() {
-        return IADiff;
-    }
-
-    public void setIADiff(String IADiff) {
-        this.IADiff.set(IADiff);
-    }
-
-    public String getIBDiff() {
-        return IBDiff.get();
-    }
-
-    public StringProperty IBDiffProperty() {
-        return IBDiff;
-    }
-
-    public void setIBDiff(String IBDiff) {
-        this.IBDiff.set(IBDiff);
-    }
-
-    public String getICDiff() {
-        return ICDiff.get();
-    }
-
-    public StringProperty ICDiffProperty() {
-        return ICDiff;
-    }
-
-    public void setICDiff(String ICDiff) {
-        this.ICDiff.set(ICDiff);
     }
 
     public void setPP(String pp) {

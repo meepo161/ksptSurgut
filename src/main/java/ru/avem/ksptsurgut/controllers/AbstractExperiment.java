@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,11 +31,11 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     @FXML
     protected AnchorPane root;
     @FXML
-    protected JFXButton buttonCancelAll;
+    protected Button buttonCancelAll;
     @FXML
-    protected JFXButton buttonStartStop;
+    protected Button buttonStartStop;
     @FXML
-    protected JFXButton buttonNext;
+    protected Button buttonNext;
     @FXML
     protected VBox vBoxLog;
     @FXML
@@ -131,7 +132,7 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
                         }
                     }));
 
-            while (!isPressed.get() && !isStartButtonOn) {
+            while (!isPressed.get() && !isStartButtonOn && isExperimentRunning) {
                 sleep(10);
             }
             isReallyCanceled.set(true);

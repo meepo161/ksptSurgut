@@ -21,7 +21,7 @@ public class ExperimentValuesModel {
     private static ExperimentValuesModel instance = new ExperimentValuesModel();
 
     private Account firstTester = new Account("ADMIN", "ADMIN", "ADMIN", "ADMIN", "ADMIN");
-    private Account secondTester = new Account("ADMIN", "ADMIN", "ADMIN", "ADMIN", "ADMIN");
+    private Account secondTester = new Account(" ", " ", " ", " ", " ");
 
     private boolean isNeedRefresh = true;
     private Protocol currentProtocol;
@@ -53,6 +53,9 @@ public class ExperimentValuesModel {
     public void setTesters(Account tester1, Account tester2) {
         this.firstTester = tester1;
         this.secondTester = tester2;
+    }
+    public void setTester(Account tester1) {
+        this.firstTester = tester1;
     }
 
     public boolean isNeedRefresh() {

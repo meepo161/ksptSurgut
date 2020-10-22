@@ -41,6 +41,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
     private Experiment1ModelPhase3 experiment1ModelPhase3HH = experimentsValuesModel.getExperiment1ModelPhase3HH();
 
     private int uMgr = (int) currentProtocol.getUmeger();
+    private float[] data;
 
     private boolean isBHSelected = (experimentsValuesModel.getExperiment1Choice() & 0b1) > 0;
     private boolean isBHStarted;
@@ -100,10 +101,8 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                 sleep(2000);
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
-                communicationModel.initExperiment1Devices();
+            if (isExperimentRunning && !isDevicesResponding()) {
+                setCause(getNotRespondingDevicesString("Нет связи с устройствами "));
             }
 
             if (isBHSelected && isExperimentRunning && isDevicesResponding()) {
@@ -137,6 +136,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
+            communicationModel.offAllKms();
             communicationModel.onKM20();
             communicationModel.onKM21();
             appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация испытания обмотки BH...");
@@ -169,7 +169,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
-            float[] data = communicationModel.readDataMgr();
+            data = communicationModel.readDataMgr();
             experiment1ModelPhase3BH.setUr(formatRealNumber(data[1]));
             experiment1ModelPhase3BH.setR15(formatRMrg(data[3]));
             experiment1ModelPhase3BH.setR60(formatRMrg(data[0]));
@@ -193,10 +193,16 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             experiment1ModelPhase3BH.setResult("Прервано");
             setCause("");
         } else if (cause.isEmpty()) {
-            experiment1ModelPhase3BH.setResult("Успешно");
-            appendMessageToLog(Constants.LogTag.GREEN, "Испытание обмотки BH завершено успешно");
+            if (data[3] > 0.0f && data[3] < 500_000_000f) {
+                appendMessageToLog(Constants.LogTag.RED, "Сопротивление изоляции обмотки ВН меньше 500 МОм");
+                experiment1ModelPhase3BH.setResult("Неуспешно");
+            } else {
+                experiment1ModelPhase3BH.setResult("Успешно");
+                appendMessageToLog(Constants.LogTag.GREEN, "Испытание обмотки BH завершено успешно");
+            }
         }
         isBHStarted = false;
+        communicationModel.offAllKms();
     }
 
     private void startHHExperiment() {
@@ -220,6 +226,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
 
         if (isExperimentRunning && isDevicesResponding()) {
             appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация испытания обмотки HH...");
+            communicationModel.offAllKms();
             communicationModel.onKM19();
             communicationModel.onKM22();
         }
@@ -246,7 +253,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
-            float[] data = communicationModel.readDataMgr();
+            data = communicationModel.readDataMgr();
             experiment1ModelPhase3HH.setUr(formatRealNumber(data[1]));
             experiment1ModelPhase3HH.setR15(formatRMrg(data[3]));
             experiment1ModelPhase3HH.setR60(formatRMrg(data[0]));
@@ -269,11 +276,17 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
             appendMessageToLog(Constants.LogTag.RED, "Испытание обмотки HH прервано по причине: Мегер не отвечает на запросы");
             experiment1ModelPhase3HH.setResult("Прервано");
             setCause("");
-        } else if (cause.isEmpty()) {
-            experiment1ModelPhase3HH.setResult("Успешно");
-            appendMessageToLog(Constants.LogTag.GREEN, "Испытание обмотки HH завершено успешно");
+        }  else if (cause.isEmpty()) {
+            if (data[3] > 0.0f && data[3] < 500_000_000f) {
+                appendMessageToLog(Constants.LogTag.RED, "Сопротивление изоляции обмотки ВН меньше 500 МОм");
+                experiment1ModelPhase3HH.setResult("Неуспешно");
+            } else {
+                experiment1ModelPhase3HH.setResult("Успешно");
+                appendMessageToLog(Constants.LogTag.GREEN, "Испытание обмотки BH завершено успешно");
+            }
         }
         isHHStarted = false;
+        communicationModel.offAllKms();
     }
 
     protected void finalizeExperiment() {
@@ -394,22 +407,22 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                     case OwenPRModel.PRI3_FIXED:
                         isDoorSHSO = (boolean) value;
                         if (isDoorSHSO) {
-                            setCause("открыты двери ШСО");
+                            setCause("открыты двери ШСО или отключено питание");
                         }
                         break;
                     case OwenPRModel.PRI5_FIXED:
                         isStopButton = (boolean) value;
                         if (isStopButton) {
-                            setCause("Нажата кнопка СТОП");
+                            setCause("Нажата кнопка СТОП или отключено питание");
                         }
                         break;
-                    case OwenPRModel.PRI6:
+                    case OwenPRModel.PRI6_FIXED:
                         isStartButtonOn = (boolean) value;
                         break;
                     case OwenPRModel.PRI7_FIXED:
                         isDoorZone = (boolean) value;
                         if (isDoorZone) {
-                            setCause("открыты двери зоны");
+                            setCause("открыты двери зоны или отключено питание");
                         }
                         break;
                 }

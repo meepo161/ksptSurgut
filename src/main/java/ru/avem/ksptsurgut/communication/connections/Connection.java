@@ -1,18 +1,17 @@
 package ru.avem.ksptsurgut.communication.connections;
 
 public interface Connection {
+    String getName();
 
-    boolean initConnection();
+    boolean isInitiated();
 
-    void closeConnection();
+    void setBaudrate(int baudrate);
 
-    boolean isInitiatedConnection();
+    void setParameters(int baudRate, int dataBits, int stopBits, int parity);
 
-    int write(byte[] outputArray);
+    int write(byte[] src);
 
-    int read(byte[] inputArray);
+    int read(byte[] dst);
 
-    void setPortParameters(int baudRate, int dataBits, int stopBits, int parity);
-
-    void setConnectionBaudrate(int baudrate);
+    void close();
 }

@@ -6,6 +6,24 @@ import java.nio.ByteBuffer;
 public interface ModbusController {
     int DELAY = 20;
     int READ_DELAY = 20;
+
+    RequestStatus readInputRegisters(byte deviceAddress, short registerAddress, short numberOfRegisters,
+                                     ByteBuffer dstBuffer);
+
+    RequestStatus writeSingleHoldingRegister(byte deviceAddress, short registerAddress, byte[] data,
+                                             ByteBuffer dstBuffer);
+
+    RequestStatus readMultipleHoldingRegisters(byte deviceAddress, short registerAddress, short numberOfRegisters,
+                                               ByteBuffer dstBuffer);
+
+    RequestStatus writeMultipleHoldingRegisters(byte deviceAddress, short registerAddress, short numberOfRegisters,
+                                                ByteBuffer srcBuffer, ByteBuffer dstBuffer);
+
+    enum RequestStatus {
+        FRAME_RECEIVED, FRAME_TIME_OUT, BAD_CRC, BAD_FUNCTION, BAD_DATA_ADDS, BAD_DATA_VALUE,
+        DEVICE_FAILURE, UNKNOWN, PORT_NOT_INITIALIZED
+    }
+
     enum Command {
         READ_MULTIPLE_HOLDING_REGISTERS((byte) 0x03),
         READ_INPUT_REGISTERS((byte) 0x04),
@@ -14,7 +32,7 @@ public interface ModbusController {
         READ_EXCEPTION_STATUS((byte) 0x07),
         REPORT_SLAVE_ID((byte) 0x11);
 
-        private byte value;
+        private final byte value;
 
         Command(byte value) {
             this.value = value;
@@ -24,28 +42,4 @@ public interface ModbusController {
             return value;
         }
     }
-
-    enum RequestStatus {
-        FRAME_RECEIVED, FRAME_TIME_OUT, BAD_CRC, BAD_FUNCTION, BAD_DATA_ADDS, BAD_DATA_VALUE,
-        DEVICE_FAILURE, UNKNOWN, PORT_NOT_INITIALIZED
-    }
-
-    RequestStatus reportSlaveID(byte deviceAddress, byte identifier, byte versionSoftware,
-                                byte versionHardware, int serialNumber,
-                                ByteBuffer inputBuffer);
-
-    RequestStatus readInputRegisters(byte deviceAddress, short registerAddress,
-                                     short numberOfRegisters, ByteBuffer inputBuffer);
-
-    RequestStatus writeSingleHoldingRegister(byte deviceAddress, short registerAddress,
-                                             byte[] data, ByteBuffer inputBuffer);
-
-    RequestStatus readMultipleHoldingRegisters(byte deviceAddress, short registerAddress,
-                                               short numberOfRegisters, ByteBuffer inputBuffer);
-
-    RequestStatus writeMultipleHoldingRegisters(byte deviceAddress, short registerAddress,
-                                                short numberOfRegisters, ByteBuffer outputBuffer,
-                                                ByteBuffer inputBuffer);
-
-    RequestStatus readStatus(byte modbusAddress, ByteBuffer inputBuffer);
 }

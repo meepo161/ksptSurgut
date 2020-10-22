@@ -14,7 +14,7 @@ import java.util.List;
 
 public class LoginController {
     @FXML
-    private TextField textLogin;
+    private ComboBox<Account> textLogin;
     @FXML
     private PasswordField textPassword;
     @FXML
@@ -26,7 +26,7 @@ public class LoginController {
     @FXML
     private void handleLogIn() {
         List<Account> allAccounts = AccountRepository.getAllAccounts();
-        String login = textLogin.getText();
+        String login = textLogin.getSelectionModel().getSelectedItem().getName();
         String password = textPassword.getText();
 
         if (allAccounts.size() == 0) {
@@ -50,7 +50,11 @@ public class LoginController {
                         Toast.makeText("Первый и второй испытатель не могут быть одним и тем же лицом").show(Toast.ToastType.WARNING);
                         return;
                     }
-                    experimentsValuesModel.setTesters(account, secondTesterAccount);
+                    if (secondTesterAccount == null) {
+                        experimentsValuesModel.setTester(account);
+                    } else {
+                        experimentsValuesModel.setTesters(account, secondTesterAccount);
+                    }
                     main.showMainView();
                     break;
                 } else {
@@ -70,10 +74,11 @@ public class LoginController {
 
     public void clearFields() {
         secondTester.getSelectionModel().clearSelection();
+        textLogin.getSelectionModel().clearSelection();
         List<Account> allAccounts = AccountRepository.getAllAccounts();
         secondTester.getItems().setAll(allAccounts);
+        textLogin.getItems().setAll(allAccounts);
 
-        textLogin.clear();
         textPassword.clear();
         textLogin.requestFocus();
     }

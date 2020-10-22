@@ -214,12 +214,11 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning) {
                 communicationModel.initExperiment4Devices();
+                sleep(3000);
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
-                communicationModel.initExperiment4Devices();
+            if (isExperimentRunning && !isDevicesResponding()) {
+                setCause(getNotRespondingDevicesString("Нет связи с устройствами "));
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
@@ -492,7 +491,9 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             experiment4ModelPhase3.setUBH3(formatRealNumber(measuringUInCA));
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3;
                             measuringUkzPercent = (((measuringUInAvr * 100.0) / UBHTestItem) * (Iном / ((measuringIA + measuringIB + measuringIC) / 3)));
-                            experiment4ModelPhase3.setUKZPercent(formatRealNumber(measuringUkzPercent));
+                            if(measuringUkzPercent > 0) {
+                                experiment4ModelPhase3.setUKZPercent(formatRealNumber(measuringUkzPercent));
+                            }
                         }
                         break;
                     case PM130Model.I1_PARAM:

@@ -2,7 +2,8 @@ package ru.avem.ksptsurgut.communication;
 
 import ru.avem.ksptsurgut.Constants;
 import ru.avem.ksptsurgut.communication.connections.Connection;
-import ru.avem.ksptsurgut.communication.connections.SerialConnection;
+import ru.avem.ksptsurgut.communication.connections.SerialParameters;
+import ru.avem.ksptsurgut.communication.connections.usbserial.UsbSerialConnection;
 import ru.avem.ksptsurgut.communication.devices.DeviceController;
 import ru.avem.ksptsurgut.communication.devices.avem_voltmeter.AvemVoltmeterController;
 import ru.avem.ksptsurgut.communication.devices.cs02021.CS02021Controller;
@@ -32,14 +33,11 @@ import static ru.avem.ksptsurgut.communication.devices.phasemeter.PhaseMeterCont
 import static ru.avem.ksptsurgut.communication.devices.pr200.OwenPRController.*;
 import static ru.avem.ksptsurgut.utils.Utils.sleep;
 
-
 public class CommunicationModel extends Observable implements Observer {
     public static final Object LOCK = new Object();
 
-    private static CommunicationModel instance = new CommunicationModel();
-
-    private Connection RS485Connection;
-    private Connection MeggerConnection;
+    public static final CommunicationModel instance = new CommunicationModel();
+    ;
 
     public OwenPRController owenPRController;
     public PM130Controller pm130Controller;
@@ -66,13 +64,19 @@ public class CommunicationModel extends Observable implements Observer {
 
     public List<DeviceController> devicesControllers = new ArrayList<>();
 
+    private Connection RS485Connection = new UsbSerialConnection(
+            Constants.Communication.RS485_DEVICE_NAME,
+            new SerialParameters(
+                    Constants.Communication.BAUDRATE_MAIN,
+                    Constants.Communication.DATABITS,
+                    Constants.Communication.STOPBITS,
+                    Constants.Communication.PARITY,
+                    Constants.Communication.WRITE_TIMEOUT,
+                    Constants.Communication.READ_TIMEOUT
+            ));
+
     private CommunicationModel() {
-
-        connectMainBus();
         ModbusController modbusController = new RTUController(RS485Connection);
-
-        connectMeggerBus();
-//        ModbusController megerController = new RTUController(MeggerConnection);
 
         pm130Controller = new PM130Controller(1, this, modbusController, PM130_ID);
         devicesControllers.add(pm130Controller);
@@ -101,7 +105,17 @@ public class CommunicationModel extends Observable implements Observer {
         trmController = new TRMController(7, this, modbusController, TRM_ID);
         devicesControllers.add(trmController);
 
-        megacsController = new CS02021Controller(MEGACS_ID, this, MeggerConnection);
+        Connection meggerConnection = new UsbSerialConnection(
+                Constants.Communication.MEGGER_RS485,
+                new SerialParameters(
+                        Constants.Communication.BAUDRATE_MEGACS,
+                        Constants.Communication.DATABITS,
+                        Constants.Communication.STOPBITS,
+                        Constants.Communication.PARITY,
+                        Constants.Communication.WRITE_TIMEOUT,
+                        Constants.Communication.READ_TIMEOUT));
+
+        megacsController = new CS02021Controller(MEGACS_ID, this, meggerConnection);
         devicesControllers.add(megacsController);
 
         deltaCP2000Controller = new DeltaCP2000Controller(11, this, modbusController, DELTACP2000_ID);
@@ -182,7 +196,7 @@ public class CommunicationModel extends Observable implements Observer {
 
     public void resetAllDevices() {
         owenPRController.resetAllAttempts();
-//        megacsController.resetAllAttempts();
+        megacsController.resetAllAttempts();
         deltaCP2000Controller.resetAllAttempts();
         ikasController.resetAllAttempts();
         parmaT400Controller.resetAllAttempts();
@@ -191,39 +205,6 @@ public class CommunicationModel extends Observable implements Observer {
         trmController.resetAllAttempts();
     }
 
-    private void connectMainBus() {
-        RS485Connection = new SerialConnection(
-                Constants.Communication.RS485_DEVICE_NAME,
-                Constants.Communication.BAUDRATE_MAIN,
-                Constants.Communication.DATABITS,
-                Constants.Communication.STOPBITS,
-                Constants.Communication.PARITY,
-                Constants.Communication.WRITE_TIMEOUT,
-                Constants.Communication.READ_TIMEOUT);
-        Logger.withTag("DEBUG_TAG").log("connectMainBus");
-        if (!RS485Connection.isInitiatedConnection()) {
-            Logger.withTag("DEBUG_TAG").log("!isInitiatedMainBus");
-            RS485Connection.closeConnection();
-            RS485Connection.initConnection();
-        }
-    }
-
-    private void connectMeggerBus() {
-        MeggerConnection = new SerialConnection(
-                Constants.Communication.MEGGER_RS485,
-                Constants.Communication.BAUDRATE_MEGACS,
-                Constants.Communication.DATABITS,
-                Constants.Communication.STOPBITS,
-                Constants.Communication.PARITY,
-                Constants.Communication.WRITE_TIMEOUT,
-                Constants.Communication.READ_TIMEOUT);
-        Logger.withTag("DEBUG_TAG").log("connectMainBus");
-        if (!MeggerConnection.isInitiatedConnection()) {
-            Logger.withTag("DEBUG_TAG").log("!isInitiatedMainBus");
-            MeggerConnection.closeConnection();
-            MeggerConnection.initConnection();
-        }
-    }
 
     public void deinitPR() {
         owenPRController.write(RES_REGISTER, 1, 0);
@@ -263,16 +244,16 @@ public class CommunicationModel extends Observable implements Observer {
         writeToKms1Register(kms1);
         kms2 = 0;
         writeToKms2Register(kms2);
-        kms2 = 0;
+        kms3 = 0;
         writeToKms3Register(kms3);
     }
 
     public void onAllKms() {
         kms1 = 1;
         writeToKms1Register(kms1);
-        kms2 = 2;
+        kms2 = 1;
         writeToKms2Register(kms2);
-        kms2 = 2;
+        kms3 = 1;
         writeToKms3Register(kms3);
     }
 

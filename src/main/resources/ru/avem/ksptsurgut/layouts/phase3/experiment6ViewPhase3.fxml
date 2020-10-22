@@ -58,13 +58,13 @@
                         </HBox>
                         <HBox alignment="CENTER" spacing="16.0">
                             <children>
-                                <JFXButton fx:id="buttonCancelAll" buttonType="RAISED" mnemonicParsing="false"
+                                <Button fx:id="buttonCancelAll" mnemonicParsing="false"
                                            onAction="#handleExperimentCancel" style="-fx-background-color: #FFBDB2;"
                                            text="Отменить все"/>
-                                <JFXButton fx:id="buttonStartStop" buttonType="RAISED" mnemonicParsing="false"
+                                <Button fx:id="buttonStartStop" mnemonicParsing="false"
                                            onAction="#handleRunStopExperiment" style="-fx-background-color: #b2ffbd;"
                                            text="Запустить"/>
-                                <JFXButton fx:id="buttonNext" buttonType="RAISED" mnemonicParsing="false"
+                                <Button fx:id="buttonNext" mnemonicParsing="false"
                                            onAction="#handleNextExperiment" style="-fx-background-color: #b2f4ff;"
                                            text="Далее"/>
                             </children>

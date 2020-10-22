@@ -37,7 +37,7 @@
                      </image>
                   </ImageView>
                   <Label alignment="CENTER" text="Логин:" />
-                  <JFXTextField fx:id="textLogin" prefColumnCount="13" prefWidth="400.0" />
+                  <JFXComboBox fx:id="textLogin" prefWidth="400.0" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

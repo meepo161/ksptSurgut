@@ -108,10 +108,8 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                 sleep(2000);
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
-                communicationModel.initExperiment2Devices();
+            if (isExperimentRunning && !isDevicesResponding()) {
+                setCause(getNotRespondingDevicesString("Нет связи с устройствами "));
             }
 
             if (isBHSelected) {

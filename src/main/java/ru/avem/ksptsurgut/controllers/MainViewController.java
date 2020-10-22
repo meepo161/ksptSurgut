@@ -384,6 +384,10 @@ public class MainViewController implements Statable {
                 currentState.toWaitState();
             }
         }
+        textFieldSerialNumber.setText(experimentsValuesModel.getCurrentProtocol().getSerialNumber());
+        comboBoxTestItem.getSelectionModel().select(experimentsValuesModel.getCurrentProtocol().getObject());
+        initializeComboBoxResult();
+        currentState.toResultState();
     }
 
     @FXML

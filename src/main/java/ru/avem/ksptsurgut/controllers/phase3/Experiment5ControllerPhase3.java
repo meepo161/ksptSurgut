@@ -64,9 +64,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     private double UBHTestItem = currentProtocol.getUbh();
     private double Pkva = currentProtocol.getP();
     private double UHHTestItem = currentProtocol.getUhh();
-    private double IxxPercent = currentProtocol.getIxx(); // 32.0 %
-    private double Inom = Pkva * 1000 / (UBHTestItem * Math.sqrt(3)); // 1000 *1000 / (6000 * 1.73) = 96,3
-    private double Ixx = Inom / 100 * IxxPercent; //  96,3 / 100 * 32.0 = 30,8
+    private double Inom = Pkva * 1000 / (UHHTestItem * Math.sqrt(3));
     private double Time = currentProtocol.getXxtime();
     private int XXTime = (int) Time;
 
@@ -109,14 +107,17 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         tableColumnIA.setCellValueFactory(cellData -> cellData.getValue().IAProperty());
         tableColumnIB.setCellValueFactory(cellData -> cellData.getValue().IBProperty());
         tableColumnIC.setCellValueFactory(cellData -> cellData.getValue().ICProperty());
-        tableColumnIAPercent.setCellValueFactory(cellData -> cellData.getValue().IADiffProperty());
-        tableColumnIBPercent.setCellValueFactory(cellData -> cellData.getValue().IBDiffProperty());
-        tableColumnICPercent.setCellValueFactory(cellData -> cellData.getValue().ICDiffProperty());
+        tableColumnIAPercent.setCellValueFactory(cellData -> cellData.getValue().IAPercentProperty());
+        tableColumnIBPercent.setCellValueFactory(cellData -> cellData.getValue().IBPercentProperty());
+        tableColumnICPercent.setCellValueFactory(cellData -> cellData.getValue().ICPercentProperty());
         tableColumnPP.setCellValueFactory(cellData -> cellData.getValue().PProperty());
         tableColumnF.setCellValueFactory(cellData -> cellData.getValue().FProperty());
         tableColumnCOS.setCellValueFactory(cellData -> cellData.getValue().COSProperty());
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         tableColumnResultExperiment5.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
+        showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
+                "После нажмите <Да>", true);
+
     }
 
     @Override
@@ -176,9 +177,6 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
-                    "После нажмите <Да>", true);
-
             if (isExperimentRunning) {
                 appendOneMessageToLog(Constants.LogTag.BLUE,"Начало испытания");
                 communicationModel.initOwenPrController();
@@ -209,20 +207,24 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 communicationModel.initExperiment5Devices();
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.RED,getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
+            if (isExperimentRunning && !isDevicesResponding()) {
+                setCause(getNotRespondingDevicesString("Нет связи с устройствами "));
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog(Constants.LogTag.BLUE,"Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING380) {
                     communicationModel.onKM1();
-                    communicationModel.onKM11();
+                    sleep(3000);
                     communicationModel.onKM15();
+                    sleep(300);
                     communicationModel.onKM3();
+                    sleep(300);
                     communicationModel.onKM47();
-                    appendOneMessageToLog(Constants.LogTag.BLUE,"Собрана схема для испытания трансформатора с HH до 380В");
+                    sleep(300);
+                    communicationModel.onKM11();
+                    sleep(300);
+                    appendOneMessageToLog(Constants.LogTag.BLUE,"Собрана схема для испытания трансформатора с HH до 400В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog(Constants.LogTag.RED,"Схема разобрана. Введите корректный HH в объекте испытания.");
@@ -235,10 +237,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
 
             if (isExperimentRunning && isDevicesResponding()) {
                 appendOneMessageToLog(Constants.LogTag.BLUE,"Идет подбор токовой ступени");
-                int timeToWait = 500;
-                while ((timeToWait-- > 0) && isDevicesResponding() && isExperimentRunning) {
-                    sleep(10);
-                }
+                sleep(5000);
                 pickUpState();
                 sleep(100);
                 appendOneMessageToLog(Constants.LogTag.GREEN,"Токовая ступень подобрана");
@@ -409,7 +408,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                             setCause("Нажата кнопка СТОП");
                         }
                         break;
-                    case OwenPRModel.PRI6:
+                    case OwenPRModel.PRI6_FIXED:
                         isStartButtonOn = (boolean) value;
                         break;
                     case OwenPRModel.PRI7_FIXED:
@@ -440,11 +439,9 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                             if (iA > 0.001) {
                                 String iAString = formatRealNumber(iA);
                                 experiment5ModelPhase3.setIA(iAString);
-                                iAPercentD = Ixx / iA;
+                                iAPercentD = (iA / Inom) * 100;
                                 String iAPercent = formatRealNumber(iAPercentD);
-                                String iADiff = formatRealNumber(IxxPercent - iAPercentD);
-                                experiment5ModelPhase3.setIAPercent(iADiff);
-                                experiment5ModelPhase3.setIADiff(iAPercent);
+                                experiment5ModelPhase3.setIAPercent(iAPercent);
                             }
                         }
                         break;
@@ -461,11 +458,9 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                             if (iB > 0.001) {
                                 String iBString = formatRealNumber(iB);
                                 experiment5ModelPhase3.setIB(iBString);
-                                iBPercentD = Ixx / iB;
+                                iBPercentD = (iB / Inom) * 100;
                                 String iBPercent = formatRealNumber(iBPercentD);
-                                String iBDiff = formatRealNumber(IxxPercent - iBPercentD);
-                                experiment5ModelPhase3.setIBPercent(iBDiff);
-                                experiment5ModelPhase3.setIBDiff(iBPercent);
+                                experiment5ModelPhase3.setIBPercent(iBPercent);
                             }
                         }
                         break;
@@ -483,11 +478,9 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                                 String iCString = formatRealNumber(iC);
                                 experiment5ModelPhase3.setIC(iCString);
                                 IAvr = (iA + iB + iC) / 3;
-                                iCPercentD = Ixx / iC;
+                                iCPercentD = (iC / Inom) * 100;
                                 String iCPercent = formatRealNumber(iCPercentD);
-                                String iCDiff = formatRealNumber(IxxPercent - iCPercentD);
-                                experiment5ModelPhase3.setICPercent(iCDiff);
-                                experiment5ModelPhase3.setICDiff(iCPercent);
+                                experiment5ModelPhase3.setICPercent(iCPercent);
                             }
                         }
                         break;

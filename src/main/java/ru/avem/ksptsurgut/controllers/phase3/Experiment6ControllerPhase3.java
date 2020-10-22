@@ -15,7 +15,6 @@ import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.db.model.Protocol;
 import ru.avem.ksptsurgut.model.phase3.Experiment6ModelPhase3;
-import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -33,6 +32,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     private static final double STATE_1_TO_5_MULTIPLIER = 0.2;
     private static final double STATE_10_TO_5_MULTIPLIER = 2.0;
     private static final double STATE_50_TO_5_MULTIPLIER = 10.0;
+    private static final int TIME_DELAY_CURRENT_STAGES = 1000;
 
     @FXML
     private TableView<Experiment6ModelPhase3> tableViewExperimentValues;
@@ -49,15 +49,19 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableColumn<Experiment6ModelPhase3, String> tableColumnResult;
 
+    private double UBHTestItem = currentProtocol.getUbh();
     private double UHHTestItem = currentProtocol.getUhh();
     private final double coef = 6.66;
+    private double PInKVA = currentProtocol.getP() * 1000;
+    private double Iном = PInKVA / (Math.sqrt(3) * UHHTestItem);
+    private double Ixx = Iном / 20;
 
     private Experiment6ModelPhase3 experiment6ModelPhase3;
     private ObservableList<Experiment6ModelPhase3> experiment6Data = FXCollections.observableArrayList();
 
-    private boolean is50to5State;
-    private boolean is10to5State;
-    private boolean is1to5State;
+    private boolean is50AState;
+    private boolean is10AState;
+    private boolean is1AState;
 
     private volatile double iA;
     private volatile double iAOld;
@@ -88,6 +92,8 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
         tableColumnResult.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
 
         scrollPaneLog.vvalueProperty().bind(vBoxLog.heightProperty());
+        showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
+                "После нажмите <Да>", true);
     }
 
     @Override
@@ -145,8 +151,6 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
     @Override
     protected void runExperiment() {
         new Thread(() -> {
-            showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
-                    "После нажмите <Да>", true);
 
             if (isExperimentRunning) {
                 appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
@@ -169,7 +173,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning) {
-                appendOneMessageToLog(Constants.LogTag.ORANGE,"Включите кнопочный пост");
+                appendOneMessageToLog(Constants.LogTag.ORANGE, "Включите кнопочный пост");
                 showInformDialogForButtonPost("Нажмите <ПУСК> кнопочного поста");
             }
 
@@ -178,12 +182,11 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                 communicationModel.onKM1();
                 sleep(6000);
                 communicationModel.initExperiment6Devices();
+                sleep(3000);
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
-                communicationModel.initExperiment6Devices();
+            if (isExperimentRunning && !isDevicesResponding()) {
+                setCause(getNotRespondingDevicesString("Нет связи с устройствами "));
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
@@ -193,16 +196,38 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
 
                     communicationModel.onKM11();
                     communicationModel.onKM14();
-                    communicationModel.onKM47();
-                    appendOneMessageToLog(Constants.LogTag.BLUE, "Собрана схема для испытания трансформатора с HH до 418В");
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "Собрана схема для испытания трансформатора с HH до 400В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog(Constants.LogTag.RED, "Схема разобрана. Введите корректный HH в объекте испытания.");
                     isExperimentRunning = false;
                 }
-                is1to5State = false;
-                is10to5State = false;
-                is50to5State = true;
+                is50AState = true;
+                is10AState = false;
+                is1AState = false;
+            }
+
+            if (isExperimentRunning && isDevicesResponding()) {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация испытания");
+                if (Ixx < 1) {
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "1А токовая ступень");
+                    communicationModel.onKM69();
+                    is1AState = true;
+                    is10AState = false;
+                    is50AState = false;
+                } else if (Ixx > 1 && Ixx < 10) {
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "10А токовая ступень");
+                    communicationModel.onKM58();
+                    is1AState = false;
+                    is10AState = true;
+                    is50AState = false;
+                } else if (Ixx >= 10) {
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "50А токовая ступень");
+                    communicationModel.onKM47();
+                    is1AState = false;
+                    is10AState = false;
+                    is50AState = true;
+                }
             }
 
             if (isExperimentRunning && isStartButtonOn && isDevicesResponding()) {
@@ -237,7 +262,7 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
         sleep(100);
 
         communicationModel.stopObject();
-        int time = 1000;
+        int time = 100;
         while (isExperimentRunning && (time-- > 0)) {
             sleep(10);
         }
@@ -305,6 +330,77 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
         return start;
     }
 
+    private void pickUpState() {
+        if (is50AState) {
+            if (measuringIAvr < 10.0 && measuringIAvr > 1) {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 10A");
+                communicationModel.onKM58();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+                is50AState = false;
+                is10AState = true;
+                is1AState = false;
+                communicationModel.offDO10();
+                communicationModel.offDO12();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+            } else if (measuringIAvr < 1) {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 1A");
+                communicationModel.onKM69();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+                is50AState = false;
+                is10AState = false;
+                is1AState = true;
+                communicationModel.offDO11();
+                communicationModel.offDO12();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+            } else {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 50A");
+            }
+        } else if (is10AState) {
+            if (measuringIAvr > 10) {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 50A");
+                communicationModel.onKM47();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+                is50AState = true;
+                is10AState = false;
+                is1AState = false;
+                communicationModel.offDO10();
+                communicationModel.offDO11();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+            } else if (measuringIAvr < 1) {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 1A");
+                communicationModel.onKM69();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+                is50AState = false;
+                is10AState = false;
+                is1AState = true;
+                communicationModel.offDO11();
+                communicationModel.offDO12();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+            }
+        } else if (is1AState) {
+            if (measuringIAvr > 1) {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 10A");
+                communicationModel.onKM58();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+                is50AState = false;
+                is10AState = true;
+                is1AState = false;
+                communicationModel.offDO10();
+                communicationModel.offDO12();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+            } else if (measuringIAvr < 1) {
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 1A");
+                communicationModel.onKM69();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+                is50AState = false;
+                is10AState = false;
+                is1AState = true;
+                communicationModel.offDO11();
+                communicationModel.offDO12();
+                sleep(TIME_DELAY_CURRENT_STAGES);
+            }
+        }
+    }
 
     @Override
     public void update(Observable o, Object values) {
@@ -358,11 +454,11 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                     case PM130Model.I1_PARAM:
                         if (isNeedToRefresh) {
                             iA = (float) value;
-                            if (is50to5State) {
+                            if (is50AState) {
                                 iA *= STATE_50_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
+                            } else if (is10AState) {
                                 iA *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
+                            } else if (is1AState) {
                                 iA *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iAOld != -1) {
@@ -380,11 +476,11 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                     case PM130Model.I2_PARAM:
                         if (isNeedToRefresh) {
                             iB = (float) value;
-                            if (is50to5State) {
+                            if (is50AState) {
                                 iB *= STATE_50_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
+                            } else if (is10AState) {
                                 iB *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
+                            } else if (is1AState) {
                                 iB *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iBOld != -1) {
@@ -402,11 +498,11 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                     case PM130Model.I3_PARAM:
                         if (isNeedToRefresh) {
                             iC = (float) value;
-                            if (is50to5State) {
+                            if (is50AState) {
                                 iC *= STATE_50_TO_5_MULTIPLIER;
-                            } else if (is10to5State) {
+                            } else if (is10AState) {
                                 iC *= STATE_10_TO_5_MULTIPLIER;
-                            } else if (is1to5State) {
+                            } else if (is1AState) {
                                 iC *= STATE_1_TO_5_MULTIPLIER;
                             }
                             if (iCOld != -1) {

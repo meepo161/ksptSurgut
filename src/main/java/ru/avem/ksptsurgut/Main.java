@@ -147,7 +147,7 @@ public class Main extends Application implements ru.avem.ksptsurgut.Exitappable 
 
     @Override
     public void exitApp() {
-        showConfirmDialog("Вы действительно хотите выйти?", this::showLoginView, () -> {
+        showConfirmDialog("Вы действительно хотите выйти?", Platform::exit, () -> {
         });
     }
 }

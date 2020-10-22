@@ -1,6 +1,6 @@
 package ru.avem.ksptsurgut;
 
-import ru.avem.ksptsurgut.communication.serial.driver.UsbSerialPort;
+import ru.avem.ksptsurgut.communication.connections.usbserial.driver.UsbSerialPort;
 import ru.avem.ksptsurgut.utils.BuildConfig;
 
 import java.text.SimpleDateFormat;
@@ -20,8 +20,8 @@ public final class Constants {
         public static final int DATABITS = UsbSerialPort.DATABITS_8;
         public static final int STOPBITS = UsbSerialPort.STOPBITS_1;
         public static final int PARITY = UsbSerialPort.PARITY_NONE;
-        public static final int WRITE_TIMEOUT = 100;
-        public static final int READ_TIMEOUT = 100;
+        public static final int WRITE_TIMEOUT = 1000;
+        public static final int READ_TIMEOUT = 1000;
     }
 
     public static final class LogTag {

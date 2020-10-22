@@ -26,7 +26,7 @@ import static ru.avem.ksptsurgut.utils.Utils.sleep;
 import static ru.avem.ksptsurgut.utils.View.setDeviceState;
 
 public class Experiment3ControllerPhase3 extends AbstractExperiment {
-    private static final int WIDDING380 = 381;
+    private static final int WIDDING380 = 401;
 
     @FXML
     private TableView<Experiment3ModelPhase3> tableViewExperimentValues;
@@ -175,6 +175,8 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
     protected void runExperiment() {
         new Thread(() -> {
             if (isExperimentRunning) {
+                experiment3ModelPhase3.setGroupBH(String.valueOf(0));
+                experiment3ModelPhase3.setGroupHH(String.valueOf(0));
                 appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
                 communicationModel.initExperiment3Devices();
@@ -199,10 +201,8 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 showInformDialogForButtonPost("Нажмите <ПУСК> кнопочного поста");
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
-                communicationModel.initExperiment3Devices();
+            if (isExperimentRunning && !isDevicesResponding()) {
+                setCause(getNotRespondingDevicesString("Нет связи с устройствами "));
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
@@ -215,7 +215,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                     communicationModel.onKM1213();
                     communicationModel.onKM47();
                     communicationModel.onKM3();
-                    appendOneMessageToLog(Constants.LogTag.BLUE, "Собрана схема для испытания трансформатора с HH до 380В");
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "Собрана схема для испытания трансформатора с HH до 400В");
                 } else {
                     communicationModel.offAllKms();
                     appendOneMessageToLog(Constants.LogTag.RED, "Схема разобрана. Введите корректный HH в объекте испытания.");
@@ -420,7 +420,7 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                             measuringUOutAvr = (measuringUOutAB + measuringUOutBC + measuringUOutCA) / 3.0;
                             experiment3ModelPhase3.setuOutputAvr(formatRealNumber(measuringUOutAvr));
                             if (measuringUOutAvr > 380) {
-                                setCause("Напряжение поднялось больше 380В. Возможно, неправильно подключен ОИ");
+                                setCause("Напряжение поднялось больше 400В. Возможно, неправильно подключен ОИ");
                             }
                         }
                         break;
