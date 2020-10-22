@@ -1,20 +1,13 @@
 package ru.avem.ksptsurgut.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import ru.avem.ksptsurgut.Main;
 import ru.avem.ksptsurgut.communication.CommunicationModel;
 import ru.avem.ksptsurgut.db.model.Protocol;
 import ru.avem.ksptsurgut.model.ExperimentValuesModel;
@@ -98,21 +91,18 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     }
 
     protected void showRequestDialog(String request, boolean force) {
-        if (isExperimentRunning && ((isDevicesResponding() && isStartButtonOn) || force)) {
-            AtomicBoolean isPressed = new AtomicBoolean(false);
-            Platform.runLater(() -> {
-                View.showConfirmDialog(request,
-                        () -> isPressed.set(true),
-                        () -> {
-                            setCause("Отменено оператором");
-                            isPressed.set(true);
-                        });
-            });
+//        if (isExperimentRunning && ((isDevicesResponding() && isStartButtonOn) || force)) {
+        AtomicBoolean isPressed = new AtomicBoolean(false);
+        Platform.runLater(() -> {
+            View.showConfirmDialog(request,
+                    () -> isPressed.set(true),
+                    () -> buttonStartStop.setDisable(true));
+        });
 
-            while (!isPressed.get()) {
-                sleep(100);
-            }
+        while (!isPressed.get()) {
+            sleep(100);
         }
+//        }
     }
 
     protected void showInformDialogForButtonPost(String informMessage) {

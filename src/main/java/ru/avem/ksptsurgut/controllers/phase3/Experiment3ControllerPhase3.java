@@ -179,8 +179,8 @@ public class Experiment3ControllerPhase3 extends AbstractExperiment {
                 experiment3ModelPhase3.setGroupHH(String.valueOf(0));
                 appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment3Devices();
                 sleep(2000);
+                communicationModel.initExperiment3Devices();
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {

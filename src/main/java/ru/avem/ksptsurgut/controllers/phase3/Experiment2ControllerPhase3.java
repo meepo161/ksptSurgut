@@ -104,8 +104,8 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
             if (isExperimentRunning) {
                 appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment2Devices();
                 sleep(2000);
+                communicationModel.initExperiment2Devices();
             }
 
             if (isExperimentRunning && !isDevicesResponding()) {

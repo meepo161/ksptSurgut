@@ -13,7 +13,6 @@ import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.db.model.Protocol;
 import ru.avem.ksptsurgut.model.phase3.Experiment5ModelPhase3;
-import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -115,9 +114,8 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         tableColumnCOS.setCellValueFactory(cellData -> cellData.getValue().COSProperty());
         tableColumnTime.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         tableColumnResultExperiment5.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
-        showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
-                "После нажмите <Да>", true);
-
+        new Thread(() -> showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
+                "После нажмите <Да>", true)).start();
     }
 
     @Override
@@ -178,10 +176,10 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     protected void runExperiment() {
         new Thread(() -> {
             if (isExperimentRunning) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Начало испытания");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment5Devices();
                 sleep(2000);
+                communicationModel.initExperiment5Devices();
                 experiment5ModelPhase3.setTime(String.valueOf(XXTime));
             }
 
@@ -191,15 +189,15 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isThereAreAccidents()) {
-                appendOneMessageToLog(Constants.LogTag.RED,getAccidentsString("Аварии"));
+                appendOneMessageToLog(Constants.LogTag.RED, getAccidentsString("Аварии"));
             }
 
             if (isExperimentRunning && isOwenPRResponding) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Инициализация кнопочного поста...");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация кнопочного поста...");
             }
 
             if (isExperimentRunning) {
-                appendOneMessageToLog(Constants.LogTag.ORANGE,"Включите кнопочный пост");
+                appendOneMessageToLog(Constants.LogTag.ORANGE, "Включите кнопочный пост");
                 showInformDialogForButtonPost("Нажмите <ПУСК> кнопочного поста");
             }
 
@@ -212,7 +210,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Инициализация испытания");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Инициализация испытания");
                 if (isExperimentRunning && UHHTestItem < WIDDING380) {
                     communicationModel.onKM1();
                     sleep(3000);
@@ -224,10 +222,10 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                     sleep(300);
                     communicationModel.onKM11();
                     sleep(300);
-                    appendOneMessageToLog(Constants.LogTag.BLUE,"Собрана схема для испытания трансформатора с HH до 400В");
+                    appendOneMessageToLog(Constants.LogTag.BLUE, "Собрана схема для испытания трансформатора с HH до 400В");
                 } else {
                     communicationModel.offAllKms();
-                    appendOneMessageToLog(Constants.LogTag.RED,"Схема разобрана. Введите корректный HH в объекте испытания.");
+                    appendOneMessageToLog(Constants.LogTag.RED, "Схема разобрана. Введите корректный HH в объекте испытания.");
                     isExperimentRunning = false;
                 }
                 is1AState = false;
@@ -236,17 +234,17 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Идет подбор токовой ступени");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Идет подбор токовой ступени");
                 sleep(5000);
                 pickUpState();
                 sleep(100);
-                appendOneMessageToLog(Constants.LogTag.GREEN,"Токовая ступень подобрана");
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Измерение тока первичной обмотки и мощности потерь");
+                appendOneMessageToLog(Constants.LogTag.GREEN, "Токовая ступень подобрана");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Измерение тока первичной обмотки и мощности потерь");
             }
 
             if (isExperimentRunning && isDevicesResponding()) {
                 XXTime = (int) currentProtocol.getXxtime();
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Ждем " + XXTime + " секунд");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Ждем " + XXTime + " секунд");
             }
 
             while (isExperimentRunning && isDevicesResponding() && (XXTime-- > 0)) {
@@ -281,14 +279,14 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
         });
 
         if (!cause.equals("")) {
-            appendMessageToLog(Constants.LogTag.RED,String.format("Испытание прервано по причине: %s", cause));
+            appendMessageToLog(Constants.LogTag.RED, String.format("Испытание прервано по причине: %s", cause));
             experiment5ModelPhase3.setResult("Неуспешно");
         } else if (!isDevicesResponding()) {
-            appendMessageToLog(Constants.LogTag.RED,getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+            appendMessageToLog(Constants.LogTag.RED, getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
             experiment5ModelPhase3.setResult("Неуспешно");
         } else {
             experiment5ModelPhase3.setResult("Успешно");
-            appendMessageToLog(Constants.LogTag.GREEN,"Испытание завершено успешно");
+            appendMessageToLog(Constants.LogTag.GREEN, "Испытание завершено успешно");
         }
     }
 
@@ -308,7 +306,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
     private void pickUpState() {
         if (is50AState) {
             if (IAvr < 10.0 && IAvr > 1) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Выставляем токовую ступень 10A");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 10A");
                 communicationModel.onKM58();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
@@ -318,7 +316,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 communicationModel.offDO12();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 1) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Выставляем токовую ступень 1A");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 1A");
                 communicationModel.onKM69();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
@@ -328,11 +326,11 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 communicationModel.offDO12();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Выставляем токовую ступень 50A");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 50A");
             }
         } else if (is10AState) {
             if (IAvr > 10) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Выставляем токовую ступень 50A");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 50A");
                 communicationModel.onKM47();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = true;
@@ -342,7 +340,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 communicationModel.offDO11();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 1) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Выставляем токовую ступень 1A");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 1A");
                 communicationModel.onKM69();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
@@ -354,7 +352,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
             }
         } else if (is1AState) {
             if (IAvr > 1) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Выставляем токовую ступень 10A");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 10A");
                 communicationModel.onKM58();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;
@@ -364,7 +362,7 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                 communicationModel.offDO12();
                 sleep(TIME_DELAY_CURRENT_STAGES);
             } else if (IAvr < 1) {
-                appendOneMessageToLog(Constants.LogTag.BLUE,"Выставляем токовую ступень 1A");
+                appendOneMessageToLog(Constants.LogTag.BLUE, "Выставляем токовую ступень 1A");
                 communicationModel.onKM69();
                 sleep(TIME_DELAY_CURRENT_STAGES);
                 is50AState = false;

@@ -398,8 +398,6 @@ public class CommunicationModel extends Observable implements Observer {
         resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetAllAttempts();
         avemVoltmeterControllerA.setNeedToRead(true);
         avemVoltmeterControllerA.resetAllAttempts();
         avemVoltmeterControllerB.setNeedToRead(true);
@@ -408,6 +406,11 @@ public class CommunicationModel extends Observable implements Observer {
         avemVoltmeterControllerC.resetAllAttempts();
         parmaT400Controller.setNeedToRead(true);
         parmaT400Controller.resetAllAttempts();
+    }
+
+    public void initDeltaCP() {
+        deltaCP2000Controller.setNeedToRead(true);
+        deltaCP2000Controller.resetAllAttempts();
     }
 
     public void initExperiment5Devices() {
@@ -420,17 +423,8 @@ public class CommunicationModel extends Observable implements Observer {
         resetTimer();
         pm130Controller.setNeedToRead(true);
         pm130Controller.resetAllAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetAllAttempts();
     }
 
-    public void initExperiment7Devices() {
-        resetTimer();
-        pm130Controller.setNeedToRead(true);
-        pm130Controller.resetAllAttempts();
-        deltaCP2000Controller.setNeedToRead(true);
-        deltaCP2000Controller.resetAllAttempts();
-    }
 
     public void onKM1() {
         onRegisterInTheKms(1, 1);

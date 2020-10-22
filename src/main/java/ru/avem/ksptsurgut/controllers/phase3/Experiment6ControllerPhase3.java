@@ -92,8 +92,9 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
         tableColumnResult.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
 
         scrollPaneLog.vvalueProperty().bind(vBoxLog.heightProperty());
-        showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
-                "После нажмите <Да>", true);
+
+        new Thread(() -> showRequestDialog("Отсоедините все провода и кабели от ВН объекта испытания.\n" +
+                "После нажмите <Да>", true)).start();
     }
 
     @Override
@@ -155,8 +156,8 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
             if (isExperimentRunning) {
                 appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment6Devices();
                 sleep(2000);
+                communicationModel.initExperiment6Devices();
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -181,7 +182,10 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog(Constants.LogTag.BLUE, "Идет загрузка ЧП");
                 communicationModel.onKM1();
                 sleep(6000);
-                communicationModel.initExperiment6Devices();
+            }
+
+            if (isExperimentRunning) {
+                communicationModel.initDeltaCP();
                 sleep(3000);
             }
 

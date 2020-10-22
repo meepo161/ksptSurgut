@@ -15,7 +15,6 @@ import ru.avem.ksptsurgut.communication.devices.pm130.PM130Model;
 import ru.avem.ksptsurgut.communication.devices.pr200.OwenPRModel;
 import ru.avem.ksptsurgut.controllers.AbstractExperiment;
 import ru.avem.ksptsurgut.model.phase3.Experiment4ModelPhase3;
-import ru.avem.ksptsurgut.utils.Toast;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
@@ -180,8 +179,8 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             if (isExperimentRunning) {
                 appendOneMessageToLog(Constants.LogTag.BLUE, "Начало испытания");
                 communicationModel.initOwenPrController();
-                communicationModel.initExperiment4Devices();
                 sleep(2000);
+                communicationModel.initExperiment4Devices();
             }
 
             if (isExperimentRunning && !isOwenPRResponding) {
@@ -198,7 +197,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning) {
-                appendOneMessageToLog(Constants.LogTag.ORANGE,"Включите кнопочный пост");
+                appendOneMessageToLog(Constants.LogTag.ORANGE, "Включите кнопочный пост");
                 showInformDialogForButtonPost("Нажмите <ПУСК> кнопочного поста");
             }
 
@@ -213,7 +212,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
             }
 
             if (isExperimentRunning) {
-                communicationModel.initExperiment4Devices();
+                communicationModel.initDeltaCP();
                 sleep(3000);
             }
 
@@ -326,7 +325,9 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     @Override
     protected boolean isDevicesResponding() {
         return isOwenPRResponding && isPM130Responding &&
-                isDeltaResponding;
+                isDeltaResponding&& isAvem1Responding &&
+                isAvem2Responding&& isAvem3Responding &&
+                isParmaResponding;
     }
 
     @Override
@@ -491,7 +492,7 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             experiment4ModelPhase3.setUBH3(formatRealNumber(measuringUInCA));
                             measuringUInAvr = (measuringUInAB + measuringUInBC + measuringUInCA) / 3;
                             measuringUkzPercent = (((measuringUInAvr * 100.0) / UBHTestItem) * (Iном / ((measuringIA + measuringIB + measuringIC) / 3)));
-                            if(measuringUkzPercent > 0) {
+                            if (measuringUkzPercent > 0) {
                                 experiment4ModelPhase3.setUKZPercent(formatRealNumber(measuringUkzPercent));
                             }
                         }
