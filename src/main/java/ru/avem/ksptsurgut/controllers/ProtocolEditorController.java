@@ -92,6 +92,9 @@ public class ProtocolEditorController {
         sortedData.comparatorProperty().bind(tableProtocols.comparatorProperty());
 
         tableProtocols.setItems(sortedData);
+        columnProtocolID.setSortType(TableColumn.SortType.DESCENDING);
+        tableProtocols.getSortOrder().add(columnProtocolID);
+        tableProtocols.sort();
     }
 
     private void initData() {

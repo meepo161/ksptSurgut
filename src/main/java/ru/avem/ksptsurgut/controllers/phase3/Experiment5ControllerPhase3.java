@@ -216,12 +216,15 @@ public class Experiment5ControllerPhase3 extends AbstractExperiment {
                     sleep(3000);
                     communicationModel.onKM15();
                     sleep(300);
-                    communicationModel.onKM3();
-                    sleep(300);
                     communicationModel.onKM47();
                     sleep(300);
                     communicationModel.onKM11();
                     sleep(300);
+                    communicationModel.onDOM6();
+                    sleep(300);
+                    communicationModel.onKM3();
+                    sleep(500);
+                    communicationModel.offDOM6();
                     appendOneMessageToLog(Constants.LogTag.BLUE, "Собрана схема для испытания трансформатора с HH до 400В");
                 } else {
                     communicationModel.offAllKms();

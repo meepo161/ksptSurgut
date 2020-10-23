@@ -325,8 +325,8 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
     @Override
     protected boolean isDevicesResponding() {
         return isOwenPRResponding && isPM130Responding &&
-                isDeltaResponding&& isAvem1Responding &&
-                isAvem2Responding&& isAvem3Responding &&
+                isDeltaResponding && isAvem1Responding &&
+                isAvem2Responding && isAvem3Responding &&
                 isParmaResponding;
     }
 
@@ -565,7 +565,9 @@ public class Experiment4ControllerPhase3 extends AbstractExperiment {
                             if ((measuringIAvemA + measuringIAvemB + measuringIAvemC) / 3 > 50) {
                                 measuringP -= measuringPKZ;
                             }
-                            experiment4ModelPhase3.setPP(formatRealNumber(measuringP));
+                            if (measuringP > 0.001) {
+                                experiment4ModelPhase3.setPP(formatRealNumber(measuringP));
+                            }
                         }
                         break;
                     case PM130Model.F_PARAM:

@@ -148,6 +148,7 @@ public class MainViewController implements Statable {
     private State waitState = new WaitState(this);
     private State resultState = new ResultState(this);
     private State currentState = idleState;
+    private boolean firstStart;
 
     @FXML
     private void initialize() {
@@ -159,7 +160,6 @@ public class MainViewController implements Statable {
         tableViewResults.setItems(resultData);
         columnTableDimension.setCellValueFactory(cellData -> cellData.getValue().dimensionProperty());
         columnTableValue.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
-        initializeComboBoxResult();
 
         protocolFileChooser = new FileChooser();
         protocolFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -168,7 +168,9 @@ public class MainViewController implements Statable {
         DBFileChooser = new FileChooser();
         DBFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         DBFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("AVEM Database (*.adb)", "*.adb"));
-
+        firstStart = true;
+        initializeComboBoxResult();
+        firstStart = false;
         toInitIdleState();
     }
 

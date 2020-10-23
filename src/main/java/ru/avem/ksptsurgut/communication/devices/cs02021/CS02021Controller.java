@@ -1,7 +1,6 @@
 package ru.avem.ksptsurgut.communication.devices.cs02021;
 
 
-import ru.avem.ksptsurgut.Constants;
 import ru.avem.ksptsurgut.communication.connections.Connection;
 import ru.avem.ksptsurgut.communication.devices.DeviceController;
 import ru.avem.ksptsurgut.communication.modbus.utils.CRC16;
@@ -130,7 +129,10 @@ public class CS02021Controller implements DeviceController {
             do {
                 sleep(2);
                 int frameSize = mConnection.read(inputArray);
-                inputBuffer.put(inputArray, 0, frameSize);
+                try {
+                    inputBuffer.put(inputArray, 0, frameSize);
+                } catch (Exception e) {
+                }
             } while (inputBuffer.position() < 16 && (++attempt < 15));
 //            mConnection.setConnectionBaudrate(Constants.Communication.BAUDRATE_MAIN);
             return inputBuffer.position() >= 16;
