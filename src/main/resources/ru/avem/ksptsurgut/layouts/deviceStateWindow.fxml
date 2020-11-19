@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane fx:id="root" prefHeight="386.0" prefWidth="433.0" stylesheets="@../styles/main_css.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avem.ksptsurgut.controllers.DeviceStateWindowController">
+    <children>
+      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="BOTTOM_CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="Неизвестно" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fill="RED" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="Не отвечает" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fill="LIME" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="Отвечает" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER">
+               <children>
+                  <HBox spacing="16.0">
+                     <children>
+                          <Label style="-fx-font-weight: bold;" text="Состояние устройств" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCirclePM130" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="PM-130" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="18.0" layoutY="51.0" spacing="16.0">
+                     <children>
+                        <Circle fx:id="deviceStateCirclePM130_2" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Label text="PM-130(2)" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCircleParma400" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="Парма 400" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCircleAVEM" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="АВЭМ4-03" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCirclePhaseMeter" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="Фазометр" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCircleIKAS" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="ИКАС" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCirclePR200" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="ПР200" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                        <Circle fx:id="deviceStateCircleTrm" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Label text="TRM" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCircleCS0202" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="ЦС0202-1" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                          <Circle fx:id="deviceStateCircleDELTACP2000" fill="DODGERBLUE" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+                          <Label text="DELTA CP2000" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+    </children>
+</AnchorPane>

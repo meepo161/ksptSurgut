@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<AnchorPane fx:id="root" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../styles/main_css.css"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.avem.ksptsurgut.controllers.DebugWindowController">
+    <children>
+        <VBox layoutX="329.0" layoutY="149.0" prefHeight="768.0" prefWidth="1366.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Label text="Отладка">
+                            <font>
+                                <Font name="System Bold" size="20.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" prefWidth="1366.0" spacing="8.0">
+                            <children>
+                                <HBox alignment="CENTER" spacing="8.0">
+                                    <children>
+                                        <VBox layoutX="18.0" layoutY="18.0" spacing="8.0">
+                                            <children>
+                                                <Label text="Входы ПР">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0"/>
+                                                    </font>
+                                                </Label>
+                                                <JFXCheckBox fx:id="rbPRI1" disable="true" text="1"/>
+                                                <JFXCheckBox fx:id="rbPRI2" disable="true" text="2"/>
+                                                <JFXCheckBox fx:id="rbPRI3" disable="true" text="3"/>
+                                                <JFXCheckBox fx:id="rbPRI4" disable="true" text="4"/>
+                                                <JFXCheckBox fx:id="rbPRI5" disable="true" text="5"/>
+                                                <JFXCheckBox fx:id="rbPRI6" disable="true" text="6"/>
+                                                <JFXCheckBox fx:id="rbPRI7" disable="true" text="7"/>
+                                                <JFXCheckBox fx:id="rbPRI8" disable="true" text="8"/>
+                                                <JFXCheckBox fx:id="rbPRI1M1" disable="true" text="1M1"/>
+                                                <JFXCheckBox fx:id="rbPRI2M1" disable="true" text="2M1"/>
+                                                <JFXCheckBox fx:id="rbPRI3M1" disable="true" text="3M1"/>
+                                                <JFXCheckBox fx:id="rbPRI4M1" disable="true" text="4M1"/>
+                                                <JFXCheckBox fx:id="rbPRI5M1" disable="true" text="5M1"/>
+                                                <JFXCheckBox fx:id="rbPRI6M1" disable="true" text="6M1"/>
+                                                <JFXCheckBox fx:id="rbPRI7M1" disable="true" text="7M1"/>
+                                                <JFXCheckBox fx:id="rbPRI8M1" disable="true" text="8M1"/>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                            </padding>
+                                        </VBox>
+                                        <VBox spacing="8.0">
+                                            <children>
+                                                <Label text="Выходы ПР">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0"/>
+                                                    </font>
+                                                </Label>
+                                                <JFXCheckBox fx:id="rbPR1" onAction="#handleRBPR1" text="1"/>
+                                                <JFXCheckBox fx:id="rbPR2" onAction="#handleRBPR2" text="2"/>
+                                                <JFXCheckBox fx:id="rbPR3" onAction="#handleRBPR3" text="3"/>
+                                                <JFXCheckBox fx:id="rbPR4" onAction="#handleRBPR4" text="4"/>
+                                                <JFXCheckBox fx:id="rbPR5" onAction="#handleRBPR5" text="5"/>
+                                                <JFXCheckBox fx:id="rbPR6" onAction="#handleRBPR6" text="6"/>
+                                                <JFXCheckBox fx:id="rbPR7" onAction="#handleRBPR7" text="7"/>
+                                                <JFXCheckBox fx:id="rbPR8" onAction="#handleRBPR8" text="8"/>
+                                                <JFXCheckBox fx:id="rbPR1M1" onAction="#handleRBPR1M1" text="1M1"/>
+                                                <JFXCheckBox fx:id="rbPR2M1" onAction="#handleRBPR2M1" text="2M1"/>
+                                                <JFXCheckBox fx:id="rbPR3M1" onAction="#handleRBPR3M1" text="3M1"/>
+                                                <JFXCheckBox fx:id="rbPR4M1" onAction="#handleRBPR4M1" text="4M1"/>
+                                                <JFXCheckBox fx:id="rbPR5M1" onAction="#handleRBPR5M1" text="5M1"/>
+                                                <JFXCheckBox fx:id="rbPR6M1" onAction="#handleRBPR6M1" text="6M1"/>
+                                                <JFXCheckBox fx:id="rbPR7M1" onAction="#handleRBPR7M1" text="7M1"/>
+                                                <JFXCheckBox fx:id="rbPR8M1" onAction="#handleRBPR8M1" text="8M1"/>
+                                                <HBox spacing="8.0">
+                                                    <children>
+                                                        <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleAllOn"
+                                                                text="ON"/>
+                                                        <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" mnemonicParsing="false"
+                                                                   onAction="#handleAllOff" text="OFF"/>
+                                                    </children>
+                                                    <padding>
+                                                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                                    </padding>
+                                                </HBox>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                            </padding>
+                                        </VBox>
+                                        <VBox alignment="TOP_CENTER" spacing="8.0">
+                                            <children>
+                                                <Label text="Частотный преобразователь" wrapText="true">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0"/>
+                                                    </font>
+                                                </Label>
+                                                <Label layoutX="18.0" layoutY="18.0" text="Напряжение" wrapText="true"/>
+                                                <JFXTextField fx:id="tfVoltage"/>
+                                                <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleBtnSetVoltage"
+                                                        text="Выставить"/>
+                                                <Label layoutX="62.0" layoutY="43.0" text="Текущее напряжение"
+                                                       wrapText="true">
+                                                    <VBox.margin>
+                                                        <Insets top="32.0"/>
+                                                    </VBox.margin>
+                                                </Label>
+                                                <JFXTextField fx:id="tfCurrentVoltage" layoutX="18.0" layoutY="68.0"/>
+                                                <JFXButton buttonType="RAISED" layoutX="81.0" layoutY="104.0" mnemonicParsing="false"
+                                                        onAction="#handleBtnStopObject" text="Остановить"/>
+                                                <JFXButton buttonType="RAISED" layoutX="77.0" layoutY="227.0" mnemonicParsing="false"
+                                                        onAction="#handleBtnPR1" text="PR1"/>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                            </padding>
+                                        </VBox>
+                                        <AnchorPane>
+                                            <children>
+                                                <VBox alignment="TOP_CENTER" prefHeight="433.0" prefWidth="172.0"
+                                                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <children>
+                                                        <HBox spacing="16.0">
+                                                            <children>
+                                                                <Label style="-fx-font-weight: bold;"
+                                                                       text="Состояние устройств"/>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="16.0" left="16.0" right="16.0"
+                                                                        top="16.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="341.0"
+                                                              spacing="8.0">
+                                                            <children>
+                                                                <Circle fx:id="deviceStateCirclePR200" fill="DODGERBLUE"
+                                                                        radius="14.0" stroke="BLACK"
+                                                                        strokeType="INSIDE"/>
+                                                                <Label text="ПР200"/>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="194.0"
+                                                              spacing="8.0">
+                                                            <children>
+                                                                <Circle fx:id="deviceStateCircleDELTACP2000"
+                                                                        fill="DODGERBLUE" radius="14.0" stroke="BLACK"
+                                                                        strokeType="INSIDE"/>
+                                                                <Label text="DELTA CP2000"/>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                    </children>
+                                                    <padding>
+                                                        <Insets right="16.0"/>
+                                                    </padding>
+                                                </VBox>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                    </padding>
+                                </HBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
