@@ -160,9 +160,10 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                 appendOneMessageToLog("Инициализация кнопочного поста...");
             }
 
-            while (isExperimentRunning && !isStartButtonOn) {
+            int timeOut = 30;
+            while (isExperimentRunning && !isStartButtonOn && timeOut-- > 0) {
                 appendOneMessageToLog("Включите кнопочный пост");
-                sleep(1);
+                sleep(1000);
                 isNeedToWaitDelta = true;
             }
 
@@ -173,9 +174,10 @@ public class Experiment6ControllerPhase3 extends AbstractExperiment {
                 sleep(3000);
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
+            timeOut = 30;
+            while (isExperimentRunning && !isDevicesResponding() && timeOut-- > 0) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
+                sleep(1000);
                 communicationModel.initExperiment2Devices();
             }
 

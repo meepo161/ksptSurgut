@@ -35,9 +35,17 @@ public class ExperimentValuesModel {
     private Experiment1ModelPhase3 experiment1ModelPhase3BH = new Experiment1ModelPhase3("BH и К.");
     private Experiment1ModelPhase3 experiment1ModelPhase3HH = new Experiment1ModelPhase3("HH и К.");
     private Experiment1ModelPhase3 experiment1ModelPhase3BHHH = new Experiment1ModelPhase3("ВН и HH");
-    private Experiment2ModelPhase3 experiment2ModelPhase3BH = new Experiment2ModelPhase3("BH");
     private Experiment2ModelPhase3 experiment2ModelPhase3HH = new Experiment2ModelPhase3("HH");
-    private Experiment3ModelPhase3 experiment3ModelPhase3 = new Experiment3ModelPhase3();
+    private Experiment2ModelPhase3 experiment2ModelPhase3BH = new Experiment2ModelPhase3("BH");
+    private Experiment2ModelPhase3 experiment2ModelPhase3BH2 = new Experiment2ModelPhase3("BH2");
+    private Experiment2ModelPhase3 experiment2ModelPhase3BH3 = new Experiment2ModelPhase3("BH3");
+    private Experiment2ModelPhase3 experiment2ModelPhase3BH4 = new Experiment2ModelPhase3("BH4");
+    private Experiment2ModelPhase3 experiment2ModelPhase3BH5 = new Experiment2ModelPhase3("BH5");
+    private Experiment3ModelPhase3 experiment3ModelPhase3 = new Experiment3ModelPhase3("BH");
+    private Experiment3ModelPhase3 experiment3ModelPhase3BH2 = new Experiment3ModelPhase3("BH2");
+    private Experiment3ModelPhase3 experiment3ModelPhase3BH3 = new Experiment3ModelPhase3("BH3");
+    private Experiment3ModelPhase3 experiment3ModelPhase3BH4 = new Experiment3ModelPhase3("BH4");
+    private Experiment3ModelPhase3 experiment3ModelPhase3BH5 = new Experiment3ModelPhase3("BH5");
     private Experiment4ModelPhase3 experiment4ModelPhase3 = new Experiment4ModelPhase3();
     private Experiment5ModelPhase3 experiment5ModelPhase3 = new Experiment5ModelPhase3();
     private Experiment6ModelPhase3 experiment6ModelPhase3 = new Experiment6ModelPhase3();
@@ -150,12 +158,76 @@ public class ExperimentValuesModel {
         this.experiment2ModelPhase3HH = experiment2ModelPhase3HH;
     }
 
+    public Experiment2ModelPhase3 getExperiment2ModelPhase3BH2() {
+        return experiment2ModelPhase3BH2;
+    }
+
+    public void setExperiment2ModelPhase3BH2(Experiment2ModelPhase3 experiment2ModelPhase3BH2) {
+        this.experiment2ModelPhase3BH2 = experiment2ModelPhase3BH2;
+    }
+
+    public Experiment2ModelPhase3 getExperiment2ModelPhase3BH3() {
+        return experiment2ModelPhase3BH3;
+    }
+
+    public void setExperiment2ModelPhase3BH3(Experiment2ModelPhase3 experiment2ModelPhase3BH3) {
+        this.experiment2ModelPhase3BH3 = experiment2ModelPhase3BH3;
+    }
+
+    public Experiment2ModelPhase3 getExperiment2ModelPhase3BH4() {
+        return experiment2ModelPhase3BH4;
+    }
+
+    public void setExperiment2ModelPhase3BH4(Experiment2ModelPhase3 experiment2ModelPhase3BH4) {
+        this.experiment2ModelPhase3BH4 = experiment2ModelPhase3BH4;
+    }
+
+    public Experiment2ModelPhase3 getExperiment2ModelPhase3BH5() {
+        return experiment2ModelPhase3BH5;
+    }
+
+    public void setExperiment2ModelPhase3BH5(Experiment2ModelPhase3 experiment2ModelPhase3BH5) {
+        this.experiment2ModelPhase3BH5 = experiment2ModelPhase3BH5;
+    }
+
     public Experiment3ModelPhase3 getExperiment3ModelPhase3() {
         return experiment3ModelPhase3;
     }
 
     public void setExperiment3ModelPhase3(Experiment3ModelPhase3 experiment3ModelPhase3) {
         this.experiment3ModelPhase3 = experiment3ModelPhase3;
+    }
+
+    public Experiment3ModelPhase3 getExperiment3ModelPhase3BH2() {
+        return experiment3ModelPhase3BH2;
+    }
+
+    public void setExperiment3ModelPhase3BH2(Experiment3ModelPhase3 experiment3ModelPhase3BH2) {
+        this.experiment3ModelPhase3BH2 = experiment3ModelPhase3BH2;
+    }
+
+    public Experiment3ModelPhase3 getExperiment3ModelPhase3BH3() {
+        return experiment3ModelPhase3BH3;
+    }
+
+    public void setExperiment3ModelPhase3BH3(Experiment3ModelPhase3 experiment3ModelPhase3BH3) {
+        this.experiment3ModelPhase3BH3 = experiment3ModelPhase3BH3;
+    }
+
+    public Experiment3ModelPhase3 getExperiment3ModelPhase3BH4() {
+        return experiment3ModelPhase3BH4;
+    }
+
+    public void setExperiment3ModelPhase3BH4(Experiment3ModelPhase3 experiment3ModelPhase3BH4) {
+        this.experiment3ModelPhase3BH4 = experiment3ModelPhase3BH4;
+    }
+
+    public Experiment3ModelPhase3 getExperiment3ModelPhase3BH5() {
+        return experiment3ModelPhase3BH5;
+    }
+
+    public void setExperiment3ModelPhase3BH5(Experiment3ModelPhase3 experiment3ModelPhase3BH5) {
+        this.experiment3ModelPhase3BH5 = experiment3ModelPhase3BH5;
     }
 
     public Experiment4ModelPhase3 getExperiment4ModelPhase3() {

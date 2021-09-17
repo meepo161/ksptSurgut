@@ -25,7 +25,7 @@ public class Experiment3ModelPhase3 {
     private List<StringProperty> properties = new ArrayList<>();
 
 
-    public Experiment3ModelPhase3() {
+    public Experiment3ModelPhase3(String winding) {
         uOutputAB = new SimpleStringProperty();
         uOutputBC = new SimpleStringProperty();
         uOutputCA = new SimpleStringProperty();

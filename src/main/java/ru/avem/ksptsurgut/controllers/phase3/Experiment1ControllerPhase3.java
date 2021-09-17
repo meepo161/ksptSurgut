@@ -104,7 +104,8 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                 sleep(2000);
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
+            int timeOut = 30;
+            while (isExperimentRunning && !isDevicesResponding() && timeOut-- > 0) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
                 sleep(100);
                 communicationModel.initExperiment1Devices();
@@ -153,7 +154,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
-            if (currentProtocol.getUmeger() < 2500) {
+            if (currentProtocol.getUmeger() <= 2500) {
                 if (!communicationModel.setUMgr(uMgr)) {
                     setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
                     setCause("Мегер не отвечает на запросы");
@@ -161,7 +162,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
                     setDeviceState(deviceStateCircleCS0202, View.DeviceState.RESPONDING);
                 }
             } else {
-                appendOneMessageToLog("Напряжение Мегаомметра выше допустимого. Измените объект испытания");
+                setCause("Напряжение Мегаомметра выше допустимого. Измените объект испытания");
                 isExperimentRunning = false;
             }
         }

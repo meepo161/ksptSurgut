@@ -72,6 +72,58 @@ public class Protocol {
     private String e2ResultBH = "";
 
     @DatabaseField
+    private String e2WindingBH2 = "";
+    @DatabaseField
+    private String e2ABBH2 = "";
+    @DatabaseField
+    private String e2BCBH2 = "";
+    @DatabaseField
+    private String e2CABH2 = "";
+    @DatabaseField
+    private String e2TBH2 = "";
+    @DatabaseField
+    private String e2ResultBH2 = "";
+
+    @DatabaseField
+    private String e2WindingBH3 = "";
+    @DatabaseField
+    private String e2ABBH3 = "";
+    @DatabaseField
+    private String e2BCBH3 = "";
+    @DatabaseField
+    private String e2CABH3 = "";
+    @DatabaseField
+    private String e2TBH3 = "";
+    @DatabaseField
+    private String e2ResultBH3 = "";
+
+    @DatabaseField
+    private String e2WindingBH4 = "";
+    @DatabaseField
+    private String e2ABBH4 = "";
+    @DatabaseField
+    private String e2BCBH4 = "";
+    @DatabaseField
+    private String e2CABH4 = "";
+    @DatabaseField
+    private String e2TBH4 = "";
+    @DatabaseField
+    private String e2ResultBH4 = "";
+
+    @DatabaseField
+    private String e2WindingBH5 = "";
+    @DatabaseField
+    private String e2ABBH5 = "";
+    @DatabaseField
+    private String e2BCBH5 = "";
+    @DatabaseField
+    private String e2CABH5 = "";
+    @DatabaseField
+    private String e2TBH5 = "";
+    @DatabaseField
+    private String e2ResultBH5 = "";
+
+    @DatabaseField
     private String e2WindingHH = "";
     @DatabaseField
     private String e2ABHH = "";
@@ -110,6 +162,115 @@ public class Protocol {
     private String e3F = "";
     @DatabaseField
     private String e3Result = "";
+
+    @DatabaseField
+    private String e3UInputAB2 = "";
+    @DatabaseField
+    private String e3UInputBC2 = "";
+    @DatabaseField
+    private String e3UInputCA2 = "";
+    @DatabaseField
+    private String e3UInputAvr2 = "";
+    @DatabaseField
+    private String e3UOutputAB2 = "";
+    @DatabaseField
+    private String e3UOutputBC2 = "";
+    @DatabaseField
+    private String e3UOutputCA2 = "";
+    @DatabaseField
+    private String e3UOutputAvr2 = "";
+    @DatabaseField
+    private String e3DiffU2 = "";
+    @DatabaseField
+    private String e3WindingBH2 = "";
+    @DatabaseField
+    private String e3WindingHH2 = "";
+    @DatabaseField
+    private String e3F2 = "";
+    @DatabaseField
+    private String e3Result2 = "";
+
+    @DatabaseField
+    private String e3UInputAB3 = "";
+    @DatabaseField
+    private String e3UInputBC3 = "";
+    @DatabaseField
+    private String e3UInputCA3 = "";
+    @DatabaseField
+    private String e3UInputAvr3 = "";
+    @DatabaseField
+    private String e3UOutputAB3 = "";
+    @DatabaseField
+    private String e3UOutputBC3 = "";
+    @DatabaseField
+    private String e3UOutputCA3 = "";
+    @DatabaseField
+    private String e3UOutputAvr3 = "";
+    @DatabaseField
+    private String e3DiffU3 = "";
+    @DatabaseField
+    private String e3WindingBH3 = "";
+    @DatabaseField
+    private String e3WindingHH3 = "";
+    @DatabaseField
+    private String e3F3 = "";
+    @DatabaseField
+    private String e3Result3 = "";
+
+
+    @DatabaseField
+    private String e3UInputAB4 = "";
+    @DatabaseField
+    private String e3UInputBC4 = "";
+    @DatabaseField
+    private String e3UInputCA4 = "";
+    @DatabaseField
+    private String e3UInputAvr4 = "";
+    @DatabaseField
+    private String e3UOutputAB4 = "";
+    @DatabaseField
+    private String e3UOutputBC4 = "";
+    @DatabaseField
+    private String e3UOutputCA4 = "";
+    @DatabaseField
+    private String e3UOutputAvr4 = "";
+    @DatabaseField
+    private String e3DiffU4 = "";
+    @DatabaseField
+    private String e3WindingBH4 = "";
+    @DatabaseField
+    private String e3WindingHH4 = "";
+    @DatabaseField
+    private String e3F4 = "";
+    @DatabaseField
+    private String e3Result4 = "";
+
+    @DatabaseField
+    private String e3UInputAB5 = "";
+    @DatabaseField
+    private String e3UInputBC5 = "";
+    @DatabaseField
+    private String e3UInputCA5 = "";
+    @DatabaseField
+    private String e3UInputAvr5 = "";
+    @DatabaseField
+    private String e3UOutputAB5 = "";
+    @DatabaseField
+    private String e3UOutputBC5 = "";
+    @DatabaseField
+    private String e3UOutputCA5 = "";
+    @DatabaseField
+    private String e3UOutputAvr5 = "";
+    @DatabaseField
+    private String e3DiffU5 = "";
+    @DatabaseField
+    private String e3WindingBH5 = "";
+    @DatabaseField
+    private String e3WindingHH5 = "";
+    @DatabaseField
+    private String e3F5 = "";
+    @DatabaseField
+    private String e3Result5 = "";
 
     @DatabaseField
     private String e4UKZV = "";
@@ -197,8 +358,6 @@ public class Protocol {
     private String e7TimeHHandCorps = "";
     @DatabaseField
     private String e7ResultHHandCorps = "";
-
-
 
 
     @DatabaseField
@@ -1133,6 +1292,615 @@ public class Protocol {
         this.time = time;
     }
 
+
+    public String getE2WindingBH2() {
+        return e2WindingBH2;
+    }
+
+    public void setE2WindingBH2(String e2WindingBH2) {
+        this.e2WindingBH2 = e2WindingBH2;
+    }
+
+    public String getE2ABBH2() {
+        return e2ABBH2;
+    }
+
+    public void setE2ABBH2(String e2ABBH2) {
+        this.e2ABBH2 = e2ABBH2;
+    }
+
+    public String getE2BCBH2() {
+        return e2BCBH2;
+    }
+
+    public void setE2BCBH2(String e2BCBH2) {
+        this.e2BCBH2 = e2BCBH2;
+    }
+
+    public String getE2CABH2() {
+        return e2CABH2;
+    }
+
+    public void setE2CABH2(String e2CABH2) {
+        this.e2CABH2 = e2CABH2;
+    }
+
+    public String getE2TBH2() {
+        return e2TBH2;
+    }
+
+    public void setE2TBH2(String e2TBH2) {
+        this.e2TBH2 = e2TBH2;
+    }
+
+    public String getE2ResultBH2() {
+        return e2ResultBH2;
+    }
+
+    public void setE2ResultBH2(String e2ResultBH2) {
+        this.e2ResultBH2 = e2ResultBH2;
+    }
+
+    public String getE2WindingBH3() {
+        return e2WindingBH3;
+    }
+
+    public void setE2WindingBH3(String e2WindingBH3) {
+        this.e2WindingBH3 = e2WindingBH3;
+    }
+
+    public String getE2ABBH3() {
+        return e2ABBH3;
+    }
+
+    public void setE2ABBH3(String e2ABBH3) {
+        this.e2ABBH3 = e2ABBH3;
+    }
+
+    public String getE2BCBH3() {
+        return e2BCBH3;
+    }
+
+    public void setE2BCBH3(String e2BCBH3) {
+        this.e2BCBH3 = e2BCBH3;
+    }
+
+    public String getE2CABH3() {
+        return e2CABH3;
+    }
+
+    public void setE2CABH3(String e2CABH3) {
+        this.e2CABH3 = e2CABH3;
+    }
+
+    public String getE2TBH3() {
+        return e2TBH3;
+    }
+
+    public void setE2TBH3(String e2TBH3) {
+        this.e2TBH3 = e2TBH3;
+    }
+
+    public String getE2ResultBH3() {
+        return e2ResultBH3;
+    }
+
+    public void setE2ResultBH3(String e2ResultBH3) {
+        this.e2ResultBH3 = e2ResultBH3;
+    }
+
+    public String getE2WindingBH4() {
+        return e2WindingBH4;
+    }
+
+    public void setE2WindingBH4(String e2WindingBH4) {
+        this.e2WindingBH4 = e2WindingBH4;
+    }
+
+    public String getE2ABBH4() {
+        return e2ABBH4;
+    }
+
+    public void setE2ABBH4(String e2ABBH4) {
+        this.e2ABBH4 = e2ABBH4;
+    }
+
+    public String getE2BCBH4() {
+        return e2BCBH4;
+    }
+
+    public void setE2BCBH4(String e2BCBH4) {
+        this.e2BCBH4 = e2BCBH4;
+    }
+
+    public String getE2CABH4() {
+        return e2CABH4;
+    }
+
+    public void setE2CABH4(String e2CABH4) {
+        this.e2CABH4 = e2CABH4;
+    }
+
+    public String getE2TBH4() {
+        return e2TBH4;
+    }
+
+    public void setE2TBH4(String e2TBH4) {
+        this.e2TBH4 = e2TBH4;
+    }
+
+    public String getE2ResultBH4() {
+        return e2ResultBH4;
+    }
+
+    public void setE2ResultBH4(String e2ResultBH4) {
+        this.e2ResultBH4 = e2ResultBH4;
+    }
+
+    public String getE2WindingBH5() {
+        return e2WindingBH5;
+    }
+
+    public void setE2WindingBH5(String e2WindingBH5) {
+        this.e2WindingBH5 = e2WindingBH5;
+    }
+
+    public String getE2ABBH5() {
+        return e2ABBH5;
+    }
+
+    public void setE2ABBH5(String e2ABBH5) {
+        this.e2ABBH5 = e2ABBH5;
+    }
+
+    public String getE2BCBH5() {
+        return e2BCBH5;
+    }
+
+    public void setE2BCBH5(String e2BCBH5) {
+        this.e2BCBH5 = e2BCBH5;
+    }
+
+    public String getE2CABH5() {
+        return e2CABH5;
+    }
+
+    public void setE2CABH5(String e2CABH5) {
+        this.e2CABH5 = e2CABH5;
+    }
+
+    public String getE2TBH5() {
+        return e2TBH5;
+    }
+
+    public void setE2TBH5(String e2TBH5) {
+        this.e2TBH5 = e2TBH5;
+    }
+
+    public String getE2ResultBH5() {
+        return e2ResultBH5;
+    }
+
+    public void setE2ResultBH5(String e2ResultBH5) {
+        this.e2ResultBH5 = e2ResultBH5;
+    }
+
+    public String getE3UInputAB2() {
+        return e3UInputAB2;
+    }
+
+    public void setE3UInputAB2(String e3UInputAB2) {
+        this.e3UInputAB2 = e3UInputAB2;
+    }
+
+    public String getE3UInputBC2() {
+        return e3UInputBC2;
+    }
+
+    public void setE3UInputBC2(String e3UInputBC2) {
+        this.e3UInputBC2 = e3UInputBC2;
+    }
+
+    public String getE3UInputCA2() {
+        return e3UInputCA2;
+    }
+
+    public void setE3UInputCA2(String e3UInputCA2) {
+        this.e3UInputCA2 = e3UInputCA2;
+    }
+
+    public String getE3UInputAvr2() {
+        return e3UInputAvr2;
+    }
+
+    public void setE3UInputAvr2(String e3UInputAvr2) {
+        this.e3UInputAvr2 = e3UInputAvr2;
+    }
+
+    public String getE3UOutputAB2() {
+        return e3UOutputAB2;
+    }
+
+    public void setE3UOutputAB2(String e3UOutputAB2) {
+        this.e3UOutputAB2 = e3UOutputAB2;
+    }
+
+    public String getE3UOutputBC2() {
+        return e3UOutputBC2;
+    }
+
+    public void setE3UOutputBC2(String e3UOutputBC2) {
+        this.e3UOutputBC2 = e3UOutputBC2;
+    }
+
+    public String getE3UOutputCA2() {
+        return e3UOutputCA2;
+    }
+
+    public void setE3UOutputCA2(String e3UOutputCA2) {
+        this.e3UOutputCA2 = e3UOutputCA2;
+    }
+
+    public String getE3UOutputAvr2() {
+        return e3UOutputAvr2;
+    }
+
+    public void setE3UOutputAvr2(String e3UOutputAvr2) {
+        this.e3UOutputAvr2 = e3UOutputAvr2;
+    }
+
+    public String getE3DiffU2() {
+        return e3DiffU2;
+    }
+
+    public void setE3DiffU2(String e3DiffU2) {
+        this.e3DiffU2 = e3DiffU2;
+    }
+
+    public String getE3WindingBH2() {
+        return e3WindingBH2;
+    }
+
+    public void setE3WindingBH2(String e3WindingBH2) {
+        this.e3WindingBH2 = e3WindingBH2;
+    }
+
+    public String getE3WindingHH2() {
+        return e3WindingHH2;
+    }
+
+    public void setE3WindingHH2(String e3WindingHH2) {
+        this.e3WindingHH2 = e3WindingHH2;
+    }
+
+    public String getE3F2() {
+        return e3F2;
+    }
+
+    public void setE3F2(String e3F2) {
+        this.e3F2 = e3F2;
+    }
+
+    public String getE3Result2() {
+        return e3Result2;
+    }
+
+    public void setE3Result2(String e3Result2) {
+        this.e3Result2 = e3Result2;
+    }
+
+    public String getE3UInputAB3() {
+        return e3UInputAB3;
+    }
+
+    public void setE3UInputAB3(String e3UInputAB3) {
+        this.e3UInputAB3 = e3UInputAB3;
+    }
+
+    public String getE3UInputBC3() {
+        return e3UInputBC3;
+    }
+
+    public void setE3UInputBC3(String e3UInputBC3) {
+        this.e3UInputBC3 = e3UInputBC3;
+    }
+
+    public String getE3UInputCA3() {
+        return e3UInputCA3;
+    }
+
+    public void setE3UInputCA3(String e3UInputCA3) {
+        this.e3UInputCA3 = e3UInputCA3;
+    }
+
+    public String getE3UInputAvr3() {
+        return e3UInputAvr3;
+    }
+
+    public void setE3UInputAvr3(String e3UInputAvr3) {
+        this.e3UInputAvr3 = e3UInputAvr3;
+    }
+
+    public String getE3UOutputAB3() {
+        return e3UOutputAB3;
+    }
+
+    public void setE3UOutputAB3(String e3UOutputAB3) {
+        this.e3UOutputAB3 = e3UOutputAB3;
+    }
+
+    public String getE3UOutputBC3() {
+        return e3UOutputBC3;
+    }
+
+    public void setE3UOutputBC3(String e3UOutputBC3) {
+        this.e3UOutputBC3 = e3UOutputBC3;
+    }
+
+    public String getE3UOutputCA3() {
+        return e3UOutputCA3;
+    }
+
+    public void setE3UOutputCA3(String e3UOutputCA3) {
+        this.e3UOutputCA3 = e3UOutputCA3;
+    }
+
+    public String getE3UOutputAvr3() {
+        return e3UOutputAvr3;
+    }
+
+    public void setE3UOutputAvr3(String e3UOutputAvr3) {
+        this.e3UOutputAvr3 = e3UOutputAvr3;
+    }
+
+    public String getE3DiffU3() {
+        return e3DiffU3;
+    }
+
+    public void setE3DiffU3(String e3DiffU3) {
+        this.e3DiffU3 = e3DiffU3;
+    }
+
+    public String getE3WindingBH3() {
+        return e3WindingBH3;
+    }
+
+    public void setE3WindingBH3(String e3WindingBH3) {
+        this.e3WindingBH3 = e3WindingBH3;
+    }
+
+    public String getE3WindingHH3() {
+        return e3WindingHH3;
+    }
+
+    public void setE3WindingHH3(String e3WindingHH3) {
+        this.e3WindingHH3 = e3WindingHH3;
+    }
+
+    public String getE3F3() {
+        return e3F3;
+    }
+
+    public void setE3F3(String e3F3) {
+        this.e3F3 = e3F3;
+    }
+
+    public String getE3Result3() {
+        return e3Result3;
+    }
+
+    public void setE3Result3(String e3Result3) {
+        this.e3Result3 = e3Result3;
+    }
+
+    public String getE3UInputAB4() {
+        return e3UInputAB4;
+    }
+
+    public void setE3UInputAB4(String e3UInputAB4) {
+        this.e3UInputAB4 = e3UInputAB4;
+    }
+
+    public String getE3UInputBC4() {
+        return e3UInputBC4;
+    }
+
+    public void setE3UInputBC4(String e3UInputBC4) {
+        this.e3UInputBC4 = e3UInputBC4;
+    }
+
+    public String getE3UInputCA4() {
+        return e3UInputCA4;
+    }
+
+    public void setE3UInputCA4(String e3UInputCA4) {
+        this.e3UInputCA4 = e3UInputCA4;
+    }
+
+    public String getE3UInputAvr4() {
+        return e3UInputAvr4;
+    }
+
+    public void setE3UInputAvr4(String e3UInputAvr4) {
+        this.e3UInputAvr4 = e3UInputAvr4;
+    }
+
+    public String getE3UOutputAB4() {
+        return e3UOutputAB4;
+    }
+
+    public void setE3UOutputAB4(String e3UOutputAB4) {
+        this.e3UOutputAB4 = e3UOutputAB4;
+    }
+
+    public String getE3UOutputBC4() {
+        return e3UOutputBC4;
+    }
+
+    public void setE3UOutputBC4(String e3UOutputBC4) {
+        this.e3UOutputBC4 = e3UOutputBC4;
+    }
+
+    public String getE3UOutputCA4() {
+        return e3UOutputCA4;
+    }
+
+    public void setE3UOutputCA4(String e3UOutputCA4) {
+        this.e3UOutputCA4 = e3UOutputCA4;
+    }
+
+    public String getE3UOutputAvr4() {
+        return e3UOutputAvr4;
+    }
+
+    public void setE3UOutputAvr4(String e3UOutputAvr4) {
+        this.e3UOutputAvr4 = e3UOutputAvr4;
+    }
+
+    public String getE3DiffU4() {
+        return e3DiffU4;
+    }
+
+    public void setE3DiffU4(String e3DiffU4) {
+        this.e3DiffU4 = e3DiffU4;
+    }
+
+    public String getE3WindingBH4() {
+        return e3WindingBH4;
+    }
+
+    public void setE3WindingBH4(String e3WindingBH4) {
+        this.e3WindingBH4 = e3WindingBH4;
+    }
+
+    public String getE3WindingHH4() {
+        return e3WindingHH4;
+    }
+
+    public void setE3WindingHH4(String e3WindingHH4) {
+        this.e3WindingHH4 = e3WindingHH4;
+    }
+
+    public String getE3F4() {
+        return e3F4;
+    }
+
+    public void setE3F4(String e3F4) {
+        this.e3F4 = e3F4;
+    }
+
+    public String getE3Result4() {
+        return e3Result4;
+    }
+
+    public void setE3Result4(String e3Result4) {
+        this.e3Result4 = e3Result4;
+    }
+
+    public String getE3UInputAB5() {
+        return e3UInputAB5;
+    }
+
+    public void setE3UInputAB5(String e3UInputAB5) {
+        this.e3UInputAB5 = e3UInputAB5;
+    }
+
+    public String getE3UInputBC5() {
+        return e3UInputBC5;
+    }
+
+    public void setE3UInputBC5(String e3UInputBC5) {
+        this.e3UInputBC5 = e3UInputBC5;
+    }
+
+    public String getE3UInputCA5() {
+        return e3UInputCA5;
+    }
+
+    public void setE3UInputCA5(String e3UInputCA5) {
+        this.e3UInputCA5 = e3UInputCA5;
+    }
+
+    public String getE3UInputAvr5() {
+        return e3UInputAvr5;
+    }
+
+    public void setE3UInputAvr5(String e3UInputAvr5) {
+        this.e3UInputAvr5 = e3UInputAvr5;
+    }
+
+    public String getE3UOutputAB5() {
+        return e3UOutputAB5;
+    }
+
+    public void setE3UOutputAB5(String e3UOutputAB5) {
+        this.e3UOutputAB5 = e3UOutputAB5;
+    }
+
+    public String getE3UOutputBC5() {
+        return e3UOutputBC5;
+    }
+
+    public void setE3UOutputBC5(String e3UOutputBC5) {
+        this.e3UOutputBC5 = e3UOutputBC5;
+    }
+
+    public String getE3UOutputCA5() {
+        return e3UOutputCA5;
+    }
+
+    public void setE3UOutputCA5(String e3UOutputCA5) {
+        this.e3UOutputCA5 = e3UOutputCA5;
+    }
+
+    public String getE3UOutputAvr5() {
+        return e3UOutputAvr5;
+    }
+
+    public void setE3UOutputAvr5(String e3UOutputAvr5) {
+        this.e3UOutputAvr5 = e3UOutputAvr5;
+    }
+
+    public String getE3DiffU5() {
+        return e3DiffU5;
+    }
+
+    public void setE3DiffU5(String e3DiffU5) {
+        this.e3DiffU5 = e3DiffU5;
+    }
+
+    public String getE3WindingBH5() {
+        return e3WindingBH5;
+    }
+
+    public void setE3WindingBH5(String e3WindingBH5) {
+        this.e3WindingBH5 = e3WindingBH5;
+    }
+
+    public String getE3WindingHH5() {
+        return e3WindingHH5;
+    }
+
+    public void setE3WindingHH5(String e3WindingHH5) {
+        this.e3WindingHH5 = e3WindingHH5;
+    }
+
+    public String getE3F5() {
+        return e3F5;
+    }
+
+    public void setE3F5(String e3F5) {
+        this.e3F5 = e3F5;
+    }
+
+    public String getE3Result5() {
+        return e3Result5;
+    }
+
+    public void setE3Result5(String e3Result5) {
+        this.e3Result5 = e3Result5;
+    }
+
     @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("Время проведения испытания: HH:mm:ss");
@@ -1144,117 +1912,11 @@ public class Protocol {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Protocol protocol = (Protocol) o;
-        return id == protocol.id &&
-                Double.compare(protocol.ubh, ubh) == 0 &&
-                Double.compare(protocol.uhh, uhh) == 0 &&
-                Double.compare(protocol.p, p) == 0 &&
-                Double.compare(protocol.ixx, ixx) == 0 &&
-                Double.compare(protocol.ukz, ukz) == 0 &&
-                Double.compare(protocol.xxtime, xxtime) == 0 &&
-                Double.compare(protocol.uinsulation, uinsulation) == 0 &&
-                Double.compare(protocol.umeger, umeger) == 0 &&
-                millis == protocol.millis &&
-                Objects.equals(e1WindingBH, protocol.e1WindingBH) &&
-                Objects.equals(e1UBH, protocol.e1UBH) &&
-                Objects.equals(e1R15BH, protocol.e1R15BH) &&
-                Objects.equals(e1R60BH, protocol.e1R60BH) &&
-                Objects.equals(e1CoefBH, protocol.e1CoefBH) &&
-                Objects.equals(e1TBH, protocol.e1TBH) &&
-                Objects.equals(e1ResultBH, protocol.e1ResultBH) &&
-                Objects.equals(e1WindingHH, protocol.e1WindingHH) &&
-                Objects.equals(e1UHH, protocol.e1UHH) &&
-                Objects.equals(e1R15HH, protocol.e1R15HH) &&
-                Objects.equals(e1R60HH, protocol.e1R60HH) &&
-                Objects.equals(e1CoefHH, protocol.e1CoefHH) &&
-                Objects.equals(e1THH, protocol.e1THH) &&
-                Objects.equals(e1ResultHH, protocol.e1ResultHH) &&
-                Objects.equals(e1WindingBHHH, protocol.e1WindingBHHH) &&
-                Objects.equals(e1UBHHH, protocol.e1UBHHH) &&
-                Objects.equals(e1R15BHHH, protocol.e1R15BHHH) &&
-                Objects.equals(e1R60BHHH, protocol.e1R60BHHH) &&
-                Objects.equals(e1CoefBHHH, protocol.e1CoefBHHH) &&
-                Objects.equals(e1TBHHH, protocol.e1TBHHH) &&
-                Objects.equals(e1ResultBHHH, protocol.e1ResultBHHH) &&
-                Objects.equals(e2WindingBH, protocol.e2WindingBH) &&
-                Objects.equals(e2ABBH, protocol.e2ABBH) &&
-                Objects.equals(e2BCBH, protocol.e2BCBH) &&
-                Objects.equals(e2CABH, protocol.e2CABH) &&
-                Objects.equals(e2TBH, protocol.e2TBH) &&
-                Objects.equals(e2ResultBH, protocol.e2ResultBH) &&
-                Objects.equals(e2WindingHH, protocol.e2WindingHH) &&
-                Objects.equals(e2ABHH, protocol.e2ABHH) &&
-                Objects.equals(e2BCHH, protocol.e2BCHH) &&
-                Objects.equals(e2CAHH, protocol.e2CAHH) &&
-                Objects.equals(e2THH, protocol.e2THH) &&
-                Objects.equals(e2ResultHH, protocol.e2ResultHH) &&
-                Objects.equals(e3UInputAB, protocol.e3UInputAB) &&
-                Objects.equals(e3UInputBC, protocol.e3UInputBC) &&
-                Objects.equals(e3UInputCA, protocol.e3UInputCA) &&
-                Objects.equals(e3UInputAvr, protocol.e3UInputAvr) &&
-                Objects.equals(e3UOutputAB, protocol.e3UOutputAB) &&
-                Objects.equals(e3UOutputBC, protocol.e3UOutputBC) &&
-                Objects.equals(e3UOutputCA, protocol.e3UOutputCA) &&
-                Objects.equals(e3UOutputAvr, protocol.e3UOutputAvr) &&
-                Objects.equals(e3DiffU, protocol.e3DiffU) &&
-                Objects.equals(e3WindingBH, protocol.e3WindingBH) &&
-                Objects.equals(e3WindingHH, protocol.e3WindingHH) &&
-                Objects.equals(e3F, protocol.e3F) &&
-                Objects.equals(e3Result, protocol.e3Result) &&
-                Objects.equals(e4UKZV, protocol.e4UKZV) &&
-                Objects.equals(e4UKZPercent, protocol.e4UKZPercent) &&
-                Objects.equals(e4UKZDiff, protocol.e4UKZDiff) &&
-                Objects.equals(e4IA, protocol.e4IA) &&
-                Objects.equals(e4IB, protocol.e4IB) &&
-                Objects.equals(e4IC, protocol.e4IC) &&
-                Objects.equals(e4Pp, protocol.e4Pp) &&
-                Objects.equals(e4F, protocol.e4F) &&
-                Objects.equals(e4Result, protocol.e4Result) &&
-                Objects.equals(e5UBH, protocol.e5UBH) &&
-                Objects.equals(e5IA, protocol.e5IA) &&
-                Objects.equals(e5IB, protocol.e5IB) &&
-                Objects.equals(e5IC, protocol.e5IC) &&
-                Objects.equals(e5IAPercent, protocol.e5IAPercent) &&
-                Objects.equals(e5IBPercent, protocol.e5IBPercent) &&
-                Objects.equals(e5ICPercent, protocol.e5ICPercent) &&
-                Objects.equals(e5IADiff, protocol.e5IADiff) &&
-                Objects.equals(e5IBDiff, protocol.e5IBDiff) &&
-                Objects.equals(e5ICDiff, protocol.e5ICDiff) &&
-                Objects.equals(e5Pp, protocol.e5Pp) &&
-                Objects.equals(e5Cos, protocol.e5Cos) &&
-                Objects.equals(e5F, protocol.e5F) &&
-                Objects.equals(e5Result, protocol.e5Result) &&
-                Objects.equals(e6UInput, protocol.e6UInput) &&
-                Objects.equals(e6IBH, protocol.e6IBH) &&
-                Objects.equals(e6F, protocol.e6F) &&
-                Objects.equals(e6Time, protocol.e6Time) &&
-                Objects.equals(e6Result, protocol.e6Result) &&
-                Objects.equals(e7TypeBHandCorps, protocol.e7TypeBHandCorps) &&
-                Objects.equals(e7UBHandCorps, protocol.e7UBHandCorps) &&
-                Objects.equals(e7IBHandCorps, protocol.e7IBHandCorps) &&
-                Objects.equals(e7UGiven, protocol.e7UGiven) &&
-                Objects.equals(e7UBHAvem, protocol.e7UBHAvem) &&
-                Objects.equals(e7TimeBHandCorps, protocol.e7TimeBHandCorps) &&
-                Objects.equals(e7ResultBHandCorps, protocol.e7ResultBHandCorps) &&
-                Objects.equals(e7TypeHHandCorps, protocol.e7TypeHHandCorps) &&
-                Objects.equals(e7IHHandCorps, protocol.e7IHHandCorps) &&
-                Objects.equals(e7UHHandCorps, protocol.e7UHHandCorps) &&
-                Objects.equals(e7UHHAvem, protocol.e7UHHAvem) &&
-                Objects.equals(e7TimeHHandCorps, protocol.e7TimeHHandCorps) &&
-                Objects.equals(e7ResultHHandCorps, protocol.e7ResultHHandCorps) &&
-                Objects.equals(serialNumber, protocol.serialNumber) &&
-                Objects.equals(type, protocol.type) &&
-                Objects.equals(position1, protocol.position1) &&
-                Objects.equals(position1Number, protocol.position1Number) &&
-                Objects.equals(position1FullName, protocol.position1FullName) &&
-                Objects.equals(position2, protocol.position2) &&
-                Objects.equals(position2Number, protocol.position2Number) &&
-                Objects.equals(position2FullName, protocol.position2FullName) &&
-                Objects.equals(date, protocol.date) &&
-                Objects.equals(time, protocol.time);
+        return id == protocol.id && Double.compare(protocol.ubh, ubh) == 0 && Double.compare(protocol.uhh, uhh) == 0 && Double.compare(protocol.p, p) == 0 && Double.compare(protocol.ixx, ixx) == 0 && Double.compare(protocol.ukz, ukz) == 0 && Double.compare(protocol.xxtime, xxtime) == 0 && Double.compare(protocol.uinsulation, uinsulation) == 0 && Double.compare(protocol.umeger, umeger) == 0 && millis == protocol.millis && Objects.equals(e1WindingBH, protocol.e1WindingBH) && Objects.equals(e1UBH, protocol.e1UBH) && Objects.equals(e1R15BH, protocol.e1R15BH) && Objects.equals(e1R60BH, protocol.e1R60BH) && Objects.equals(e1CoefBH, protocol.e1CoefBH) && Objects.equals(e1TBH, protocol.e1TBH) && Objects.equals(e1ResultBH, protocol.e1ResultBH) && Objects.equals(e1WindingHH, protocol.e1WindingHH) && Objects.equals(e1UHH, protocol.e1UHH) && Objects.equals(e1R15HH, protocol.e1R15HH) && Objects.equals(e1R60HH, protocol.e1R60HH) && Objects.equals(e1CoefHH, protocol.e1CoefHH) && Objects.equals(e1THH, protocol.e1THH) && Objects.equals(e1ResultHH, protocol.e1ResultHH) && Objects.equals(e1WindingBHHH, protocol.e1WindingBHHH) && Objects.equals(e1UBHHH, protocol.e1UBHHH) && Objects.equals(e1R15BHHH, protocol.e1R15BHHH) && Objects.equals(e1R60BHHH, protocol.e1R60BHHH) && Objects.equals(e1CoefBHHH, protocol.e1CoefBHHH) && Objects.equals(e1TBHHH, protocol.e1TBHHH) && Objects.equals(e1ResultBHHH, protocol.e1ResultBHHH) && Objects.equals(e2WindingBH, protocol.e2WindingBH) && Objects.equals(e2ABBH, protocol.e2ABBH) && Objects.equals(e2BCBH, protocol.e2BCBH) && Objects.equals(e2CABH, protocol.e2CABH) && Objects.equals(e2TBH, protocol.e2TBH) && Objects.equals(e2ResultBH, protocol.e2ResultBH) && Objects.equals(e2WindingBH2, protocol.e2WindingBH2) && Objects.equals(e2ABBH2, protocol.e2ABBH2) && Objects.equals(e2BCBH2, protocol.e2BCBH2) && Objects.equals(e2CABH2, protocol.e2CABH2) && Objects.equals(e2TBH2, protocol.e2TBH2) && Objects.equals(e2ResultBH2, protocol.e2ResultBH2) && Objects.equals(e2WindingBH3, protocol.e2WindingBH3) && Objects.equals(e2ABBH3, protocol.e2ABBH3) && Objects.equals(e2BCBH3, protocol.e2BCBH3) && Objects.equals(e2CABH3, protocol.e2CABH3) && Objects.equals(e2TBH3, protocol.e2TBH3) && Objects.equals(e2ResultBH3, protocol.e2ResultBH3) && Objects.equals(e2WindingBH4, protocol.e2WindingBH4) && Objects.equals(e2ABBH4, protocol.e2ABBH4) && Objects.equals(e2BCBH4, protocol.e2BCBH4) && Objects.equals(e2CABH4, protocol.e2CABH4) && Objects.equals(e2TBH4, protocol.e2TBH4) && Objects.equals(e2ResultBH4, protocol.e2ResultBH4) && Objects.equals(e2WindingBH5, protocol.e2WindingBH5) && Objects.equals(e2ABBH5, protocol.e2ABBH5) && Objects.equals(e2BCBH5, protocol.e2BCBH5) && Objects.equals(e2CABH5, protocol.e2CABH5) && Objects.equals(e2TBH5, protocol.e2TBH5) && Objects.equals(e2ResultBH5, protocol.e2ResultBH5) && Objects.equals(e2WindingHH, protocol.e2WindingHH) && Objects.equals(e2ABHH, protocol.e2ABHH) && Objects.equals(e2BCHH, protocol.e2BCHH) && Objects.equals(e2CAHH, protocol.e2CAHH) && Objects.equals(e2THH, protocol.e2THH) && Objects.equals(e2ResultHH, protocol.e2ResultHH) && Objects.equals(e3UInputAB, protocol.e3UInputAB) && Objects.equals(e3UInputBC, protocol.e3UInputBC) && Objects.equals(e3UInputCA, protocol.e3UInputCA) && Objects.equals(e3UInputAvr, protocol.e3UInputAvr) && Objects.equals(e3UOutputAB, protocol.e3UOutputAB) && Objects.equals(e3UOutputBC, protocol.e3UOutputBC) && Objects.equals(e3UOutputCA, protocol.e3UOutputCA) && Objects.equals(e3UOutputAvr, protocol.e3UOutputAvr) && Objects.equals(e3DiffU, protocol.e3DiffU) && Objects.equals(e3WindingBH, protocol.e3WindingBH) && Objects.equals(e3WindingHH, protocol.e3WindingHH) && Objects.equals(e3F, protocol.e3F) && Objects.equals(e3Result, protocol.e3Result) && Objects.equals(e3UInputAB2, protocol.e3UInputAB2) && Objects.equals(e3UInputBC2, protocol.e3UInputBC2) && Objects.equals(e3UInputCA2, protocol.e3UInputCA2) && Objects.equals(e3UInputAvr2, protocol.e3UInputAvr2) && Objects.equals(e3UOutputAB2, protocol.e3UOutputAB2) && Objects.equals(e3UOutputBC2, protocol.e3UOutputBC2) && Objects.equals(e3UOutputCA2, protocol.e3UOutputCA2) && Objects.equals(e3UOutputAvr2, protocol.e3UOutputAvr2) && Objects.equals(e3DiffU2, protocol.e3DiffU2) && Objects.equals(e3WindingBH2, protocol.e3WindingBH2) && Objects.equals(e3WindingHH2, protocol.e3WindingHH2) && Objects.equals(e3F2, protocol.e3F2) && Objects.equals(e3Result2, protocol.e3Result2) && Objects.equals(e3UInputAB3, protocol.e3UInputAB3) && Objects.equals(e3UInputBC3, protocol.e3UInputBC3) && Objects.equals(e3UInputCA3, protocol.e3UInputCA3) && Objects.equals(e3UInputAvr3, protocol.e3UInputAvr3) && Objects.equals(e3UOutputAB3, protocol.e3UOutputAB3) && Objects.equals(e3UOutputBC3, protocol.e3UOutputBC3) && Objects.equals(e3UOutputCA3, protocol.e3UOutputCA3) && Objects.equals(e3UOutputAvr3, protocol.e3UOutputAvr3) && Objects.equals(e3DiffU3, protocol.e3DiffU3) && Objects.equals(e3WindingBH3, protocol.e3WindingBH3) && Objects.equals(e3WindingHH3, protocol.e3WindingHH3) && Objects.equals(e3F3, protocol.e3F3) && Objects.equals(e3Result3, protocol.e3Result3) && Objects.equals(e3UInputAB4, protocol.e3UInputAB4) && Objects.equals(e3UInputBC4, protocol.e3UInputBC4) && Objects.equals(e3UInputCA4, protocol.e3UInputCA4) && Objects.equals(e3UInputAvr4, protocol.e3UInputAvr4) && Objects.equals(e3UOutputAB4, protocol.e3UOutputAB4) && Objects.equals(e3UOutputBC4, protocol.e3UOutputBC4) && Objects.equals(e3UOutputCA4, protocol.e3UOutputCA4) && Objects.equals(e3UOutputAvr4, protocol.e3UOutputAvr4) && Objects.equals(e3DiffU4, protocol.e3DiffU4) && Objects.equals(e3WindingBH4, protocol.e3WindingBH4) && Objects.equals(e3WindingHH4, protocol.e3WindingHH4) && Objects.equals(e3F4, protocol.e3F4) && Objects.equals(e3Result4, protocol.e3Result4) && Objects.equals(e3UInputAB5, protocol.e3UInputAB5) && Objects.equals(e3UInputBC5, protocol.e3UInputBC5) && Objects.equals(e3UInputCA5, protocol.e3UInputCA5) && Objects.equals(e3UInputAvr5, protocol.e3UInputAvr5) && Objects.equals(e3UOutputAB5, protocol.e3UOutputAB5) && Objects.equals(e3UOutputBC5, protocol.e3UOutputBC5) && Objects.equals(e3UOutputCA5, protocol.e3UOutputCA5) && Objects.equals(e3UOutputAvr5, protocol.e3UOutputAvr5) && Objects.equals(e3DiffU5, protocol.e3DiffU5) && Objects.equals(e3WindingBH5, protocol.e3WindingBH5) && Objects.equals(e3WindingHH5, protocol.e3WindingHH5) && Objects.equals(e3F5, protocol.e3F5) && Objects.equals(e3Result5, protocol.e3Result5) && Objects.equals(e4UKZV, protocol.e4UKZV) && Objects.equals(e4UKZPercent, protocol.e4UKZPercent) && Objects.equals(e4UKZDiff, protocol.e4UKZDiff) && Objects.equals(e4IA, protocol.e4IA) && Objects.equals(e4IB, protocol.e4IB) && Objects.equals(e4IC, protocol.e4IC) && Objects.equals(e4Pp, protocol.e4Pp) && Objects.equals(e4F, protocol.e4F) && Objects.equals(e4Result, protocol.e4Result) && Objects.equals(e5UBH, protocol.e5UBH) && Objects.equals(e5IA, protocol.e5IA) && Objects.equals(e5IB, protocol.e5IB) && Objects.equals(e5IC, protocol.e5IC) && Objects.equals(e5IAPercent, protocol.e5IAPercent) && Objects.equals(e5IBPercent, protocol.e5IBPercent) && Objects.equals(e5ICPercent, protocol.e5ICPercent) && Objects.equals(e5IADiff, protocol.e5IADiff) && Objects.equals(e5IBDiff, protocol.e5IBDiff) && Objects.equals(e5ICDiff, protocol.e5ICDiff) && Objects.equals(e5Pp, protocol.e5Pp) && Objects.equals(e5Cos, protocol.e5Cos) && Objects.equals(e5F, protocol.e5F) && Objects.equals(e5Result, protocol.e5Result) && Objects.equals(e6UInput, protocol.e6UInput) && Objects.equals(e6IBH, protocol.e6IBH) && Objects.equals(e6F, protocol.e6F) && Objects.equals(e6Time, protocol.e6Time) && Objects.equals(e6Result, protocol.e6Result) && Objects.equals(e7TypeBHandCorps, protocol.e7TypeBHandCorps) && Objects.equals(e7UBHandCorps, protocol.e7UBHandCorps) && Objects.equals(e7IBHandCorps, protocol.e7IBHandCorps) && Objects.equals(e7UGiven, protocol.e7UGiven) && Objects.equals(e7UBHAvem, protocol.e7UBHAvem) && Objects.equals(e7TimeBHandCorps, protocol.e7TimeBHandCorps) && Objects.equals(e7ResultBHandCorps, protocol.e7ResultBHandCorps) && Objects.equals(e7TypeHHandCorps, protocol.e7TypeHHandCorps) && Objects.equals(e7IHHandCorps, protocol.e7IHHandCorps) && Objects.equals(e7UHHandCorps, protocol.e7UHHandCorps) && Objects.equals(e7UHHAvem, protocol.e7UHHAvem) && Objects.equals(e7TimeHHandCorps, protocol.e7TimeHHandCorps) && Objects.equals(e7ResultHHandCorps, protocol.e7ResultHHandCorps) && Objects.equals(serialNumber, protocol.serialNumber) && Objects.equals(type, protocol.type) && Objects.equals(position1, protocol.position1) && Objects.equals(position1Number, protocol.position1Number) && Objects.equals(position1FullName, protocol.position1FullName) && Objects.equals(position2, protocol.position2) && Objects.equals(position2Number, protocol.position2Number) && Objects.equals(position2FullName, protocol.position2FullName) && Objects.equals(date, protocol.date) && Objects.equals(time, protocol.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, e1WindingBH, e1UBH, e1R15BH, e1R60BH, e1CoefBH, e1TBH, e1ResultBH, e1WindingHH, e1UHH, e1R15HH, e1R60HH, e1CoefHH, e1THH, e1ResultHH, e1WindingBHHH, e1UBHHH, e1R15BHHH, e1R60BHHH, e1CoefBHHH, e1TBHHH, e1ResultBHHH, e2WindingBH, e2ABBH, e2BCBH, e2CABH, e2TBH, e2ResultBH, e2WindingHH, e2ABHH, e2BCHH, e2CAHH, e2THH, e2ResultHH, e3UInputAB, e3UInputBC, e3UInputCA, e3UInputAvr, e3UOutputAB, e3UOutputBC, e3UOutputCA, e3UOutputAvr, e3DiffU, e3WindingBH, e3WindingHH, e3F, e3Result, e4UKZV, e4UKZPercent, e4UKZDiff, e4IA, e4IB, e4IC, e4Pp, e4F, e4Result, e5UBH, e5IA, e5IB, e5IC, e5IAPercent, e5IBPercent, e5ICPercent, e5IADiff, e5IBDiff, e5ICDiff, e5Pp, e5Cos, e5F, e5Result, e6UInput, e6IBH, e6F, e6Time, e6Result, e7TypeBHandCorps, e7UBHandCorps, e7IBHandCorps, e7UGiven, e7UBHAvem, e7TimeBHandCorps, e7ResultBHandCorps, e7TypeHHandCorps, e7IHHandCorps, e7UHHandCorps, e7UHHAvem, e7TimeHHandCorps, e7ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
+        return Objects.hash(id, e1WindingBH, e1UBH, e1R15BH, e1R60BH, e1CoefBH, e1TBH, e1ResultBH, e1WindingHH, e1UHH, e1R15HH, e1R60HH, e1CoefHH, e1THH, e1ResultHH, e1WindingBHHH, e1UBHHH, e1R15BHHH, e1R60BHHH, e1CoefBHHH, e1TBHHH, e1ResultBHHH, e2WindingBH, e2ABBH, e2BCBH, e2CABH, e2TBH, e2ResultBH, e2WindingBH2, e2ABBH2, e2BCBH2, e2CABH2, e2TBH2, e2ResultBH2, e2WindingBH3, e2ABBH3, e2BCBH3, e2CABH3, e2TBH3, e2ResultBH3, e2WindingBH4, e2ABBH4, e2BCBH4, e2CABH4, e2TBH4, e2ResultBH4, e2WindingBH5, e2ABBH5, e2BCBH5, e2CABH5, e2TBH5, e2ResultBH5, e2WindingHH, e2ABHH, e2BCHH, e2CAHH, e2THH, e2ResultHH, e3UInputAB, e3UInputBC, e3UInputCA, e3UInputAvr, e3UOutputAB, e3UOutputBC, e3UOutputCA, e3UOutputAvr, e3DiffU, e3WindingBH, e3WindingHH, e3F, e3Result, e3UInputAB2, e3UInputBC2, e3UInputCA2, e3UInputAvr2, e3UOutputAB2, e3UOutputBC2, e3UOutputCA2, e3UOutputAvr2, e3DiffU2, e3WindingBH2, e3WindingHH2, e3F2, e3Result2, e3UInputAB3, e3UInputBC3, e3UInputCA3, e3UInputAvr3, e3UOutputAB3, e3UOutputBC3, e3UOutputCA3, e3UOutputAvr3, e3DiffU3, e3WindingBH3, e3WindingHH3, e3F3, e3Result3, e3UInputAB4, e3UInputBC4, e3UInputCA4, e3UInputAvr4, e3UOutputAB4, e3UOutputBC4, e3UOutputCA4, e3UOutputAvr4, e3DiffU4, e3WindingBH4, e3WindingHH4, e3F4, e3Result4, e3UInputAB5, e3UInputBC5, e3UInputCA5, e3UInputAvr5, e3UOutputAB5, e3UOutputBC5, e3UOutputCA5, e3UOutputAvr5, e3DiffU5, e3WindingBH5, e3WindingHH5, e3F5, e3Result5, e4UKZV, e4UKZPercent, e4UKZDiff, e4IA, e4IB, e4IC, e4Pp, e4F, e4Result, e5UBH, e5IA, e5IB, e5IC, e5IAPercent, e5IBPercent, e5ICPercent, e5IADiff, e5IBDiff, e5ICDiff, e5Pp, e5Cos, e5F, e5Result, e6UInput, e6IBH, e6F, e6Time, e6Result, e7TypeBHandCorps, e7UBHandCorps, e7IBHandCorps, e7UGiven, e7UBHAvem, e7TimeBHandCorps, e7ResultBHandCorps, e7TypeHHandCorps, e7IHHandCorps, e7UHHandCorps, e7UHHAvem, e7TimeHHandCorps, e7ResultHHandCorps, serialNumber, type, ubh, uhh, p, ixx, ukz, xxtime, uinsulation, umeger, position1, position1Number, position1FullName, position2, position2Number, position2FullName, millis, date, time);
     }
 }

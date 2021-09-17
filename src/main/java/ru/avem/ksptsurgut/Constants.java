@@ -6,7 +6,7 @@ import ru.avem.ksptsurgut.utils.BuildConfig;
 import java.text.SimpleDateFormat;
 
 
-public final class Constants {
+public final class  Constants {
     public static final class Display {
         public static final int WIDTH = BuildConfig.DEBUG ? 1366 : 1366;
         public static final int HEIGHT = BuildConfig.DEBUG ? 768 : 768;

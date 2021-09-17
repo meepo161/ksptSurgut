@@ -40,7 +40,7 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="16.0">
                      <children>
-                        <TableView fx:id="tableViewExperimentValues" prefHeight="102.0" prefWidth="1000.0">
+                        <TableView fx:id="tableViewExperimentValues" prefHeight="302.0" prefWidth="1000.0">
                            <placeholder>
                               <Label text="Нет данных" />
                            </placeholder>

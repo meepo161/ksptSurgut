@@ -13,11 +13,13 @@ import ru.avem.ksptsurgut.model.phase3.Experiment2ModelPhase3;
 import ru.avem.ksptsurgut.utils.View;
 
 import java.util.Observable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ru.avem.ksptsurgut.Main.setTheme;
 import static ru.avem.ksptsurgut.communication.devices.DeviceController.*;
 import static ru.avem.ksptsurgut.utils.Utils.sleep;
 import static ru.avem.ksptsurgut.utils.View.setDeviceState;
+import static ru.avem.ksptsurgut.utils.View.showConfirmDialog;
 
 public class Experiment2ControllerPhase3 extends AbstractExperiment {
     @FXML
@@ -35,11 +37,19 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
     @FXML
     private TableColumn<Experiment2ModelPhase3, String> tableColumnResultExperiment;
 
-    private Experiment2ModelPhase3 Experiment2ModelPhase3BH = experimentsValuesModel.getExperiment2ModelPhase3BH();
     private Experiment2ModelPhase3 Experiment2ModelPhase3HH = experimentsValuesModel.getExperiment2ModelPhase3HH();
+    private Experiment2ModelPhase3 Experiment2ModelPhase3BH = experimentsValuesModel.getExperiment2ModelPhase3BH();
+    private Experiment2ModelPhase3 Experiment2ModelPhase3BH2 = experimentsValuesModel.getExperiment2ModelPhase3BH2();
+    private Experiment2ModelPhase3 Experiment2ModelPhase3BH3 = experimentsValuesModel.getExperiment2ModelPhase3BH3();
+    private Experiment2ModelPhase3 Experiment2ModelPhase3BH4 = experimentsValuesModel.getExperiment2ModelPhase3BH4();
+    private Experiment2ModelPhase3 Experiment2ModelPhase3BH5 = experimentsValuesModel.getExperiment2ModelPhase3BH5();
 
     private boolean isBHSelected = (experimentsValuesModel.getExperiment2Choice() & 0b1) > 0;
     private boolean isBHStarted;
+    private boolean isBH2Started;
+    private boolean isBH3Started;
+    private boolean isBH4Started;
+    private boolean isBH5Started;
     private boolean isHHSelected = (experimentsValuesModel.getExperiment2Choice() & 0b10) > 0;
     private boolean isHHStarted;
 
@@ -47,6 +57,8 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
     private volatile float measuringR;
 
     private volatile float temperature;
+
+    int timeOut = 0;
 
     @FXML
     public void initialize() {
@@ -59,7 +71,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
         tableColumnTemperature.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
         tableColumnResultExperiment.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
 
-        tableViewExperimentValues.setItems(FXCollections.observableArrayList(Experiment2ModelPhase3BH, Experiment2ModelPhase3HH));
+        tableViewExperimentValues.setItems(FXCollections.observableArrayList(Experiment2ModelPhase3HH, Experiment2ModelPhase3BH, Experiment2ModelPhase3BH2, Experiment2ModelPhase3BH3, Experiment2ModelPhase3BH4, Experiment2ModelPhase3BH5));
         tableViewExperimentValues.setSelectionModel(null);
 
         communicationModel.addObserver(this);
@@ -67,6 +79,7 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void initExperiment() {
+        showRequestDialog("Подключите крокодилы ИКАС к обмотке BH. После нажмите <Да>");
         isExperimentEnded = false;
         isExperimentRunning = true;
 
@@ -75,10 +88,18 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
         buttonNext.setDisable(true);
 
         isBHStarted = false;
+        isBH2Started = false;
+        isBH3Started = false;
+        isBH4Started = false;
+        isBH5Started = false;
         isHHStarted = false;
 
-        Experiment2ModelPhase3BH.clearProperties();
         Experiment2ModelPhase3HH.clearProperties();
+        Experiment2ModelPhase3BH.clearProperties();
+        Experiment2ModelPhase3BH2.clearProperties();
+        Experiment2ModelPhase3BH3.clearProperties();
+        Experiment2ModelPhase3BH4.clearProperties();
+        Experiment2ModelPhase3BH5.clearProperties();
 
         isOwenPRResponding = true;
         setDeviceState(deviceStateCirclePR200, View.DeviceState.UNDEFINED);
@@ -104,18 +125,85 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                 sleep(2000);
             }
 
-            while (isExperimentRunning && !isDevicesResponding()) {
+            timeOut = 20;
+            while (isExperimentRunning && !isDevicesResponding() && timeOut-- > 0) {
                 appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
-                sleep(100);
+                sleep(1000);
                 communicationModel.initExperiment2Devices();
+            }
+
+            isNeedCheckDoor = true;
+            if (isExperimentRunning && isHHSelected && isDevicesResponding()) {
+                startHHExperiment();
             }
 
             if (isExperimentRunning && isBHSelected && isDevicesResponding()) {
                 startBHExperiment();
             }
 
-            if (isExperimentRunning && isHHSelected && isDevicesResponding()) {
-                startHHExperiment();
+            isNeedCheckDoor = false;
+            AtomicInteger nextOrEnd = new AtomicInteger(0);
+            Platform.runLater(() -> showConfirmDialog("Переключите трансформатор в следующее положение или нажмите (Нет)",
+                    () -> nextOrEnd.set(1),
+                    () -> nextOrEnd.set(2)));
+            timeOut = 120;
+            while (nextOrEnd.get() == 0 && timeOut-- > 0) {
+                sleep(1000);
+            }
+
+            if (nextOrEnd.get() == 1) {
+                if (isExperimentRunning && isBHSelected && isDevicesResponding()) {
+                    isNeedCheckDoor = true;
+                    startBH2Experiment();
+                }
+
+                isNeedCheckDoor = false;
+                AtomicInteger nextOrEnd2 = new AtomicInteger(0);
+                Platform.runLater(() -> showConfirmDialog("Переключите трансформатор в следующее положение или нажмите (Нет)",
+                        () -> nextOrEnd2.set(1),
+                        () -> nextOrEnd2.set(2)));
+                timeOut = 120;
+                while (nextOrEnd2.get() == 0 && timeOut-- > 0) {
+                    sleep(1000);
+                }
+                if (nextOrEnd2.get() == 1) {
+                    if (isExperimentRunning && isBHSelected && isDevicesResponding()) {
+                        isNeedCheckDoor = true;
+                        startBH3Experiment();
+                    }
+
+                    isNeedCheckDoor = false;
+                    AtomicInteger nextOrEnd3 = new AtomicInteger(0);
+                    Platform.runLater(() -> showConfirmDialog("Переключите трансформатор в следующее положение или нажмите (Нет)",
+                            () -> nextOrEnd3.set(1),
+                            () -> nextOrEnd3.set(2)));
+                    timeOut = 120;
+                    while (nextOrEnd3.get() == 0 && timeOut-- > 0) {
+                        sleep(1000);
+                    }
+                    if (nextOrEnd3.get() == 1) {
+                        if (isExperimentRunning && isBHSelected && isDevicesResponding()) {
+                            isNeedCheckDoor = true;
+                            startBH4Experiment();
+                        }
+
+                        isNeedCheckDoor = false;
+                        AtomicInteger nextOrEnd4 = new AtomicInteger(0);
+                        Platform.runLater(() -> showConfirmDialog("Переключите трансформатор в следующее положение или нажмите (Нет)",
+                                () -> nextOrEnd4.set(1),
+                                () -> nextOrEnd4.set(2)));
+                        timeOut = 120;
+                        while (nextOrEnd4.get() == 0 && timeOut-- > 0) {
+                            sleep(1000);
+                        }
+                        if (nextOrEnd4.get() == 1) {
+                            if (isExperimentRunning && isBHSelected && isDevicesResponding()) {
+                                isNeedCheckDoor = true;
+                                startBH5Experiment();
+                            }
+                        }
+                    }
+                }
             }
 
             if (!cause.isEmpty()) {
@@ -130,18 +218,6 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                     }
                 }
                 appendMessageToLog(String.format("Испытание прервано по причине: %s", cause));
-            } else if (!isStartButtonOn) {
-                if (isBHSelected) {
-                    if (Experiment2ModelPhase3BH.getResult().isEmpty()) {
-                        Experiment2ModelPhase3BH.setResult("Прервано");
-                    }
-                }
-                if (isHHSelected) {
-                    if (Experiment2ModelPhase3HH.getResult().isEmpty()) {
-                        Experiment2ModelPhase3HH.setResult("Прервано");
-                    }
-                }
-                appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
             } else if (!isDevicesResponding()) {
                 if (isBHSelected) {
                     if (Experiment2ModelPhase3BH.getResult().isEmpty()) {
@@ -154,6 +230,18 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                     }
                 }
                 appendMessageToLog(getNotRespondingDevicesString("Испытание прервано по причине: потеряна связь с устройствами"));
+            } else if (!isStartButtonOn) {
+                if (isBHSelected) {
+                    if (Experiment2ModelPhase3BH.getResult().isEmpty()) {
+                        Experiment2ModelPhase3BH.setResult("Прервано");
+                    }
+                }
+                if (isHHSelected) {
+                    if (Experiment2ModelPhase3HH.getResult().isEmpty()) {
+                        Experiment2ModelPhase3HH.setResult("Прервано");
+                    }
+                }
+                appendMessageToLog("Испытание прервано по причине: нажали кнопку <Стоп>");
             }
             appendMessageToLog("------------------------------------------------\n");
 
@@ -178,9 +266,10 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
             sleep(1000);
         }
 
-        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding()) {
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding() && timeOut-- > 0) {
             appendOneMessageToLog("Включите кнопочный пост");
-            sleep(1);
+            sleep(1000);
         }
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
@@ -256,13 +345,458 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                 } else {
                     Experiment2ModelPhase3BH.setResult("Расхождение");
                     appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
-                            "_______________________________________________________");
+                            "_______________________________________________________\n" +
+                            "AB BC " + ((AB - BC) / AB) * 100 + " %\n" +
+                            "AB AC " + ((AB - AC) / AB) * 100 + " %\n" +
+                            "BC AC " + ((BC - AC) / BC) * 100 + " %\n" +
+                            "_______________________________________________________\n"
+                    );
                 }
             } catch (NumberFormatException e) {
                 Experiment2ModelPhase3BH.setResult("Обрыв");
             }
         }
         isBHStarted = false;
+    }
+
+    private void startBH2Experiment() {
+        showRequestDialog("Подключите крокодилы ИКАС к обмотке BH. После нажмите <Да>");
+
+        if (isExperimentRunning) {
+            isBH2Started = true;
+        }
+
+        if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
+            appendOneMessageToLog(getAccidentsString("Аварии"));
+        }
+
+        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
+            appendOneMessageToLog("Инициализация кнопочного поста...");
+            isStartButtonOn = false;
+            sleep(1000);
+        }
+
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding() && timeOut-- > 0) {
+            appendOneMessageToLog("Включите кнопочный пост");
+            sleep(1000);
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Инициализация испытания обмотки BH...");
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Начало измерения обмотки AB");
+            communicationModel.startMeasuringAB();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AB завершено");
+            Experiment2ModelPhase3BH2.setAB(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки BC");
+            communicationModel.startMeasuringBC();
+            sleep(2000);
+        }
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки BC завершено");
+            Experiment2ModelPhase3BH2.setBC(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки AC");
+            communicationModel.startMeasuringAC();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AC завершено");
+            Experiment2ModelPhase3BH2.setAC(measuringR);
+        }
+
+        appendOneMessageToLog("Конец испытания обмотки BH\n_______________________________________________________");
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            try {
+                float AB = Float.parseFloat(Experiment2ModelPhase3BH2.getAB());
+                float BC = Float.parseFloat(Experiment2ModelPhase3BH2.getBC());
+                float AC = Float.parseFloat(Experiment2ModelPhase3BH2.getAC());
+
+                if ((AB / BC >= 0.98) &&
+                        (AB / AC >= 0.98) &&
+                        (BC / AC >= 0.98) &&
+                        (AB / BC <= 1.02) &&
+                        (AB / AC <= 1.02) &&
+                        (BC / AC <= 1.02)) {
+                    Experiment2ModelPhase3BH2.setResult("Успешно");
+                } else {
+                    Experiment2ModelPhase3BH2.setResult("Расхождение");
+                    appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
+                            "_______________________________________________________\n" +
+                            "AB BC " + ((AB - BC) / AB) * 100 + " %\n" +
+                            "AB AC " + ((AB - AC) / AB) * 100 + " %\n" +
+                            "BC AC " + ((BC - AC) / BC) * 100 + " %\n" +
+                            "_______________________________________________________\n"
+                    );
+                }
+            } catch (NumberFormatException e) {
+                Experiment2ModelPhase3BH2.setResult("Обрыв");
+            }
+        }
+        isBH2Started = false;
+    }
+
+    private void startBH3Experiment() {
+        showRequestDialog("Подключите крокодилы ИКАС к обмотке BH. После нажмите <Да>");
+
+        if (isExperimentRunning) {
+            isBH3Started = true;
+        }
+
+        if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
+            appendOneMessageToLog(getAccidentsString("Аварии"));
+        }
+
+        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
+            appendOneMessageToLog("Инициализация кнопочного поста...");
+            isStartButtonOn = false;
+            sleep(1000);
+        }
+
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding() && timeOut-- > 0) {
+            appendOneMessageToLog("Включите кнопочный пост");
+            sleep(1000);
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Инициализация испытания обмотки BH...");
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Начало измерения обмотки AB");
+            communicationModel.startMeasuringAB();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AB завершено");
+            Experiment2ModelPhase3BH3.setAB(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки BC");
+            communicationModel.startMeasuringBC();
+            sleep(2000);
+        }
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки BC завершено");
+            Experiment2ModelPhase3BH3.setBC(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки AC");
+            communicationModel.startMeasuringAC();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AC завершено");
+            Experiment2ModelPhase3BH3.setAC(measuringR);
+        }
+
+        appendOneMessageToLog("Конец испытания обмотки BH\n_______________________________________________________");
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            try {
+                float AB = Float.parseFloat(Experiment2ModelPhase3BH3.getAB());
+                float BC = Float.parseFloat(Experiment2ModelPhase3BH3.getBC());
+                float AC = Float.parseFloat(Experiment2ModelPhase3BH3.getAC());
+
+                if ((AB / BC >= 0.98) &&
+                        (AB / AC >= 0.98) &&
+                        (BC / AC >= 0.98) &&
+                        (AB / BC <= 1.02) &&
+                        (AB / AC <= 1.02) &&
+                        (BC / AC <= 1.02)) {
+                    Experiment2ModelPhase3BH3.setResult("Успешно");
+                } else {
+                    Experiment2ModelPhase3BH3.setResult("Расхождение");
+                    appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
+                            "_______________________________________________________\n" +
+                            "AB BC " + ((AB - BC) / AB) * 100 + " %\n" +
+                            "AB AC " + ((AB - AC) / AB) * 100 + " %\n" +
+                            "BC AC " + ((BC - AC) / BC) * 100 + " %\n" +
+                            "_______________________________________________________\n"
+                    );
+                }
+            } catch (NumberFormatException e) {
+                Experiment2ModelPhase3BH3.setResult("Обрыв");
+            }
+        }
+        isBH3Started = false;
+    }
+
+    private void startBH4Experiment() {
+        showRequestDialog("Подключите крокодилы ИКАС к обмотке BH. После нажмите <Да>");
+
+        if (isExperimentRunning) {
+            isBH4Started = true;
+        }
+
+        if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
+            appendOneMessageToLog(getAccidentsString("Аварии"));
+        }
+
+        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
+            appendOneMessageToLog("Инициализация кнопочного поста...");
+            isStartButtonOn = false;
+            sleep(1000);
+        }
+
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding() && timeOut-- > 0) {
+            appendOneMessageToLog("Включите кнопочный пост");
+            sleep(1000);
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Инициализация испытания обмотки BH...");
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Начало измерения обмотки AB");
+            communicationModel.startMeasuringAB();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AB завершено");
+            Experiment2ModelPhase3BH4.setAB(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки BC");
+            communicationModel.startMeasuringBC();
+            sleep(2000);
+        }
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки BC завершено");
+            Experiment2ModelPhase3BH4.setBC(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки AC");
+            communicationModel.startMeasuringAC();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AC завершено");
+            Experiment2ModelPhase3BH4.setAC(measuringR);
+        }
+
+        appendOneMessageToLog("Конец испытания обмотки BH\n_______________________________________________________");
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            try {
+                float AB = Float.parseFloat(Experiment2ModelPhase3BH4.getAB());
+                float BC = Float.parseFloat(Experiment2ModelPhase3BH4.getBC());
+                float AC = Float.parseFloat(Experiment2ModelPhase3BH4.getAC());
+
+                if ((AB / BC >= 0.98) &&
+                        (AB / AC >= 0.98) &&
+                        (BC / AC >= 0.98) &&
+                        (AB / BC <= 1.02) &&
+                        (AB / AC <= 1.02) &&
+                        (BC / AC <= 1.02)) {
+                    Experiment2ModelPhase3BH4.setResult("Успешно");
+                } else {
+                    Experiment2ModelPhase3BH4.setResult("Расхождение");
+                    appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
+                            "_______________________________________________________\n" +
+                            "AB BC " + ((AB - BC) / AB) * 100 + " %\n" +
+                            "AB AC " + ((AB - AC) / AB) * 100 + " %\n" +
+                            "BC AC " + ((BC - AC) / BC) * 100 + " %\n" +
+                            "_______________________________________________________\n"
+                    );
+                }
+            } catch (NumberFormatException e) {
+                Experiment2ModelPhase3BH4.setResult("Обрыв");
+            }
+        }
+        isBH4Started = false;
+    }
+
+    private void startBH5Experiment() {
+        showRequestDialog("Подключите крокодилы ИКАС к обмотке BH. После нажмите <Да>");
+
+        if (isExperimentRunning) {
+            isBH5Started = true;
+        }
+
+        if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
+            appendOneMessageToLog(getAccidentsString("Аварии"));
+        }
+
+        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
+            appendOneMessageToLog("Инициализация кнопочного поста...");
+            isStartButtonOn = false;
+            sleep(1000);
+        }
+
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding() && timeOut-- > 0) {
+            appendOneMessageToLog("Включите кнопочный пост");
+            sleep(1000);
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Инициализация испытания обмотки BH...");
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 1f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока ИКАС подготовится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            appendOneMessageToLog("Начало измерения обмотки AB");
+            communicationModel.startMeasuringAB();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 1 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AB завершено");
+            Experiment2ModelPhase3BH5.setAB(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки BC");
+            communicationModel.startMeasuringBC();
+            sleep(2000);
+        }
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 2 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки BC завершено");
+            Experiment2ModelPhase3BH5.setBC(measuringR);
+
+            appendOneMessageToLog("Начало измерения обмотки AC");
+            communicationModel.startMeasuringAC();
+            sleep(2000);
+        }
+
+        while (isExperimentRunning && isDevicesResponding() && isStartButtonOn && (ikasReadyParam != 0f) && (ikasReadyParam != 101f)) {
+            sleep(100);
+            appendOneMessageToLog("Ожидаем, пока 3 измерение закончится");
+        }
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            sleep(500);
+            appendOneMessageToLog("Измерение обмотки AC завершено");
+            Experiment2ModelPhase3BH5.setAC(measuringR);
+        }
+
+        appendOneMessageToLog("Конец испытания обмотки BH\n_______________________________________________________");
+
+        if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
+            try {
+                float AB = Float.parseFloat(Experiment2ModelPhase3BH5.getAB());
+                float BC = Float.parseFloat(Experiment2ModelPhase3BH5.getBC());
+                float AC = Float.parseFloat(Experiment2ModelPhase3BH5.getAC());
+
+                if ((AB / BC >= 0.98) &&
+                        (AB / AC >= 0.98) &&
+                        (BC / AC >= 0.98) &&
+                        (AB / BC <= 1.02) &&
+                        (AB / AC <= 1.02) &&
+                        (BC / AC <= 1.02)) {
+                    Experiment2ModelPhase3BH5.setResult("Успешно");
+                } else {
+                    Experiment2ModelPhase3BH5.setResult("Расхождение");
+                    appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
+                            "_______________________________________________________\n" +
+                            "AB BC " + ((AB - BC) / AB) * 100 + " %\n" +
+                            "AB AC " + ((AB - AC) / AB) * 100 + " %\n" +
+                            "BC AC " + ((BC - AC) / BC) * 100 + " %\n" +
+                            "_______________________________________________________\n"
+                    );
+                }
+            } catch (NumberFormatException e) {
+                Experiment2ModelPhase3BH5.setResult("Обрыв");
+            }
+        }
+        isBH5Started = false;
     }
 
     private void startHHExperiment() {
@@ -272,19 +806,19 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
             isHHStarted = true;
         }
 
-        if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isThereAreAccidents() && isDevicesResponding()) {
             appendOneMessageToLog(getAccidentsString("Аварии"));
         }
 
-        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding() && isStartButtonOn) {
+        if (isExperimentRunning && isOwenPRResponding && isDevicesResponding()) {
             appendOneMessageToLog("Инициализация кнопочного поста...");
             isStartButtonOn = false;
             sleep(1000);
         }
-
-        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding() && isStartButtonOn) {
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && isDevicesResponding() && timeOut-- > 0) {
             appendOneMessageToLog("Включите кнопочный пост");
-            sleep(1);
+            sleep(1000);
         }
 
         if (isExperimentRunning && isDevicesResponding() && isStartButtonOn) {
@@ -360,7 +894,12 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                 } else {
                     Experiment2ModelPhase3HH.setResult("Расхождение");
                     appendOneMessageToLog("Измеренные сопротивления отличаются между собой более чем на 2%\n" +
-                            "_______________________________________________________");
+                            "_______________________________________________________\n" +
+                            "AB BC " + ((AB - BC) / AB) * 100 + " %\n" +
+                            "AB AC " + ((AB - AC) / AB) * 100 + " %\n" +
+                            "BC AC " + ((BC - AC) / BC) * 100 + " %\n" +
+                            "_______________________________________________________\n"
+                    );
                 }
             } catch (NumberFormatException e) {
                 Experiment2ModelPhase3HH.setResult("Обрыв");
@@ -402,6 +941,13 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
 
     @Override
     protected void fillFieldsOfExperimentProtocol() {
+        currentProtocol.setE2WindingHH(Experiment2ModelPhase3HH.getWinding());
+        currentProtocol.setE2ABHH(Experiment2ModelPhase3HH.getAB());
+        currentProtocol.setE2BCHH(Experiment2ModelPhase3HH.getBC());
+        currentProtocol.setE2CAHH(Experiment2ModelPhase3HH.getAC());
+        currentProtocol.setE2THH(Experiment2ModelPhase3HH.getTemperature());
+        currentProtocol.setE2ResultHH(Experiment2ModelPhase3HH.getResult());
+
         currentProtocol.setE2WindingBH(Experiment2ModelPhase3BH.getWinding());
         currentProtocol.setE2ABBH(Experiment2ModelPhase3BH.getAB());
         currentProtocol.setE2BCBH(Experiment2ModelPhase3BH.getBC());
@@ -409,12 +955,33 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
         currentProtocol.setE2TBH(Experiment2ModelPhase3BH.getTemperature());
         currentProtocol.setE2ResultBH(Experiment2ModelPhase3BH.getResult());
 
-        currentProtocol.setE2WindingHH(Experiment2ModelPhase3HH.getWinding());
-        currentProtocol.setE2ABHH(Experiment2ModelPhase3HH.getAB());
-        currentProtocol.setE2BCHH(Experiment2ModelPhase3HH.getBC());
-        currentProtocol.setE2CAHH(Experiment2ModelPhase3HH.getAC());
-        currentProtocol.setE2THH(Experiment2ModelPhase3HH.getTemperature());
-        currentProtocol.setE2ResultHH(Experiment2ModelPhase3HH.getResult());
+        currentProtocol.setE2WindingBH2(Experiment2ModelPhase3BH2.getWinding());
+        currentProtocol.setE2ABBH2(Experiment2ModelPhase3BH2.getAB());
+        currentProtocol.setE2BCBH2(Experiment2ModelPhase3BH2.getBC());
+        currentProtocol.setE2CABH2(Experiment2ModelPhase3BH2.getAC());
+        currentProtocol.setE2TBH2(Experiment2ModelPhase3BH2.getTemperature());
+        currentProtocol.setE2ResultBH2(Experiment2ModelPhase3BH2.getResult());
+
+        currentProtocol.setE2WindingBH3(Experiment2ModelPhase3BH3.getWinding());
+        currentProtocol.setE2ABBH3(Experiment2ModelPhase3BH3.getAB());
+        currentProtocol.setE2BCBH3(Experiment2ModelPhase3BH3.getBC());
+        currentProtocol.setE2CABH3(Experiment2ModelPhase3BH3.getAC());
+        currentProtocol.setE2TBH3(Experiment2ModelPhase3BH3.getTemperature());
+        currentProtocol.setE2ResultBH3(Experiment2ModelPhase3BH3.getResult());
+
+        currentProtocol.setE2WindingBH4(Experiment2ModelPhase3BH4.getWinding());
+        currentProtocol.setE2ABBH4(Experiment2ModelPhase3BH4.getAB());
+        currentProtocol.setE2BCBH4(Experiment2ModelPhase3BH4.getBC());
+        currentProtocol.setE2CABH4(Experiment2ModelPhase3BH4.getAC());
+        currentProtocol.setE2TBH4(Experiment2ModelPhase3BH4.getTemperature());
+        currentProtocol.setE2ResultBH4(Experiment2ModelPhase3BH4.getResult());
+
+        currentProtocol.setE2WindingBH5(Experiment2ModelPhase3BH5.getWinding());
+        currentProtocol.setE2ABBH5(Experiment2ModelPhase3BH5.getAB());
+        currentProtocol.setE2BCBH5(Experiment2ModelPhase3BH5.getBC());
+        currentProtocol.setE2CABH5(Experiment2ModelPhase3BH5.getAC());
+        currentProtocol.setE2TBH5(Experiment2ModelPhase3BH5.getTemperature());
+        currentProtocol.setE2ResultBH5(Experiment2ModelPhase3BH5.getResult());
     }
 
     @Override
@@ -430,9 +997,9 @@ public class Experiment2ControllerPhase3 extends AbstractExperiment {
                         isOwenPRResponding = (boolean) value;
                         setDeviceState(deviceStateCirclePR200, (isOwenPRResponding) ? View.DeviceState.RESPONDING : View.DeviceState.NOT_RESPONDING);
                         break;
-                    case OwenPRModel.PRI1_FIXED:
+                    case OwenPRModel.PRI1:
                         isDoorZone = (boolean) value;
-                        if (!isDoorZone) {
+                        if (!isDoorZone && isNeedCheckDoor) {
                             setCause("открыты двери зоны");
                         }
                         break;

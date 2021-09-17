@@ -66,6 +66,9 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
     private volatile double measuringUIn;
     private volatile double coefTransformationRatio;
 
+
+    private int timeOut = 0;
+
     @FXML
     public void initialize() {
         setTheme(root);
@@ -184,9 +187,10 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             appendOneMessageToLog("Инициализация кнопочного поста...");
         }
 
-        while (isExperimentRunning && !isStartButtonOn) {
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && timeOut-- > 0) {
             appendOneMessageToLog("Включите кнопочный пост");
-            sleep(1);
+            sleep(1000);
             isNeedToWaitDelta = true;
         }
 
@@ -196,9 +200,10 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             communicationModel.initExperiment7Devices();
         }
 
-        while (isExperimentRunning && !isDevicesResponding()) {
+        timeOut = 30;
+        while (isExperimentRunning && !isDevicesResponding() && timeOut-- > 0) {
             appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
-            sleep(100);
+            sleep(1000);
             communicationModel.initExperiment7Devices();
         }
 
@@ -208,7 +213,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             communicationModel.onK10();
             communicationModel.onK9();
             communicationModel.onK8();
-            communicationModel.onKM4();
+//            communicationModel.onKM4();
             communicationModel.onKM12();
             sleep(1000);
         }
@@ -317,9 +322,10 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             appendOneMessageToLog("Инициализация кнопочного поста...");
         }
 
-        while (isExperimentRunning && !isStartButtonOn) {
+        timeOut = 30;
+        while (isExperimentRunning && !isStartButtonOn && timeOut-- > 0) {
             appendOneMessageToLog("Включите кнопочный пост");
-            sleep(1);
+            sleep(1000);
             isNeedToWaitDelta = true;
         }
 
@@ -329,9 +335,10 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             communicationModel.initExperiment7Devices();
         }
 
-        while (isExperimentRunning && !isDevicesResponding()) {
+        timeOut = 30;
+        while (isExperimentRunning && !isDevicesResponding() && timeOut-- > 0) {
             appendOneMessageToLog(getNotRespondingDevicesString("Нет связи с устройствами "));
-            sleep(100);
+            sleep(1000);
             communicationModel.initExperiment7Devices();
         }
 
@@ -341,7 +348,7 @@ public class Experiment7ControllerPhase3 extends AbstractExperiment {
             communicationModel.onK10();
             communicationModel.onK9();
             communicationModel.onK8();
-            communicationModel.onKM4();
+//            communicationModel.onKM4();
             communicationModel.onKM12();
             sleep(1000);
         }

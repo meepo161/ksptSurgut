@@ -66,12 +66,6 @@ public class Utils {
             measuringR = measuringR / 1_000_000_000_000f;
             units = "*10¹²";
         } else if (measuringR > 1_000_000_000f) {
-            measuringR = measuringR / 1_000_000_000f;
-            units = "*10⁹";
-        } else if (measuringR > 1_000_000f) {
-            measuringR = measuringR / 1_000_000f;
-            units = "*10⁶";
-        }  else if (measuringR > 1_000f) {
             measuringR = measuringR / 1_000f;
             units = "*10³";
         } else {
