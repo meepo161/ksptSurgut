@@ -143,7 +143,7 @@ public class Experiment1ControllerPhase3 extends AbstractExperiment {
         }
 
         if (isExperimentRunning && isDevicesResponding()) {
-            if (currentProtocol.getUmeger() < 2500) {
+            if (currentProtocol.getUmeger() <= 2500) {
                 if (!communicationModel.setUMgr(uMgr)) {
                     setDeviceState(deviceStateCircleCS0202, View.DeviceState.NOT_RESPONDING);
                     setCause("Мегер не отвечает на запросы");

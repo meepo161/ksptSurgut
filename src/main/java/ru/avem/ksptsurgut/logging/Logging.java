@@ -165,6 +165,66 @@ public class Logging {
                                 case "$12$":
                                     cell.setCellValue(protocol.getE2ResultHH());
                                     break;
+                                case "$422$":
+                                    cell.setCellValue(protocol.getE2ABBH2());
+                                    break;
+                                case "$423$":
+                                    cell.setCellValue(protocol.getE2BCBH2());
+                                    break;
+                                case "$424$":
+                                    cell.setCellValue(protocol.getE2CABH2());
+                                    break;
+                                case "$425$":
+                                    cell.setCellValue(protocol.getE2TBH2());
+                                    break;
+                                case "$426$":
+                                    cell.setCellValue(protocol.getE2ResultBH2());
+                                    break;
+                                case "$432$":
+                                    cell.setCellValue(protocol.getE2ABBH3());
+                                    break;
+                                case "$433$":
+                                    cell.setCellValue(protocol.getE2BCBH3());
+                                    break;
+                                case "$434$":
+                                    cell.setCellValue(protocol.getE2CABH3());
+                                    break;
+                                case "$435$":
+                                    cell.setCellValue(protocol.getE2TBH3());
+                                    break;
+                                case "$436$":
+                                    cell.setCellValue(protocol.getE2ResultBH3());
+                                    break;
+                                case "$442$":
+                                    cell.setCellValue(protocol.getE2ABBH4());
+                                    break;
+                                case "$443$":
+                                    cell.setCellValue(protocol.getE2BCBH4());
+                                    break;
+                                case "$444$":
+                                    cell.setCellValue(protocol.getE2CABH4());
+                                    break;
+                                case "$445$":
+                                    cell.setCellValue(protocol.getE2TBH4());
+                                    break;
+                                case "$446$":
+                                    cell.setCellValue(protocol.getE2ResultBH4());
+                                    break;
+                                case "$452$":
+                                    cell.setCellValue(protocol.getE2ABBH5());
+                                    break;
+                                case "$453$":
+                                    cell.setCellValue(protocol.getE2BCBH5());
+                                    break;
+                                case "$454$":
+                                    cell.setCellValue(protocol.getE2CABH5());
+                                    break;
+                                case "$455$":
+                                    cell.setCellValue(protocol.getE2TBH5());
+                                    break;
+                                case "$456$":
+                                    cell.setCellValue(protocol.getE2ResultBH5());
+                                    break;
                                 case "$13$":
                                     cell.setCellValue(protocol.getE3UInputAB());
                                     break;
@@ -192,17 +252,157 @@ public class Logging {
                                 case "$21$":
                                     cell.setCellValue(protocol.getE3DiffU());
                                     break;
-                                case "$28$":
-                                    cell.setCellValue(protocol.getE3WindingBH());
-                                    break;
-                                case "$29$":
-                                    cell.setCellValue(protocol.getE3WindingHH());
-                                    break;
                                 case "$22$":
                                     cell.setCellValue(protocol.getE3F());
                                     break;
                                 case "$23$":
                                     cell.setCellValue(protocol.getE3Result());
+                                    break;
+                                case "$613$":
+                                    cell.setCellValue(protocol.getE3UInputAB2());
+                                    break;
+                                case "$614$":
+                                    cell.setCellValue(protocol.getE3UInputBC2());
+                                    break;
+                                case "$615$":
+                                    cell.setCellValue(protocol.getE3UInputCA2());
+                                    break;
+                                case "$616$":
+                                    cell.setCellValue(protocol.getE3UInputAvr2());
+                                    break;
+                                case "$617$":
+                                    cell.setCellValue(protocol.getE3UOutputAB2());
+                                    break;
+                                case "$618$":
+                                    cell.setCellValue(protocol.getE3UOutputBC2());
+                                    break;
+                                case "$619$":
+                                    cell.setCellValue(protocol.getE3UOutputCA2());
+                                    break;
+                                case "$620$":
+                                    cell.setCellValue(protocol.getE3UOutputAvr2());
+                                    break;
+                                case "$621$":
+                                    cell.setCellValue(protocol.getE3DiffU2());
+                                    break;
+                                case "$622$":
+                                    cell.setCellValue(protocol.getE3F2());
+                                    break;
+                                case "$623$":
+                                    cell.setCellValue(protocol.getE3Result2());
+                                    break;
+
+
+                                case "$713$":
+                                    cell.setCellValue(protocol.getE3UInputAB3());
+                                    break;
+                                case "$714$":
+                                    cell.setCellValue(protocol.getE3UInputBC3());
+                                    break;
+                                case "$715$":
+                                    cell.setCellValue(protocol.getE3UInputCA3());
+                                    break;
+                                case "$716$":
+                                    cell.setCellValue(protocol.getE3UInputAvr3());
+                                    break;
+                                case "$717$":
+                                    cell.setCellValue(protocol.getE3UOutputAB3());
+                                    break;
+                                case "$718$":
+                                    cell.setCellValue(protocol.getE3UOutputBC3());
+                                    break;
+                                case "$719$":
+                                    cell.setCellValue(protocol.getE3UOutputCA3());
+                                    break;
+                                case "$720$":
+                                    cell.setCellValue(protocol.getE3UOutputAvr3());
+                                    break;
+                                case "$721$":
+                                    cell.setCellValue(protocol.getE3DiffU3());
+                                    break;
+                                case "$722$":
+                                    cell.setCellValue(protocol.getE3F3());
+                                    break;
+                                case "$723$":
+                                    cell.setCellValue(protocol.getE3Result3());
+                                    break;
+
+
+                                case "$813$":
+                                    cell.setCellValue(protocol.getE3UInputAB4());
+                                    break;
+                                case "$814$":
+                                    cell.setCellValue(protocol.getE3UInputBC4());
+                                    break;
+                                case "$815$":
+                                    cell.setCellValue(protocol.getE3UInputCA4());
+                                    break;
+                                case "$816$":
+                                    cell.setCellValue(protocol.getE3UInputAvr4());
+                                    break;
+                                case "$817$":
+                                    cell.setCellValue(protocol.getE3UOutputAB4());
+                                    break;
+                                case "$818$":
+                                    cell.setCellValue(protocol.getE3UOutputBC4());
+                                    break;
+                                case "$819$":
+                                    cell.setCellValue(protocol.getE3UOutputCA4());
+                                    break;
+                                case "$820$":
+                                    cell.setCellValue(protocol.getE3UOutputAvr4());
+                                    break;
+                                case "$821$":
+                                    cell.setCellValue(protocol.getE3DiffU4());
+                                    break;
+                                case "$822$":
+                                    cell.setCellValue(protocol.getE3F4());
+                                    break;
+                                case "$823$":
+                                    cell.setCellValue(protocol.getE3Result4());
+                                    break;
+
+
+                                case "$913$":
+                                    cell.setCellValue(protocol.getE3UInputAB5());
+                                    break;
+                                case "$914$":
+                                    cell.setCellValue(protocol.getE3UInputBC5());
+                                    break;
+                                case "$915$":
+                                    cell.setCellValue(protocol.getE3UInputCA5());
+                                    break;
+                                case "$916$":
+                                    cell.setCellValue(protocol.getE3UInputAvr5());
+                                    break;
+                                case "$917$":
+                                    cell.setCellValue(protocol.getE3UOutputAB5());
+                                    break;
+                                case "$918$":
+                                    cell.setCellValue(protocol.getE3UOutputBC5());
+                                    break;
+                                case "$919$":
+                                    cell.setCellValue(protocol.getE3UOutputCA5());
+                                    break;
+                                case "$920$":
+                                    cell.setCellValue(protocol.getE3UOutputAvr5());
+                                    break;
+                                case "$921$":
+                                    cell.setCellValue(protocol.getE3DiffU5());
+                                    break;
+                                case "$922$":
+                                    cell.setCellValue(protocol.getE3F5());
+                                    break;
+                                case "$923$":
+                                    cell.setCellValue(protocol.getE3Result5());
+                                    break;
+
+
+                                case "$28$":
+                                    cell.setCellValue(protocol.getE3WindingBH());
+                                    break;
+                                case "$29$":
+                                    cell.setCellValue(protocol.getE3WindingHH());
                                     break;
                                 case "$27$":
                                     cell.setCellValue(protocol.getE3Result());

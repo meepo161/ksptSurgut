@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static ru.avem.ksptsurgut.Constants.Info.TITLE;
+import static ru.avem.ksptsurgut.utils.Utils.formatRMrg;
 import static ru.avem.ksptsurgut.utils.View.showConfirmDialog;
 
 public class Main extends Application implements ru.avem.ksptsurgut.Exitappable {

@@ -67,6 +67,8 @@ public abstract class AbstractExperiment extends DeviceState implements Experime
     protected volatile boolean isCurrentInput;
     protected volatile boolean isStartButtonOn;
 
+    protected volatile boolean isNeedCheckDoor;
+
     protected volatile String cause;
 
 
